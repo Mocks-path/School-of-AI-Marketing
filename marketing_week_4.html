@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Marketing Week 4 — Build GrowLoop, Your First AI Social Media Engine</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;
+  --green:#4CAF50;--green-light:#E8F5E9;
+  --blue:#3F88C5;--purple:#8B5CF6;--pink:#EC4899;--red:#E74C3C;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);
+  --shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased;line-height:1.6}
+
+/* ─── HEADER ─── */
+.header{position:sticky;top:0;z-index:100;background:rgba(255,255,255,0.85);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:.8rem 2rem;display:flex;align-items:center;justify-content:space-between}
+.header-left{display:flex;align-items:center;gap:.7rem}
+.header-title{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);line-height:1.2}
+.header-title span{color:var(--orange)}
+.header-tag{font-size:.65rem;color:var(--text-muted);font-weight:500;letter-spacing:.04em;text-transform:uppercase}
+.logo-mascot{width:44px;height:44px;flex-shrink:0}
+.progress-pill{display:flex;align-items:center;gap:.6rem;padding:.4rem .9rem;background:var(--orange-glow);border-radius:50px;font-size:.72rem;color:var(--orange);font-weight:700}
+.progress-pill .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.5;transform:scale(.9)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes popIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:scale(1)}}
+
+/* ─── HERO ─── */
+.hero{padding:3.5rem 2rem 2.5rem;background:linear-gradient(180deg,var(--bg) 0%,var(--bg-light) 100%);position:relative;overflow:hidden}
+.hero-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1.4fr 1fr;gap:2.5rem;align-items:center}
+.hero-badge{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;margin-bottom:1rem;animation:fadeUp .7s ease}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.15;color:var(--navy);margin-bottom:.9rem;animation:fadeUp .7s ease .1s both}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:.95rem;color:var(--text-secondary);line-height:1.7;margin-bottom:1.4rem;animation:fadeUp .7s ease .2s both}
+.usecase-banner{background:#fff;border-radius:var(--radius);padding:1rem 1.2rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);display:flex;align-items:center;gap:1rem;animation:fadeUp .7s ease .3s both}
+.usecase-icon{width:48px;height:48px;border-radius:12px;background:linear-gradient(135deg,#3F88C5,#8B5CF6);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:1.4rem}
+.usecase-text{font-size:.82rem;color:var(--text-secondary);line-height:1.5}
+.usecase-text strong{color:var(--navy);font-weight:700}
+.hero-visual{display:flex;justify-content:center;align-items:center;animation:fadeUp .8s ease .2s both}
+.hero-mascot{width:230px;height:auto;animation:float 3.5s ease-in-out infinite;filter:drop-shadow(0 12px 40px rgba(232,122,46,0.22))}
+.budget-strip{max-width:1100px;margin:1.6rem auto 0;display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;animation:fadeUp .8s ease .35s both}
+.budget-chip{background:#fff;border:1px solid var(--border);border-radius:10px;padding:.75rem .9rem;text-align:center;box-shadow:var(--shadow-sm)}
+.budget-chip .bv{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--orange)}
+.budget-chip .bl{font-size:.64rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:.15rem}
+
+/* ─── SECTION SHELL ─── */
+.section{padding:3rem 2rem;scroll-margin-top:80px}
+.section.alt{background:var(--bg-light)}
+.container{max-width:1100px;margin:0 auto}
+.section-header{margin-bottom:2rem}
+.section-num{display:inline-flex;align-items:center;gap:.5rem;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--orange);margin-bottom:.5rem}
+.section-num .num{width:24px;height:24px;border-radius:50%;background:var(--orange);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+.section-title{font-family:'DM Serif Display',serif;font-size:clamp(1.5rem,2.8vw,2rem);color:var(--navy);line-height:1.25;margin-bottom:.4rem}
+.section-sub{font-size:.92rem;color:var(--text-secondary);line-height:1.65;max-width:720px}
+.story-beat{background:#fff;border-left:4px solid var(--orange);border-radius:0 var(--radius-sm) var(--radius-sm) 0;padding:1rem 1.2rem;font-size:.88rem;color:var(--text-primary);line-height:1.65;box-shadow:var(--shadow-sm);margin-bottom:1.6rem}
+.story-beat .sb-tag{display:inline-block;font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);margin-bottom:.3rem}
+.story-beat em{color:var(--text-secondary)}
+
+/* ─── TAB NAV ─── */
+.tab-nav{display:flex;gap:.4rem;overflow-x:auto;padding:.4rem;background:rgba(255,255,255,0.7);backdrop-filter:blur(8px);border-radius:50px;border:1px solid var(--border);box-shadow:var(--shadow-sm);position:sticky;top:72px;z-index:50;margin:0 auto 2rem;max-width:fit-content;flex-wrap:nowrap;-ms-overflow-style:none;scrollbar-width:none}
+.tab-nav::-webkit-scrollbar{display:none}
+.tab-btn{padding:.55rem 1.1rem;border-radius:50px;border:none;background:transparent;color:var(--text-secondary);font-size:.78rem;font-weight:600;cursor:pointer;font-family:inherit;white-space:nowrap;transition:all .2s}
+.tab-btn:hover{color:var(--orange)}
+.tab-btn.active{background:var(--orange);color:#fff;box-shadow:0 3px 12px rgba(232,122,46,0.35)}
+
+/* ─── GENERIC CARDS/GRIDS ─── */
+.pick-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.5rem}
+.pick-card{background:#fff;border-radius:var(--radius);padding:1.4rem;border:2px solid var(--border);cursor:pointer;transition:all .3s;position:relative;overflow:hidden}
+.pick-card::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;transition:height .3s}
+.pick-card:nth-child(1)::before{background:linear-gradient(90deg,var(--green),#7BC67E)}
+.pick-card:nth-child(2)::before{background:linear-gradient(90deg,var(--blue),#5DADE2)}
+.pick-card:nth-child(3)::before{background:linear-gradient(90deg,var(--pink),#F48FB1)}
+.pick-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md)}
+.pick-card.active{border-color:var(--orange);box-shadow:var(--shadow-md)}
+.pick-card.active::before{height:6px}
+.pick-icon{width:42px;height:42px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.3rem;margin-bottom:.8rem;background:var(--bg-light)}
+.pick-card h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.pick-card .pc-tag{font-size:.68rem;color:var(--orange);font-weight:700;text-transform:uppercase;letter-spacing:.06em;margin-bottom:.6rem}
+.pick-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+.pick-detail{background:#fff;border-radius:var(--radius);padding:1.3rem 1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);font-size:.86rem;line-height:1.65;display:none}
+.pick-detail.show{display:block;animation:fadeUp .4s ease}
+.pick-detail strong{color:var(--navy)}
+.pick-detail .verdict-pill{display:inline-block;padding:.2rem .7rem;border-radius:50px;font-size:.68rem;font-weight:800;letter-spacing:.05em;text-transform:uppercase;margin-bottom:.5rem}
+.vp-good{background:var(--green-light);color:#2E7D32}
+.vp-mid{background:#FFF3CD;color:#856404}
+.vp-bad{background:#FEE;color:#C62828}
+
+/* ─── SCENARIO QUIZ ─── */
+.scenario-panel{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-top:1.4rem}
+.scenario-title{font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--text-muted);margin-bottom:.6rem}
+.scenario-q{font-size:1rem;color:var(--navy);margin-bottom:1rem;font-weight:600;line-height:1.5}
+.scenario-options{display:grid;grid-template-columns:1fr;gap:.6rem;margin-bottom:1rem}
+.scenario-btn{padding:.75rem .9rem;border-radius:8px;border:1.5px solid var(--border);background:#fff;font-size:.82rem;font-weight:600;color:var(--text-primary);cursor:pointer;font-family:inherit;transition:all .2s;text-align:left;line-height:1.45}
+.scenario-btn:hover{border-color:var(--orange);color:var(--orange)}
+.scenario-btn.correct{background:var(--green-light);border-color:var(--green);color:#2E7D32}
+.scenario-btn.wrong{background:#FEE;border-color:var(--red);color:#C62828}
+.scenario-feedback{padding:.9rem;border-radius:8px;font-size:.83rem;line-height:1.55;display:none}
+.scenario-feedback.show{display:block;animation:fadeUp .4s ease}
+.scenario-feedback.success{background:var(--green-light);color:#2E7D32;border-left:3px solid var(--green)}
+.scenario-feedback.fail{background:#FEE;color:#C62828;border-left:3px solid var(--red)}
+.btn-action{padding:.55rem 1.1rem;border-radius:8px;background:var(--orange);color:#fff;border:none;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-action:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-secondary{background:transparent;color:var(--text-primary);border:1.5px solid var(--border);padding:.55rem 1.1rem;border-radius:8px;font-size:.82rem;font-weight:600;cursor:pointer;font-family:inherit;transition:all .2s}
+.btn-secondary:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ─── CHAT MOCK ─── */
+.chat-mock{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-sm);overflow:hidden;margin-top:1rem}
+.chat-head{background:var(--navy-dark);color:#fff;padding:.6rem 1rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.5rem}
+.chat-head .cdot{width:8px;height:8px;border-radius:50%;background:var(--green)}
+.chat-body{padding:1.1rem;display:flex;flex-direction:column;gap:.8rem;min-height:150px}
+.chat-msg{max-width:88%;padding:.8rem 1rem;border-radius:12px;font-size:.83rem;line-height:1.55}
+.chat-msg.user{align-self:flex-end;background:var(--orange-glow);color:var(--text-primary);border:1px solid rgba(232,122,46,0.25);border-bottom-right-radius:3px}
+.chat-msg.ai{align-self:flex-start;background:var(--bg-light);border:1px solid var(--border);border-bottom-left-radius:3px}
+.chat-msg.ai strong{color:var(--orange)}
+.chat-msg .who{display:block;font-size:.62rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.3rem}
+
+/* ─── LEAD SCORING WIDGET ─── */
+.lead-lab{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-top:1.4rem}
+.lead-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.lead-field{margin-bottom:1rem}
+.lead-field label{display:flex;justify-content:space-between;font-size:.78rem;font-weight:700;color:var(--text-primary);margin-bottom:.35rem}
+.lead-field label output{color:var(--orange);font-weight:800}
+.calc-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--border);outline:none;cursor:pointer}
+.calc-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--orange);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,0.15)}
+.calc-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--orange);cursor:pointer}
+.lead-out{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:1.2rem;background:var(--bg-light);border-radius:12px;border:2px solid transparent;transition:all .3s}
+.lead-out.hot{border-color:var(--green);background:var(--green-light)}
+.lead-out.warm{border-color:#E0A800;background:#FFF8E1}
+.lead-out.cold{border-color:var(--red);background:#FEE}
+.lead-score{font-family:'DM Serif Display',serif;font-size:3rem;color:var(--navy);line-height:1}
+.lead-out.hot .lead-score{color:#2E7D32}.lead-out.warm .lead-score{color:#B8860B}.lead-out.cold .lead-score{color:#C62828}
+.lead-verdict{font-size:.9rem;font-weight:800;letter-spacing:.03em;text-transform:uppercase}
+.lead-advice{font-size:.8rem;line-height:1.5;text-align:center;color:var(--text-secondary);margin-top:.3rem}
+
+/* ─── PERSONALIZER (before/after) ─── */
+.voice-tabs{display:flex;gap:.4rem;margin-bottom:1rem;flex-wrap:wrap}
+.voice-tab{padding:.45rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:#fff;font-size:.75rem;font-weight:600;color:var(--text-secondary);cursor:pointer;font-family:inherit;transition:all .2s}
+.voice-tab:hover{border-color:var(--orange);color:var(--orange)}
+.voice-tab.active{background:var(--orange);border-color:var(--orange);color:#fff}
+.email-preview{background:#fff;border-radius:var(--radius);border:1px solid var(--border);box-shadow:var(--shadow-md);overflow:hidden}
+.email-chrome{background:#F5F5F7;padding:.55rem 1rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.4rem;font-size:.72rem;color:var(--text-muted)}
+.email-chrome .sdot{width:9px;height:9px;border-radius:50%}
+.email-meta{padding:.9rem 1.4rem;border-bottom:1px solid var(--border);font-size:.78rem;color:var(--text-secondary)}
+.email-meta .subj{font-size:.92rem;color:var(--navy);font-weight:700;margin-top:.25rem;transition:opacity .3s}
+.email-body{padding:1.2rem 1.4rem;font-size:.86rem;color:var(--text-primary);line-height:1.7;transition:opacity .3s;min-height:150px}
+.email-body .sig{margin-top:1rem;color:var(--text-secondary);font-size:.82rem}
+.copy-toggle{display:flex;gap:.5rem;margin:1.4rem 0 .8rem;flex-wrap:wrap}
+.before-after{border-radius:var(--radius-sm);padding:1rem 1.1rem;font-size:.85rem;line-height:1.6}
+.before-after.before{background:var(--bg-light);border:1.5px dashed var(--border);color:var(--text-muted)}
+.before-after.after{background:var(--orange-glow);border:1.5px solid rgba(232,122,46,0.35);color:var(--text-primary)}
+
+/* ─── WORKFLOW BUILDER ─── */
+.flow-builder{display:grid;grid-template-columns:1.1fr 1fr;gap:1.4rem;margin-top:1.4rem}
+.flow-palette h4,.flow-canvas h4{font-size:.95rem;color:var(--navy);margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+.flow-palette h4::before,.flow-canvas h4::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--orange)}
+.flow-blocks{display:flex;flex-direction:column;gap:.6rem}
+.flow-block{display:flex;align-items:center;gap:.75rem;padding:.75rem .9rem;background:#fff;border:1.5px solid var(--border);border-radius:10px;cursor:pointer;transition:all .2s;font-size:.84rem;font-weight:600;color:var(--text-primary)}
+.flow-block:hover{border-color:var(--orange);transform:translateX(3px)}
+.flow-block.used{opacity:.45;pointer-events:none}
+.flow-block .fb-ico{width:32px;height:32px;border-radius:8px;background:var(--orange-glow);display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.flow-block .fb-hint{display:block;font-size:.68rem;font-weight:500;color:var(--text-muted)}
+.flow-canvas{background:var(--navy-dark);border-radius:var(--radius);padding:1.2rem;min-height:260px}
+.flow-canvas h4{color:#fff}.flow-canvas h4::before{background:var(--orange-light)}
+.flow-drop{list-style:none;display:flex;flex-direction:column;gap:.4rem;min-height:120px}
+.flow-drop .empty{color:#8B8DA0;font-style:italic;font-size:.8rem;padding:.6rem}
+.flow-step{display:flex;align-items:center;gap:.6rem;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);border-radius:8px;padding:.55rem .8rem;color:#E8EAF2;font-size:.8rem;animation:fadeUp .35s ease}
+.flow-step .fs-n{width:22px;height:22px;border-radius:50%;background:var(--orange);color:#fff;font-size:.7rem;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.flow-verdict{margin-top:1rem;padding:.8rem;border-radius:8px;font-size:.8rem;line-height:1.55;display:none}
+.flow-verdict.show{display:block;animation:fadeUp .4s ease}
+.flow-verdict.good{background:rgba(76,175,80,0.15);color:#C8F0CC;border-left:3px solid var(--green)}
+.flow-verdict.warn{background:rgba(231,76,60,0.15);color:#F5C6C0;border-left:3px solid var(--red)}
+.flow-reset{margin-top:.7rem}
+
+/* ─── CONVERSION CALCULATOR ─── */
+.calc{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm);margin-top:1.4rem}
+.calc-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.4rem}
+.calc-field{margin-bottom:1rem}
+.calc-field label{display:flex;justify-content:space-between;font-size:.78rem;font-weight:700;color:var(--text-primary);margin-bottom:.35rem}
+.calc-field label output{color:var(--orange);font-weight:800}
+.calc-out{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;align-content:start}
+.calc-tile{padding:.95rem;background:var(--bg-light);border-radius:10px;text-align:center;border:1.5px solid transparent;transition:all .3s}
+.calc-tile.warn{border-color:var(--red);background:#FEE}
+.calc-tile.ok{border-color:var(--green);background:var(--green-light)}
+.calc-tile .cv{font-family:'DM Serif Display',serif;font-size:1.45rem;color:var(--navy);line-height:1.1}
+.calc-tile .cl{font-size:.64rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-top:.3rem}
+.calc-note{grid-column:1/-1;font-size:.8rem;line-height:1.55;padding:.8rem 1rem;border-radius:8px;background:var(--orange-glow);color:var(--text-primary)}
+.calc-note strong{color:var(--orange)}
+
+/* ─── CHECKLIST + FEED ─── */
+.build-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.5rem}
+.build-card{background:#fff;border-radius:var(--radius);padding:1.3rem;border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.build-card h4{font-size:.95rem;color:var(--navy);margin-bottom:.7rem;display:flex;align-items:center;gap:.5rem}
+.build-card h4::before{content:'';width:10px;height:10px;border-radius:50%;background:var(--orange)}
+.checklist{list-style:none;padding:0}
+.checklist li{display:flex;align-items:flex-start;gap:.6rem;padding:.42rem 0;font-size:.84rem;color:var(--text-primary);cursor:pointer;line-height:1.45}
+.checklist li .check{width:18px;height:18px;border-radius:5px;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:2px;transition:all .2s}
+.checklist li.done .check{background:var(--green);border-color:var(--green)}
+.checklist li.done .check::after{content:'✓';color:#fff;font-size:.7rem;font-weight:800}
+.checklist li.done{color:var(--text-muted);text-decoration:line-through}
+.feed{background:var(--navy-dark);border-radius:10px;padding:1rem 1.1rem;min-height:220px;max-height:280px;overflow-y:auto}
+.feed-line{display:flex;gap:.6rem;font-size:.78rem;line-height:1.55;padding:.3rem 0;color:#D8DAE5;animation:fadeUp .4s ease}
+.feed-line .ft{color:var(--orange-light);font-weight:700;flex-shrink:0}
+.feed-line.hint-line{color:#8B8DA0;font-style:italic}
+.done-note{margin-top:1rem;padding:.8rem;background:var(--green-light);border-radius:7px;font-size:.78rem;color:#2E7D32;display:none}
+
+/* ─── DAY 7 METRICS / PIPELINE ─── */
+.eval-dashboard{background:#fff;border-radius:var(--radius);padding:1.5rem;border:1px solid var(--border);box-shadow:var(--shadow-sm)}
+.eval-metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-bottom:1.2rem}
+.metric-card{padding:1rem;background:var(--bg-light);border-radius:10px;text-align:center;border:1.5px solid transparent}
+.metric-card.highlight{border-color:var(--orange);background:var(--orange-glow)}
+.metric-value{font-family:'DM Serif Display',serif;font-size:1.65rem;color:var(--navy);line-height:1}
+.metric-card.highlight .metric-value{color:var(--orange)}
+.metric-label{font-size:.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-top:.4rem}
+.adset{display:grid;grid-template-columns:1.2fr 1fr auto;gap:1rem;align-items:center;padding:1rem 1.1rem;background:var(--bg-light);border-radius:10px;margin-bottom:.7rem;border:1.5px solid transparent;transition:all .3s}
+.adset.decided-scale{border-color:var(--green);background:var(--green-light)}
+.adset.decided-kill{border-color:var(--red);background:#FEE}
+.adset.decided-watch{border-color:#E0A800;background:#FFF8E1}
+.adset-name{font-size:.86rem;font-weight:700;color:var(--navy);line-height:1.4}
+.adset-name span{display:block;font-size:.7rem;font-weight:600;color:var(--text-muted)}
+.adset-nums{display:flex;gap:1rem;font-size:.75rem;color:var(--text-secondary);flex-wrap:wrap}
+.adset-nums b{display:block;font-size:.88rem;color:var(--navy)}
+.adset-actions{display:flex;gap:.4rem}
+.adset-btn{padding:.4rem .8rem;border-radius:7px;border:1.5px solid var(--border);background:#fff;font-size:.72rem;font-weight:700;cursor:pointer;font-family:inherit;transition:all .2s}
+.adset-btn:hover{border-color:var(--orange);color:var(--orange)}
+.adset-btn:disabled{opacity:.45;cursor:not-allowed}
+.adset-feedback{grid-column:1/-1;font-size:.78rem;line-height:1.5;padding:.6rem .8rem;border-radius:7px;display:none}
+.adset-feedback.show{display:block;animation:fadeUp .4s ease}
+.adset-feedback.good{background:rgba(76,175,80,0.12);color:#2E7D32}
+.adset-feedback.warn{background:#FFF3CD;color:#856404}
+.week-verdict{display:none;margin-top:1.4rem;background:var(--navy-dark);border-radius:var(--radius);padding:1.6rem;color:#fff;animation:popIn .5s ease}
+.week-verdict.show{display:block}
+.week-verdict h4{font-family:'DM Serif Display',serif;font-size:1.35rem;margin-bottom:.8rem}
+.week-verdict h4 em{font-style:normal;color:var(--orange-light)}
+.wv-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.7rem;margin-bottom:1rem}
+.wv-tile{background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.14);border-radius:9px;padding:.8rem;text-align:center}
+.wv-tile .v{font-family:'DM Serif Display',serif;font-size:1.3rem;color:var(--orange-light)}
+.wv-tile .l{font-size:.62rem;text-transform:uppercase;letter-spacing:.05em;color:rgba(255,255,255,0.55);font-weight:700;margin-top:.25rem}
+.week-verdict p{font-size:.87rem;line-height:1.65;color:rgba(255,255,255,0.85)}
+.week-verdict p strong{color:var(--orange-light)}
+
+/* ─── FOOTER / RECAP ─── */
+.footer-cta{text-align:center;padding:3rem 2rem 5.5rem;background:var(--navy-dark);color:#fff}
+.footer-cta h2{font-family:'DM Serif Display',serif;font-size:1.9rem;margin-bottom:.6rem}
+.footer-cta h2 em{color:var(--orange);font-style:normal}
+.footer-cta>p{font-size:.92rem;color:rgba(255,255,255,0.7);max-width:600px;margin:0 auto 1.8rem}
+.recap-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.9rem;max-width:1050px;margin:0 auto 1.8rem;text-align:left}
+.recap-card{background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.13);border-radius:var(--radius);padding:1.2rem 1.3rem}
+.recap-card .rn{font-size:.62rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--orange-light);margin-bottom:.35rem}
+.recap-card h4{font-family:'DM Serif Display',serif;font-size:1.02rem;margin-bottom:.35rem;color:#fff}
+.recap-card p{font-size:.76rem;color:rgba(255,255,255,0.65);line-height:1.55}
+.footer-note{font-size:.72rem;color:rgba(255,255,255,0.4);margin-top:1.6rem;max-width:640px;margin-left:auto;margin-right:auto;line-height:1.6}
+
+/* ─── COMPLETION BAR ─── */
+.completion-bar{position:fixed;bottom:0;left:0;right:0;background:rgba(255,255,255,0.95);backdrop-filter:blur(10px);border-top:1px solid var(--border);padding:.7rem 2rem;display:flex;align-items:center;justify-content:space-between;z-index:90;box-shadow:0 -2px 12px rgba(0,0,0,0.05)}
+.completion-info{display:flex;align-items:center;gap:.8rem;font-size:.82rem;color:var(--text-primary);font-weight:600}
+.completion-track{flex:1;max-width:280px;height:8px;background:var(--bg-light);border-radius:4px;overflow:hidden;margin:0 1rem}
+.completion-fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--orange-light));border-radius:4px;transition:width .5s ease}
+.completion-percent{font-family:'DM Serif Display',serif;color:var(--orange);font-size:1.15rem}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:880px){
+  .hero-inner{grid-template-columns:1fr;text-align:center}
+  .hero-mascot{width:170px;margin:0 auto}
+  .usecase-banner{text-align:left}
+  .budget-strip{grid-template-columns:repeat(2,1fr)}
+  .pick-grid{grid-template-columns:1fr}
+  .calc-grid,.build-grid,.lead-grid,.flow-builder{grid-template-columns:1fr}
+  .eval-metrics{grid-template-columns:repeat(2,1fr)}
+  .adset{grid-template-columns:1fr}
+  .wv-grid,.recap-grid{grid-template-columns:repeat(2,1fr)}
+  .header{padding:.7rem 1rem}
+  .section{padding:2.2rem 1rem}
+  .hero{padding:2.5rem 1rem 2rem}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── HEADER ─── -->
+<header class="header">
+  <div class="header-left">
+    <svg class="logo-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <ellipse cx="477" cy="380" rx="285" ry="324" fill="#EBE3D6"/>
+      <ellipse cx="477" cy="380" rx="240" ry="270" fill="#412C23"/>
+      <circle cx="389" cy="430" r="36" fill="#fff"/>
+      <circle cx="565" cy="430" r="36" fill="#fff"/>
+      <circle cx="389" cy="430" r="14" fill="#2B2D42"/>
+      <circle cx="565" cy="430" r="14" fill="#2B2D42"/>
+      <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="14" stroke-linecap="round" fill="none"/>
+      <ellipse cx="477" cy="1350" rx="430" ry="100" fill="#EF7F1A"/>
+      <ellipse cx="477" cy="1350" rx="380" ry="78" fill="#FF9429"/>
+    </svg>
+    <div>
+      <div class="header-title">AI Social <span>Media</span></div>
+      <div class="header-tag">Week 4 · Fun While You Learn</div>
+    </div>
+  </div>
+  <div class="progress-pill"><span class="dot"></span> <span id="headerProgressText">0 of 6 stages explored</span></div>
+</header>
+
+<!-- ─── HERO ─── -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="hero-badge"><span style="width:7px;height:7px;border-radius:50%;background:var(--orange);display:inline-block"></span> Story Project · Build a Social Media Engine</div>
+      <h1>Build <em>GrowLoop</em> — Your First AI Social Media Engine That Grows a Real Brand</h1>
+      <p class="hero-sub">You're a complete beginner. You're helping a tiny artisan bakery — "Crumb &amp; Co" — a laptop, ChatGPT, Canva, and zero design skills. Your mission this week: build an AI-powered content engine that picks the right platform, writes posts people actually save and share, schedules a whole week, replies to comments like a human, and reads the numbers to grow — without posting a single piece of generic slop. Every choice below has consequences. Choose like a professional.</p>
+      <div class="usecase-banner">
+        <div class="usecase-icon">🚀</div>
+        <div class="usecase-text"><strong>The Mission:</strong> By Friday, GrowLoop — your personal AI social media stack — must turn a quiet, near-empty Instagram into a batch of platform-native posts, a scheduled week, and real engagement — all while keeping Crumb &amp; Co's voice human and honest. Viral or not, you'll walk away with the full AI social-media playbook.</div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <svg class="hero-mascot" viewBox="0 0 955 1486" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="bodyGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#EBE3D6"/><stop offset="1" stop-color="#D1D0CC"/></linearGradient>
+          <linearGradient id="faceGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7A6A48"/><stop offset="1" stop-color="#412C23"/></linearGradient>
+          <linearGradient id="feetGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FF9429"/><stop offset="1" stop-color="#EF7F1A"/></linearGradient>
+        </defs>
+        <ellipse cx="210" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="740" cy="408" rx="68" ry="82" fill="#D9DADA"/>
+        <ellipse cx="477" cy="380" rx="285" ry="324" fill="url(#bodyGrad)"/>
+        <ellipse cx="477" cy="392" rx="240" ry="225" fill="url(#faceGrad)"/>
+        <circle cx="389" cy="430" r="38" fill="#fff"/>
+        <circle cx="565" cy="430" r="38" fill="#fff"/>
+        <circle cx="389" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="565" cy="430" r="15" fill="#2B2D42"/>
+        <circle cx="395" cy="424" r="5" fill="#fff"/>
+        <circle cx="571" cy="424" r="5" fill="#fff"/>
+        <path d="M380 1180c30 28 65 42 97 42s67-14 97-42" stroke="#A34E1C" stroke-width="16" stroke-linecap="round" fill="none"/>
+        <ellipse cx="477" cy="1350" rx="430" ry="105" fill="url(#feetGrad)"/>
+        <ellipse cx="477" cy="1320" rx="380" ry="78" fill="#FF9429"/>
+      </svg>
+    </div>
+  </div>
+  <div class="budget-strip">
+    <div class="budget-chip"><div class="bv">1 brand</div><div class="bl">Quiet feed to grow</div></div>
+    <div class="budget-chip"><div class="bv">5 days</div><div class="bl">Idea → posted week</div></div>
+    <div class="budget-chip"><div class="bv">0 skills</div><div class="bl">Design required</div></div>
+    <div class="budget-chip"><div class="bv">4 lessons</div><div class="bl">Woven into 1 build</div></div>
+  </div>
+</section>
+
+<!-- ─── TAB NAVIGATION ─── -->
+<div class="tab-nav" id="tabNav">
+  <button class="tab-btn active" data-target="s1">1 · Platform &amp; Goal</button>
+  <button class="tab-btn" data-target="s2">2 · Content Ideas</button>
+  <button class="tab-btn" data-target="s3">3 · The Caption</button>
+  <button class="tab-btn" data-target="s4">4 · Schedule &amp; Engage</button>
+  <button class="tab-btn" data-target="s5">5 · Community</button>
+  <button class="tab-btn" data-target="s6">6 · The Numbers</button>
+</div>
+
+<!-- ═══════════ STAGE 1: FUNNEL & STACK ═══════════ -->
+<section class="section" id="s1">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">1</div> Stage One · The Blueprint</div>
+      <h2 class="section-title">Pick Your Platform, Set the Goal &amp; Learn How the Feed Works</h2>
+      <p class="section-sub">Before you post anything, you need to know how a stranger becomes a follower — and eventually a customer. Growth isn't one lucky post — it's a <strong>loop</strong> of reach → engagement → follow, and every AI tool you'll use plugs into exactly one part of it.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Monday, 8:15 a.m. Crumb &amp; Co is a real bakery — famous on its own street, invisible online. The owner, Priya, bakes sourdough at 5 a.m. and has 214 Instagram followers and one blurry photo of a croissant. She wants to reach the neighbourhood. Your instinct is to post ten random photos right now. <em>Don't.</em> First, open ChatGPT and do what professionals do: pick the right platform, set one clear goal, then learn how the feed actually decides who sees a post. Click each part of the growth loop below to see what happens there — and what could go wrong.
+    </div>
+
+    <div class="pick-grid">
+      <div class="pick-card" data-stage="top" onclick="pickStage('top')">
+        <div class="pick-icon">🎯</div>
+        <div class="pc-tag">Loop · Reach</div>
+        <h4>Get Seen</h4>
+        <p>Turn "post something" into content the algorithm shows to people who don't follow you yet — via Reels, hooks and hashtags. This is where content AI lives.</p>
+      </div>
+      <div class="pick-card" data-stage="mid" onclick="pickStage('mid')">
+        <div class="pick-icon">💬</div>
+        <div class="pc-tag">Loop · Engage</div>
+        <h4>Earn Interaction</h4>
+        <p>A good post earns saves, shares, comments and DMs. This is where writing AI plus a scheduling tool live — and where generic slop gets ignored.</p>
+      </div>
+      <div class="pick-card" data-stage="bottom" onclick="pickStage('bottom')">
+        <div class="pick-icon">📈</div>
+        <div class="pc-tag">Loop · Grow</div>
+        <h4>Convert &amp; Keep</h4>
+        <p>A viewer becomes a follower, a follower becomes a regular, a regular becomes a walk-in — tracked in native analytics so nothing is guessed.</p>
+      </div>
+    </div>
+    <div class="pick-detail" id="stageDetail"></div>
+
+    <div class="chat-mock">
+      <div class="chat-head"><span class="cdot"></span> ChatGPT · "Design my AI social media stack" — the prompt showdown</div>
+      <div class="chat-body" id="promptChat">
+        <div class="chat-msg ai"><span class="who">Narrator</span>You get out of ChatGPT exactly what you put in. Below are three prompts you could send to design your stack. <strong>Pick the one that earns the most useful answer</strong> — then see what comes back.</div>
+      </div>
+    </div>
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · Pick your prompt</div>
+      <div class="scenario-q">Which prompt do you send to design GrowLoop's social media stack?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="pickPrompt(0)">"How do I go viral?"</button>
+        <button class="scenario-btn" onclick="pickPrompt(1)">"Give me a bot that auto-posts 50 times a day and mass-follows strangers automatically."</button>
+        <button class="scenario-btn" onclick="pickPrompt(2)">"Act as a social media strategist. I'm a beginner helping a small artisan bakery (Crumb &amp; Co) grow on one platform. Recommend the best single platform and one clear goal, then map a simple growth loop (reach → engage → grow) and one type of AI tool per stage. Keep it beginner-friendly, low-cost, and authentic. For each stage: the goal, the tool type, and one rookie mistake to avoid."</button>
+      </div>
+      <div class="scenario-feedback" id="promptFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🧠 Pop Quiz · Algorithm instincts (3 rounds)</div>
+      <div class="scenario-q" id="funnelQ">Loading…</div>
+      <div class="scenario-options" id="funnelOpts"></div>
+      <div class="scenario-feedback" id="funnelFb"></div>
+      <button class="btn-secondary" id="funnelNext" onclick="nextFunnelQ()" style="margin-top:.5rem;display:none">Next round →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STAGE 2: LEAD GEN ═══════════ -->
+<section class="section alt" id="s2">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">2</div> Stage Two · Content Creation</div>
+      <h2 class="section-title">AI Content Ideas — Not Every Post Idea Is Worth Making</h2>
+      <p class="section-sub">A good content idea has a checkable profile: it fits the brand's voice, it gives the viewer a reason to stop scrolling, and it has a <strong>hook</strong> — a reason to care in the first second. AI can score every idea so your best effort goes to the posts most likely to land.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Tuesday. You described Crumb &amp; Co to ChatGPT in plain English — "warm, cosy neighbourhood bakery, sourdough and cinnamon rolls, small-batch, run by hand, a little imperfect and proud of it." It helped you brainstorm 20 content ideas. But 20 is too many to make equally. Three ideas below landed on your shortlist. Inspect each, then meet the Idea-Score Lab and learn to sort scroll-stoppers from slop.
+    </div>
+
+    <div class="pick-grid">
+      <div class="pick-card" data-lead="bloom" onclick="pickLead('bloom')">
+        <div class="pick-icon">🥐</div>
+        <div class="pc-tag">On-brand · Strong hook</div>
+        <h4>"5am sourdough" Reel</h4>
+        <p>A 20-second Reel of dough being shaped by hand at dawn, real hands, real flour. On-brand, native to the platform, and a hook people stop for. Small idea, exactly the bakery's kind of post.</p>
+      </div>
+      <div class="pick-card" data-lead="chain" onclick="pickLead('chain')">
+        <div class="pick-icon">🏢</div>
+        <div class="pc-tag">Off-brand · Copycat</div>
+        <h4>Trending dance (no baking)</h4>
+        <p>A big viral dance trend everyone's doing. Might rack up views, but it says nothing about the bakery. Impressive numbers for a day — brings zero real fans of the bread.</p>
+      </div>
+      <div class="pick-card" data-lead="ghost" onclick="pickLead('ghost')">
+        <div class="pick-icon">👻</div>
+        <div class="pc-tag">Generic · No hook</div>
+        <h4>"Buy our bread" graphic</h4>
+        <p>A plain stock-photo graphic with the logo and "Fresh bread daily!" No story, no hook, no reason to stop. It looks like an ad, so the scroll never slows down.</p>
+      </div>
+    </div>
+    <div class="pick-detail" id="leadDetail"></div>
+
+    <div class="lead-lab">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem">🎚️ The Idea-Score Lab — score a post idea like an AI would</div>
+      <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:1.1rem">AI doesn't guess — it scores each idea on signals you define, then sorts. Drag the sliders to build an idea and watch its potential change. Rule of thumb: <strong>make the strong ones first, and stop wasting effort on the slop.</strong></p>
+      <div class="lead-grid">
+        <div>
+          <div class="lead-field">
+            <label>Fits the brand's voice &amp; story <output id="oFit">8 / 10</output></label>
+            <input type="range" class="calc-slider" id="inFit" min="0" max="10" step="1" value="8">
+          </div>
+          <div class="lead-field">
+            <label>Native to the platform (Reel/format fits) <output id="oSen">7 / 10</output></label>
+            <input type="range" class="calc-slider" id="inSen" min="0" max="10" step="1" value="7">
+          </div>
+          <div class="lead-field">
+            <label>Hook strength (stops the scroll in 1 second) <output id="oTrig">6 / 10</output></label>
+            <input type="range" class="calc-slider" id="inTrig" min="0" max="10" step="1" value="6">
+          </div>
+          <div class="lead-field">
+            <label>Save/share worthy (useful, funny or beautiful) <output id="oReach">7 / 10</output></label>
+            <input type="range" class="calc-slider" id="inReach" min="0" max="10" step="1" value="7">
+          </div>
+        </div>
+        <div class="lead-out" id="leadOut">
+          <div class="lead-score" id="leadScore">70</div>
+          <div class="lead-verdict" id="leadVerdict">Decent</div>
+          <div class="lead-advice" id="leadAdvice"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">⚖️ Choice Point · Where do you spend your content energy?</div>
+      <div class="scenario-q">You have time to properly shoot and craft only ~7 of your 20 ideas this week. Which 7?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="targetQ(0)">The 7 biggest viral trends of the moment — chasing views would be huge.</button>
+        <button class="scenario-btn" onclick="targetQ(1)">The top 7 by idea score — most on-brand, native, with a real hook — and let AI polish each with one honest detail.</button>
+        <button class="scenario-btn" onclick="targetQ(2)">Don't score at all — just post all 20 generic AI graphics to save time.</button>
+      </div>
+      <div class="scenario-feedback" id="targetFb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STAGE 3: THE MESSAGE ═══════════ -->
+<section class="section" id="s3">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">3</div> Stage Three · The Caption &amp; Hook</div>
+      <h2 class="section-title">Write Hooks &amp; Captions People Actually Save — AI Drafts, You Direct</h2>
+      <p class="section-sub">The average scroll gives a post well under 2 seconds — almost always lost because the first line is about the brand, not the viewer. The whole game is <strong>one true, specific hook</strong> in the brand's own voice. AI can write it — but only if you feed it the real story.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Wednesday. You paste Crumb &amp; Co's story and photos into ChatGPT and ask for a caption. Its first draft is generic slop — "Delicious freshly baked goods await you!" Useless. So you direct it: <em>audience (neighbours who love a cosy find), the moment (dough shaped by hand at 5am), and a genuine, specific detail in the bakery's warm voice.</em> Try the three voices below and watch the caption rewrite itself.
+    </div>
+
+    <div class="voice-tabs">
+      <button class="voice-tab active" data-voice="peer" onclick="setVoice('peer')">😊 Warm &amp; Cosy</button>
+      <button class="voice-tab" data-voice="result" onclick="setVoice('result')">📖 Storyteller</button>
+      <button class="voice-tab" data-voice="short" onclick="setVoice('short')">⚡ Punchy Hook</button>
+    </div>
+
+    <div class="email-preview">
+      <div class="email-chrome">
+        <span class="sdot" style="background:#FF5F57"></span><span class="sdot" style="background:#FEBC2E"></span><span class="sdot" style="background:#28C840"></span>
+        <span style="margin-left:.6rem">📱 New Reel · @crumbandco</span>
+      </div>
+      <div class="email-meta">
+        Draft caption (GrowLoop) · <span class="subj" id="emailSubj">Hook: "This is what 5am smells like."</span>
+      </div>
+      <div class="email-body" id="emailBody">
+        This is what 5am smells like at Crumb &amp; Co. 🌅 Priya's been shaping this sourdough by hand since before the birds — no machines, no shortcuts, just flour, water, salt and a lot of patience. By the time you're on your first coffee, it's out of the oven and on the shelf. Come find the warm loaf. 🥖
+        <div class="sig">📍 Corner of Residency Road · fresh daily till it's gone.</div>
+      </div>
+    </div>
+
+    <div class="copy-toggle">
+      <button class="btn-secondary" id="beforeBtn" onclick="toggleCopy('before')">😬 Before: the generic AI draft</button>
+      <button class="btn-action" id="afterBtn" onclick="toggleCopy('after')">✨ After: directed by you</button>
+    </div>
+    <div class="before-after before" id="copyBefore" style="display:none">
+      "Delicious freshly baked goods await you! 😋 Visit us today for the best bread and pastries in town. We use only the finest ingredients to bring you quality every day. #bakery #food #yummy #delicious #bread"
+      <div style="margin-top:.5rem;font-size:.75rem">← This is the undirected draft. It could belong to any bakery on Earth. It says nothing real, has no hook, and no reason to save. The scroll never slows.</div>
+    </div>
+    <div class="before-after after" id="copyAfter">
+      "This is what 5am smells like. Sourdough shaped by hand before the birds — no machines, no shortcuts. Come find the warm loaf. 🥖"
+      <div style="margin-top:.5rem;font-size:.75rem;color:var(--text-secondary)">← Same AI wrote both. The difference is the <strong>direction</strong>: a real moment (5am by hand), a specific person (Priya), the brand's cosy voice, and a hook that makes you stop. That's a caption that earns a save.</div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · The 2-second scroll test</div>
+      <div class="scenario-q">A neighbour is scrolling fast with 200 posts to go. Which first line makes them stop?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="subjQ(0)">"Delicious Freshly Baked Goods Await You!!! Visit Us Today!!!"</button>
+        <button class="scenario-btn" onclick="subjQ(1)">"This is what 5am smells like."</button>
+        <button class="scenario-btn" onclick="subjQ(2)">"We are a bakery. Please check out our products."</button>
+      </div>
+      <div class="scenario-feedback" id="subjFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">⚠️ Authenticity Checkpoint · The fake-detail trap</div>
+      <div class="scenario-q">AI drafts a caption saying "our award-winning croissants!" — but Crumb &amp; Co has never won an award. What do you do?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="ethicsQ(0)">Post it anyway — "award-winning" sounds impressive.</button>
+        <button class="scenario-btn" onclick="ethicsQ(1)">Delete the false claim and replace it with something true (hand-shaped, small-batch, fresh at 5am).</button>
+        <button class="scenario-btn" onclick="ethicsQ(2)">Post it, but add "(unofficially)" to cover yourself.</button>
+      </div>
+      <div class="scenario-feedback" id="ethicsFb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STAGE 4: OUTREACH AT SCALE ═══════════ -->
+<section class="section alt" id="s4">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">4</div> Stage Four · Schedule &amp; Post</div>
+      <h2 class="section-title">Post Consistently Without Burning Out — Build the Week</h2>
+      <p class="section-sub">One post is not a strategy — growth comes from <strong>showing up week after week</strong> at the right times. But cramming is dangerous: post ten things in one day then vanish, and the feed forgets you. You'll batch and schedule a whole week <em>and</em> respect the rhythm that keeps the algorithm delivering.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Thursday. You have 7 platform-native posts ready. The temptation: dump all 7 into the feed this afternoon, then post nothing for two weeks. That's exactly how small brands go quiet and get forgotten by Friday. Instead you'll assemble a <em>weekly schedule</em> the right way — drag the blocks into the canvas in a sensible order, then meet the consistency rules that keep your reach alive.
+    </div>
+
+    <div class="flow-builder">
+      <div class="flow-palette">
+        <h4>Schedule blocks (click to add)</h4>
+        <div class="flow-blocks" id="flowBlocks">
+          <div class="flow-block" data-block="warm" onclick="addBlock('warm')"><span class="fb-ico">📅</span><span>Set a steady cadence first<span class="fb-hint">Pick a realistic rhythm you can sustain for months</span></span></div>
+          <div class="flow-block" data-block="open" onclick="addBlock('open')"><span class="fb-ico">🥐</span><span>Mon · Hero Reel<span class="fb-hint">Your strongest hook + best moment of the week</span></span></div>
+          <div class="flow-block" data-block="f1" onclick="addBlock('f1')"><span class="fb-ico">📖</span><span>Wed · Story carousel<span class="fb-hint">A behind-the-scenes or how-it's-made post</span></span></div>
+          <div class="flow-block" data-block="f2" onclick="addBlock('f2')"><span class="fb-ico">🔄</span><span>Fri · Community re-share<span class="fb-hint">Repost a customer photo or answer a FAQ</span></span></div>
+          <div class="flow-block" data-block="bye" onclick="addBlock('bye')"><span class="fb-ico">📌</span><span>Weekend · Light Story poll<span class="fb-hint">Low-effort touch to stay present, not silent</span></span></div>
+          <div class="flow-block" data-block="stop" onclick="addBlock('stop')"><span class="fb-ico">🕒</span><span>Post at peak-audience times<span class="fb-hint">Schedule for when your followers are actually online</span></span></div>
+        </div>
+      </div>
+      <div class="flow-canvas">
+        <h4>GrowLoop weekly schedule</h4>
+        <ul class="flow-drop" id="flowDrop"><li class="empty">Click blocks on the left to build your week…</li></ul>
+        <div class="flow-verdict" id="flowVerdict"></div>
+        <button class="btn-secondary flow-reset" id="flowReset" onclick="resetFlow()" style="display:none">↻ Reset schedule</button>
+      </div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">📬 Consistency Checkpoint · The "post everything now" temptation</div>
+      <div class="scenario-q">Your week of posts is ready. The account is small and new. How do you actually publish them?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="deliverQ(0)">Dump all 7 today, then post nothing for two weeks. Momentum!</button>
+        <button class="scenario-btn" onclick="deliverQ(1)">Schedule a steady 3–4 posts a week at peak times with a tool like Buffer or Later, keep it sustainable, and show up every week. Consistent is powerful.</button>
+        <button class="scenario-btn" onclick="deliverQ(2)">Buy 50,000 fake followers to look bigger — more followers, more reach.</button>
+      </div>
+      <div class="scenario-feedback" id="deliverFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">⚖️ Authenticity Checkpoint · Staying on the right side of the platform</div>
+      <div class="scenario-q">Platform rules and honest growth matter — fake engagement gets accounts throttled or banned. Which practice keeps you healthy?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="lawQ(0)">Buy likes, use engagement bots, and mass-follow strangers to game the algorithm.</button>
+        <button class="scenario-btn" onclick="lawQ(1)">Grow with real content, real replies, honest hashtags, and genuine interaction — disclose any paid partnerships.</button>
+        <button class="scenario-btn" onclick="lawQ(2)">Repost other creators' videos as your own without credit — free content!</button>
+      </div>
+      <div class="scenario-feedback" id="lawFb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STAGE 5: CLOSE & AUTOMATE ═══════════ -->
+<section class="section" id="s5">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">5</div> Stage Five · Community &amp; Engagement</div>
+      <h2 class="section-title">Turn Comments into Community — and Never Let a Fan Go Ignored</h2>
+      <p class="section-sub">A comment is not the end — it's the start of the real relationship, and exactly where small brands quietly lose fans. The fix is a system: AI drafts warm replies, you keep them human, and you log every conversation so nobody gets forgotten.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Friday morning. The 5am Reel took off a little. Comments are trickling in. A neighbour asked "do you do gluten-free?" Two people tagged friends. Someone DM'd "can I pre-order a loaf?" This is the moment small brands blow it — a warm comment gets buried under a busy bake and left on read. You won't. Work the community-and-engagement checklist, and watch the conversation come to life in the feed.
+    </div>
+
+    <div class="build-grid">
+      <div class="build-card">
+        <h4>Your community &amp; engagement checklist</h4>
+        <ul class="checklist" id="buildList">
+          <li data-step="0" onclick="runBuildStep(0)"><span class="check"></span>Reply to the "gluten-free?" comment with a <strong>&nbsp;warm, human answer&nbsp;</strong> — no copy-paste template</li>
+          <li data-step="1" onclick="runBuildStep(1)"><span class="check"></span>AI-draft friendly replies to the easy comments, then <em>you</em> edit for voice</li>
+          <li data-step="2" onclick="runBuildStep(2)"><span class="check"></span>Answer the "can I pre-order?" DM personally and log it</li>
+          <li data-step="3" onclick="runBuildStep(3)"><span class="check"></span>Do 10 minutes of social listening — see what neighbours ask for</li>
+          <li data-step="4" onclick="runBuildStep(4)"><span class="check"></span>Set a daily reminder so no comment or DM sits unanswered &gt; 24h</li>
+          <li data-step="5" onclick="runBuildStep(5)"><span class="check"></span>Thank and re-share the customers who tagged the bakery</li>
+        </ul>
+        <div class="done-note" id="buildDone">✅ <strong>The community is alive.</strong> Every comment has a real reply, and nothing is sitting on read. This is what "shows up for its fans" actually looks like.</div>
+      </div>
+      <div class="build-card">
+        <h4>Engagement feed (click checklist items)</h4>
+        <div class="feed" id="buildFeed">
+          <div class="feed-line hint-line"><span class="ft">--:--</span>Waiting for you to work the engagement checklist… tick items on the left.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">🎯 Checkpoint · A neighbour comments "do you do gluten-free?"</div>
+      <div class="scenario-q">This is a warm, curious fan. What's the best next move?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="closeQ(0)">Ignore it — it's just one comment, and the answer is boring.</button>
+        <button class="scenario-btn" onclick="closeQ(1)">Reply warmly and honestly ("Not yet — but we're testing a spelt loaf! Want me to DM you when it's in?"), and note the request for content ideas.</button>
+        <button class="scenario-btn" onclick="closeQ(2)">Paste a generic "Thanks for your comment! Check out our page 🙏" reply — same for everyone.</button>
+      </div>
+      <div class="scenario-feedback" id="closeFb"></div>
+    </div>
+
+    <div class="scenario-panel">
+      <div class="scenario-title">⚖️ Choice Point · The DM you almost forgot</div>
+      <div class="scenario-q">Someone DM'd "can I pre-order a loaf?" three days ago. You just found it, unanswered, in a busy inbox. What does this teach you?</div>
+      <div class="scenario-options">
+        <button class="scenario-btn" onclick="leakQ(0)">Nothing — a few missed DMs are just the cost of being online.</button>
+        <button class="scenario-btn" onclick="leakQ(1)">Reply now with an apology and answer — and fix the real cause: set a daily check + log every conversation, so memory never decides who feels heard.</button>
+        <button class="scenario-btn" onclick="leakQ(2)">Ignore it — three days late looks bad, better to pretend it never came.</button>
+      </div>
+      <div class="scenario-feedback" id="leakFb"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ STAGE 6: THE VERDICT ═══════════ -->
+<section class="section alt" id="s6">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-num"><div class="num">6</div> Stage Six · The Numbers</div>
+      <h2 class="section-title">Read Your Analytics — What Worked, What to Fix</h2>
+      <p class="section-sub">One week in. Feelings are worthless; the growth math is everything. Below is GrowLoop's real analytics table. First, do the math yourself in the calculator — then judge each post type: <strong>Double-down, Iterate, or Drop</strong>.</p>
+    </div>
+
+    <div class="story-beat">
+      <span class="sb-tag">📖 The story so far</span>
+      Friday, 6 p.m. You posted 7 platform-native pieces plus daily replies. Some landed; one flopped completely. That's exactly what was supposed to happen — you now have <em>data</em>, not guesses. Time to think like a marketer: open the native analytics, run the growth math, then decide what to keep and what to fix for next month.
+    </div>
+
+    <div class="calc">
+      <div style="font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem">🧮 The Growth Math — how much reach to earn one new follower?</div>
+      <p style="font-size:.82rem;color:var(--text-secondary);margin-bottom:1.1rem">Every stage of the loop leaks. Drag the sliders and watch how much reach it takes to earn a follower — and a walk-in. This is the single most clarifying number in social: it turns "am I doing okay?" into a target you can actually hit.</p>
+      <div class="calc-grid">
+        <div>
+          <div class="calc-field">
+            <label>Accounts reached <output id="oEmails">40</output></label>
+            <input type="range" class="calc-slider" id="inEmails" min="10" max="300" step="10" value="40">
+          </div>
+          <div class="calc-field">
+            <label>Engagement rate <output id="oReply">15%</output></label>
+            <input type="range" class="calc-slider" id="inReply" min="1" max="40" step="1" value="15">
+          </div>
+          <div class="calc-field">
+            <label>Engaged → new follower <output id="oBook">40%</output></label>
+            <input type="range" class="calc-slider" id="inBook" min="10" max="80" step="5" value="40">
+          </div>
+          <div class="calc-field">
+            <label>Follower → walk-in customer <output id="oClose">30%</output></label>
+            <input type="range" class="calc-slider" id="inClose" min="5" max="70" step="5" value="30">
+          </div>
+        </div>
+        <div class="calc-out">
+          <div class="calc-tile" id="tReplies"><div class="cv" id="vReplies">6</div><div class="cl">Engaged</div></div>
+          <div class="calc-tile" id="tCalls"><div class="cv" id="vCalls">2.4</div><div class="cl">New followers</div></div>
+          <div class="calc-tile" id="tClients"><div class="cv" id="vClients">0.7</div><div class="cl">Walk-ins</div></div>
+          <div class="calc-tile"><div class="cv" id="vPerCall">17</div><div class="cl">Reach per follower</div></div>
+          <div class="calc-note" id="calcNote"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="eval-dashboard" style="margin-top:1.4rem">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem">
+        <div>
+          <div style="font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy)">GrowLoop · Week-1 Analytics Dashboard</div>
+          <div style="font-size:.78rem;color:var(--text-muted)">7 posts · 3 post types · goal: 5+ real followers a week</div>
+        </div>
+      </div>
+      <div class="eval-metrics">
+        <div class="metric-card"><div class="metric-value">18%</div><div class="metric-label">Blended engagement</div></div>
+        <div class="metric-card"><div class="metric-value">96%</div><div class="metric-label">On-brand posts</div></div>
+        <div class="metric-card"><div class="metric-value">6</div><div class="metric-label">New followers</div></div>
+        <div class="metric-card highlight"><div class="metric-value">2</div><div class="metric-label">Walk-ins (so far)</div></div>
+      </div>
+
+      <div style="font-size:.72rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--text-muted);margin:1rem 0 .6rem">Judge each post type</div>
+
+      <div class="adset" id="asA">
+        <div class="adset-name">Type A · On-brand Reel + strong hook<span>The "5am sourdough" behind-the-scenes format</span></div>
+        <div class="adset-nums"><span>Posts<b>3</b></span><span>Engaged<b>34%</b></span><span>Saves<b>41</b></span><span>Follows<b>4</b></span></div>
+        <div class="adset-actions">
+          <button class="adset-btn" onclick="judge('A','kill',this)">Drop</button>
+          <button class="adset-btn" onclick="judge('A','tweak',this)">Iterate</button>
+          <button class="adset-btn" onclick="judge('A','keep',this)">Double-down</button>
+        </div>
+        <div class="adset-feedback" id="fbA"></div>
+      </div>
+
+      <div class="adset" id="asB">
+        <div class="adset-name">Type B · Generic "buy our bread" graphic<span>Stock-photo ad, no story, same look every time</span></div>
+        <div class="adset-nums"><span>Posts<b>2</b></span><span>Engaged<b>1%</b></span><span>Saves<b>0</b></span><span>Follows<b class="" style="color:#C62828">-2</b></span></div>
+        <div class="adset-actions">
+          <button class="adset-btn" onclick="judge('B','kill',this)">Drop</button>
+          <button class="adset-btn" onclick="judge('B','tweak',this)">Iterate</button>
+          <button class="adset-btn" onclick="judge('B','keep',this)">Double-down</button>
+        </div>
+        <div class="adset-feedback" id="fbB"></div>
+      </div>
+
+      <div class="adset" id="asC">
+        <div class="adset-name">Type C · Great photo, but weak caption<span>Beautiful shot, no hook, posted once then dropped</span></div>
+        <div class="adset-nums"><span>Posts<b>2</b></span><span>Engaged<b>10%</b></span><span>Saves<b>7</b></span><span>Follows<b>2</b></span></div>
+        <div class="adset-actions">
+          <button class="adset-btn" onclick="judge('C','kill',this)">Drop</button>
+          <button class="adset-btn" onclick="judge('C','tweak',this)">Iterate</button>
+          <button class="adset-btn" onclick="judge('C','keep',this)">Double-down</button>
+        </div>
+        <div class="adset-feedback" id="fbC"></div>
+      </div>
+
+      <div class="week-verdict" id="weekVerdict">
+        <h4>📜 The Friday-Night Verdict: <em>GrowLoop works.</em></h4>
+        <div class="wv-grid">
+          <div class="wv-tile"><div class="v">7</div><div class="l">Posts published</div></div>
+          <div class="wv-tile"><div class="v">6</div><div class="l">New followers</div></div>
+          <div class="wv-tile"><div class="v">2</div><div class="l">Walk-ins</div></div>
+          <div class="wv-tile"><div class="v">+180%</div><div class="l">Reach vs last week</div></div>
+        </div>
+        <p>In one week, a quiet feed earned <strong>real, engaged followers</strong> — nearly tripling reach — and became a repeatable engine. The lesson is written in the post types: <strong>Type A (on-brand Reel + strong hook) is your whole strategy;</strong> Type B (the generic graphic) actually lost followers and earned nothing; Type C proved a great photo with a weak caption leaves saves on the table. Next month's plan writes itself: only on-brand, always a hook, never slop. Social is a long game — no single post makes you, and consistency beats one viral hit. Most beginners quit after one flop. You built a system. 🎉</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER RECAP ─── -->
+<div class="footer-cta">
+  <h2>🎉 Five days ago, <em>GrowLoop</em> didn't exist.</h2>
+  <p>Now you've run the entire AI social-media loop once — for real, and without posting a single piece of slop. Here's what the build secretly taught you: the four lessons of Week 4.</p>
+  <div class="recap-grid">
+    <div class="recap-card">
+      <div class="rn">Lesson 1</div>
+      <h4>Social Media in the AI Era</h4>
+      <p>Reach → Engage → Grow. Growth is a loop, each AI tool owns one part. Pick one platform and one goal, then learn how the feed works. Stage 1's blueprint.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 2</div>
+      <h4>AI Social Content Creation</h4>
+      <p>Brand voice → ideas → hook score → polish. Not every idea is equal; a score is a priority, not a promise. The Idea-Score Lab is your forever-tool.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 3</div>
+      <h4>AI Scheduling, Community &amp; Engagement</h4>
+      <p>One true hook beats a hundred templates. Then a steady weekly schedule, human replies, and a little social listening. Stages 3 &amp; 4 &amp; 5.</p>
+    </div>
+    <div class="recap-card">
+      <div class="rn">Lesson 4</div>
+      <h4>AI Social Analytics &amp; Growth</h4>
+      <p>Reach, saves, follows — read them, then double-down, iterate, or drop. The post you learn from is the growth you keep. Stage 6.</p>
+    </div>
+  </div>
+  <button class="btn-action" style="font-size:.9rem;padding:.8rem 1.8rem" onclick="document.getElementById('s1').scrollIntoView({behavior:'smooth'})">↻ Rebuild the engine</button>
+  <div class="footer-note">GrowLoop is a teaching scenario. Real reach and engagement rates vary widely, and social media is a long game — consistency and authenticity beat one lucky viral hit, and nobody can guarantee virality. Real tools help (ChatGPT/Claude, Canva, CapCut/Descript/Opus Clip, Buffer/Later/Metricool, native analytics), but the goal of week four is one honest, well-built, human content engine that makes next month's posts dramatically smarter — never a slop machine.</div>
+</div>
+
+<!-- ─── COMPLETION BAR ─── -->
+<div class="completion-bar">
+  <div class="completion-info"><span style="font-size:1.1rem">🚀</span><span>GrowLoop Progress</span></div>
+  <div class="completion-track"><div class="completion-fill" id="completionFill" style="width:0%"></div></div>
+  <div class="completion-percent" id="completionPct">0%</div>
+</div>
+
+<script>
+/* ───────── PROGRESS TRACKING ───────── */
+const visited = new Set();
+function markVisited(id){
+  visited.add(id);
+  const pct = Math.round((visited.size / 6) * 100);
+  document.getElementById('completionFill').style.width = pct + '%';
+  document.getElementById('completionPct').textContent = pct + '%';
+  document.getElementById('headerProgressText').textContent = `${visited.size} of 6 stages explored`;
+}
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.target).scrollIntoView({behavior:'smooth', block:'start'});
+    markVisited(btn.dataset.target);
+  });
+});
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && e.intersectionRatio > 0.3) {
+      markVisited(e.target.id);
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b.dataset.target === e.target.id));
+    }
+  });
+}, {threshold:[0.3]});
+document.querySelectorAll('.section').forEach(s => observer.observe(s));
+
+/* ───────── STAGE 1: FUNNEL STAGE PICK ───────── */
+const stageInfo = {
+  top: `<span class="verdict-pill vp-good">Reach · where it all starts</span><br><strong>Get seen</strong> is turning a vague plan ("post something") into content the feed pushes to people who don't follow you yet — through Reels, strong hooks and honest hashtags. Get this wrong and everything downstream is wasted — a perfect caption nobody sees grows nothing. <strong>AI's job here:</strong> understand the brand, brainstorm platform-native ideas, and sharpen hooks. <em>This is Stage 2.</em>`,
+  mid: `<span class="verdict-pill vp-good">Engage · where trust is earned</span><br><strong>Earn interaction</strong> is the caption plus a steady schedule and real community replies. Reach without engagement fades fast — saves, shares and comments are what tell the algorithm to keep showing you. <strong>AI's job here:</strong> draft captions in the brand voice, schedule the week, and help reply like a human. But this stage has a hidden boss: <strong>consistency</strong> — post everything at once then vanish and the feed forgets you. <em>This is Stages 3, 4 &amp; 5.</em>`,
+  bottom: `<span class="verdict-pill vp-good">Grow · where it pays off</span><br><strong>Convert &amp; keep</strong> is turning a viewer into a follower, a follower into a regular, and a regular into a walk-in — with every number read in <strong>native analytics</strong> so nothing is guessed. This is exactly where small brands stall, posting on vibes. <strong>AI's job here:</strong> read the metrics, spot what worked, and plan next month. <em>This is Stage 6.</em>`
+};
+function pickStage(k){
+  document.querySelectorAll('#s1 .pick-card').forEach(c => c.classList.toggle('active', c.dataset.stage === k));
+  const d = document.getElementById('stageDetail');
+  d.innerHTML = stageInfo[k];
+  d.classList.add('show');
+}
+
+/* prompt showdown */
+const promptResults = [
+  {ok:false, fb:'✗ Far too vague. ChatGPT replies with a generic listicle — "post consistently, use hashtags, engage with others…" — the same advice it gives everyone. Vague prompt in, vague answer out. Give it the real brand.',
+   chat:`<div class="chat-msg user"><span class="who">You</span>How do I go viral?</div><div class="chat-msg ai"><span class="who">ChatGPT</span>Here are some tips to grow on social media: post consistently, use trending hashtags, engage with your audience, jump on trends… <strong>(…generic advice with nothing about the bakery, its voice, or a real goal.)</strong></div>`},
+  {ok:false, fb:'✗ This is the spam mindset, and it will get the account throttled or banned. Auto-posting 50 times a day and mass-following strangers is exactly what platforms detect and punish — and it torches the brand\'s reputation. Volume without value is not a strategy.',
+   chat:`<div class="chat-msg user"><span class="who">You</span>Give me a bot that auto-posts 50 times a day and mass-follows strangers automatically.</div><div class="chat-msg ai"><span class="who">ChatGPT</span>I\'d caution against that. Spamming 50 posts a day and mass-following will likely get the account flagged, shadow-banned or suspended, and it damages trust with real fans. <strong>Healthy growth is a few great posts and genuine engagement, not mass automation.</strong></div>`},
+  {ok:true, fb:'✓ Exactly. Role + the real brand + a clear structure + guardrails (beginner-friendly, low-cost, authentic) + a requested format. This earns a genuinely useful, honest blueprint — and it becomes GrowLoop\'s stack.',
+   chat:`<div class="chat-msg user"><span class="who">You</span>Act as a social media strategist. Beginner helping a small artisan bakery (Crumb &amp; Co) grow on one platform. Recommend the best single platform + one goal, map a loop (reach → engage → grow), one AI tool type per stage, beginner-friendly, low-cost, authentic. For each: the goal, the tool type, one rookie mistake.</div><div class="chat-msg ai"><span class="who">ChatGPT</span>Great brief. Start with <strong>Instagram</strong>, goal: local awareness. <strong>REACH</strong> — goal: get seen; tool: AI ideas + Reels editor (CapCut); mistake: chasing off-brand trends. <strong>ENGAGE</strong> — goal: saves &amp; replies; tool: AI captions (ChatGPT/Claude) + a scheduler (Buffer/Later); mistake: posting then vanishing. <strong>GROW</strong> — goal: real followers; tool: native analytics; mistake: judging by likes alone. <strong>← This is your stack.</strong></div>`}
+];
+let promptAnswered = false;
+function pickPrompt(i){
+  const r = promptResults[i];
+  const btns = document.querySelectorAll('#s1 .scenario-panel:first-of-type .scenario-btn');
+  if (!promptAnswered){
+    btns.forEach((b,j) => { if (j===2) b.classList.add('correct'); else if (j===i && !r.ok) b.classList.add('wrong'); });
+    if (r.ok) promptAnswered = true;
+  }
+  const fb = document.getElementById('promptFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+  document.getElementById('promptChat').innerHTML = r.chat;
+}
+
+/* funnel quiz */
+const funnelQs = [
+  {q:"Why pick one platform and one goal before posting a single thing?", opts:["Because it looks professional in a slide deck","Because a perfect post on the wrong platform reaches nobody — focus is decided upstream, at 'reach'","Because AI refuses to help without a diagram"], correct:1, explain:"Every stage depends on the one before it. If you spread thin across five platforms with no goal, great content is wasted. The loop tells you to nail 'reach' on one platform before you obsess over the rest."},
+  {q:"A viewer 'converts' along the growth loop when they…", opts:["See your post for half a second","Move one step closer to being a fan — e.g. save it, then follow, then visit","Scroll past without stopping"], correct:1, explain:"Conversion is movement toward loyalty. Each stage has its own conversion: reach→engagement, engagement→follow, follow→walk-in. Knowing your rate at each is the whole game."},
+  {q:"ChatGPT recommends an expensive all-in-one 'AI social suite' for your first week. Best move?", opts:["Buy it — more features means more growth","Refuse all tools and do everything by hand forever","Start lean: free/cheap tools per stage (ChatGPT, Canva, Buffer), prove the loop works, then upgrade what's actually the bottleneck"], correct:2, explain:"Beginners don't have a tooling problem, they have a 'does this even work' problem. Prove the loop cheaply first; buy the fancy suite only when growth justifies it."}
+];
+let fqIdx = 0;
+function renderFunnelQ(){
+  const s = funnelQs[fqIdx];
+  document.getElementById('funnelQ').textContent = `Round ${fqIdx+1}/3 — ${s.q}`;
+  document.getElementById('funnelOpts').innerHTML = s.opts.map((o,i)=>`<button class="scenario-btn" onclick="answerFunnelQ(${i})">${o}</button>`).join('');
+  const fb = document.getElementById('funnelFb');
+  fb.className = 'scenario-feedback'; fb.innerHTML = '';
+  document.getElementById('funnelNext').style.display = 'none';
+}
+function answerFunnelQ(i){
+  const s = funnelQs[fqIdx];
+  document.querySelectorAll('#funnelOpts .scenario-btn').forEach((b,j)=>{
+    b.disabled = true;
+    if (j===s.correct) b.classList.add('correct'); else if (j===i) b.classList.add('wrong');
+  });
+  const fb = document.getElementById('funnelFb');
+  fb.className = 'scenario-feedback show ' + (i===s.correct ? 'success' : 'fail');
+  fb.innerHTML = (i===s.correct ? '✓ Spot on! ' : '✗ Not quite. ') + s.explain + (fqIdx===funnelQs.length-1 ? '<br><br>🎉 Stage 1 complete — the stack is mapped. Next: brainstorm the content.' : '');
+  document.getElementById('funnelNext').style.display = fqIdx < funnelQs.length-1 ? 'inline-block' : 'none';
+}
+function nextFunnelQ(){ fqIdx++; if (fqIdx < funnelQs.length) renderFunnelQ(); }
+renderFunnelQ();
+
+/* ───────── STAGE 2: LEAD PICK ───────── */
+const leadInfo = {
+  bloom: `<span class="verdict-pill vp-good">✓ Your best idea — make this one first</span><br>The <strong>"5am sourdough" Reel</strong> hits every signal: it fits the brand voice (handmade, honest, cosy), it's native to the platform (a short vertical Reel is what the feed pushes), and it has a <em>strong hook</em> — dough shaped by hand at dawn is the kind of thing people stop for and save. High score, real reason to make it now. <em>This becomes your flagship post through the rest of the build.</em>`,
+  chain: `<span class="verdict-pill vp-mid">Vanity trap — big views, wrong fans</span><br>The <strong>trending dance</strong> would look amazing in a view count, and that's the trap. It says nothing about bread, the bakery, or its voice. You might get a spike of strangers who never return, and the account learns to attract the wrong audience. <strong>Consequence:</strong> in this story, chasing the trend burns your best day for followers who don't care about the bread. Chase fit, not fame.`,
+  ghost: `<span class="verdict-pill vp-bad">Generic slop — skip it</span><br>The <strong>"buy our bread" graphic</strong> fails the hook test: a stock photo, a logo, and "Fresh bread daily!" There's no story, no reason to stop, and it reads instantly as an ad. <strong>Consequence:</strong> posting slop is wasted effort — there's nothing to save or share, and the algorithm buries low-engagement posts. Low score. Skip it, or spend 2 minutes turning it into a real behind-the-scenes moment before deciding.`
+};
+function pickLead(k){
+  document.querySelectorAll('#s2 .pick-card').forEach(c => c.classList.toggle('active', c.dataset.lead === k));
+  const d = document.getElementById('leadDetail');
+  d.innerHTML = leadInfo[k];
+  d.classList.add('show');
+}
+
+/* lead score lab */
+function scoreLead(){
+  const fit = +document.getElementById('inFit').value;
+  const sen = +document.getElementById('inSen').value;
+  const trig = +document.getElementById('inTrig').value;
+  const reach = +document.getElementById('inReach').value;
+  document.getElementById('oFit').textContent = fit + ' / 10';
+  document.getElementById('oSen').textContent = sen + ' / 10';
+  document.getElementById('oTrig').textContent = trig + ' / 10';
+  document.getElementById('oReach').textContent = reach + ' / 10';
+  // weighted: brand-fit & save-worthiness matter most (off-brand or unsaveable posts grow nothing)
+  const score = Math.round((fit*3 + reach*3 + trig*2 + sen*2) / 10 * 10);
+  document.getElementById('leadScore').textContent = score;
+  const out = document.getElementById('leadOut');
+  const v = document.getElementById('leadVerdict');
+  const a = document.getElementById('leadAdvice');
+  if (score >= 75 && fit >= 5 && reach >= 5){
+    out.className = 'lead-out hot'; v.textContent = '🔥 Strong idea';
+    a.innerHTML = 'Top of the list. Make this one <strong>first</strong> and polish the hook — this is where your effort pays back.';
+  } else if (score >= 50){
+    out.className = 'lead-out warm'; v.textContent = '🌤️ Decent idea';
+    a.innerHTML = 'Worth making, but after the strong ones. A weak hook or low save-worthiness is holding it back.';
+  } else {
+    out.className = 'lead-out cold'; v.textContent = '🧊 Weak idea';
+    a.innerHTML = (fit < 5) ? 'Off-brand — don\'t chase views that attract the wrong audience. Skip or rework it.' : (reach < 5 ? 'Nothing to save or share. Effort is wasted on slop. Skip for now.' : 'Low priority — spend your effort higher up the list.');
+  }
+}
+['inFit','inSen','inTrig','inReach'].forEach(id => document.getElementById(id).addEventListener('input', scoreLead));
+scoreLead();
+
+/* target choice */
+const targetFbs = [
+  {cls:'fail', fb:'✗ <strong>The vanity play.</strong> Chasing the biggest viral trends usually brings a spike of strangers who never come back — and teaches the algorithm to show you to the wrong crowd. Views are not fans. Make the content your real audience actually wants.'},
+  {cls:'success', fb:'✓ <strong>The professional play.</strong> Top 7 by idea score means most on-brand, native, with a real hook — then AI polishes each with one honest detail. Your effort lands where it grows. This is exactly how GrowLoop proceeds. 🎯'},
+  {cls:'fail', fb:'✗ <strong>The slop shortcut.</strong> Twenty generic AI graphics get ~1% engagement, train the feed to bury your posts, and quietly repel real fans. "Saving time" this way costs you all your future reach. Craft the few; skip the slop.'}
+];
+function targetQ(i){
+  const btns = document.querySelectorAll('#s2 .scenario-panel .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled = true; if (j===1) b.classList.add('correct'); else if (j===i && i!==1) b.classList.add('wrong'); });
+  const fb = document.getElementById('targetFb');
+  fb.className = 'scenario-feedback show ' + targetFbs[i].cls;
+  fb.innerHTML = targetFbs[i].fb;
+}
+
+/* ───────── STAGE 3: THE MESSAGE ───────── */
+const voices = {
+  peer: {s:'Hook: "This is what 5am smells like."', b:`This is what 5am smells like at Crumb &amp; Co. 🌅 Priya's been shaping this sourdough by hand since before the birds — no machines, no shortcuts, just flour, water, salt and a lot of patience. By the time you're on your first coffee, it's out of the oven and on the shelf. Come find the warm loaf. 🥖`, sig:'📍 Corner of Residency Road · fresh daily till it\'s gone.'},
+  result: {s:'Hook: "Nobody sees the 5am part."', b:`Nobody sees the 5am part. Before the shop lights come on, Priya is elbow-deep in dough, folding a sourdough that started rising yesterday. It\'s slow, it\'s a little messy, and it\'s the whole reason the crust cracks the way it does. We could buy it in frozen — we never will. That\'s the promise of Crumb &amp; Co: real bread, made by hand, every single morning.`, sig:'📍 Residency Road · come say hi to the baker.'},
+  short: {s:'Hook: "Made by hand before you woke up."', b:`Made by hand before you woke up. 🥖 Real sourdough, shaped at 5am, out of the oven by 8. That\'s it — that\'s the whole story. Save this for your next slow morning.`, sig:'📍 Crumb &amp; Co · Residency Road.'}
+};
+function setVoice(v){
+  document.querySelectorAll('.voice-tab').forEach(t => t.classList.toggle('active', t.dataset.voice === v));
+  const s = document.getElementById('emailSubj'), b = document.getElementById('emailBody');
+  s.style.opacity = 0; b.style.opacity = 0;
+  setTimeout(()=>{
+    s.textContent = voices[v].s;
+    b.innerHTML = voices[v].b + `<div class="sig">${voices[v].sig}</div>`;
+    s.style.opacity = 1; b.style.opacity = 1;
+  }, 250);
+}
+function toggleCopy(which){
+  document.getElementById('copyBefore').style.display = which==='before' ? 'block' : 'none';
+  document.getElementById('copyAfter').style.display = which==='after' ? 'block' : 'none';
+}
+
+/* subject quiz */
+const subjFbs = [
+  {ok:false, fb:'✗ "Delicious Freshly Baked Goods Await You!!!" screams ad — capital letters and triple exclamation marks are exactly what tired scrollers (and the algorithm) skip. Scrolled past before it\'s read.'},
+  {ok:true, fb:'✓ Yes. It\'s specific, sensory and curious — "5am" makes you wonder, and the smell of fresh bread does the rest. It reads like a real moment, not an ad. That\'s what stops the scroll.'},
+  {ok:false, fb:'✗ "We are a bakery. Please check out our products." is flat, brand-first, and gives the viewer no reason to care. It states; it doesn\'t hook. Straight past.'}
+];
+function subjQ(i){
+  const r = subjFbs[i];
+  const btns = document.querySelectorAll('#s3 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled = true; if (subjFbs[j].ok) b.classList.add('correct'); else if (j===i) b.classList.add('wrong'); });
+  const fb = document.getElementById('subjFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* ethics quiz */
+const ethicsFbs = [
+  {ok:false, fb:'✗ <strong>Never post a lie.</strong> A false "award-winning" claim is worse than no hook — the moment a follower learns there\'s no award, the brand\'s credibility is gone. Fake claims are the fastest way to torch trust at scale.'},
+  {ok:true, fb:'✓ Exactly. The story must be <strong>real</strong>. Swap the invented boast for a true one — hand-shaped, small-batch, fresh at 5am — and the caption becomes honest <em>and</em> compelling. AI writes the sentence; a human guarantees it\'s true. That\'s the whole ethics of AI content at scale.'},
+  {ok:false, fb:'✗ Hedging a false claim ("(unofficially)") just advertises that you know it isn\'t true — it reads as clumsy and slippery. Don\'t patch a lie; replace it with a truth you can stand behind.'}
+];
+function ethicsQ(i){
+  const r = ethicsFbs[i];
+  const btns = document.querySelectorAll('#s3 .scenario-panel:last-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled = true; if (ethicsFbs[j].ok) b.classList.add('correct'); else if (j===i) b.classList.add('wrong'); });
+  const fb = document.getElementById('ethicsFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* ───────── STAGE 4: WORKFLOW BUILDER ───────── */
+const blockData = {
+  warm:{n:'📅 Set a steady cadence first', order:0},
+  open:{n:'🥐 Mon · Hero Reel', order:1},
+  f1:{n:'📖 Wed · Story carousel', order:2},
+  f2:{n:'🔄 Fri · Community re-share', order:3},
+  bye:{n:'📌 Weekend · Light Story poll', order:4},
+  stop:{n:'🕒 Post at peak-audience times', order:5}
+};
+const flowUsed = [];
+function addBlock(k){
+  if (flowUsed.includes(k)) return;
+  flowUsed.push(k);
+  document.querySelector(`.flow-block[data-block="${k}"]`).classList.add('used');
+  renderFlow();
+  document.getElementById('flowReset').style.display = 'inline-block';
+  checkFlow();
+}
+function renderFlow(){
+  const drop = document.getElementById('flowDrop');
+  drop.innerHTML = flowUsed.map((k,i)=>`<li class="flow-step"><span class="fs-n">${i+1}</span>${blockData[k].n}</li>`).join('');
+}
+function checkFlow(){
+  const v = document.getElementById('flowVerdict');
+  if (flowUsed.length < 6){ v.className = 'flow-verdict'; return; }
+  // ideal order: cadence(0) first, hero(1), then week posts in order, weekend touch near end, peak-times present
+  const ideal = ['warm','open','f1','f2','bye','stop'];
+  const warmFirst = flowUsed[0] === 'warm';
+  const openerBeforeFollowups = flowUsed.indexOf('open') < flowUsed.indexOf('f1') && flowUsed.indexOf('f1') < flowUsed.indexOf('f2');
+  const byeAfterFollowups = flowUsed.indexOf('bye') > flowUsed.indexOf('f2');
+  const hasStop = flowUsed.includes('stop');
+  if (warmFirst && openerBeforeFollowups && byeAfterFollowups && hasStop){
+    v.className = 'flow-verdict good show';
+    v.innerHTML = '✓ <strong>A professional week.</strong> Set a steady cadence first, lead with your hero Reel, then a story carousel and a community re-share, a light weekend touch — and always post at peak-audience times so real followers actually see it. Consistency compounds. This is exactly how GrowLoop schedules.';
+  } else {
+    v.className = 'flow-verdict warn show';
+    let msg = '△ <strong>Almost — the order matters.</strong> ';
+    if (!warmFirst) msg += 'A sustainable cadence must come <em>first</em>: dumping everything then vanishing kills your reach. ';
+    else if (!openerBeforeFollowups) msg += 'Posts should flow across the week after your hero (Mon → Wed → Fri). ';
+    else if (!byeAfterFollowups) msg += 'The light weekend touch belongs near the <em>end</em>, after your weekday posts. ';
+    if (!hasStop) msg += 'And never skip posting at peak times — a great post at 3am is a great post nobody sees. ';
+    msg += 'Reset and try the order again.';
+    v.innerHTML = msg;
+  }
+}
+function resetFlow(){
+  flowUsed.length = 0;
+  document.querySelectorAll('.flow-block').forEach(b => b.classList.remove('used'));
+  document.getElementById('flowDrop').innerHTML = '<li class="empty">Click blocks on the left to build your sequence…</li>';
+  document.getElementById('flowVerdict').className = 'flow-verdict';
+  document.getElementById('flowReset').style.display = 'none';
+}
+
+/* deliverability quiz */
+const deliverFbs = [
+  {cls:'fail', fb:'✗ <strong>Reach suicide.</strong> A brand-new account has no momentum. Dumping 7 posts then going silent tells the algorithm "inconsistent, probably inactive" — your reach collapses, and even your good posts stop being shown. Steady cadence isn\'t optional; it\'s the whole ballgame.'},
+  {cls:'success', fb:'✓ <strong>The durable way.</strong> Schedule 3–4 posts a week at peak times with a tool like Buffer or Later, keep it sustainable, and show up every single week. Boring, steady, and it\'s exactly why the feed keeps showing you to new people. Consistency is a reputation you can\'t fake. 🎯'},
+  {cls:'fail', fb:'✗ <strong>The fake-follower disaster.</strong> Bought followers are bots and dead accounts — they never engage, they crater your engagement rate, and platforms purge them (and can ban you). A tiny real audience beats a giant fake one every single time.'}
+];
+function deliverQ(i){
+  const btns = document.querySelectorAll('#s4 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled = true; if (j===1) b.classList.add('correct'); else if (j===i && i!==1) b.classList.add('wrong'); });
+  const fb = document.getElementById('deliverFb');
+  fb.className = 'scenario-feedback show ' + deliverFbs[i].cls;
+  fb.innerHTML = deliverFbs[i].fb;
+}
+
+/* law quiz */
+const lawFbs = [
+  {ok:false, fb:'✗ <strong>Against the rules and self-defeating.</strong> Bought likes, engagement bots and mass-following violate every platform\'s terms directly — and they destroy trust the moment fans notice fake numbers. Gaming the system is never the durable play.'},
+  {ok:true, fb:'✓ Exactly. Real content, real replies, honest hashtags, genuine interaction, and clear disclosure of any paid partnership — that\'s the baseline for healthy, lasting growth. Playing fair isn\'t red tape; it\'s the same authenticity that makes people <em>want</em> to follow. 🎯'},
+  {ok:false, fb:'✗ <strong>A fast way to a strike.</strong> Reposting others\' videos as your own without credit breaks copyright and platform rules, and it wrecks your credibility too. Make your own, or credit clearly and get permission — always.'}
+];
+function lawQ(i){
+  const r = lawFbs[i];
+  const btns = document.querySelectorAll('#s4 .scenario-panel:last-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled = true; if (lawFbs[j].ok) b.classList.add('correct'); else if (j===i) b.classList.add('wrong'); });
+  const fb = document.getElementById('lawFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* ───────── STAGE 5: CLOSE CHECKLIST ───────── */
+const buildEvents = [
+  {t:'Fri 09:10', msg:'Replied to the "gluten-free?" comment warmly and honestly — "Not yet, but we\'re testing a spelt loaf! Want a DM when it\'s in?" She said yes in 4 minutes.'},
+  {t:'Fri 09:35', msg:'AI drafted friendly replies to the 6 easy comments; you edited each to sound like Priya, not a bot. Warm, human, done in minutes.'},
+  {t:'Fri 10:02', msg:'Answered the "can I pre-order a loaf?" DM personally and logged it. Every conversation now sits on one screen — nobody forgotten.'},
+  {t:'Fri 10:20', msg:'Ten minutes of social listening: three neighbours asked about gluten-free, two about opening hours. That\'s next week\'s content, handed to you for free.'},
+  {t:'Fri 10:40', msg:'Daily reminder set: any comment or DM older than 24h pings you. The "left on read" that haunts small brands can\'t happen here anymore.'},
+  {t:'Fri 11:15', msg:'Thanked and re-shared the two customers who tagged the bakery. They felt seen, their friends saw the bread — real word-of-mouth, no spend.'}
+];
+const buildSteps = new Set();
+function runBuildStep(i){
+  if (buildSteps.has(i)) return;
+  buildSteps.add(i);
+  document.querySelector(`#buildList li[data-step="${i}"]`).classList.add('done');
+  const feed = document.getElementById('buildFeed');
+  if (buildSteps.size === 1) feed.innerHTML = '';
+  const e = buildEvents[i];
+  feed.innerHTML += `<div class="feed-line"><span class="ft">${e.t}</span><span>${e.msg}</span></div>`;
+  feed.scrollTop = feed.scrollHeight;
+  if (buildSteps.size === buildEvents.length) document.getElementById('buildDone').style.display = 'block';
+}
+
+/* close quiz */
+const closeFbs = [
+  {ok:false, fb:'✗ Ignoring a warm, curious comment is how small brands stay small. A neighbour who asks a question is halfway to being a fan — leave it on read and you teach your whole audience that comments go nowhere.'},
+  {ok:true, fb:'✓ Yes. A warm, honest reply turns a question into a relationship — "we\'re testing a spelt loaf, want a DM?" — and noting the request feeds your content ideas. Community is built one real reply at a time. 🎯'},
+  {ok:false, fb:'✗ A copy-paste "Thanks for your comment!" is worse than silence — it\'s obviously automated and makes a real person feel like a ticket number. AI can draft replies, but a human must make them sound human.'}
+];
+function closeQ(i){
+  const r = closeFbs[i];
+  const btns = document.querySelectorAll('#s5 .scenario-panel:first-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled = true; if (closeFbs[j].ok) b.classList.add('correct'); else if (j===i) b.classList.add('wrong'); });
+  const fb = document.getElementById('closeFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* leak quiz */
+const leakFbs = [
+  {ok:false, fb:'✗ Shrugging off missed DMs is how small brands cap their own growth. Every forgotten "can I pre-order?" is a fan you worked to earn and then dropped. This is fixable — and the fix is a system, not more willpower.'},
+  {ok:true, fb:'✓ Exactly. Apologize, answer now — and fix the <strong>cause</strong>: a daily check plus a logged conversation so nothing sits on read. The fan you <em>remember</em> is the regular you keep. Stop relying on memory; let the routine remember. 🎯'},
+  {ok:false, fb:'✗ Pretending it never arrived guarantees the loss. A slightly-late, honest reply ("so sorry for the delay — yes, here\'s how to pre-order!") recovers most fans. Ghosting someone who wanted to buy your bread is the one unforced error to never make.'}
+];
+function leakQ(i){
+  const r = leakFbs[i];
+  const btns = document.querySelectorAll('#s5 .scenario-panel:last-of-type .scenario-btn');
+  btns.forEach((b,j)=>{ b.disabled = true; if (leakFbs[j].ok) b.classList.add('correct'); else if (j===i) b.classList.add('wrong'); });
+  const fb = document.getElementById('leakFb');
+  fb.className = 'scenario-feedback show ' + (r.ok ? 'success' : 'fail');
+  fb.innerHTML = r.fb;
+}
+
+/* ───────── STAGE 6: PIPELINE MATH ───────── */
+function pmCalc(){
+  const emails = +document.getElementById('inEmails').value;
+  const reply = +document.getElementById('inReply').value;
+  const book = +document.getElementById('inBook').value;
+  const close = +document.getElementById('inClose').value;
+  document.getElementById('oEmails').textContent = emails;
+  document.getElementById('oReply').textContent = reply + '%';
+  document.getElementById('oBook').textContent = book + '%';
+  document.getElementById('oClose').textContent = close + '%';
+  const replies = emails * reply/100;
+  const calls = replies * book/100;
+  const clients = calls * close/100;
+  document.getElementById('vReplies').textContent = Math.round(replies*10)/10;
+  document.getElementById('vCalls').textContent = Math.round(calls*10)/10;
+  document.getElementById('vClients').textContent = Math.round(clients*10)/10;
+  const perCall = calls > 0 ? Math.round(emails/calls) : '∞';
+  document.getElementById('vPerCall').textContent = perCall;
+  const tCalls = document.getElementById('tCalls'), tClients = document.getElementById('tClients');
+  tCalls.className = 'calc-tile ' + (calls >= 5 ? 'ok' : calls < 2 ? 'warn' : '');
+  tClients.className = 'calc-tile ' + (clients >= 1 ? 'ok' : 'warn');
+  const note = document.getElementById('calcNote');
+  if (reply <= 3){
+    note.innerHTML = '🚨 <strong>A ~' + reply + '% engagement rate is the signature of generic slop.</strong> On-brand posts with a real hook typically lift engagement to 10–25%. Fix the content before you post more — reach can\'t rescue a boring post.';
+  } else if (calls < 5){
+    note.innerHTML = '🟡 At these rates you earn <strong>' + (Math.round(calls*10)/10) + ' followers</strong> from ' + emails + ' accounts reached. To hit 5+ new followers, either raise your engagement (stronger hooks) or reach more of the <em>right</em> people — never chase empty views.';
+  } else {
+    note.innerHTML = '✅ <strong>Healthy loop!</strong> ' + emails + ' reached → ~' + (Math.round(calls*10)/10) + ' new followers → ~' + (Math.round(clients*10)/10) + ' walk-ins. Now you have a <strong>target</strong>: to earn 10 followers, you know roughly how much quality reach you need. That clarity is the whole point.';
+  }
+}
+['inEmails','inReply','inBook','inClose'].forEach(id => document.getElementById(id).addEventListener('input', pmCalc));
+pmCalc();
+
+/* ───────── STAGE 6: JUDGE BATCHES ───────── */
+const judgeKey = {
+  A: {right:'keep', fb:{
+    keep:'✓ Correct — <strong>DOUBLE-DOWN.</strong> 34% engagement, 41 saves, 4 new followers. On-brand Reels with a strong hook are your entire strategy. Make more of exactly this — it\'s the format worth scaling (while keeping it authentic and sustainable).',
+    tweak:'△ Barely an iteration needed. A 34% engagement rate with 41 saves is a home run — don\'t fix what\'s working. Verdict: <strong>DOUBLE-DOWN</strong> and keep it consistent.',
+    kill:'✗ You just dropped your winner! This format earned most of your saves and 4 of your 6 new followers. This is the strategy the whole week was designed to find. Verdict: <strong>DOUBLE-DOWN</strong>.'}},
+  B: {right:'kill', fb:{
+    kill:'✓ Correct — <strong>DROP.</strong> 1% engagement, zero saves, and it <em>lost 2 followers</em> — generic ad-slop actively repels people and teaches the feed to bury you. No rewrites, no "one more try". Drop the slop forever.',
+    tweak:'△ You can\'t iterate your way out of "generic stock-photo ad". The problem isn\'t the wording, it\'s the whole approach — no story, no hook. Verdict: <strong>DROP</strong>; move that effort to on-brand content.',
+    keep:'✗ Keeping a slop graphic that loses followers will slowly poison your reach and train the algorithm to ignore even your good posts. This is the format actively hurting you. Verdict: <strong>DROP</strong>.'}},
+  C: {right:'tweak', fb:{
+    tweak:'✓ Correct — <strong>ITERATE.</strong> Beautiful photo (10% engagement, 2 follows) but a <em>weak caption and no hook</em>. Saves come from a reason to stop, so you left engagement on the table. Add a strong hook and a real story and this likely doubles. Fix, don\'t drop.',
+    keep:'△ The photo is great, but "keep as-is" ignores the weak caption — you\'re leaving saves unclaimed. Verdict: <strong>ITERATE</strong> by adding a real hook.',
+    kill:'✗ Don\'t drop a post that already earned 2 followers from a lovely photo. The only thing missing is a hook — that\'s an iteration, not a funeral. Verdict: <strong>ITERATE</strong>.'}}
+};
+const judged = {};
+function judge(set, verdict, btn){
+  const k = judgeKey[set];
+  judged[set] = true;
+  const row = document.getElementById('as'+set);
+  row.className = 'adset decided-' + (k.right==='keep'?'scale':k.right==='kill'?'kill':'watch');
+  row.querySelectorAll('.adset-btn').forEach(b => b.disabled = true);
+  const fb = document.getElementById('fb'+set);
+  fb.className = 'adset-feedback show ' + (verdict===k.right ? 'good' : 'warn');
+  fb.innerHTML = k.fb[verdict];
+  if (judged.A && judged.B && judged.C){
+    setTimeout(()=>{ document.getElementById('weekVerdict').classList.add('show'); document.getElementById('weekVerdict').scrollIntoView({behavior:'smooth', block:'center'}); }, 600);
+  }
+}
+</script>
+</body>
+</html>
