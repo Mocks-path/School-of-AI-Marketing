@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Optimization, Scaling & Measurement · Lesson 04</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · power-law portfolio ============ */
+.plaw{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 22px 20px}
+.plaw-chart{display:flex;align-items:flex-end;gap:4px;height:230px;padding:0 4px;border-bottom:2px solid var(--line);position:relative}
+.pbar{flex:1;background:var(--tan);border-radius:4px 4px 0 0;height:2%;transition:height .6s cubic-bezier(.3,.8,.3,1),background .3s;min-width:0;position:relative;opacity:.85}
+.pbar.hit{background:var(--orange)}
+.pbar.star{background:linear-gradient(180deg,var(--yellow),var(--orange))}
+.pbar .ptip{
+  position:absolute;top:-30px;left:50%;transform:translateX(-50%);
+  background:var(--brown-dark);color:#fff;font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:3px 7px;border-radius:5px;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity .2s;z-index:5;
+}
+.pbar:hover .ptip{opacity:1}
+.plaw-x{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.08em;text-transform:uppercase;margin-top:8px}
+.plaw-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:22px}
+.pstat{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;text-align:center}
+.pstat .pv{font-family:'Fraunces',serif;font-weight:800;font-size:30px;color:var(--orange-dark);line-height:1}
+.pstat .pl{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:6px;line-height:1.4}
+.plaw-note{font-size:14px;color:var(--brown-dark);background:var(--cream);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:12px 16px;margin-top:18px;max-width:none}
+.plaw-note strong{color:var(--orange-dark)}
+@media(max-width:700px){.plaw-chart{height:180px}.pstat .pv{font-size:24px}}
+
+/* ============ Figure 2 · trend timing ============ */
+.trend-wrap{display:grid;grid-template-columns:1fr 250px;gap:26px;align-items:center}
+.trend-chart{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;position:relative}
+.trend-chart svg{width:100%;height:auto;display:block;overflow:visible}
+.trend-marker{cursor:pointer}
+.trend-dot{transition:r .2s}
+.trend-side{display:grid;gap:9px}
+.trend-side .ts-lab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.tbtn{font-family:'Inter',sans-serif;font-size:13px;text-align:left;background:var(--paper);border:1px solid var(--line);color:var(--ink);padding:11px 14px;border-radius:10px;cursor:pointer;transition:all .2s}
+.tbtn:hover{border-color:var(--orange)}
+.tbtn.on{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.trend-cap{font-size:13.5px;color:var(--brown);background:var(--cream);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:12px 15px;margin-top:16px;max-width:none}
+.trend-cap strong{color:var(--orange-dark)}
+@media(max-width:760px){.trend-wrap{grid-template-columns:1fr}}
+
+/* ============ Figure 3 · seasonal calendar ============ */
+.cal{display:flex;gap:0;margin-bottom:18px}
+.cnode{
+  flex:1;text-align:center;padding:14px 6px;background:var(--paper);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;transition:all .25s;
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--brown);font-weight:600;
+}
+.cnode .cem{display:block;font-size:22px;margin-bottom:4px;line-height:1}
+.cnode:hover{border-color:var(--orange);transform:translateY(-2px)}
+.cnode.active{background:var(--brown-dark);border-color:var(--brown-dark);color:var(--paper)}
+.clink{width:12px;flex-shrink:0}
+.cpanel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:210px}
+.cpanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.cpanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:4px}
+.cpanel .ctag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:block;margin-bottom:14px}
+.cpanel ul{list-style:none;display:grid;gap:9px;margin-bottom:16px}
+.cpanel li{font-size:14.5px;color:var(--ink);padding-left:24px;position:relative;line-height:1.5}
+.cpanel li::before{content:"✦";position:absolute;left:0;color:var(--orange);font-size:13px}
+.c-lead{background:var(--cream);border-left:3px solid var(--brown);border-radius:0 10px 10px 0;padding:12px 15px;font-size:13.5px;color:var(--brown);line-height:1.5;max-width:none}
+.c-lead strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+@media(max-width:700px){.cal{flex-wrap:wrap;gap:8px}.cnode{flex:1 1 28%}.clink{display:none}}
+
+/* ============ Figure 4 · analytics decision cards ============ */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hcard{height:230px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.hgrid.show .hcard{animation:hIn .5s forwards}
+.hgrid.show .hcard:nth-child(1){animation-delay:.05s}
+.hgrid.show .hcard:nth-child(2){animation-delay:.2s}
+.hgrid.show .hcard:nth-child(3){animation-delay:.35s}
+.hgrid.show .hcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.hinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.hcard.flipped .hinner{transform:rotateY(180deg)}
+.hface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center}
+.hfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.hfront .hmetric{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;background:rgba(0,0,0,0.18);padding:3px 10px;border-radius:999px;margin-bottom:12px}
+.hfront .hclaim{font-family:'Fraunces',serif;font-weight:800;font-size:23px;line-height:1.14;margin-bottom:8px}
+.hfront .hsub{font-size:12.5px;opacity:.92;max-width:260px}
+.hfront .hhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.hback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.hback .hlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.hback p{font-size:13px;line-height:1.5;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){.hgrid{grid-template-columns:1fr}.hcard{height:225px}.hfront .hclaim{font-size:20px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 04 · AI Ads Optimization</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="40" rx="11" fill="#412C23"/>
+      <path d="M10 31V14.5l6 8.5 6-8.5 6 8.5 6-8.5V31" stroke="#EF7F1A" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="34" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 2 · Lesson 04 · AI Ads Optimization</div>
+  <h1>The numbers decide. <em>You</em> read them.</h1>
+  <p class="lede">Here's the truth every advertiser learns: most first campaigns lose money, and no tool can promise you a return. What separates people who eventually profit from people who quietly burn their budget is one skill — reading the metrics and acting on them. A handful of ad sets will carry your results; most won't. That's not failure — it's the shape of paid advertising. This lesson shows you the metrics that matter, how to diagnose a struggling campaign, when to kill or scale, how AI bidding works, and how to grow spend without breaking what's working.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The metrics that matter — and how results concentrate</h2>
+  <p class="lead">A few terms unlock every ad dashboard. <strong>CPM</strong> is cost per 1,000 impressions (how expensive it is to be seen). <strong>CTR</strong> is click-through rate (how compelling your ad is). <strong>CPC</strong> is cost per click. <strong>Conversion rate</strong> is the share of clickers who buy. <strong>CPA</strong> (or cost-per-result) is what one sale costs you. And <strong>ROAS</strong> — return on ad spend — is revenue divided by spend, the number that decides whether you are winning.</p>
+
+  <p>Here's the pattern nobody warns you about: if you run ten ad sets, they will <em>not</em> each deliver a tenth of your sales. A couple will carry almost all the profitable results, a few will break even, and most will quietly lose money. That lopsided shape is normal — it's exactly why advertising needs a <strong>learning budget</strong>. You cannot predict the winners in advance, so you fund several small tests, let the data speak, then pour spend into the few that work. Watch a real-shaped set of results build below (illustrative numbers).</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · How ad-set results actually stack up (illustrative)</span>
+      <div class="controls">
+        <button id="plawBtn" class="active" onclick="growPortfolio()">▶ Run the tests</button>
+        <button onclick="resetPortfolio()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="plaw">
+      <div class="plaw-chart" id="plawChart"></div>
+      <div class="plaw-x"><span>Top performers →</span><span>← the losing tail</span></div>
+      <div class="plaw-stats">
+        <div class="pstat"><div class="pv" id="pvDesigns">0</div><div class="pl">ad sets tested</div></div>
+        <div class="pstat"><div class="pv" id="pvWinners">0</div><div class="pl">carry most results</div></div>
+        <div class="pstat"><div class="pv" id="pvShare">0%</div><div class="pl">of results from top 5</div></div>
+      </div>
+      <div class="plaw-note" id="plawNote"><strong>Press run —</strong> and watch the results build. Notice how a tiny number of tall bars tower over the rest. That skew is why a learning budget exists: you fund the tests, and the winners reveal themselves.</div>
+    </div>
+  </div>
+
+  <h3>The one metric that ties it together: break-even ROAS</h3>
+  <p>Before you judge any campaign, you need your <strong>break-even ROAS</strong> — the return where you neither make nor lose money. The math is simple: divide your selling price by your profit margin per sale. If a MokshPath course sells for ₹5,000 and you keep ₹2,500 after costs (illustrative), your margin is 50%, so break-even ROAS is 1 ÷ 0.50 = <strong>2.0</strong>. Any ROAS above 2.0 is profit; below it, you're paying to lose money. This one number turns every other metric into a decision — and it's why you can't chase a "good ROAS" you heard online. There is <em>no</em> guaranteed or universal target; yours depends entirely on your own margins.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The campaign lifecycle: don't judge too early</h2>
+  <p class="lead">The single most common beginner mistake is panicking on day one and switching everything off. Every campaign moves through a lifecycle, and the numbers you see early are almost meaningless. Judge too soon and you kill winners before they've had a chance to work; wait too long and you burn budget on fatigue.</p>
+
+  <p>Every campaign follows the same curve: a noisy <strong>learning</strong> phase where the algorithm is still figuring out who to show your ad to, an <strong>optimizing</strong> phase as costs settle and ROAS improves, a <strong>peak efficiency</strong> window where the campaign is at its best, and eventually <strong>fatigue</strong>, when the same people have seen the ad too many times and results decay. Automated bidding needs enough conversions (roughly 50 in a week, illustrative) to exit learning — so patience early is a strategy, not weakness. Click each point on the curve to see what to do in each phase.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · The campaign lifecycle — when to act</span>
+      <div class="controls">
+        <button onclick="trendStep()">▶ Next phase</button>
+      </div>
+    </div>
+    <div class="trend-wrap">
+      <div class="trend-chart">
+        <svg viewBox="0 0 400 200" id="trendSvg">
+          <line x1="30" y1="170" x2="390" y2="170" stroke="#E8DCC8" stroke-width="2"/>
+          <line x1="30" y1="20" x2="30" y2="170" stroke="#E8DCC8" stroke-width="2"/>
+          <path d="M30 165 Q110 160 150 130 T240 40 Q290 25 320 60 T390 150" fill="none" stroke="#EF7F1A" stroke-width="3"/>
+          <g class="trend-marker" onclick="pickTrend('emerging')"><circle class="trend-dot" id="td-emerging" cx="120" cy="150" r="7" fill="#A34E1C" stroke="#fff" stroke-width="2.5"/></g>
+          <g class="trend-marker" onclick="pickTrend('rising')"><circle class="trend-dot" id="td-rising" cx="195" cy="90" r="7" fill="#A34E1C" stroke="#fff" stroke-width="2.5"/></g>
+          <g class="trend-marker" onclick="pickTrend('peak')"><circle class="trend-dot" id="td-peak" cx="248" cy="38" r="7" fill="#A34E1C" stroke="#fff" stroke-width="2.5"/></g>
+          <g class="trend-marker" onclick="pickTrend('decline')"><circle class="trend-dot" id="td-decline" cx="345" cy="115" r="7" fill="#A34E1C" stroke="#fff" stroke-width="2.5"/></g>
+          <text x="210" y="192" font-family="'JetBrains Mono',monospace" font-size="9" fill="#6E5C50" text-anchor="middle" letter-spacing="1">TIME →</text>
+        </svg>
+      </div>
+      <div class="trend-side">
+        <div class="ts-lab">Jump to a phase</div>
+        <button class="tbtn on" id="tb-emerging" onclick="pickTrend('emerging')">① Learning</button>
+        <button class="tbtn" id="tb-rising" onclick="pickTrend('rising')">② Optimizing</button>
+        <button class="tbtn" id="tb-peak" onclick="pickTrend('peak')">③ Peak efficiency</button>
+        <button class="tbtn" id="tb-decline" onclick="pickTrend('decline')">④ Fatigue</button>
+      </div>
+    </div>
+    <div class="trend-cap" id="trendCap"></div>
+  </div>
+
+  <h3>The honest caveat about the learning phase</h3>
+  <p>Patience is a strategy, but it is not a licence to bleed money forever. The rule that keeps you honest: set a <strong>learning budget</strong> you can afford to lose completely, and a time limit to match. If a campaign is still badly below break-even ROAS after it has genuinely exited learning — and after you've given the algorithm enough conversions to work with — that isn't a phase, that's a verdict. Most first campaigns lose money. The learning budget is the tuition you pay to find the few setups that don't.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Let AI bid, then scale what works</h2>
+  <p class="lead">You have a winning campaign. Now two questions decide everything: how do you let the platform's AI optimize the bidding for you, and how do you grow spend without breaking the very thing that's working? Both have a right and a wrong way — and scaling too fast is one of the fastest ways to lose money in advertising.</p>
+
+  <p>Modern ad platforms do the hardest maths for you. <strong>Automated bidding</strong> and AI-driven campaign types (Meta's <strong>Advantage+</strong>, Google's <strong>Performance Max</strong>) decide who to show your ad to, when, and at what price — you just set the goal and the budget. But handing over the wheel doesn't remove your job; it changes it. Your job becomes feeding the AI good inputs and scaling carefully. Click each stage below to see how the AI works and the right way to grow.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · From AI bidding to scaling</span>
+      <div class="controls">
+        <button onclick="calStep(-1)">◀ Prev</button>
+        <button onclick="calStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="cal" id="cal">
+      <div class="cnode" data-k="valentine" onclick="pickCal('valentine')"><span class="cem">🤖</span>Auto bidding</div>
+      <div class="clink"></div>
+      <div class="cnode" data-k="mothers" onclick="pickCal('mothers')"><span class="cem">✨</span>Advantage+ / PMax</div>
+      <div class="clink"></div>
+      <div class="cnode" data-k="halloween" onclick="pickCal('halloween')"><span class="cem">📈</span>Vertical scaling</div>
+      <div class="clink"></div>
+      <div class="cnode" data-k="christmas" onclick="pickCal('christmas')"><span class="cem">🔁</span>Horizontal scaling</div>
+    </div>
+    <div class="cpanel" id="calPanel"></div>
+  </div>
+
+  <h3>Why scaling breaks things — and how to avoid it</h3>
+  <p>Scaling feels like it should be simple: double the budget, double the sales. It rarely is. When you raise spend sharply, the platform's AI has to go find <em>more</em> people — and the next cheapest audience is almost always a little worse than the first. Costs rise, ROAS dips, and a big sudden change can even throw a stable campaign back into the noisy learning phase. The fix is discipline: raise budgets in small steps (a common rule of thumb is roughly 20% every few days, illustrative), give the AI time to re-stabilise after each move, and lean on horizontal scaling — duplicating winners into fresh audiences — rather than forcing one ad set to spend far beyond what it can handle. Grow like a dimmer switch, not a light switch.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Diagnose the campaign, then kill or scale</h2>
+  <p class="lead">Every campaign generates the same handful of numbers — CTR, CPC, conversion rate, CPA, ROAS. Read together, they don't just describe your campaign; they point straight at the <em>one</em> thing to fix. Almost every underperforming campaign has a creative problem, an audience problem, or an offer problem. The skill is reading the metrics to tell which.</p>
+
+  <p>Here's the diagnostic logic: a low <strong>CTR</strong> usually means a <em>creative</em> problem (the ad isn't stopping the scroll). A healthy CTR but expensive clicks or the wrong people can mean an <em>audience</em> problem. And clicks that arrive but never convert usually mean an <em>offer or landing-page</em> problem. Once you've diagnosed it, the decision is binary: kill it, or scale it. Flip each card to see the signal, what it's telling you, and the move it demands.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Four signals that drive the kill-or-scale call</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all decisions</button>
+        <button onclick="allHype()">↺ Back to the signals</button>
+      </div>
+    </div>
+    <div class="hgrid" id="hgrid">
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hmetric">The signal</div>
+            <div class="hclaim">Low CTR</div>
+            <div class="hsub">Lots of impressions, almost no clicks.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The decision · creative problem</div>
+            <p>The ad isn't stopping the scroll. This is a <strong>creative</strong> problem — the hook, image or first line is weak. Fix the ad, not the audience: test a new opening image, a sharper hook, a different format. Cheapest lever, biggest lift. Ask AI for five fresh angles and test them.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hmetric">The signal</div>
+            <div class="hclaim">Good CTR, clicks don't convert</div>
+            <div class="hsub">People click, then nobody buys.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The decision · offer / audience problem</div>
+            <p>The ad works but the outcome doesn't. Either you're reaching the <strong>wrong audience</strong> (curious clickers, not buyers) or the <strong>offer / landing page</strong> lets them down (unclear price, weak page, no trust). Check the page and offer first; then tighten the audience. Don't blame the creative — its CTR proves it's fine.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hmetric">The signal</div>
+            <div class="hclaim">ROAS above break-even</div>
+            <div class="hsub">One ad set profitably outrunning the rest.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The decision · scale it</div>
+            <p>This is your winner — the one carrying the whole account. <strong>Scale it</strong>: raise its budget in small steps (vertical), then duplicate it into fresh audiences (horizontal). Grow gently so you don't reset learning. Most of your future profit is hiding in scaling this one, not in chasing new ideas.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hmetric">The signal</div>
+            <div class="hclaim">Below break-even after learning</div>
+            <div class="hsub">Spend gone, ROAS still underwater.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The decision · kill it</div>
+            <p>Once a campaign has truly exited learning and still sits below your break-even ROAS, that's a verdict, not a phase. <strong>Kill it</strong> — without sentiment. Every extra rupee here is money you could feed to a winner. Setting a "kill number" in advance is what stops hope from quietly draining the account.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Your simple weekly reporting routine</h3>
+  <p>Optimization sounds abstract, so here is the concrete loop a solo advertiser actually runs — and it's short on purpose, because over-tinkering resets learning. <strong>Once a week — read the numbers.</strong> Open your dashboard, look at spend, CPA and ROAS per ad set, and sort by what's making money. <strong>Diagnose.</strong> For anything struggling, use the CTR / conversion logic above to name the problem: creative, audience, or offer. <strong>Decide, then act sparingly.</strong> Kill what's dead below break-even, scale winners in small steps, refresh anything fatiguing. <strong>Resist the urge to fiddle daily.</strong> Give changes several days to settle before judging them. That's the whole job — a short weekly review, one clear decision at a time, repeated.</p>
+
+  <h3>The one-sentence version of optimization</h3>
+  <p>Optimizing ads is a loop: know your break-even ROAS, give campaigns a learning budget and the patience to exit learning, read the metrics to diagnose creative-vs-audience-vs-offer, then kill the losers and scale the winners gently. AI does the bidding and the maths — but the discipline to follow the numbers instead of your hope is the human skill that decides whether the account compounds or quietly bleeds.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now have the optimization playbook. Know your break-even ROAS before you judge anything; expect most first campaigns to lose money and fund a learning budget you can afford to lose. Don't panic in the learning phase, and remember no tool can promise a return. Read the metrics to diagnose creative-vs-audience-vs-offer, let the platform's AI handle bidding, and scale winners in small steps — because scaling too fast breaks what's working. Across all of Week 2, the pattern held: AI supplies the speed, the bidding and the maths, and you supply the strategy, the discipline and the honest reading of the numbers.</p>
+  <ul>
+    <li>Learn the metrics: CPM, CTR, CPC, conversion rate, CPA, ROAS</li>
+    <li>Break-even ROAS = 1 ÷ your profit margin — there is no universal target</li>
+    <li>Fund a learning budget; most first campaigns lose money, no ROAS is guaranteed</li>
+    <li>Diagnose before you act: creative vs audience vs offer problem</li>
+    <li>Kill below break-even, scale winners gently — fast scaling breaks things</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 04 of 04 · Week 2 complete — you can now optimize, scale and measure AI ads →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · power-law portfolio ===== */
+const BARN=32;
+const HEIGHTS=[100,72,55,40,30,24,20,17,15,13,12,11,10,9,8,7,7,6,6,5,5,4,4,4,3,3,3,2,2,2,2,2];
+const chart=el('plawChart');
+let plawTimers=[];
+function initBars(){
+  chart.innerHTML='';
+  for(let i=0;i<BARN;i++){
+    const b=document.createElement('div');
+    b.className='pbar';
+    if(i===0)b.classList.add('star');
+    else if(i<5)b.classList.add('hit');
+    const sales=Math.round(HEIGHTS[i]*4.2);
+    b.innerHTML='<span class="ptip">Ad set #'+(i+1)+' · '+sales+' results/wk</span>';
+    chart.appendChild(b);
+  }
+}
+function growPortfolio(){
+  resetPortfolio(false);
+  el('plawBtn').classList.add('active');
+  const bars=chart.querySelectorAll('.pbar');
+  let listed=0;
+  bars.forEach((b,i)=>{
+    plawTimers.push(setTimeout(()=>{
+      b.style.height=Math.max(2,HEIGHTS[i])+'%';
+      listed++;
+      el('pvDesigns').textContent=listed;
+      if(listed<=5)el('pvWinners').textContent=Math.min(listed,5);
+      const total=HEIGHTS.reduce((a,c)=>a+c,0);
+      const top5=HEIGHTS.slice(0,5).reduce((a,c)=>a+c,0);
+      const shown=HEIGHTS.slice(0,listed).reduce((a,c)=>a+c,0);
+      const share=Math.round((top5/Math.max(shown,1))*100);
+      el('pvShare').textContent=Math.min(share,100)+'%';
+      if(i===BARN-1){
+        el('pvWinners').textContent='5';
+        el('pvShare').textContent=Math.round((top5/total)*100)+'%';
+        el('plawNote').innerHTML='<strong>There it is —</strong> 32 ad sets tested, but the top 5 bars deliver the overwhelming majority of the profitable results (illustrative). You could not have named those 5 in advance. That is exactly why you fund a learning budget: the winners announce themselves only after the data comes in.';
+      }
+    },200+i*90));
+  });
+}
+function resetPortfolio(full){
+  plawTimers.forEach(t=>clearTimeout(t));plawTimers=[];
+  chart.querySelectorAll('.pbar').forEach(b=>b.style.height='2%');
+  el('pvDesigns').textContent='0';el('pvWinners').textContent='0';el('pvShare').textContent='0%';
+  if(full!==false){
+    el('plawNote').innerHTML='<strong>Press run —</strong> and watch the results build. Notice how a tiny number of tall bars tower over the rest. That skew is why a learning budget exists: you fund the tests, and the winners reveal themselves.';
+  }
+}
+initBars();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){growPortfolio();o.unobserve(e.target)}}),{threshold:0.35}).observe(chart);
+
+/* ===== Figure 2 · trend curve ===== */
+const TRENDS={
+  emerging:{cap:'<strong>① Learning — do not touch it.</strong> The algorithm is still testing who to show your ad to, so costs are jumpy and ROAS looks scary. This is noise, not signal. Editing the budget or targeting now resets learning and wastes your spend. Fund it, watch it, and leave it alone until it has enough conversions to stabilise.'},
+  rising:{cap:'<strong>② Optimizing — costs settle.</strong> Enough data has come in that the system is finding the right people. CPA starts falling and ROAS climbs toward your break-even line. This is where you make small, patient tweaks — pause an obviously dead ad, but resist big changes. Let the momentum build.'},
+  peak:{cap:'<strong>③ Peak efficiency — scale here.</strong> The campaign is beating break-even ROAS reliably. This is the moment to grow spend — but gently (more on that in the next section). Raise the budget too fast and you can knock a stable campaign straight back into the learning phase. Scale the winner; don\'t shock it.'},
+  decline:{cap:'<strong>④ Fatigue — refresh or retire.</strong> The same audience has now seen the ad too many times (rising frequency), CTR drops and CPA creeps up. Nothing is broken — the creative is simply worn out. Refresh with a new ad, expand the audience, or retire this ad set and let its budget flow to fresher winners.'}
+};
+const TORDER=['emerging','rising','peak','decline'];
+let tCur='emerging';
+function pickTrend(k){
+  tCur=k;
+  TORDER.forEach(id=>{
+    el('td-'+id).setAttribute('r','7');el('td-'+id).setAttribute('fill','#A34E1C');
+    el('tb-'+id).classList.remove('on');
+  });
+  el('td-'+k).setAttribute('r','10');el('td-'+k).setAttribute('fill','#EF7F1A');
+  el('tb-'+k).classList.add('on');
+  el('trendCap').innerHTML=TRENDS[k].cap;
+}
+function trendStep(){
+  let i=TORDER.indexOf(tCur)+1;if(i>=TORDER.length)i=0;
+  pickTrend(TORDER[i]);
+}
+pickTrend('emerging');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickTrend('emerging');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('trendSvg'));
+
+/* ===== Figure 3 · seasonal calendar ===== */
+const CAL={
+  valentine:{t:'Automated bidding',tag:'What it is: you set the goal, the AI sets the price',ideas:[
+    'You choose the outcome (sales, leads) and a budget',
+    'The AI decides each auction bid in real time',
+    'It needs conversions to learn — feed it clean data',
+    'Your job: pick the right goal, not micromanage bids'
+  ],lead:'Set the objective to the real outcome you want (a purchase, not a click). The AI optimizes toward whatever you tell it to — so a lazy goal produces lazy results.'},
+  mothers:{t:'Advantage+ / Performance Max',tag:'What it is: AI runs the whole campaign for you',ideas:[
+    'Meta Advantage+ and Google PMax automate targeting & placement',
+    'You supply creatives, budget, and the goal — AI does the rest',
+    'Great for beginners: fewer knobs to get wrong',
+    'The trade-off: less visibility into exactly what it\'s doing'
+  ],lead:'Give the AI plenty of good raw material — several images, headlines and a clear offer. These systems are only as good as the creative and signals you feed them.'},
+  halloween:{t:'Vertical scaling',tag:'What it is: grow spend on the same winning ad set',ideas:[
+    'Increase the budget on a proven, above-break-even ad set',
+    'Do it in small steps — a big jump can reset learning',
+    'Rule of thumb: ~20% every few days (illustrative)',
+    'Watch ROAS after each step — if it holds, step again'
+  ],lead:'Raise budgets like a dimmer, not a switch. Sudden large increases force the AI into worse audiences and can knock a stable campaign back into learning.'},
+  christmas:{t:'Horizontal scaling',tag:'What it is: duplicate the winner into fresh audiences',ideas:[
+    'Copy a winning ad set and point it at a new audience',
+    'Spreads spend without over-saturating one group',
+    'Reduces the risk of a single ad set fatiguing',
+    'The safer way to add real volume once vertical stalls'
+  ],lead:'When a single ad set can\'t absorb more budget cleanly, go wide instead of deep. Duplicating winners across audiences is usually the more stable path to scale.'}
+};
+const CORDER=['valentine','mothers','halloween','christmas'];
+let cCur='valentine';
+function pickCal(k){
+  cCur=k;
+  document.querySelectorAll('#cal .cnode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=CAL[k],panel=el('calPanel');
+  let html='<span class="ctag">'+d.tag+'</span><h4>'+d.t+'</h4><ul>';
+  d.ideas.forEach(t=>{html+='<li>'+t+'</li>'});
+  html+='</ul><div class="c-lead"><strong>The smart move</strong>'+d.lead+'</div>';
+  panel.innerHTML=html;
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function calStep(dir){
+  let i=CORDER.indexOf(cCur)+dir;
+  if(i<0)i=CORDER.length-1;if(i>=CORDER.length)i=0;
+  pickCal(CORDER[i]);
+}
+pickCal('valentine');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickCal('valentine');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('cal'));
+
+/* ===== Figure 4 · analytics decision cards ===== */
+const hgrid=el('hgrid');
+function allReal(){document.querySelectorAll('.hcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.hcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(hgrid);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Ad Creative & Copy · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · prompt builder → design ============ */
+.pb-grid{display:grid;grid-template-columns:300px 1fr;gap:24px;align-items:start}
+.opt-group{margin-bottom:18px}
+.opt-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.opt{display:flex;flex-wrap:wrap;gap:7px}
+.opt button{
+  font-family:'Inter',sans-serif;font-size:12.5px;background:var(--paper);
+  border:1px solid var(--line);color:var(--ink);padding:7px 12px;border-radius:8px;
+  cursor:pointer;transition:all .2s;
+}
+.opt button:hover{border-color:var(--orange)}
+.opt button.on{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.pb-right{display:grid;gap:16px}
+.prompt-box{
+  background:var(--brown-dark);border-radius:12px;padding:18px 20px;position:relative;
+  font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.7;color:#F3E7D5;min-height:70px;
+}
+.prompt-box::before{content:"prompt";position:absolute;top:-9px;left:16px;background:var(--orange);color:#fff;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding:2px 8px;border-radius:4px;font-weight:600}
+.prompt-box .pk{color:var(--yellow)}
+.canvas-wrap{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;display:flex;gap:20px;align-items:center;box-shadow:0 8px 22px rgba(65,44,35,0.06)}
+.canvas{
+  width:150px;height:150px;flex-shrink:0;border-radius:12px;position:relative;overflow:hidden;
+  background:var(--cream);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;
+}
+.canvas svg{width:100%;height:100%;display:block}
+.canvas .genscan{position:absolute;inset:0;background:linear-gradient(180deg,transparent,rgba(239,127,26,0.35),transparent);transform:translateY(-100%);pointer-events:none}
+.canvas.gen .genscan{animation:scan 1.1s ease-in-out}
+@keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(150%)}}
+.canvas.gen .art{opacity:0;animation:fadeArt .5s .95s forwards}
+.art{opacity:1}
+@keyframes fadeArt{to{opacity:1}}
+.canvas-meta{font-size:13px;color:var(--ink)}
+.canvas-meta .cm-t{font-family:'Fraunces',serif;font-size:19px;color:var(--brown-dark);margin-bottom:5px}
+.canvas-meta .cm-note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);line-height:1.5}
+@media(max-width:820px){.pb-grid{grid-template-columns:1fr}.canvas-wrap{flex-direction:column;text-align:center}}
+
+/* ============ Figure 2 · niche map ============ */
+.nmap{display:flex;gap:0;margin-bottom:20px}
+.nnode{
+  flex:1;text-align:center;padding:14px 8px;background:var(--paper);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:0.06em;text-transform:uppercase;color:var(--brown);font-weight:600;
+}
+.nnode .nem{display:block;font-size:24px;margin-bottom:5px;line-height:1}
+.nnode:hover{border-color:var(--orange);transform:translateY(-2px)}
+.nnode.active{background:var(--brown-dark);border-color:var(--brown-dark);color:var(--paper)}
+.nlink{width:14px;flex-shrink:0}
+.npanel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px;min-height:220px}
+.npanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.npanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:4px}
+.npanel .ntag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:block;margin-bottom:14px}
+.npanel ul{list-style:none;display:grid;gap:9px;margin-bottom:16px}
+.npanel li{font-size:14.5px;color:var(--ink);padding-left:24px;position:relative;line-height:1.5}
+.npanel li::before{content:"✦";position:absolute;left:0;color:var(--orange);font-size:13px}
+.n-human{background:var(--cream);border-left:3px solid var(--brown);border-radius:0 10px 10px 0;padding:12px 15px;font-size:13.5px;color:var(--brown);line-height:1.5}
+.n-human strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+@media(max-width:700px){.nmap{flex-wrap:wrap;gap:8px}.nnode{flex:1 1 28%}.nlink{display:none}}
+
+/* ============ Figure 3 · print-file spec diagram ============ */
+.spec-wrap{display:grid;grid-template-columns:360px 1fr;gap:26px;align-items:start}
+.garment{
+  width:100%;max-width:352px;aspect-ratio:1/1.05;background:var(--paper);border:1px solid var(--line);
+  border-radius:16px;position:relative;box-shadow:0 14px 34px rgba(65,44,35,0.10);overflow:hidden;
+}
+.garment svg{width:100%;height:100%;display:block}
+.gspot{
+  position:absolute;width:26px;height:26px;border-radius:50%;background:var(--brown-dark);color:#fff;
+  font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;display:flex;align-items:center;
+  justify-content:center;cursor:pointer;border:2px solid var(--paper);z-index:6;transition:transform .25s,background .25s;
+  box-shadow:0 3px 8px rgba(47,29,25,0.3);
+}
+.gspot:hover{transform:scale(1.18)}
+.gspot.on{background:var(--orange);transform:scale(1.22)}
+.gs1{top:16%;left:50%;transform:translateX(-50%)}
+.gs1.on{transform:translateX(-50%) scale(1.22)}
+.gs2{top:42%;left:50%;transform:translateX(-50%)}
+.gs2.on{transform:translateX(-50%) scale(1.22)}
+.gs3{top:70%;left:22%}
+.gs4{top:70%;right:22%}
+.print-zone{position:absolute;top:30%;left:31%;width:38%;height:34%;border:2px dashed var(--orange);border-radius:6px;opacity:0;transition:opacity .3s}
+.print-zone.show{opacity:1}
+.spec-panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:240px;position:sticky;top:90px}
+.spec-panel.swap{animation:panelIn .4s ease}
+.sp-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange-dark);font-weight:600}
+.sp-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--brown-dark);margin:6px 0 10px}
+.sp-why{font-size:14px;color:var(--ink);margin-bottom:12px;max-width:none}
+.sp-num{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--brown-dark);background:var(--cream);border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 8px 8px 0;max-width:none;margin:0}
+.sp-num strong{color:var(--orange-dark)}
+@media(max-width:820px){.spec-wrap{grid-template-columns:1fr}.spec-panel{position:static}}
+
+/* ============ Figure 4 · IP safety flip cards ============ */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hcard{height:225px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.hgrid.show .hcard{animation:hIn .5s forwards}
+.hgrid.show .hcard:nth-child(1){animation-delay:.05s}
+.hgrid.show .hcard:nth-child(2){animation-delay:.2s}
+.hgrid.show .hcard:nth-child(3){animation-delay:.35s}
+.hgrid.show .hcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.hinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.hcard.flipped .hinner{transform:rotateY(180deg)}
+.hface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center}
+.hfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.hfront .hbadge{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;background:rgba(0,0,0,0.18);padding:3px 10px;border-radius:999px;margin-bottom:12px}
+.hfront .hclaim{font-family:'Fraunces',serif;font-weight:800;font-size:24px;line-height:1.12;margin-bottom:8px}
+.hfront .hsub{font-size:12.5px;opacity:.92;max-width:260px}
+.hfront .hhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.hback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.hback .hlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.hback p{font-size:13px;line-height:1.5;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){.hgrid{grid-template-columns:1fr}.hcard{height:220px}.hfront .hclaim{font-size:21px}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 02 · AI Ad Creative</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="40" rx="11" fill="#412C23"/>
+      <path d="M10 31V14.5l6 8.5 6-8.5 6 8.5 6-8.5V31" stroke="#EF7F1A" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="34" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 2 · Lesson 02 · AI Ad Creative</div>
+  <h1>Creative is the new <em>targeting</em>.</h1>
+  <p class="lede">On today's ad platforms the algorithm already finds the right people for you — so the ad itself is the biggest lever you control. A thumb-stopping hook, a fresh angle, a clean visual and a sharp line of copy decide whether anyone stops scrolling. Now AI can draft all of it in seconds: dozens of hooks, dozens of visuals, whole scripts. But volume isn't the same as good — the winning ad still has to feel real, follow ad policy, and never make a claim you can't back. Here's how to make AI your creative team without letting it make you generic.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The prompt is the new brief</h2>
+  <p class="lead">AI copywriters and image models turn a written brief into ad creative in seconds — headlines, hooks, scripts, visuals. The quality of what comes out depends almost entirely on the quality of what you type in. Vague brief, generic ad. Specific brief, scroll-stopping ad.</p>
+
+  <p>A beginner types "write me an ad for my course" and gets bland, forgettable copy that sounds like everyone else's. A structured brief names four things the model needs: the <strong>hook</strong> (the first line that stops the scroll), the <strong>angle</strong> (why this matters to them), the <strong>tone</strong>, and the <strong>format</strong> (the crucial call-to-action — what you actually want the viewer to do). Add those and the same model produces something a real person would stop and read.</p>
+  <p>Build a creative brief below by picking one option from each row. Watch the prompt assemble in real time, then press Generate to see the kind of ad that brief would produce. Notice how each choice you add sharpens the result — that's the whole skill.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Brief builder → ad creative</span>
+      <div class="controls">
+        <button onclick="genDesign()">▶ Generate</button>
+        <button onclick="randomPrompt()">⚄ Surprise me</button>
+      </div>
+    </div>
+    <div class="pb-grid">
+      <div>
+        <div class="opt-group">
+          <div class="opt-label">1 · Hook</div>
+          <div class="opt" id="subOpt">
+            <button class="on" onclick="pick('sub','cat',this)">A bold question</button>
+            <button onclick="pick('sub','mtn',this)">A "before / after"</button>
+            <button onclick="pick('sub','skull',this)">A myth to bust</button>
+          </div>
+        </div>
+        <div class="opt-group">
+          <div class="opt-label">2 · Angle</div>
+          <div class="opt" id="styOpt">
+            <button class="on" onclick="pick('sty','line',this)">Save time</button>
+            <button onclick="pick('sty','retro',this)">Beat fear of AI</button>
+            <button onclick="pick('sty','water',this)">Land a job</button>
+          </div>
+        </div>
+        <div class="opt-group">
+          <div class="opt-label">3 · Tone</div>
+          <div class="opt" id="colOpt">
+            <button class="on" onclick="pick('col','mono',this)">Straight-talking</button>
+            <button onclick="pick('col','warm',this)">Warm & encouraging</button>
+            <button onclick="pick('col','pastel',this)">Playful</button>
+          </div>
+        </div>
+        <div class="opt-group">
+          <div class="opt-label">4 · CTA (the must-have)</div>
+          <div class="opt" id="fmtOpt">
+            <button class="on" onclick="pick('fmt','trans',this)">"Start free lesson"</button>
+            <button onclick="pick('fmt','center',this)">"See the syllabus"</button>
+          </div>
+        </div>
+      </div>
+      <div class="pb-right">
+        <div class="prompt-box" id="promptBox"></div>
+        <div class="canvas-wrap">
+          <div class="canvas" id="canvas">
+            <div class="genscan"></div>
+            <div class="art" id="art"></div>
+          </div>
+          <div class="canvas-meta">
+            <div class="cm-t" id="cmT">Your ad preview</div>
+            <div class="cm-note" id="cmNote">Pick options on the left and press Generate. In a real tool this returns several variations — you'd pick the strongest hook and refine.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Why the CTA line matters most</h3>
+  <p>Beginners forget the fourth row and wonder why their ads get likes but no sign-ups. AI's default is to write something pleasant that <em>ends nowhere</em> — a nice paragraph with no clear next step. But an ad exists to get one specific action: start the free lesson, see the syllabus, book the call. Naming that action out loud — and repeating it in the brief — is the phrase that separates a post that entertains from an ad that converts. "End with a single clear call-to-action" is the line that turns AI copy into an actual ad.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The angle beats the wording every time</h2>
+  <p class="lead">The most common beginner mistake isn't clumsy wording — it's a well-written ad built on a boring <strong>angle</strong>. The angle is the reason this offer matters to a specific person right now: save time, kill a fear, reach a goal. Change the angle and the same course becomes a completely different ad. Test angles, not adjectives.</p>
+
+  <p>Think about why someone actually stops for an ad. Rarely for the product itself — usually because it speaks to something they already feel: "I'm too busy to learn this", "I'm scared AI will take my job", "I want a career I'm proud of". A generic "Learn AI marketing today" ad competes with a million others and speaks to no one. A "Terrified AI will replace you? Learn to be the one who runs it" ad grabs a specific person by the feeling they woke up with. Click through the angle types below to see how AI helps you generate lots of them fast — then you pick the one that lands.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Angles that actually convert</span>
+      <div class="controls">
+        <button onclick="nicheStep(-1)">◀ Prev</button>
+        <button onclick="nicheStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="nmap" id="nmap">
+      <div class="nnode" data-k="job" onclick="pickNiche('job')"><span class="nem">⏳</span>Pain</div>
+      <div class="nlink"></div>
+      <div class="nnode" data-k="hobby" onclick="pickNiche('hobby')"><span class="nem">😰</span>Fear</div>
+      <div class="nlink"></div>
+      <div class="nnode" data-k="pet" onclick="pickNiche('pet')"><span class="nem">🎯</span>Desire</div>
+      <div class="nlink"></div>
+      <div class="nnode" data-k="event" onclick="pickNiche('event')"><span class="nem">🧾</span>Proof</div>
+    </div>
+    <div class="npanel" id="nichePanel"></div>
+  </div>
+
+  <h3>The angle makes the copy easy</h3>
+  <p>Once you've chosen an angle, writing the ad gets simpler — because you now know exactly what to prompt for. Instead of "write me a good ad", you ask AI: "give me twenty hooks for busy professionals who feel they have no time to learn AI" then "write three ad captions for the strongest hook using the PAS framework." AI is superb at both steps. The specific angle is the instruction that makes the AI intern useful. Broad angles make broad, forgettable ads.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Anatomy of a scroll-stopping ad</h2>
+  <p class="lead">An ad that feels great in your head can flop in the feed — because you're competing with thumbs moving at full speed. Every high-performing ad has the same four parts working together, and getting them right is a checklist, not a talent.</p>
+
+  <p>Four parts decide whether your ad earns the click: the <strong>hook</strong> (the first three seconds that stop the scroll), the <strong>visual</strong> (the image or video that carries the hook), the <strong>copy</strong> (a short body that builds desire using a framework like PAS or AIDA), and the <strong>CTA</strong> (one clear next step). Miss any one and the ad leaks attention. Click each numbered spot below to see the part, what "good" looks like, and how AI helps you produce it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The four parts of an ad</span>
+      <div class="controls">
+        <button id="tourBtn" onclick="tourSpec()">▶ Tour all</button>
+        <button onclick="resetSpec()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="spec-wrap">
+      <div class="garment" id="garment">
+        <svg viewBox="0 0 200 210" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M64 20 L40 34 L24 62 L44 78 L54 66 L54 190 L146 190 L146 66 L156 78 L176 62 L160 34 L136 20 C136 34 118 42 100 42 C82 42 64 34 64 20 Z"
+            fill="#FBF6EE" stroke="#E8DCC8" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+        <div class="print-zone" id="printZone"></div>
+        <div class="gspot gs1" id="gsp1" onclick="pickSpec('res')">1</div>
+        <div class="gspot gs2" id="gsp2" onclick="pickSpec('bg')">2</div>
+        <div class="gspot gs3" id="gsp3" onclick="pickSpec('file')">3</div>
+        <div class="gspot gs4" id="gsp4" onclick="pickSpec('area')">4</div>
+      </div>
+      <div class="spec-panel" id="specPanel">
+        <div class="sp-tag" id="specTag">Interactive ad anatomy</div>
+        <div class="sp-title" id="specTitle">Click a numbered dot on the ad</div>
+        <p class="sp-why" id="specWhy">Each numbered dot marks one part of the ad that decides whether it stops the scroll or gets ignored. Click a dot — or press "Tour all" — to see the part, what "good" looks like, and how AI helps you produce it.</p>
+        <p class="sp-num" id="specNum"><strong>Rule of thumb —</strong> the hook does 80% of the work. Spend most of your effort there; a great body under a weak hook is a great ad nobody ever reads.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>The good news: it's a checklist, not a talent</h3>
+  <p>None of this requires a creative-director title. Ask AI for ten hooks, pick the sharpest. Ask it to generate or storyboard the visual. Ask it to write the body in PAS or AIDA. Ask it to end on one clear CTA. Run all four parts through the same checklist every time and your ads stop feeling like random posts and start feeling like ads that were built to convert.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Where AI creative gets you in trouble</h2>
+  <p class="lead">You can survive a weak hook or a slow week. You cannot survive a wave of ads that all sound the same, break ad policy, or make a claim you can't back. This is where AI is most dangerous to beginners — because it will cheerfully write a bold "guaranteed results" line, invent a fake testimonial, or hand you the exact same generic ad it just gave a thousand other people.</p>
+
+  <p>AI has no judgment about your brand, your promises or the platform's rules — it only predicts pleasant-sounding words. That means it drifts toward generic sameness, and it will happily write things that get ad accounts suspended: false claims, undisclosed AI, or fake authenticity. "The AI wrote it" is not a defence to the ad platform or the regulator. The good news: staying safe is simple once you know the four traps. Flip each card.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Creative traps — flip to the safe version</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all safe versions</button>
+        <button onclick="allHype()">↺ Back to the trap</button>
+      </div>
+    </div>
+    <div class="hgrid" id="hgrid">
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hbadge">The trap</div>
+            <div class="hclaim">Generic sameness</div>
+            <div class="hsub">"Write me an ad for an AI marketing course."</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The safe move</div>
+            <p>A bare prompt gives you the same bland ad it gives everyone. Feed AI a specific angle, a real customer's own words, and your brand voice — then rewrite the best line yourself. Use AI for volume of options; use <em>your</em> taste to pick and sharpen the one that sounds human.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hbadge">The trap</div>
+            <div class="hclaim">False claims</div>
+            <div class="hsub">"Promise guaranteed results and a fixed income."</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The safe move</div>
+            <p>"Guaranteed job," "make ₹X in 30 days," miracle promises — these break ad policy and consumer law even if AI wrote them. Sell the real transformation honestly: what learners actually build and do. Truthful ads survive review and build trust; hype gets the account suspended.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hbadge">The trap</div>
+            <div class="hclaim">Fake authenticity</div>
+            <div class="hsub">"Write a glowing testimonial from a happy student."</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The safe move</div>
+            <p>Never invent reviews, fake UGC or made-up faces. Fabricated testimonials are deceptive and get ads pulled. Use real quotes with permission, or write clearly as the brand. AI can polish a genuine review's wording — it must never manufacture the review itself.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hbadge">The trap</div>
+            <div class="hclaim">Undisclosed AI</div>
+            <div class="hsub">"Make an AI avatar look like a real person filming this."</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">The safe move</div>
+            <p>AI-generated faces and voices can mislead if passed off as real, and platforms increasingly require disclosure. Keep AI visuals clearly stylised or labelled, and never imply a real endorser who doesn't exist. Ask "would this feel dishonest if the viewer knew AI made it?" before every upload.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-question safety check</h3>
+  <p>Before any ad goes live, ask yourself one blunt question: <strong>"Is every claim in this ad true, and is nothing pretending to be something it isn't?"</strong> If a promise is inflated, a testimonial is invented, or an AI face is passed off as a real person, cut it or make it honest. This ten-second check is the difference between an ad account that compounds and one that gets suspended in month three. AI is your creative intern — but you are the one who signs off on what's true and safe to run.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Creative is the new targeting — it's the biggest lever you control. A structured brief — hook, angle, tone, and the all-important CTA — turns AI into your creative team. But volume alone isn't a winning ad: it has to ride a sharp angle, nail the four parts (hook, visual, copy, CTA), and stay honest so your account survives. AI supplies infinite options; you supply the taste and the caution. Next lesson: the testing loop that tells you which creative actually works.</p>
+  <ul>
+    <li>Structure every brief: hook + angle + tone + CTA</li>
+    <li>Always end on one clear call-to-action — the line that converts</li>
+    <li>Test angles, not adjectives — the angle makes the sale</li>
+    <li>Every ad has four parts: hook, visual, copy, CTA — the hook does 80%</li>
+    <li>Never run false claims, fake testimonials or undisclosed AI — it suspends accounts</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 02 of 04 · Next up: The Creative Testing Loop →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · prompt builder ===== */
+const CHOICE={sub:'cat',sty:'line',col:'mono',fmt:'trans'};
+const LABELS={
+  sub:{cat:'a bold opening question',mtn:'a before-and-after transformation',skull:'a myth to bust in the first line'},
+  sty:{line:'the "no time to learn" angle',retro:'the "beat your fear of AI" angle',water:'the "land a better job" angle'},
+  col:{mono:'a straight-talking tone',warm:'a warm, encouraging tone',pastel:'a playful tone'},
+  fmt:{trans:'ending on "Start the free lesson"',center:'ending on "See the full syllabus"'}
+};
+const ARTS={
+  cat:'<svg viewBox="0 0 100 100"><g fill="none" stroke="#412C23" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M30 60 q-8 -18 4 -28 q6 12 12 6 q6 6 12 -6 q12 10 4 28 q4 12 -16 12 q-20 0 -16 -12"/><circle cx="42" cy="55" r="1.6" fill="#412C23"/><circle cx="58" cy="55" r="1.6" fill="#412C23"/><path d="M50 60 q-3 3 -6 1 M50 60 q3 3 6 1"/></g></svg>',
+  mtn:'<svg viewBox="0 0 100 100"><g fill="none" stroke="#412C23" stroke-width="3" stroke-linejoin="round"><circle cx="68" cy="30" r="9"/><path d="M18 72 L40 40 L54 58 L66 44 L84 72 Z"/></g></svg>',
+  skull:'<svg viewBox="0 0 100 100"><g fill="none" stroke="#412C23" stroke-width="3" stroke-linecap="round"><path d="M35 66 q-8 -6 -8 -22 q0 -20 23 -20 q23 0 23 20 q0 16 -8 22 l0 8 l-30 0 z"/><circle cx="42" cy="46" r="4"/><circle cx="58" cy="46" r="4"/><path d="M50 52 l-3 8 l6 0 z"/><path d="M40 78 v6 M50 74 v10 M60 78 v6"/></g></svg>'
+};
+const ART_COLOR={mono:'#412C23',warm:'#D55222',pastel:'#A88BB0'};
+function buildPrompt(){
+  const p='Write an ad opening with <span class="pk">'+LABELS.sub[CHOICE.sub]+'</span>, built on <span class="pk">'+LABELS.sty[CHOICE.sty]+'</span>, in <span class="pk">'+LABELS.col[CHOICE.col]+'</span> — <span class="pk">'+LABELS.fmt[CHOICE.fmt]+'</span>, one clear CTA.';
+  el('promptBox').innerHTML=p;
+}
+function pick(group,val,btn){
+  CHOICE[group]=val;
+  const map={sub:'subOpt',sty:'styOpt',col:'colOpt',fmt:'fmtOpt'};
+  document.querySelectorAll('#'+map[group]+' button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  buildPrompt();
+}
+function genDesign(){
+  const cv=el('canvas'),art=el('art');
+  const svg=ARTS[CHOICE.sub];
+  art.innerHTML=svg;
+  const col=ART_COLOR[CHOICE.col];
+  art.querySelectorAll('[stroke]').forEach(e=>e.setAttribute('stroke',col));
+  art.querySelectorAll('circle[fill="#412C23"],path[fill="#412C23"]').forEach(e=>e.setAttribute('fill',col));
+  cv.classList.remove('gen');void cv.offsetWidth;cv.classList.add('gen');
+  el('cmT').textContent='Generated ✓';
+  el('cmNote').textContent='This tight hook + angle + tone + CTA is exactly the shape a scroll-stopping ad needs. In a real tool you’d get several variations and refine the strongest hook.';
+}
+function randomPrompt(){
+  const subs=['cat','mtn','skull'],stys=['line','retro','water'],cols=['mono','warm','pastel'];
+  const r=a=>a[Math.floor(Math.random()*a.length)];
+  CHOICE.sub=r(subs);CHOICE.sty=r(stys);CHOICE.col=r(cols);
+  ['subOpt','styOpt','colOpt'].forEach((g,i)=>{
+    const key=['sub','sty','col'][i];
+    document.querySelectorAll('#'+g+' button').forEach(b=>b.classList.remove('on'));
+    const btns=document.querySelectorAll('#'+g+' button');
+    const idx=[subs,stys,cols][i].indexOf(CHOICE[key]);
+    if(btns[idx])btns[idx].classList.add('on');
+  });
+  buildPrompt();genDesign();
+}
+buildPrompt();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){genDesign();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('canvas'));
+
+/* ===== Figure 2 · niche map ===== */
+const NICHE={
+  job:{t:'The pain angle',tag:'"No time" · overwhelm · falling behind',tasks:[
+    'Names a frustration the viewer feels right now and offers relief',
+    'Endless variations: not just "busy" but "too busy to keep up with AI"',
+    'Ask AI for "30 hooks about being too busy to learn new skills"',
+    'Works because people act fastest to make a present pain stop'
+  ],h:'AI brainstorms dozens of pain hooks instantly — but you pick the one that names a real, specific frustration your buyer would recognise as theirs.'},
+  hobby:{t:'The fear angle',tag:'"AI will replace me" · getting left behind',tasks:[
+    'Speaks to a worry the viewer already carries about their future',
+    'Strong emotional pull you can turn into a scroll-stopping first line',
+    'Ask AI for "the fears a mid-career professional has about AI"',
+    'Reframes the fear into "learn to run it, not be replaced by it"'
+  ],h:'AI knows the surface fears — you decide which one is honest and helpful to speak to, and never manufacture panic you can’t responsibly resolve.'},
+  pet:{t:'The desire angle',tag:'A raise · a new career · pride',tasks:[
+    'One of the strongest angles — people move toward what they want',
+    'Specific desire beats vague benefit: "land an AI job" beats "learn AI"',
+    'Ask AI for "the outcomes a learner secretly hopes this course delivers"',
+    'Paints the after-state vividly so the CTA feels like the next step'
+  ],h:'AI drafts any aspiration on request — you choose the specific, believable outcome your course can actually deliver and lead with that.'},
+  event:{t:'The proof angle',tag:'Results · demos · real work',tasks:[
+    'Skeptical viewers trust evidence more than adjectives',
+    'Show, don’t claim: a real project, a screenshot, a genuine result',
+    'Ask AI to turn a real case study into a punchy proof-led hook',
+    'Lower resistance because it answers "does this actually work?"'
+  ],h:'AI turns real proof into sharp copy fast — you supply the genuine result, because inventing the proof is the trap in the next section.'}
+};
+const NORDER=['job','hobby','pet','event'];
+let nCurrent='job';
+function pickNiche(k){
+  nCurrent=k;
+  document.querySelectorAll('#nmap .nnode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=NICHE[k],panel=el('nichePanel');
+  let html='<span class="ntag">'+d.tag+'</span><h4>'+d.t+'</h4><ul>';
+  d.tasks.forEach(t=>{html+='<li>'+t+'</li>'});
+  html+='</ul><div class="n-human"><strong>AI does · you decide</strong>'+d.h+'</div>';
+  panel.innerHTML=html;
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function nicheStep(dir){
+  let i=NORDER.indexOf(nCurrent)+dir;
+  if(i<0)i=NORDER.length-1;if(i>=NORDER.length)i=0;
+  pickNiche(NORDER[i]);
+}
+pickNiche('job');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickNiche('job');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('nmap'));
+
+/* ===== Figure 3 · print-file spec ===== */
+const SPEC={
+  res:{n:1,t:'The hook',
+    why:'The first three seconds decide everything — if the opening line or frame doesn’t stop the thumb, nothing after it is ever read. A strong hook names a pain, sparks curiosity, or shows a surprising before/after. This is where 80% of an ad’s performance is won or lost.',
+    num:'Ask AI for 10–20 hook options, then pick the sharpest. Never ship the first one — the best hook is usually the fifth idea, not the first.'},
+  bg:{n:2,t:'The visual',
+    why:'Attention lives in the image or video. A clean, on-brand visual that matches the hook keeps the viewer watching; a mismatched or cluttered one loses them even if the words are great. For MokshPath, that’s a crisp graphic, a short screen-recording demo, or a UGC-style clip.',
+    num:'Use AI to generate or storyboard visuals fast — but keep them clearly on-brand and never fake a real person. The visual must earn the hook’s promise.'},
+  file:{n:3,t:'The copy (PAS / AIDA)',
+    why:'Under the hook, a short body builds desire using a proven framework. PAS — Problem, Agitate, Solution. AIDA — Attention, Interest, Desire, Action. These give AI a structure so the copy leads somewhere instead of rambling. Keep it tight and every line earning the next.',
+    num:'Prompt: "write this body using the PAS framework." Frameworks make AI copy flow; you trim it to sound human and true, not padded.'},
+  area:{n:4,t:'The CTA',
+    why:'Every ad must end on one clear action — start the free lesson, see the syllabus, book the call. Two competing CTAs split attention and kill conversions. The whole ad exists to earn this single click, so it has to be obvious and low-friction.',
+    num:'Pick one CTA and repeat it. Ask AI to end every variation on the same single action, then check nothing distracts from it.'}
+};
+const SPECORDER=['res','bg','file','area'];
+let specTour=null,specIdx=0;
+function pickSpec(k){
+  ['gsp1','gsp2','gsp3','gsp4'].forEach(id=>el(id).classList.remove('on'));
+  const map={res:'gsp1',bg:'gsp2',file:'gsp3',area:'gsp4'};
+  el(map[k]).classList.add('on');
+  el('printZone').classList.toggle('show',k==='area');
+  const d=SPEC[k];
+  el('specTag').textContent='Rule '+d.n+' of 4';
+  el('specTitle').textContent=d.t;
+  el('specWhy').textContent=d.why;
+  el('specNum').innerHTML='<strong>Target —</strong> '+d.num;
+  const panel=el('specPanel');
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function tourSpec(){
+  stopSpec();el('tourBtn').classList.add('active');
+  specIdx=0;pickSpec(SPECORDER[0]);
+  specTour=setInterval(()=>{
+    specIdx++;
+    if(specIdx>=SPECORDER.length){stopSpec();return}
+    pickSpec(SPECORDER[specIdx]);
+  },3200);
+}
+function stopSpec(){if(specTour){clearInterval(specTour);specTour=null}el('tourBtn').classList.remove('active')}
+function resetSpec(){
+  stopSpec();
+  ['gsp1','gsp2','gsp3','gsp4'].forEach(id=>el(id).classList.remove('on'));
+  el('printZone').classList.remove('show');
+  el('specTag').textContent='Interactive ad anatomy';
+  el('specTitle').textContent='Click a numbered dot on the ad';
+  el('specWhy').textContent='Each numbered dot marks one part of the ad that decides whether it stops the scroll or gets ignored. Click a dot — or press “Tour all” — to see the part, what “good” looks like, and how AI helps you produce it.';
+  el('specNum').innerHTML='<strong>Rule of thumb —</strong> the hook does 80% of the work. Spend most of your effort there; a great body under a weak hook is a great ad nobody ever reads.';
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){tourSpec();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('garment'));
+
+/* ===== Figure 4 · IP safety cards ===== */
+const hgrid=el('hgrid');
+function allReal(){document.querySelectorAll('.hcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.hcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(hgrid);
+
+</script>
+</body>
+</html>

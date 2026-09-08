@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Audiences, Targeting &amp; Campaign Setup · Lesson 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · Listing anatomy ============ */
+.anatomy{display:grid;grid-template-columns:400px 1fr;gap:26px;align-items:start}
+.mock{
+  width:100%;max-width:392px;background:#fff;border:1px solid var(--line);
+  border-radius:16px;padding:18px;position:relative;box-shadow:0 14px 34px rgba(65,44,35,0.10);
+}
+.mock [data-spot]{position:relative;border-radius:10px;transition:outline-color .3s}
+.mock [data-spot].hl{outline:2px solid var(--orange);outline-offset:3px;animation:hlPulse 1.3s ease-in-out infinite}
+@keyframes hlPulse{0%,100%{outline-color:var(--orange)}50%{outline-color:rgba(239,127,26,0.25)}}
+.spot{
+  position:absolute;top:-10px;right:-10px;width:24px;height:24px;border-radius:50%;
+  background:var(--brown-dark);color:#fff;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:2px solid var(--paper);z-index:6;transition:transform .25s,background .25s;
+  box-shadow:0 3px 8px rgba(47,29,25,0.3);
+}
+.spot:hover{transform:scale(1.2)}
+[data-spot].hl .spot{background:var(--orange);transform:scale(1.25)}
+.m-img{
+  height:150px;background:linear-gradient(135deg,#F5E7D0,#E9D2AC);border-radius:10px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  color:var(--tan);font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:0.12em;text-transform:uppercase;cursor:pointer;position:relative;
+}
+.m-img svg{width:52px;height:42px}
+.m-title{font-family:'Inter',sans-serif;font-weight:600;font-size:14.5px;line-height:1.3;color:var(--brown-dark);padding:4px;margin:12px 0 8px;cursor:pointer}
+.m-stars{display:flex;align-items:center;gap:8px;margin:2px 2px 8px;font-size:13px;color:var(--orange)}
+.m-stars .cnt{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
+.m-price{display:flex;align-items:baseline;gap:9px;padding:3px;margin-bottom:10px;cursor:pointer}
+.m-price .now{font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--orange-dark)}
+.m-price .was{font-size:13px;color:var(--muted);text-decoration:line-through}
+.m-desc{font-size:12px;color:var(--ink);line-height:1.5;padding:5px;margin-bottom:10px;cursor:pointer;background:var(--cream);border-radius:8px}
+.m-tags{display:flex;flex-wrap:wrap;gap:5px;padding:4px;cursor:pointer}
+.m-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;background:var(--cream);border:1px solid var(--line);color:var(--tan);padding:3px 8px;border-radius:999px}
+.spot-panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:230px;position:sticky;top:90px}
+.spot-panel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sp-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange-dark);font-weight:600}
+.sp-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--brown-dark);margin:6px 0 10px}
+.sp-why{font-size:14px;color:var(--ink);margin-bottom:12px;max-width:none}
+.sp-ai{font-size:13px;color:var(--brown);background:var(--cream);border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 8px 8px 0;max-width:none;margin:0}
+.sp-ai strong{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark)}
+
+/* ============ Figure 2 · AI listing generator ============ */
+.gen-grid{display:grid;grid-template-columns:250px 1fr;gap:24px;align-items:start}
+.opt-group{margin-bottom:20px}
+.opt-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.opt{display:grid;gap:7px}
+.opt button{font-family:'Inter',sans-serif;font-size:13px;text-align:left;background:var(--paper);border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:9px;cursor:pointer;transition:all .2s}
+.opt button:hover{border-color:var(--orange)}
+.opt button.on{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.gen-out{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:250px;position:relative;box-shadow:0 8px 22px rgba(65,44,35,0.06)}
+.gen-out::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;border-radius:14px 14px 0 0;background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.gen-ph{font-size:14px;color:var(--muted);font-style:italic}
+.gen-out.live .gen-ph{display:none}
+.gl-block{margin-bottom:16px}
+.gl-block:last-child{margin-bottom:0}
+.gl-lab{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.gl-title{font-family:'Inter',sans-serif;font-weight:600;font-size:15px;line-height:1.35;color:var(--brown-dark)}
+.gl-desc{font-size:13.5px;color:var(--ink);line-height:1.55}
+.gl-tags{display:flex;flex-wrap:wrap;gap:6px}
+.gl-tag{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--cream);border:1px solid var(--line);color:var(--tan);padding:3px 9px;border-radius:999px}
+.gen-note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.04em;margin-top:16px;max-width:none}
+.gen-note strong{color:var(--orange-dark)}
+.cursor{color:var(--orange);font-weight:700;animation:blink .9s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ============ Figure 3 · mockup swapper ============ */
+.mock-wrap{display:grid;grid-template-columns:1fr 220px;gap:28px;align-items:center}
+.mock-stage{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:22px;position:relative;min-height:280px;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 22px rgba(65,44,35,0.06)}
+.scene{position:relative;width:230px;height:230px;transition:opacity .4s}
+.scene svg{width:100%;height:100%}
+.scene .desg{transition:all .4s}
+.mock-side{display:grid;gap:10px}
+.mock-side .ms-lab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.mbtn{font-family:'Inter',sans-serif;font-size:13px;text-align:left;background:var(--paper);border:1px solid var(--line);color:var(--ink);padding:11px 15px;border-radius:10px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px}
+.mbtn:hover{border-color:var(--orange)}
+.mbtn.on{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.mbtn .mb-em{font-size:18px}
+.mock-caption{font-size:13.5px;color:var(--brown);background:var(--cream);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:11px 15px;margin-top:16px;max-width:none}
+.mock-caption strong{color:var(--orange-dark)}
+@media(max-width:700px){.mock-wrap{grid-template-columns:1fr}}
+
+/* ============ Figure 4 · SEO keyword builder ============ */
+.seo-wrap{display:grid;grid-template-columns:1fr 250px;gap:30px;align-items:start}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.03em;
+  border:1px solid var(--line);background:var(--paper);color:var(--brown);
+  padding:9px 15px;border-radius:999px;cursor:pointer;transition:all .25s;user-select:none;
+}
+.chip::before{content:"+ ";color:var(--orange-dark);font-weight:600}
+.chip:hover{border-color:var(--orange)}
+.chip.on{background:var(--brown-dark);color:#FBE7CB;border-color:var(--brown-dark)}
+.chip.on::before{content:"✓ ";color:var(--yellow)}
+.seo-preview{background:#fff;border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin-top:16px;box-shadow:0 4px 12px rgba(65,44,35,0.06)}
+.seo-preview .sp-lab{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:5px}
+.seo-preview .sp-line{font-family:'Inter',sans-serif;font-weight:600;font-size:14px;color:var(--brown-dark);line-height:1.35;min-height:20px}
+.gauge-zone{text-align:center}
+.gauge{width:130px;height:130px;margin:0 auto;position:relative}
+.gauge svg{transform:rotate(-90deg)}
+.gauge .gnum{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-size:36px;font-weight:800;color:var(--orange-dark)}
+.g-cap{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-top:8px}
+.g-verdict{margin-top:16px;font-size:14px;color:var(--brown-dark);background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 15px;min-height:44px;max-width:none}
+.g-verdict.pop{animation:panelIn .35s ease}
+.seo-hint{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:0.03em;max-width:none}
+
+@media(max-width:880px){
+  .anatomy,.gen-grid,.seo-wrap{grid-template-columns:1fr}
+  .spot-panel{position:static}
+  .gauge-zone{margin-top:10px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 03 · AI Ads</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="13" width="36" height="27" rx="6" fill="#412C23"/>
+      <path d="M14 13 C14 4.5 30 4.5 30 13" stroke="#EF7F1A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M12 32 L12 22 L17 28 L22 21 L27 28 L32 22 L32 32" stroke="#FECC00" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="36" cy="9" r="4.5" fill="#EF7F1A"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 2 · Lesson 03 · AI Ads</div>
+  <h1>A brilliant ad shown to <em>the wrong people</em> sells nothing.</h1>
+  <p class="lede">In paid ads, you don't wait for buyers — you pay to put your ad in front of them. But in front of <em>whom</em>? The old way was to hand-pick interests and hope. The new way is to let the platform's AI hunt for the people most likely to buy, guided by the tracking data you feed it. This lesson turns AI into your audience-finder, campaign architect and always-on optimiser — in plain English, no jargon required.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Audiences come in three temperatures</h2>
+  <p class="lead">Before you spend a rupee, you need to know <strong>who</strong> you're paying to reach. Marketers sort every audience by how ready-to-buy they are — <strong>cold, warm and hot</strong> — because a stranger and a repeat visitor need completely different ads. Match the temperature to the message and your money works harder.</p>
+
+  <p>Beginners try to sell to everyone the same way: one ad, blasted at the whole world, asking cold strangers to "Buy now!". It rarely works. A <strong>cold</strong> audience has never heard of you — they need to be introduced. A <strong>warm</strong> audience has engaged (watched a video, visited the site) — they need a reason to come back. A <strong>hot</strong> audience added to cart or is a past buyer — they just need a nudge. Your audience is a bridge between a person's readiness and the right message. Every audience type is a chance to spend wisely or waste money.</p>
+  <p>Explore the anatomy of a campaign's audience setup below. Click each numbered dot to see what that piece does for targeting — and exactly how AI can build or find it for you.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Anatomy of a campaign's audience setup</span>
+      <div class="controls">
+        <button id="tourBtn" onclick="tourSpots()">▶ Tour all</button>
+        <button onclick="resetSpots()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="anatomy">
+      <div class="mock" id="mock">
+        <div class="m-img" data-spot="img" onclick="selectSpot('img')">
+          <span class="spot">1</span>
+          <svg viewBox="0 0 52 42" fill="none"><rect x="1" y="1" width="50" height="40" rx="4" stroke="#A34E1C" stroke-width="2"/><path d="M17 6 L14 10 L10 16 L15 20 L17 17 L17 36 L35 36 L35 17 L37 20 L42 16 L38 10 L35 6" stroke="#A34E1C" stroke-width="2" fill="none" stroke-linejoin="round"/></svg>
+          Cold audience (new reach)
+        </div>
+        <div class="m-title" data-spot="title" onclick="selectSpot('title')"><span class="spot">2</span>Objective: Sales · Warm retargeting — website visitors, last 30 days</div>
+        <div class="m-stars">◆ <span class="cnt">Est. reach 180K–420K · illustrative</span></div>
+        <div class="m-price" data-spot="price" onclick="selectSpot('price')">
+          <span class="spot">3</span>
+          <span class="now">₹500/day</span><span class="was">daily budget</span>
+        </div>
+        <div class="m-desc" data-spot="desc" onclick="selectSpot('desc')"><span class="spot">4</span>Custom audience: people who added to cart but didn't buy. Uploaded customer list also feeds a 1% Lookalike of past buyers. These are the people most likely to convert.</div>
+        <div class="m-tags" data-spot="tags" onclick="selectSpot('tags')">
+          <span class="spot">5</span>
+          <span class="m-tag">interest: home decor</span><span class="m-tag">1% lookalike</span><span class="m-tag">retargeting</span><span class="m-tag">Advantage+ audience</span><span class="m-tag">age 25–45</span>
+        </div>
+      </div>
+      <div class="spot-panel" id="spotPanel">
+        <div class="sp-tag" id="spTag">Interactive anatomy</div>
+        <div class="sp-title" id="spTitle">Click any numbered dot</div>
+        <p class="sp-why" id="spWhy">Each numbered part of the audience setup does one job: putting the right ad in front of the right person at the right budget. Click a dot on the campaign card — or press "Tour all" — to see why it matters and how AI helps.</p>
+        <p class="sp-ai" id="spAi"><strong>Tip —</strong> the audience temperature and your tracking data carry almost all the weight. Get those right and the platform's AI does most of the finding for you.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Cold introduces, warm reminds, hot closes</h3>
+  <p>The art of good targeting is matching the message to the temperature. A cold stranger needs a friendly introduction, not a "last chance!" discount; a hot cart-abandoner doesn't need to be told who you are — they need one small nudge to finish. Show the wrong ad to the wrong temperature and you burn budget: begging strangers to buy, or annoying loyal customers with a beginner's pitch. Custom audiences (people who already interacted with you) and lookalikes (strangers who resemble your buyers) let you sort people by temperature automatically. Your job is to give each group the message it actually needs.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Now the algorithm finds the buyers for you</h2>
+  <p class="lead">The most nerve-wracking part of paid ads used to be guessing exactly which interests and demographics to target. Today the platforms have flipped it: with <strong>Meta Advantage+ Audience</strong> and <strong>Google Performance Max</strong>, you give the AI a goal and it hunts across billions of signals to find the people most likely to buy. Your role shifts from hand-picker to guide.</p>
+
+  <p>Here's what the AI does genuinely well: it reads who has bought and engaged before, then <strong>finds more people like them</strong> automatically, tests <strong>hundreds of audience combinations</strong> you'd never try by hand, and shifts spend toward whatever is working — in near real time. Your old interest picks become a <em>suggestion</em>, not a cage. Pick a campaign goal and a platform below, and watch a complete, AI-driven campaign setup assemble.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · AI campaign builder (simulated)</span>
+      <div class="controls">
+        <button onclick="genListing()">▶ Generate</button>
+        <button onclick="clearListing()">↺ Clear</button>
+      </div>
+    </div>
+    <div class="gen-grid">
+      <div>
+        <div class="opt-group">
+          <div class="opt-label">1 · Pick a campaign goal</div>
+          <div class="opt" id="dOpt">
+            <button class="on" onclick="pickD('catmom',this)">Get sales / purchases</button>
+            <button onclick="pickD('dachs',this)">Get website traffic</button>
+            <button onclick="pickD('teacher',this)">Get leads (sign-ups)</button>
+          </div>
+        </div>
+        <div class="opt-group">
+          <div class="opt-label">2 · Pick a platform</div>
+          <div class="opt" id="mOpt">
+            <button class="on" onclick="pickM('etsy',this)">Meta Advantage+</button>
+            <button onclick="pickM('amazon',this)">Google Perf. Max</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="gen-out" id="genOut">
+          <div class="gen-ph">Pick a goal and a platform, then press ▶ Generate to watch the full campaign setup appear.</div>
+          <div id="genBody"></div>
+        </div>
+        <p class="gen-note"><strong>The AI builds the audience in seconds — you still set the guardrails.</strong> Give it a clear goal, an honest budget cap and good tracking. Never let it spend faster than you can afford, and always check the results against real sales, not just clicks.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>The mistake beginners make with AI targeting</h3>
+  <p>The instinct is to over-restrict: pile on ten interests, narrow the age range to a sliver, exclude everyone. That starves the algorithm of room to learn and drives your cost per result up. The winning move with modern AI targeting is to <strong>go broad and let it optimise</strong> — give it your country, a wide age band, and one or two seed interests, then feed it good conversion data and get out of its way. The AI needs a big pool to test against. Trust it to narrow down where you'd only guess. Start broad, watch what converts, then refine.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Campaign structure, in plain English</h2>
+  <p class="lead">Every ads platform uses the same three nesting boxes. A <strong>campaign</strong> holds your goal (like "get sales"). Inside it, an <strong>ad set</strong> (Meta) or <strong>ad group</strong> (Google) holds your audience and budget. Inside that, the <strong>ad</strong> is the actual image and words people see. Master these three and the whole dashboard stops being scary.</p>
+
+  <p>Think of it as a filing cabinet: the campaign is the drawer (your goal), the ad set is a folder inside it (who you're targeting and how much you'll spend), and the ad is the single page in that folder (the creative). As a beginner, keep it simple — one campaign, one ad set, a couple of ads. Don't build twenty ad sets on day one; that splits your budget so thin the AI never learns. Click through the levels below and watch the structure build up.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The three nesting boxes of a campaign</span>
+      <div class="controls">
+        <button onclick="cycleMock()">▶ Cycle levels</button>
+      </div>
+    </div>
+    <div class="mock-wrap">
+      <div class="mock-stage">
+        <div class="scene" id="scene"></div>
+      </div>
+      <div class="mock-side">
+        <div class="ms-lab">Choose a level</div>
+        <button class="mbtn on" id="mk-flat" onclick="setMock('flat')"><span class="mb-em">🎯</span> Campaign (the goal)</button>
+        <button class="mbtn" id="mk-tee" onclick="setMock('tee')"><span class="mb-em">👥</span> Ad set (audience + budget)</button>
+        <button class="mbtn" id="mk-mug" onclick="setMock('mug')"><span class="mb-em">🖼️</span> Ad (the creative)</button>
+        <button class="mbtn" id="mk-tote" onclick="setMock('tote')"><span class="mb-em">💰</span> Budget (CBO / daily)</button>
+      </div>
+    </div>
+    <div class="mock-caption" id="mockCap"><strong>Campaign —</strong> the outer box. Here you choose one goal, called the objective — Sales, Leads, Traffic or Awareness. Pick the objective that matches the action you actually want; the AI optimises toward it.</div>
+  </div>
+
+  <h3>Daily vs lifetime budget, and who holds it</h3>
+  <p>Two budget decisions trip up beginners. First, <strong>daily vs lifetime</strong>: a daily budget spends a set amount every day (predictable, easy to start with); a lifetime budget spends a total across a date range and lets the AI spend more on your best days. Second, <strong>where the budget lives</strong>: put it on each ad set yourself, or hand it to the campaign and let the AI split it — that's <strong>CBO</strong> (Campaign Budget Optimisation), now called <strong>Advantage campaign budget</strong> on Meta. As a beginner, start with a daily budget and let the platform optimise. You can always take back control later.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Tracking is the fuel your AI runs on</h2>
+  <p class="lead">Here's the part beginners skip and later regret: the AI can only find buyers if you tell it what a buyer looks like. That signal comes from <strong>conversion tracking</strong> — the Meta Pixel, the Conversions API and the <strong>events</strong> they report (view, add-to-cart, purchase). No tracking, no fuel; the algorithm is flying blind.</p>
+
+  <p>Think about what the AI is trying to do: match your ad to the person most likely to complete your goal. It learns from every event your tracking sends back — who added to cart, who actually bought. The more clean, honest conversion data it gets, the smarter it becomes. You can't fake sales, but you fully control the tracking setup. Toggle each piece below and watch your campaign's "readiness" climb — then notice which ones carry the most weight.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · The campaign-readiness stack</span>
+      <div class="controls">
+        <button onclick="fullSeo()">▶ Full setup</button>
+        <button onclick="bareSeo()">↺ Bare campaign</button>
+      </div>
+    </div>
+    <div class="seo-wrap" id="seoWrap">
+      <div>
+        <div class="chips">
+          <span class="chip" id="sc-title" onclick="seoToggle('title')">Meta Pixel installed</span>
+          <span class="chip" id="sc-tags" onclick="seoToggle('tags')">Conversions API connected</span>
+          <span class="chip" id="sc-longtail" onclick="seoToggle('longtail')">Purchase event firing</span>
+          <span class="chip" id="sc-desc" onclick="seoToggle('desc')">Add-to-cart event tracked</span>
+          <span class="chip" id="sc-alt" onclick="seoToggle('alt')">Clear campaign objective</span>
+          <span class="chip" id="sc-cat" onclick="seoToggle('cat')">Consent banner set up</span>
+          <span class="chip" id="sc-fresh" onclick="seoToggle('fresh')">Let it learn (7 days)</span>
+        </div>
+        <div class="seo-preview">
+          <div class="sp-lab">What the AI knows about your buyers</div>
+          <div class="sp-line" id="seoLine">Nothing yet — no tracking</div>
+        </div>
+        <p class="seo-hint">The Pixel and Conversions API do the heavy lifting — they're the events the AI actually learns from. A clear objective and consent setup are quiet must-haves that keep the data flowing and legal.</p>
+      </div>
+      <div class="gauge-zone">
+        <div class="gauge">
+          <svg width="130" height="130" viewBox="0 0 130 130">
+            <circle cx="65" cy="65" r="56" fill="none" stroke="#E8DCC8" stroke-width="12"/>
+            <circle id="gaugeArc" cx="65" cy="65" r="56" fill="none" stroke="#EF7F1A" stroke-width="12" stroke-linecap="round" stroke-dasharray="352" stroke-dashoffset="352" style="transition:stroke-dashoffset .5s ease"/>
+          </svg>
+          <div class="gnum" id="gNum">8</div>
+        </div>
+        <div class="g-cap">Readiness</div>
+        <div class="g-verdict" id="gVerdict">Toggle each piece to see how ready this campaign is for the AI to optimise.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Your first-campaign checklist, in order</h3>
+  <p>Build it in this sequence and nothing gets missed: <strong>install the Pixel</strong> and, if you can, connect the <strong>Conversions API</strong> (server-side tracking that survives iOS blocking). Confirm your <strong>purchase and add-to-cart events</strong> fire on a test order. Pick one clear <strong>objective</strong> (usually Sales). Choose a <strong>broad audience</strong> and let Advantage+ / Performance Max optimise. Set a <strong>daily budget</strong> you can afford to lose for a week. Add a <strong>consent banner</strong> so you collect data legally. Then <strong>leave it alone for about 7 days</strong> to finish learning — resist the urge to tinker daily. Simple, honest, patient: that's the whole recipe.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now know that in paid ads, the modern job isn't hand-picking every buyer — it's guiding an AI that finds them for you. Sort audiences by temperature, hand the platform a clear goal and a real budget, and above all feed it clean conversion data — tracking is the fuel. Keep the structure simple as a beginner, respect privacy and consent, and give the algorithm a week to learn before you judge it. AI does the finding and optimising; you set the guardrails and keep it honest. Next lesson: writing the ad creative that makes all this targeting pay off.</p>
+  <ul>
+    <li>Sort audiences by temperature — cold introduces, warm reminds, hot closes</li>
+    <li>Let Advantage+ and Performance Max find buyers; go broad, don't over-restrict</li>
+    <li>Learn the three boxes: campaign → ad set/group → ad; start simple</li>
+    <li>Tracking is the fuel — Pixel, Conversions API and events feed the AI</li>
+    <li>Respect privacy, consent and iOS limits; give the algorithm ~7 days to learn</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 03 of 04 · Next up: Writing Ad Creative That Converts →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · listing anatomy ===== */
+const SPOTS={
+  img:{n:1,t:"Audience temperature (cold)",
+    why:"Every audience starts somewhere on the cold–warm–hot scale. A cold audience has never heard of you, so this box is about new reach — introducing your brand to strangers. Get the temperature label right and you'll never again beg a cold stranger to \"buy now\" or bore a loyal customer with a first-time pitch.",
+    ai:"Meta Advantage+ Audience and Google Performance Max are built to work cold — hand them a broad pool and they find the strangers most likely to warm up. Your seed interests become a hint, not a hard rule."},
+  title:{n:2,t:"Objective + warm retargeting",
+    why:"The objective is the single goal you hand the platform — Sales, Leads, Traffic or Awareness — and it steers everything the AI optimises toward. Pair it with a warm audience (people who visited or engaged recently) and you're reminding people who already know you, which is far cheaper than cold reach.",
+    ai:"The AI reads your objective and automatically leans your spend toward the people most likely to complete that exact action, refreshing its guesses as new results come in."},
+  price:{n:3,t:"Budget (daily vs lifetime)",
+    why:"Your budget is the fuel gauge. A daily budget (like ₹500/day, illustrative) spends a steady amount and is the easiest way to start; a lifetime budget spends a total across dates and lets the AI push harder on good days. Either way, set an amount you can afford to lose while it learns.",
+    ai:"Hand the budget to the campaign (CBO / Advantage campaign budget) and the AI splits it across audiences in real time, feeding whatever is converting best. As a beginner, let it."},
+  desc:{n:4,t:"Custom audience + lookalike",
+    why:"A custom audience is people who already interacted with you — cart-abandoners, past buyers, an uploaded customer list. A lookalike (or \"similar\") audience is strangers who resemble those buyers. Together they're your warmest and most efficient reach, because you're targeting proven interest and its close cousins.",
+    ai:"Upload a clean customer list and the AI builds a 1% lookalike of your best buyers automatically — then keeps hunting for more people like them across billions of signals."},
+  tags:{n:5,t:"Targeting signals (AI-assisted)",
+    why:"These are the levers you can still pull: a seed interest, a broad age band, a lookalike, retargeting, and Advantage+ turned on. The trap is over-restricting — piling on ten interests and a narrow age starves the AI. The win is a wide, honest pool the algorithm has room to optimise inside.",
+    ai:"Turn on Advantage+ Audience and treat your interest picks as suggestions. The AI tests combinations you'd never try by hand and expands beyond your picks when it finds cheaper buyers."}
+};
+const spotOrder=["img","title","price","desc","tags"];
+let tourTimer=null,tourIdx=0;
+function selectSpot(k){
+  document.querySelectorAll('#mock [data-spot]').forEach(e=>e.classList.remove('hl'));
+  const region=document.querySelector('#mock [data-spot="'+k+'"]');
+  if(region)region.classList.add('hl');
+  const d=SPOTS[k];
+  el('spTag').textContent='Element '+d.n+' of 5';
+  el('spTitle').textContent=d.t;
+  el('spWhy').textContent=d.why;
+  el('spAi').innerHTML='<strong>AI assist —</strong> '+d.ai;
+  const panel=el('spotPanel');
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function tourSpots(){
+  stopTour();el('tourBtn').classList.add('active');
+  tourIdx=0;selectSpot(spotOrder[0]);
+  tourTimer=setInterval(()=>{
+    tourIdx++;
+    if(tourIdx>=spotOrder.length){stopTour();return}
+    selectSpot(spotOrder[tourIdx]);
+  },3200);
+}
+function stopTour(){if(tourTimer){clearInterval(tourTimer);tourTimer=null}el('tourBtn').classList.remove('active')}
+function resetSpots(){
+  stopTour();
+  document.querySelectorAll('#mock [data-spot]').forEach(e=>e.classList.remove('hl'));
+  el('spTag').textContent='Interactive anatomy';
+  el('spTitle').textContent='Click any numbered dot';
+  el('spWhy').textContent='Each numbered part of the audience setup does one job: putting the right ad in front of the right person at the right budget. Click a dot on the campaign card — or press “Tour all” — to see why it matters and how AI helps.';
+  el('spAi').innerHTML='<strong>Tip —</strong> the audience temperature and your tracking data carry almost all the weight. Get those right and the platform’s AI does most of the finding for you.';
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){tourSpots();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('mock'));
+
+/* ===== Figure 2 · AI listing generator ===== */
+const LIST={
+  catmom:{
+    etsy:{title:'Objective: Sales · Meta Advantage+ Shopping Campaign, optimising for Purchase',
+      desc:'The AI reads your Pixel and past-buyer data, then hunts a broad audience for people most likely to purchase — starting cold, leaning on lookalikes of your buyers, and retargeting warm cart-abandoners. You set the goal and budget; it finds the buyers. Illustrative results only.',
+      tags:['objective: sales','Advantage+ audience','1% lookalike','retargeting','broad targeting','optimise for purchase','daily budget','let AI learn']},
+    amazon:{title:'Objective: Sales · Google Performance Max, driving conversions across all channels',
+      desc:'Performance Max spends across Search, YouTube, Gmail and Display at once, using your conversion data to chase purchases wherever they are cheapest. Feed it good asset groups and clean tracking, then let the algorithm allocate. Illustrative numbers only.',
+      tags:['objective: sales','Performance Max','conversion tracking','audience signals','smart bidding','broad reach']}
+  },
+  dachs:{
+    etsy:{title:'Objective: Traffic · Meta Advantage+ Audience, optimising for Landing-page views',
+      desc:'A traffic campaign gets the right people onto your site cheaply, warming up a cold audience for later. The AI targets browsers likely to click and land, building a pool you can retarget for sales next. Keep the budget modest while it learns. Illustrative only.',
+      tags:['objective: traffic','Advantage+ audience','cold audience','landing-page views','warm-up pool','broad targeting','low daily budget','retarget later']},
+    amazon:{title:'Objective: Traffic · Google Performance Max, maximising quality site visits',
+      desc:'Performance Max sends interested visitors to your site across Google\'s network, using your signals to favour clicks that tend to convert later. A cheap way to fill your retargeting pool. Illustrative figures only.',
+      tags:['objective: traffic','Performance Max','quality visits','audience signals','fill retargeting pool','smart bidding']}
+  },
+  teacher:{
+    etsy:{title:'Objective: Leads · Meta Advantage+ Audience, optimising for Sign-ups',
+      desc:'A leads campaign collects emails or sign-ups, often via an instant form. The AI finds people likely to complete the form, and every lead event you track teaches it who to look for next. Great for building an audience you own. Illustrative only.',
+      tags:['objective: leads','Advantage+ audience','instant form','lead event','lookalike of leads','broad targeting','daily budget','build owned list']},
+    amazon:{title:'Objective: Leads · Google Performance Max, driving form sign-ups and enquiries',
+      desc:'Performance Max chases sign-ups and enquiries across Google, learning from your lead conversions which people to target. Connect the lead event so the AI has real signal to optimise on. Illustrative numbers only.',
+      tags:['objective: leads','Performance Max','lead conversion','audience signals','form sign-ups','smart bidding']}
+  }
+};
+const DNAMES={catmom:'Get sales / purchases',dachs:'Get website traffic',teacher:'Get leads (sign-ups)'};
+let curD='catmom',curM='etsy',listTyper=null;
+function pickD(d,btn){curD=d;document.querySelectorAll('#dOpt button').forEach(b=>b.classList.remove('on'));btn.classList.add('on')}
+function pickM(m,btn){curM=m;document.querySelectorAll('#mOpt button').forEach(b=>b.classList.remove('on'));btn.classList.add('on')}
+function genListing(){
+  if(listTyper){clearInterval(listTyper);listTyper=null}
+  const d=LIST[curD][curM];
+  const out=el('genOut');out.classList.add('live');
+  const body=el('genBody');
+  body.innerHTML='<div class="gl-block"><div class="gl-lab">Campaign setup</div><div class="gl-title" id="glT"></div></div>'+
+    '<div class="gl-block"><div class="gl-lab">How the AI targets</div><div class="gl-desc" id="glD"></div></div>'+
+    '<div class="gl-block"><div class="gl-lab">Settings applied</div><div class="gl-tags" id="glTags"></div></div>';
+  const glT=el('glT'),glD=el('glD'),glTags=el('glTags');
+  const full=d.title;let i=0;
+  glT.innerHTML='<span class="cursor">▍</span>';
+  listTyper=setInterval(()=>{
+    i++;
+    glT.innerHTML=full.slice(0,i)+'<span class="cursor">▍</span>';
+    if(i>=full.length){
+      clearInterval(listTyper);listTyper=null;
+      glT.textContent=full;
+      glD.textContent=d.desc;
+      d.tags.forEach((t,k)=>{
+        setTimeout(()=>{const s=document.createElement('span');s.className='gl-tag';s.textContent=t;glTags.appendChild(s)},k*90);
+      });
+    }
+  },14);
+}
+function clearListing(){
+  if(listTyper){clearInterval(listTyper);listTyper=null}
+  el('genBody').innerHTML='';el('genOut').classList.remove('live');
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){genListing();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('genOut'));
+
+/* ===== Figure 3 · mockup swapper ===== */
+const DESIGN='<g class="desg"><circle cx="0" cy="-6" r="9" fill="none" stroke="#412C23" stroke-width="2.4"/><path d="M-9 -12 l-3 -6 l6 3 M9 -12 l3 -6 l-6 3" fill="#412C23"/><circle cx="-3" cy="-7" r="1.3" fill="#412C23"/><circle cx="3" cy="-7" r="1.3" fill="#412C23"/><path d="M-2 -3 q2 2 4 0" fill="none" stroke="#412C23" stroke-width="1.6" stroke-linecap="round"/></g>';
+const SCENES={
+  flat:{svg:'<rect x="20" y="20" width="190" height="190" rx="8" fill="#fff" stroke="#E8DCC8" stroke-width="2"/><g transform="translate(115,105) scale(2.4)">'+DESIGN+'</g>',
+    cap:'<strong>Campaign —</strong> the outer box. Here you choose one goal, called the objective — Sales, Leads, Traffic or Awareness. Pick the objective that matches the action you actually want; the AI optimises toward it.'},
+  tee:{svg:'<path d="M75 45 L45 60 L35 95 L58 108 L66 96 L66 200 L164 200 L164 96 L172 108 L195 95 L185 60 L155 45 C155 62 135 70 115 70 C95 70 75 62 75 45 Z" fill="#8C9A94" stroke="#6E7A74" stroke-width="2" stroke-linejoin="round"/><g transform="translate(115,120) scale(2.3)">'+DESIGN+'</g>',
+    cap:'<strong>Ad set / ad group —</strong> the folder inside the campaign. This is where your audience lives (cold, warm, hot; interests, lookalikes, custom) and, usually, where your budget and schedule sit. This is the level the AI does most of its targeting work on.'},
+  mug:{svg:'<rect x="55" y="70" width="110" height="110" rx="10" fill="#F0EAE0" stroke="#C9BCA6" stroke-width="2"/><path d="M165 95 q34 0 34 30 q0 30 -34 30" fill="none" stroke="#C9BCA6" stroke-width="8"/><g transform="translate(110,125) scale(2.1)">'+DESIGN+'</g>',
+    cap:'<strong>Ad —</strong> the single page in the folder: the actual image or video and words a person sees. You can have several ads in one ad set and let the AI show the winner more often. This is the creative you\'ll learn to write in Lesson 04.'},
+  tote:{svg:'<path d="M60 75 L60 200 L170 200 L170 75 Z" fill="#EDE4D3" stroke="#C9BCA6" stroke-width="2"/><path d="M85 75 q0 -30 15 -30 M145 75 q0 -30 -15 -30" fill="none" stroke="#C9BCA6" stroke-width="4"/><g transform="translate(115,135) scale(2.1)">'+DESIGN+'</g>',
+    cap:'<strong>Budget —</strong> daily (a steady amount each day, best for beginners) or lifetime (a total across dates). Hold it at the ad set yourself, or hand it to the campaign as CBO / Advantage campaign budget and let the AI split it toward what converts.'}
+};
+const MOCKORDER=['flat','tee','mug','tote'];
+let mockCur='flat',mockTimer=null;
+function setMock(k){
+  mockCur=k;
+  document.querySelectorAll('.mbtn').forEach(b=>b.classList.remove('on'));
+  el('mk-'+k).classList.add('on');
+  const s=el('scene');
+  s.style.opacity='0';
+  setTimeout(()=>{
+    s.innerHTML='<svg viewBox="0 0 230 230">'+SCENES[k].svg+'</svg>';
+    s.style.opacity='1';
+  },200);
+  el('mockCap').innerHTML=SCENES[k].cap;
+}
+function cycleMock(){
+  if(mockTimer){clearInterval(mockTimer);mockTimer=null}
+  let i=MOCKORDER.indexOf(mockCur);
+  mockTimer=setInterval(()=>{
+    i=(i+1)%MOCKORDER.length;
+    setMock(MOCKORDER[i]);
+    if(i===MOCKORDER.length-1){clearInterval(mockTimer);mockTimer=null}
+  },1900);
+}
+setMock('flat');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){setMock('tee');o.unobserve(e.target)}}),{threshold:0.4}).observe(el('scene'));
+
+/* ===== Figure 4 · SEO signal stack ===== */
+const SEOW={title:22,tags:20,longtail:16,desc:12,alt:8,cat:8,fresh:6};
+const seoOn={title:false,tags:false,longtail:false,desc:false,alt:false,cat:false,fresh:false};
+const CIRC=352;
+function seoToggle(id){seoOn[id]=!seoOn[id];updateSeo()}
+function fullSeo(){for(const k in seoOn)seoOn[k]=true;updateSeo()}
+function bareSeo(){for(const k in seoOn)seoOn[k]=false;updateSeo()}
+function updateSeo(){
+  let pct=8;
+  for(const k in seoOn){
+    const chip=el('sc-'+k);
+    if(seoOn[k]){pct+=SEOW[k];chip.classList.add('on')}else{chip.classList.remove('on')}
+  }
+  if(pct>100)pct=100;
+  el('gNum').textContent=Math.round(pct);
+  el('gaugeArc').style.strokeDashoffset=CIRC-(CIRC*pct/100);
+  let line='Nothing yet — no tracking';
+  if(seoOn.title&&seoOn.longtail)line='Pixel + purchase events live — the AI can see who buys';
+  else if(seoOn.title)line='Pixel installed — basic page views only';
+  el('seoLine').textContent=line;
+  let v;
+  if(pct<30)v='Flying blind. With little tracking, the AI can only guess — expect high cost per result.';
+  else if(pct<55)v='Some signal getting through, but the AI is still learning slowly. Results are shaky.';
+  else if(pct<80)v='Well fed now. Clean events are training the algorithm — cost per purchase starts dropping.';
+  else v='Fully ready. Pixel, Conversions API, events and consent all in place — the AI has real fuel to optimise on.';
+  const vd=el('gVerdict');
+  vd.textContent=v;
+  vd.classList.remove('pop');void vd.offsetWidth;vd.classList.add('pop');
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){bareSeo();o.unobserve(e.target)}}),{threshold:0.35}).observe(el('seoWrap'));
+
+</script>
+</body>
+</html>
