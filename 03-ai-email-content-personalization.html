@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Email Content & Personalization · Lesson 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+  --green:#3E8B5A; --red:#C0492F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · segmentation scatter ============ */
+.seg{display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:start}
+.seg-plot{
+  position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  height:340px;overflow:hidden;
+}
+.seg-axis{position:absolute;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.seg-axis.x{bottom:8px;right:14px} .seg-axis.y{top:12px;left:12px;writing-mode:vertical-rl;transform:rotate(180deg)}
+.dot{
+  position:absolute;width:15px;height:15px;border-radius:50%;transform:translate(-50%,-50%) scale(0);
+  transition:transform .5s cubic-bezier(.3,.8,.3,1),background .4s,opacity .3s;cursor:pointer;
+  border:2px solid var(--paper);box-shadow:0 2px 5px rgba(65,44,35,0.2);
+}
+.seg-plot.in .dot{transform:translate(-50%,-50%) scale(1)}
+.dot.g-champ{background:var(--green)} .dot.g-loyal{background:var(--orange)}
+.dot.g-new{background:var(--accent)} .dot.g-risk{background:var(--red)} .dot.g-lost{background:#9A8B7C}
+.dot.dim{opacity:0.16}
+.seg-side{display:flex;flex-direction:column;gap:9px}
+.seg-btn{
+  text-align:left;background:var(--paper);border:1px solid var(--line);border-radius:11px;
+  padding:11px 13px;cursor:pointer;transition:all .2s;display:flex;align-items:center;gap:10px;
+}
+.seg-btn:hover{border-color:var(--orange)}
+.seg-btn.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.seg-btn.active .sb-name,.seg-btn.active .sb-desc{color:#fff}
+.sb-dot{width:13px;height:13px;border-radius:50%;flex-shrink:0}
+.sb-name{font-family:'Fraunces',serif;font-size:15px;font-weight:700;color:var(--brown-dark);line-height:1.1}
+.sb-desc{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.05em;color:var(--muted);display:block;margin-top:2px}
+.seg-readout{margin-top:20px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:14px;color:var(--brown-dark);line-height:1.5;min-height:56px}
+.seg-readout b{color:var(--orange-dark)}
+@media(max-width:820px){.seg{grid-template-columns:1fr}}
+
+/* ============ Figure 2 · churn gauge ============ */
+.gauge-wrap{display:grid;grid-template-columns:300px 1fr;gap:30px;align-items:center}
+.gauge-box{text-align:center}
+.gauge-svg{width:260px;height:150px;margin:0 auto;display:block}
+.gauge-num{font-family:'Fraunces',serif;font-weight:800;font-size:52px;line-height:1;color:var(--brown-dark);margin-top:-6px;transition:color .3s}
+.gauge-lab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-top:4px}
+.gauge-verdict{display:inline-block;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;padding:5px 13px;border-radius:999px}
+.gv-low{background:#DDEFE2;color:var(--green)} .gv-mid{background:#FDECD2;color:var(--tan)} .gv-high{background:#F7E0D8;color:var(--red)}
+.gauge-signals{display:grid;gap:11px}
+.gsig{display:grid;grid-template-columns:1fr auto;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:11px 14px;cursor:pointer;transition:all .2s;user-select:none}
+.gsig:hover{border-color:var(--orange)}
+.gsig.on{background:#FBEEE0;border-color:var(--orange)}
+.gsig .gs-label{font-size:13.5px;color:var(--brown-dark);font-weight:500}
+.gsig .gs-label span{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);font-weight:400;margin-top:1px}
+.gsig .gs-toggle{width:40px;height:22px;border-radius:999px;background:var(--line);position:relative;transition:background .25s;flex-shrink:0}
+.gsig.on .gs-toggle{background:var(--orange)}
+.gsig .gs-toggle::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:#fff;transition:transform .25s}
+.gsig.on .gs-toggle::after{transform:translateX(18px)}
+.gsig .gs-wt{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--tan);margin-top:2px;display:block}
+.gauge-action{margin-top:18px;background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--orange);border-radius:0 10px 10px 0;padding:13px 16px;font-size:14px;color:var(--brown-dark);max-width:none;min-height:24px}
+@media(max-width:760px){.gauge-wrap{grid-template-columns:1fr}}
+
+/* ============ Figure 3 · LTV / scoring panel ============ */
+.ltv-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.ltv-card{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px 20px 18px;cursor:pointer;transition:all .25s;position:relative;overflow:hidden}
+.ltv-card:hover{border-color:var(--orange);transform:translateY(-3px);box-shadow:0 12px 26px rgba(65,44,35,0.1)}
+.ltv-card.active{border-color:var(--orange);box-shadow:0 0 0 2px rgba(239,127,26,0.3)}
+.ltv-head{display:flex;align-items:center;gap:12px;margin-bottom:14px}
+.ltv-av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:17px;color:#fff;flex-shrink:0}
+.ltv-name{font-family:'Fraunces',serif;font-size:17px;font-weight:700;color:var(--brown-dark);line-height:1.1}
+.ltv-name span{display:block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;color:var(--muted);margin-top:2px}
+.ltv-score{display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
+.ltv-score b{font-family:'Fraunces',serif;font-weight:800;font-size:34px;line-height:1;color:var(--orange-dark)}
+.ltv-score .of{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+.ltv-metric{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.05em;color:var(--muted);margin-bottom:3px}
+.ltv-metric b{color:var(--brown-dark)}
+.ltv-tier{position:absolute;top:16px;right:16px;font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;padding:3px 8px;border-radius:5px;font-weight:600}
+.tier-a{background:#DDEFE2;color:var(--green)} .tier-b{background:#FDECD2;color:var(--tan)} .tier-c{background:#F0E9E0;color:var(--muted)}
+.ltv-panel{margin-top:16px;background:var(--brown-dark);color:#F3E7D5;border-radius:14px;padding:22px 24px;min-height:120px}
+.ltv-panel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.ltv-panel .lp-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--yellow);font-weight:600}
+.ltv-panel h4{font-family:'Fraunces',serif;font-size:22px;color:#fff;margin:5px 0 10px}
+.ltv-panel p{color:#EAD9C2;font-size:14px;max-width:none;margin-bottom:10px}
+.ltv-panel .lp-do{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--yellow);letter-spacing:0.03em}
+@media(max-width:700px){.ltv-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 03 · AI Email</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="40" rx="11" fill="#412C23"/>
+      <path d="M10 30l6-8 5 4 6-10 5 6" stroke="#EF7F1A" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="34" cy="11" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 5 · Lesson 03 · AI Email</div>
+  <h1>An email is a <em>tiny stage</em> with one job.</h1>
+  <p class="lede">A great marketing email is not a wall of words — it's a handful of small parts that each have to earn the next click. The from-name earns the open. The subject line and preview text earn the read. The body earns trust. The one call-to-action earns the click. Get those parts right and even a small list outperforms a big blast. This lesson shows how to write each part with AI — subject lines, brand-voice body copy, personalization that actually fits the reader — and how to land in the inbox instead of the spam folder.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The anatomy of an email that gets opened</h2>
+  <p class="lead">Before you write a single word, know what a reader actually sees. In the inbox they see three things — your from-name, your subject line, and the preview text peeking after it. Those decide the open. Inside, the body and one clear call-to-action decide the click. Relevance is what ties it all together: the same email means nothing to a champion and everything to a lapsed subscriber. Click a segment to see how one message gets re-shaped for each reader.</p>
+
+  <p>The mistake beginners make is writing "the email" — one message blasted to everyone. But a subscriber who bought last week, a loyal repeat reader, and someone who has gone quiet for months are three different people opening three different inboxes. Personalization that matters isn't sticking their first name in the subject line — it's <strong>segment relevance</strong>: sending the champion a thank-you and early access, the at-risk reader a genuine reason to come back, the new subscriber a warm welcome. AI groups your list by behaviour and helps you write a fitting version of the email for each. Click each group to see who they are and what the email should say.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Segment-based email relevance, live</span>
+      <div class="controls">
+        <button onclick="showAllSeg()">Show all</button>
+      </div>
+    </div>
+    <div class="seg">
+      <div class="seg-plot" id="segPlot">
+        <div class="seg-axis x">engagement →</div>
+        <div class="seg-axis y">relationship →</div>
+      </div>
+      <div class="seg-side">
+        <div class="seg-btn active" data-g="all" onclick="pickSeg('all')"><span class="sb-dot" style="background:linear-gradient(135deg,#3E8B5A,#C0492F)"></span><span><span class="sb-name">All subscribers</span><span class="sb-desc">the full list</span></span></div>
+        <div class="seg-btn" data-g="champ" onclick="pickSeg('champ')"><span class="sb-dot" style="background:var(--green)"></span><span><span class="sb-name">Champions</span><span class="sb-desc">opens · clicks · buys</span></span></div>
+        <div class="seg-btn" data-g="loyal" onclick="pickSeg('loyal')"><span class="sb-dot" style="background:var(--orange)"></span><span><span class="sb-name">Loyal readers</span><span class="sb-desc">steady openers</span></span></div>
+        <div class="seg-btn" data-g="new" onclick="pickSeg('new')"><span class="sb-dot" style="background:var(--accent)"></span><span><span class="sb-name">New subscribers</span><span class="sb-desc">just joined · fresh</span></span></div>
+        <div class="seg-btn" data-g="risk" onclick="pickSeg('risk')"><span class="sb-dot" style="background:var(--red)"></span><span><span class="sb-name">Going quiet</span><span class="sb-desc">engaged · now cooling</span></span></div>
+        <div class="seg-btn" data-g="lost" onclick="pickSeg('lost')"><span class="sb-dot" style="background:#9A8B7C"></span><span><span class="sb-name">Dormant</span><span class="sb-desc">no opens · long gone</span></span></div>
+      </div>
+    </div>
+    <div class="seg-readout" id="segReadout">The whole list, plotted by how much each subscriber engages (across) and how deep the relationship is (up). Click a segment on the right to isolate it and see the email it should get.</div>
+  </div>
+
+  <h3>Why segments beat blasts</h3>
+  <p>Send the same "20% off everything" email to all 500 subscribers and you annoy your champions (who'd have happily read a normal update) while barely moving the dormant ones (who forgot who you are). Segment first, and the champions get an early-access note, the going-quiet readers get a genuine "we miss you" with one strong reason to return, the new subscribers get a warm welcome that sets expectations. Same effort, far better results — because relevance, not volume, is what earns the open. (Illustrative figures.)</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The subject line that lands in spam</h2>
+  <p class="lead">You can write a perfect email and still never be seen — because the subject line tripped a spam filter, or the reader's thumb skipped past it. Both risks are predictable. AI can score a draft before you send and tell you exactly what to fix. Toggle the common mistakes below and watch the risk gauge climb.</p>
+
+  <p>Deliverability isn't luck; it's a checklist. Spam filters and tired readers react to the same tells — ALL-CAPS shouting, "FREE!!!" and money words, a wall of image with no text, a dozen exclamation marks, sketchy sending setup. The AI has seen millions of emails that got flagged or ignored, so it can read a draft the way a filter and a reader would and flag the same warning signs early. The value is that you catch it <strong>before</strong> you hit send: a draft scored at 70% risk this week can be fixed in five minutes; the same draft, unchecked, quietly dies in the spam folder. Toggle the mistakes below on a sample subject line and watch its risk climb.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Spam & skip-risk gauge</span>
+      <div class="controls">
+        <button onclick="setSignals(true)">All mistakes on</button>
+        <button onclick="setSignals(false)">↺ Clean draft</button>
+      </div>
+    </div>
+    <div class="gauge-wrap">
+      <div class="gauge-box">
+        <svg class="gauge-svg" viewBox="0 0 260 150">
+          <path d="M20 140 A110 110 0 0 1 240 140" fill="none" stroke="#E8DCC8" stroke-width="20" stroke-linecap="round"/>
+          <path id="gaugeArc" d="M20 140 A110 110 0 0 1 240 140" fill="none" stroke="#3E8B5A" stroke-width="20" stroke-linecap="round" stroke-dasharray="345" stroke-dashoffset="345" style="transition:stroke-dashoffset .6s ease,stroke .4s"/>
+          <g id="gaugeNeedle" style="transition:transform .6s cubic-bezier(.3,.8,.4,1);transform-origin:130px 140px">
+            <line x1="130" y1="140" x2="130" y2="46" stroke="#2F1D19" stroke-width="3.5" stroke-linecap="round"/>
+            <circle cx="130" cy="140" r="8" fill="#2F1D19"/>
+          </g>
+        </svg>
+        <div class="gauge-num" id="gaugeNum">8%</div>
+        <div class="gauge-lab">Spam & skip risk · this draft</div>
+        <div><span class="gauge-verdict gv-low" id="gaugeVerdict">Clean</span></div>
+      </div>
+      <div>
+        <div class="gauge-signals" id="gaugeSignals">
+          <div class="gsig" data-w="22" onclick="toggleSig(this)"><div class="gs-label">Spam-trigger words in subject<span>"FREE", "$$$", "act now", "winner"</span></div><div class="gs-toggle"></div></div>
+          <div class="gsig" data-w="20" onclick="toggleSig(this)"><div class="gs-label">ALL CAPS and !!! everywhere<span>reads as shouting to filters</span></div><div class="gs-toggle"></div></div>
+          <div class="gsig" data-w="18" onclick="toggleSig(this)"><div class="gs-label">All image, almost no text<span>filters can't read a picture</span></div><div class="gs-toggle"></div></div>
+          <div class="gsig" data-w="16" onclick="toggleSig(this)"><div class="gs-label">Empty preview text<span>inbox shows raw code instead</span></div><div class="gs-toggle"></div></div>
+          <div class="gsig" data-w="16" onclick="toggleSig(this)"><div class="gs-label">Missing SPF / DKIM setup<span>domain not verified as "you"</span></div><div class="gs-toggle"></div></div>
+        </div>
+        <div class="gauge-action" id="gaugeAction">This draft looks clean — safe to send. Toggle the common mistakes to see the risk climb and the recommended fix change.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>SPF, DKIM & DMARC in plain English</h3>
+  <p>Those three acronyms just prove the email really came from you, not an impostor. <strong>SPF</strong> lists which servers are allowed to send as your domain. <strong>DKIM</strong> adds a tamper-proof signature. <strong>DMARC</strong> tells inboxes what to do if the first two fail. Set them up once (your email tool has a guide) and your messages arrive as "verified you" instead of "suspicious stranger." One more habit: <strong>warm up</strong> a new sending address slowly — a few hundred emails a day at first, not ten thousand on day one — so inbox providers learn you're a real sender, not a spammer. The gauge flags the risk; you fix the draft and the setup before you send.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Writing subject lines with AI</h2>
+  <p class="lead">The subject line is the hardest 40 characters in marketing — and the easiest place for AI to help. Ask for ten, keep the two good ones. But you still need to know a good line from a bad one. AI scores each draft on clarity, curiosity, and honesty, then explains the fix. Click a candidate to see its score explained.</p>
+
+  <p>Good subject lines follow simple frameworks: <strong>curiosity</strong> ("The one setting we changed"), <strong>benefit</strong> ("Cut your prep time in half"), <strong>specificity</strong> (a real number or name beats a vague promise), and <strong>honesty</strong> (the line must match what's inside — clickbait kills trust and, over time, deliverability). Feed AI your goal and a couple of details, ask for a batch, and it drafts in every framework at once. Then judge them: a high score means clear + honest + a reason to open; a low score means vague, hypey, or misleading. Click each candidate to see the AI's reasoning and how to improve it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Subject-line quality analyzer</span>
+      <div class="controls">
+        <button onclick="rankLtv()">▶ Rank by score</button>
+      </div>
+    </div>
+    <div class="ltv-grid" id="ltvGrid">
+      <div class="ltv-card active" data-k="priya" onclick="pickLtv('priya')">
+        <div class="ltv-tier tier-a">Grade A · send it</div>
+        <div class="ltv-head"><div class="ltv-av" style="background:linear-gradient(135deg,var(--green),#2C6B43)">C</div><div class="ltv-name">Curiosity + benefit<span>"The prep step you're skipping"</span></div></div>
+        <div class="ltv-score"><b>92</b><span class="of">/ 100 quality score</span></div>
+        <div class="ltv-metric">Length: <b>28 chars</b> · reads fully on mobile</div>
+        <div class="ltv-metric">Signal: <b>clear, honest, a real reason to open</b></div>
+      </div>
+      <div class="ltv-card" data-k="daniel" onclick="pickLtv('daniel')">
+        <div class="ltv-tier tier-b">Grade B · tweak it</div>
+        <div class="ltv-head"><div class="ltv-av" style="background:linear-gradient(135deg,var(--orange),var(--orange-dark))">S</div><div class="ltv-name">Specificity<span>"New guide inside for you"</span></div></div>
+        <div class="ltv-score"><b>64</b><span class="of">/ 100 quality score</span></div>
+        <div class="ltv-metric">Length: <b>24 chars</b> · fine, but generic</div>
+        <div class="ltv-metric">Signal: <b>honest but vague, no hook</b></div>
+      </div>
+      <div class="ltv-card" data-k="arjun" onclick="pickLtv('arjun')">
+        <div class="ltv-tier tier-b">Grade B · plain</div>
+        <div class="ltv-head"><div class="ltv-av" style="background:linear-gradient(135deg,var(--accent),#005E8C)">P</div><div class="ltv-name">Plain benefit<span>"Your July newsletter"</span></div></div>
+        <div class="ltv-score"><b>48</b><span class="of">/ 100 quality score</span></div>
+        <div class="ltv-metric">Length: <b>20 chars</b> · safe, forgettable</div>
+        <div class="ltv-metric">Signal: <b>clear but gives no reason to open</b></div>
+      </div>
+      <div class="ltv-card" data-k="sam" onclick="pickLtv('sam')">
+        <div class="ltv-tier tier-c">Grade C · rewrite</div>
+        <div class="ltv-head"><div class="ltv-av" style="background:linear-gradient(135deg,#9A8B7C,#6E5C50)">H</div><div class="ltv-name">Hype / clickbait<span>"FREE!!! Don't miss OUT 🔥"</span></div></div>
+        <div class="ltv-score"><b>21</b><span class="of">/ 100 quality score</span></div>
+        <div class="ltv-metric">Length: <b>23 chars</b> · caps + money word</div>
+        <div class="ltv-metric">Signal: <b>trips spam filters, kills trust</b></div>
+      </div>
+    </div>
+    <div class="ltv-panel" id="ltvPanel"></div>
+  </div>
+
+  <h3>Preview text: the free second subject line</h3>
+  <p>Right after the subject, the inbox shows a slice of preview text — and most senders waste it by leaving it blank (so it shows "View in browser" or raw code) or by repeating the subject. Treat it as a second subject line: use it to extend the promise. Subject: "The prep step you're skipping." Preview: "It takes 30 seconds and saves your whole evening." Together they earn the open. Ask AI to write the subject and preview as a matched pair, keep the two best, and — always — read them yourself before sending. AI drafts fast, but the final judgment (and any facts or numbers) is yours to check.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>A repeatable email-writing workflow</h2>
+  <p class="lead">Everything so far becomes one habit you can run in fifteen minutes: pick the segment, brief the AI, draft the parts, score and fix, then send yourself a test. Do it in this order every time and writing an email stops being a blank-page ordeal. Watch the workflow build, step by step.</p>
+
+  <p>Here's how the parts fit into one motion. First you <em>choose the reader</em> — which segment, and the one thing you want them to do. Then you <em>brief the AI</em> with your goal, brand voice, and a few real details. It drafts the pieces — from-name, ten subject lines, matched preview text, a short skimmable body, one CTA. You <em>score and cut</em>: keep the best subject, tighten the body to sound like you, check every fact and number by hand. Finally you <em>send a test to yourself</em> and read it on your phone before it ever reaches the list. Same steps, every send — the blank page becomes a checklist.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · The AI email-writing workflow</span>
+      <div class="controls">
+        <button id="btnQueue" class="active" onclick="buildQueue()">▶ Build the workflow</button>
+        <button onclick="resetQueue()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="ltv-panel" id="queueBox" style="min-height:180px;margin-top:0">
+      <span class="lp-tag">Your fifteen-minute email routine</span>
+      <h4 style="margin-bottom:14px">Five steps, in order</h4>
+      <div id="queueList" style="display:grid;gap:10px"></div>
+    </div>
+  </div>
+
+  <h3>Why this matters for you</h3>
+  <p>This is where AI stops being a novelty and becomes a reliable teammate. A vague "write me an email" gives you generic mush; this ordered workflow gives you a message that fits the reader, sounds like your brand, and clears the spam filter — in a fraction of the time. Next lesson — the final one — we connect these emails into automated sequences that send themselves at the right moment, so the workflow runs even while you sleep.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>A great email is a handful of small parts, each earning the next click: from-name, subject, preview text, body, one CTA. AI helps you write every part faster — but relevance beats volume, and a human pass is non-negotiable. Segment first so the message fits the reader, score subject lines for clarity and honesty, keep the body in your voice and free of spam tells, and always test on your own phone before you send. Respect the inbox and it will keep letting you in.</p>
+  <ul>
+    <li>Anatomy of the open: from-name, subject, preview text, body, one clear CTA</li>
+    <li>Personalization that matters is segment relevance, not just a name merge field</li>
+    <li>Score subject lines for clarity + curiosity + honesty; avoid caps and money words</li>
+    <li>Deliverability is a checklist: text-with-images, one CTA, verified SPF/DKIM/DMARC, warm up</li>
+    <li>Run the same workflow every send — AI drafts, you fact-check, cut, and test</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 03 of 04 · Next up: AI Email Automation & Sequences →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · segmentation ===== */
+const SEGPOINTS=[
+  // {g, x(recency 0-100 higher=more recent), y(value)}
+  {g:'champ',x:86,y:88},{g:'champ',x:78,y:80},{g:'champ',x:90,y:72},{g:'champ',x:82,y:92},
+  {g:'loyal',x:64,y:66},{g:'loyal',x:70,y:58},{g:'loyal',x:58,y:70},{g:'loyal',x:66,y:52},{g:'loyal',x:72,y:64},
+  {g:'new',x:88,y:30},{g:'new',x:80,y:24},{g:'new',x:92,y:38},{g:'new',x:84,y:18},
+  {g:'risk',x:26,y:74},{g:'risk',x:18,y:66},{g:'risk',x:32,y:82},{g:'risk',x:22,y:56},
+  {g:'lost',x:12,y:22},{g:'lost',x:20,y:14},{g:'lost',x:8,y:34},{g:'lost',x:16,y:8},{g:'lost',x:28,y:20}
+];
+const segPlot=el('segPlot');
+SEGPOINTS.forEach(p=>{
+  const d=document.createElement('div');
+  d.className='dot g-'+p.g;d.dataset.g=p.g;
+  d.style.left=(8+p.x*0.84)+'%';
+  d.style.top=(92-p.y*0.82)+'%';
+  segPlot.appendChild(d);
+});
+const SEGINFO={
+  all:'The whole list, plotted by how much each subscriber engages (across) and how deep the relationship is (up). Click a segment on the right to see the email it should get.',
+  champ:'<b>Champions</b> — they open, click and buy. Email: an early-access or insider note and a thank-you. No hard discount — they already love you. Make them feel first, not sold to.',
+  loyal:'<b>Loyal readers</b> — steady openers who rarely miss you. Email: your regular value-first update in a familiar voice. Keep the rhythm; don\'t over-mail or overhaul the format.',
+  new:'<b>New subscribers</b> — just joined, still deciding. Email: a warm welcome that sets expectations and delivers one quick win. The first few emails decide if they stay opted in.',
+  risk:'<b>Going quiet</b> — used to engage, now cooling. Email: a genuine "we miss you" with one strong, specific reason to come back. Honest and short — no guilt, no gimmicks.',
+  lost:'<b>Dormant</b> — no opens in a long time. Email: one final re-permission message ("still want these?"), then remove them. Emailing the truly gone hurts your deliverability.'
+};
+function pickSeg(g){
+  document.querySelectorAll('.seg-btn').forEach(b=>b.classList.toggle('active',b.dataset.g===g));
+  document.querySelectorAll('#segPlot .dot').forEach(d=>{
+    d.classList.toggle('dim', g!=='all' && d.dataset.g!==g);
+  });
+  el('segReadout').innerHTML=SEGINFO[g];
+}
+function showAllSeg(){pickSeg('all')}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){segPlot.classList.add('in');o.unobserve(e.target)}}),{threshold:0.3}).observe(segPlot);
+
+/* ===== Figure 2 · churn gauge ===== */
+function updateGauge(){
+  let risk=6;
+  document.querySelectorAll('#gaugeSignals .gsig.on').forEach(s=>risk+=parseInt(s.dataset.w));
+  risk=Math.min(risk,96);
+  el('gaugeNum').textContent=risk+'%';
+  const arc=el('gaugeArc'),needle=el('gaugeNeedle'),num=el('gaugeNum'),vd=el('gaugeVerdict');
+  const total=345;
+  arc.style.strokeDashoffset=total-(total*risk/100);
+  needle.style.transform='rotate('+(-90+risk*1.8)+'deg)';
+  let col,vclass,vtext,action;
+  if(risk<30){col='#3E8B5A';vclass='gv-low';vtext='Clean';action='This draft looks clean — safe to send. Preview text is set, tone is human, and one clear CTA stands out. Good to go.';}
+  else if(risk<60){col='#A34E1C';vclass='gv-mid';vtext='Fix before send';action='Warning signs. Rewrite the subject in plain, honest language, add real preview text, and swap any big image for text-first copy before you send.';}
+  else{col='#C0492F';vclass='gv-high';vtext='High risk — likely spam';action='This will probably land in spam or get skipped. Cut the caps and money words, add readable text, verify your domain (SPF/DKIM), and let AI redraft a calm, specific subject line.';}
+  arc.style.stroke=col;num.style.color=col;
+  vd.className='gauge-verdict '+vclass;vd.textContent=vtext;
+  el('gaugeAction').textContent=action;
+}
+function toggleSig(s){s.classList.toggle('on');updateGauge()}
+function setSignals(on){document.querySelectorAll('#gaugeSignals .gsig').forEach(s=>s.classList.toggle('on',on));updateGauge()}
+updateGauge();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){setTimeout(()=>setSignals(true),400);o.unobserve(e.target)}}),{threshold:0.35}).observe(el('gaugeSignals'));
+
+/* ===== Figure 3 · LTV panel ===== */
+const LTV={
+  priya:{tag:'Grade A · send this one',t:'"The prep step you\'re skipping" — 92',p:'Curiosity plus a clear benefit, honest about what\'s inside, and short enough to read fully on a phone. It gives a real reason to open without overpromising.',do:'DO → send as-is. Pair it with preview text that extends the promise: "Takes 30 seconds, saves your evening."'},
+  daniel:{tag:'Grade B · tweak before sending',t:'"New guide inside for you" — 64',p:'Honest and clear, but generic — "new guide" could be anything. It won\'t hurt you, but it won\'t pull an open either. One specific detail lifts it fast.',do:'DO → ask AI to add specificity: name the guide or the payoff, e.g. "The 3-step guide to faster mornings."'},
+  arjun:{tag:'Grade B · safe but forgettable',t:'"Your July newsletter" — 48',p:'Perfectly clear and perfectly plain. It labels the email instead of selling the open. Fine for loyal readers who always open; weak for everyone else.',do:'DO → keep it honest but add a hook from the top story, e.g. "July: the setting that changed our workflow."'},
+  sam:{tag:'Grade C · rewrite this',t:'"FREE!!! Don\'t miss OUT 🔥" — 21',p:'Caps, triple exclamation, a money word and hype — exactly what spam filters flag and readers distrust. Even if it lands, it trains people to ignore you.',do:'DO → let AI redraft in a calm, specific voice. Drop "FREE", the caps, and the exclamation marks entirely.'}
+};
+function pickLtv(k){
+  document.querySelectorAll('#ltvGrid .ltv-card').forEach(c=>c.classList.toggle('active',c.dataset.k===k));
+  const d=LTV[k],panel=el('ltvPanel');
+  panel.innerHTML='<span class="lp-tag">'+d.tag+'</span><h4>'+d.t+'</h4><p>'+d.p+'</p><div class="lp-do">'+d.do+'</div>';
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function rankLtv(){pickLtv('priya')}
+pickLtv('priya');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickLtv('priya');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('ltvGrid'));
+
+/* ===== Figure 4 · action queue ===== */
+const QUEUE=[
+  {rank:1,name:'Choose the reader',tag:'Segment + one goal',do:'Pick the segment & the one action',c:'var(--green)'},
+  {rank:2,name:'Brief the AI',tag:'Goal · voice · details',do:'Give context, ask for a batch',c:'var(--orange)'},
+  {rank:3,name:'Draft the parts',tag:'Subject · preview · body · CTA',do:'From-name, 10 subjects, one CTA',c:'var(--accent)'},
+  {rank:4,name:'Score & cut',tag:'Human pass · fact-check',do:'Keep the best, tighten to your voice',c:'var(--red)'},
+  {rank:5,name:'Test, then send',tag:'Read it on your phone first',do:'Send yourself a test, then the list',c:'#9A8B7C'}
+];
+let qTimers=[];
+function buildQueue(){
+  resetQueue();
+  el('btnQueue').classList.add('active');
+  const list=el('queueList');
+  QUEUE.forEach((q,i)=>{
+    qTimers.push(setTimeout(()=>{
+      const row=document.createElement('div');
+      row.style.cssText='display:flex;gap:12px;align-items:center;background:rgba(251,246,238,0.06);border-left:3px solid '+q.c+';border-radius:0 9px 9px 0;padding:10px 14px;opacity:0;transform:translateX(-8px);transition:all .35s';
+      row.innerHTML='<span style="font-family:\'Fraunces\',serif;font-weight:800;font-size:18px;color:'+q.c+';flex:0 0 20px">'+q.rank+'</span>'+
+        '<div style="flex:1"><div style="color:#fff;font-weight:600;font-size:14px">'+q.name+'</div>'+
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:9.5px;letter-spacing:0.06em;color:#C9B79E">'+q.tag+'</div></div>'+
+        '<div style="font-family:\'JetBrains Mono\',monospace;font-size:11px;color:var(--yellow);text-align:right;max-width:170px">'+q.do+'</div>';
+      list.appendChild(row);
+      void row.offsetWidth;
+      row.style.opacity='1';row.style.transform='translateX(0)';
+    },i*260));
+  });
+}
+function resetQueue(){qTimers.forEach(t=>clearTimeout(t));qTimers=[];el('queueList').innerHTML=''}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){buildQueue();o.unobserve(e.target)}}),{threshold:0.3}).observe(el('queueBox'));
+
+</script>
+</body>
+</html>

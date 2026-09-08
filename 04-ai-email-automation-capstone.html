@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Email Automation, Measurement &amp; Capstone · Lesson 04</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+  --green:#3E8B5A; --red:#C0492F;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · lifecycle flow ============ */
+.life{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:28px 22px 22px;position:relative}
+.life-loop{display:flex;align-items:center;justify-content:center;gap:0;flex-wrap:wrap}
+.lnode2{
+  width:132px;text-align:center;padding:16px 10px;border-radius:14px;
+  border:2px solid var(--line);background:var(--cream);cursor:pointer;transition:all .3s;position:relative;
+}
+.lnode2 .li-ic{width:40px;height:40px;border-radius:50%;background:var(--brown-dark);display:flex;align-items:center;justify-content:center;margin:0 auto 8px;transition:background .3s}
+.lnode2 .li-ic svg{width:22px;height:22px}
+.lnode2 h5{font-family:'Fraunces',serif;font-size:16px;color:var(--brown-dark);line-height:1.1;margin-bottom:3px}
+.lnode2 .li-sub{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.lnode2.on{border-color:var(--orange);background:#FDEBD7;transform:translateY(-4px);box-shadow:0 10px 22px rgba(239,127,26,0.2)}
+.lnode2.on .li-ic{background:var(--orange)}
+.life-conn{flex:0 0 40px;height:3px;background:var(--line);position:relative;align-self:center;min-width:26px}
+.life-conn::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.life-conn.back{margin-top:16px}
+.life-detail{margin-top:22px;background:var(--cream);border:1px solid var(--line);border-radius:11px;padding:18px 20px;min-height:110px}
+.life-detail .ld-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:block;margin-bottom:6px}
+.life-detail h4{font-family:'Fraunces',serif;font-size:20px;color:var(--brown-dark);margin-bottom:8px}
+.life-detail p{font-size:14px;color:var(--brown-dark);max-width:none;margin-bottom:10px}
+.life-detail .ld-auto{font-size:13px;color:var(--brown);background:var(--paper);border-left:3px solid var(--orange);padding:9px 13px;border-radius:0 8px 8px 0;max-width:none;margin:0}
+.life-detail .ld-auto b{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark)}
+@media(max-width:820px){
+  .life-loop{gap:10px}
+  .lnode2{width:44%}
+  .life-conn{display:none}
+}
+
+/* ============ Figure 2 · automation builder ============ */
+.auto{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.auto-flow{display:grid;gap:0}
+.auto-step{display:flex;gap:14px;align-items:stretch}
+.auto-rail{display:flex;flex-direction:column;align-items:center;flex:0 0 34px}
+.auto-bubble{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:'JetBrains Mono',monospace;font-weight:600;font-size:12px;color:#fff;transition:transform .3s}
+.auto-line{width:2px;flex:1;background:var(--line);min-height:14px}
+.auto-body{flex:1;padding-bottom:16px}
+.auto-card{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px 15px;transition:all .3s;opacity:.5}
+.auto-step.lit .auto-card{opacity:1;border-color:var(--orange);box-shadow:0 6px 16px rgba(239,127,26,0.12)}
+.auto-step.lit .auto-bubble{transform:scale(1.12)}
+.auto-kind{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;margin-bottom:3px}
+.auto-card h5{font-family:'Fraunces',serif;font-size:16px;color:var(--brown-dark);margin-bottom:2px;line-height:1.15}
+.auto-card p{font-size:12.5px;color:var(--muted);max-width:none;margin:0}
+.k-trigger{background:var(--brown-dark)} .k-wait{background:#9A8B7C} .k-cond{background:var(--accent)}
+.k-action{background:var(--orange)} .k-check{background:var(--green)}
+.ct-trigger{color:var(--brown-dark)} .ct-wait{color:#7A6B5C} .ct-cond{color:var(--accent)}
+.ct-action{color:var(--orange-dark)} .ct-check{color:var(--green)}
+.auto-note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:6px;letter-spacing:0.03em;max-width:none}
+.auto-note b{color:var(--orange-dark)}
+
+/* ============ Figure 3 · CAPSTONE revenue engine ============ */
+.engine{background:var(--paper);border:1px solid var(--line);border-radius:16px;padding:28px 22px;position:relative}
+.eng-modules{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-bottom:8px}
+.emod{
+  flex:1;min-width:130px;text-align:center;padding:15px 10px;border-radius:13px;
+  border:2px solid var(--line);background:var(--cream);cursor:pointer;transition:all .3s;position:relative;opacity:0;transform:translateY(14px);
+}
+.engine.in .emod{animation:emUp .5s forwards}
+.engine.in .emod:nth-child(1){animation-delay:.05s}
+.engine.in .emod:nth-child(2){animation-delay:.18s}
+.engine.in .emod:nth-child(3){animation-delay:.31s}
+.engine.in .emod:nth-child(4){animation-delay:.44s}
+.engine.in .emod:nth-child(5){animation-delay:.57s}
+@keyframes emUp{to{opacity:1;transform:translateY(0)}}
+.emod .em-wk{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--tan);font-weight:600}
+.emod .em-ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;margin:6px auto 8px}
+.emod .em-ic svg{width:24px;height:24px}
+.emod h5{font-family:'Fraunces',serif;font-size:15px;color:var(--brown-dark);line-height:1.1}
+.emod.on{border-color:var(--orange);background:#FDEBD7;transform:translateY(-4px);box-shadow:0 10px 22px rgba(239,127,26,0.2)}
+.em1 .em-ic{background:rgba(239,127,26,0.14)} .em2 .em-ic{background:rgba(163,78,28,0.13)}
+.em3 .em-ic{background:rgba(0,141,210,0.12)} .em4 .em-ic{background:rgba(254,204,0,0.2)} .em5 .em-ic{background:rgba(62,139,90,0.14)}
+.eng-arrows{text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin:14px 0 6px}
+.eng-arrows span{color:var(--orange-dark)}
+.eng-crm{
+  background:var(--brown-dark);color:#F3E7D5;border-radius:14px;padding:20px 24px;text-align:center;
+  position:relative;overflow:hidden;box-shadow:0 14px 34px rgba(47,29,25,0.28);
+}
+.eng-crm::after{content:"";position:absolute;top:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.4}
+.eng-crm .ec-lab{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.16em;text-transform:uppercase;color:var(--yellow);font-weight:600}
+.eng-crm h4{font-family:'Fraunces',serif;font-size:24px;color:#fff;margin:5px 0 6px}
+.eng-crm p{color:#EAD9C2;font-size:13.5px;max-width:520px;margin:0 auto}
+.eng-loopback{text-align:center;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.08em;color:var(--tan);margin-top:14px}
+.eng-loopback b{color:var(--orange-dark)}
+.eng-detail{margin-top:20px;background:var(--cream);border:1px solid var(--line);border-radius:11px;padding:16px 18px;min-height:78px}
+.eng-detail .ed-tag{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600}
+.eng-detail h4{font-family:'Fraunces',serif;font-size:18px;color:var(--brown-dark);margin:4px 0 6px}
+.eng-detail p{font-size:13.5px;color:var(--brown-dark);max-width:none;margin:0}
+
+/* ============ Figure 4 · course capstone checklist ============ */
+.cap{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+.cap-col{background:var(--paper);border:1px solid var(--line);border-radius:13px;padding:14px 12px;text-align:center;opacity:0;transform:translateY(12px)}
+.cap.in .cap-col{animation:emUp .5s forwards}
+.cap.in .cap-col:nth-child(1){animation-delay:.05s}.cap.in .cap-col:nth-child(2){animation-delay:.16s}
+.cap.in .cap-col:nth-child(3){animation-delay:.27s}.cap.in .cap-col:nth-child(4){animation-delay:.38s}
+.cap.in .cap-col:nth-child(5){animation-delay:.49s}
+.cap-wk{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--tan);font-weight:600;margin-bottom:8px}
+.cap-badge{width:46px;height:46px;border-radius:50%;margin:0 auto 10px;display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:18px;color:#fff;background:linear-gradient(135deg,var(--orange),var(--orange-dark))}
+.cap-col:nth-child(2) .cap-badge{background:linear-gradient(135deg,var(--tan),#7A3A14)}
+.cap-col:nth-child(3) .cap-badge{background:linear-gradient(135deg,var(--accent),#005E8C)}
+.cap-col:nth-child(4) .cap-badge{background:linear-gradient(135deg,var(--yellow),#C9A227);color:var(--brown-dark)}
+.cap-col:nth-child(5) .cap-badge{background:linear-gradient(135deg,var(--green),#2C6B43)}
+.cap-col h5{font-family:'Fraunces',serif;font-size:14px;color:var(--brown-dark);line-height:1.15;margin-bottom:6px}
+.cap-skill{font-size:11px;color:var(--muted);line-height:1.4}
+@media(max-width:820px){.cap{grid-template-columns:1fr 1fr}}
+@media(max-width:480px){.cap{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 04 · Capstone</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="40" rx="11" fill="#412C23"/>
+      <path d="M22 9a13 13 0 1 1-9 3.6" stroke="#EF7F1A" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <path d="M13 9l0 5 5 0" stroke="#FECC00" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="34" cy="11" r="3" fill="#EF7F1A"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 5 · Lesson 04 · Email Automation &amp; Course Capstone</div>
+  <h1>The channel that turns one signup into a <em>relationship</em>.</h1>
+  <p class="lede">This is the last lesson of the course. First, we finish email: automated flows that greet every new subscriber, nurture them, rescue an abandoned cart, and win back the ones going quiet — mostly on autopilot — plus the handful of metrics that actually tell you if it's working. Then we zoom all the way out. Everything you've built across five weeks — SEO, ads, content, social, and now email — isn't five separate skills. It's one connected marketing system. Let's see the whole machine.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Every subscriber is on a journey — email it</h2>
+  <p class="lead">A subscriber isn't a one-time send; they're a journey. New today, active if you nurture them, going quiet if you don't, and either won back or gone. Email automation is a set of flows that walks each person through that journey with the right message at each turn — so nobody drifts away unnoticed. Click each stage in the loop.</p>
+
+  <p>Here's why email is different from everything else you learned. SEO, ads, content, and social are mostly <em>rented</em> reach — the platform decides who sees you. Email is <em>owned</em>: the address sits on your list and you can reach it any time, for free. That's why the goal of all four earlier channels is really to earn the signup. Once someone's on the list, automated flows below are the map. A new subscriber gets a welcome. An active one gets nurture. Someone who left a cart gets a reminder. And a quiet subscriber gets a win-back that — surprisingly often — works. Walk the loop.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The email lifecycle loop</span>
+      <div class="controls">
+        <button onclick="lifeStep(-1)">◀ Prev</button>
+        <button onclick="lifeStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="life">
+      <div class="life-loop" id="lifeLoop">
+        <div class="lnode2" data-k="new" onclick="pickLife('new')">
+          <div class="li-ic"><svg viewBox="0 0 22 22" fill="none"><path d="M11 3v16M3 11h16" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/></svg></div>
+          <h5>New</h5><div class="li-sub">just subscribed</div>
+        </div>
+        <div class="life-conn"></div>
+        <div class="lnode2" data-k="active" onclick="pickLife('active')">
+          <div class="li-ic"><svg viewBox="0 0 22 22" fill="none"><path d="M3 12l4 4 6-8 6 4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h5>Active</h5><div class="li-sub">opening · engaged</div>
+        </div>
+        <div class="life-conn"></div>
+        <div class="lnode2" data-k="risk" onclick="pickLife('risk')">
+          <div class="li-ic"><svg viewBox="0 0 22 22" fill="none"><path d="M11 3v10" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><circle cx="11" cy="17" r="1.4" fill="#fff"/></svg></div>
+          <h5>At-Risk</h5><div class="li-sub">going quiet</div>
+        </div>
+        <div class="life-conn"></div>
+        <div class="lnode2" data-k="winback" onclick="pickLife('winback')">
+          <div class="li-ic"><svg viewBox="0 0 22 22" fill="none"><path d="M18 11a7 7 0 1 1-2-4.9" stroke="#fff" stroke-width="2.4" fill="none" stroke-linecap="round"/><path d="M16 3v4h-4" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h5>Win-Back</h5><div class="li-sub">re-engage · sunset</div>
+        </div>
+      </div>
+      <div class="life-detail" id="lifeDetail"></div>
+    </div>
+  </div>
+
+  <h3>The loop, not the line</h3>
+  <p>Notice it's a <em>loop</em>, not a one-way line. A won-back subscriber re-enters "active", a quiet reader can be revived, and the whole cycle repeats — each turn far cheaper than paying an ad to reach a stranger. This is why an owned list compounds: a subscriber you keep engaged for two years is worth many times a click you rented once. These flows are what make the loop run without you writing a fresh email to every person by hand.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Build one email flow, watch it run forever</h2>
+  <p class="lead">"Automation" sounds intimidating. It isn't. An email flow is just an if-this-then-that recipe: a trigger, maybe a wait and a condition, then send — with a human checkpoint where it matters. Here's a real abandoned-cart flow, built step by step. Press play and watch it fire.</p>
+
+  <p>The pattern is always the same five ingredients: a <strong>trigger</strong> (something happened, like adding to cart and not buying), an optional <strong>wait</strong> (give it time), a <strong>condition</strong> (only if still true), an <strong>action</strong> (send the email), and — the piece beginners skip — a <strong>human checkpoint</strong> for anything sensitive, like a discount code or a message to a top subscriber. Build it once and it runs for every subscriber, forever, at 3am, without you. That's the leverage: your judgment, encoded once, applied thousands of times. Watch this abandoned-cart flow execute.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · An abandoned-cart email flow, step by step</span>
+      <div class="controls">
+        <button id="btnAuto" class="active" onclick="runAuto()">▶ Run the flow</button>
+        <button onclick="resetAuto()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="auto">
+      <div class="auto-flow" id="autoFlow">
+        <div class="auto-step" data-i="0">
+          <div class="auto-rail"><div class="auto-bubble k-trigger">⚡</div><div class="auto-line"></div></div>
+          <div class="auto-body"><div class="auto-card"><div class="auto-kind ct-trigger">Trigger</div><h5>Subscriber adds to cart, doesn't check out</h5><p>The moment someone leaves items behind, the flow starts — the highest-intent email you'll ever send.</p></div></div>
+        </div>
+        <div class="auto-step" data-i="1">
+          <div class="auto-rail"><div class="auto-bubble k-cond">?</div><div class="auto-line"></div></div>
+          <div class="auto-body"><div class="auto-card"><div class="auto-kind ct-cond">Condition</div><h5>Wait 1 hour — only if still not purchased</h5><p>Give them a moment; many finish on their own. Only send if the cart is genuinely abandoned.</p></div></div>
+        </div>
+        <div class="auto-step" data-i="2">
+          <div class="auto-rail"><div class="auto-bubble k-action">✉</div><div class="auto-line"></div></div>
+          <div class="auto-body"><div class="auto-card"><div class="auto-kind ct-action">Action</div><h5>Send a friendly "you left this behind" email</h5><p>AI drafts it showing the exact items still in the cart. No discount yet — just a helpful nudge and a one-click link back.</p></div></div>
+        </div>
+        <div class="auto-step" data-i="3">
+          <div class="auto-rail"><div class="auto-bubble k-wait">⏳</div><div class="auto-line"></div></div>
+          <div class="auto-body"><div class="auto-card"><div class="auto-kind ct-wait">Wait &amp; branch</div><h5>Wait 24 hours — did they buy?</h5><p>If they check out, stop here, victory. If not, escalate to a gentle reminder with a small incentive.</p></div></div>
+        </div>
+        <div class="auto-step" data-i="4">
+          <div class="auto-rail"><div class="auto-bubble k-check">✓</div></div>
+          <div class="auto-body"><div class="auto-card"><div class="auto-kind ct-check">Human checkpoint</div><h5>Queue a 10% code for your approval</h5><p>The discount touches your margin, so it waits for one click from you before sending. Judgment stays human.</p></div></div>
+        </div>
+      </div>
+      <p class="auto-note"><b>Set it once, and it works every future cart.</b> The flow never forgets, never sleeps, and never sends the sensitive step without your sign-off.</p>
+    </div>
+  </div>
+
+  <h3>Measure the handful of numbers that matter</h3>
+  <p>A flow is only as good as the numbers behind it, and email has a few that count. <strong>Open rate</strong> tells you if your subject line earned attention — but treat it loosely: since Apple's Mail Privacy Protection auto-loads images, many "opens" are Apple's servers, not people, so opens now run inflated and unreliable. <strong>Click rate</strong> and <strong>click-to-open rate (CTOR)</strong> are more honest — a real human tapped a link. <strong>Conversion</strong> and <strong>revenue per email</strong> tell you if it made money. And watch the warning lights: <strong>unsubscribe rate</strong>, <strong>spam complaints</strong>, and <strong>deliverability</strong> (are you even landing in the inbox?), alongside <strong>list growth</strong>. A simple monthly email report is just those numbers, this month vs last, with one sentence on what you'll try next.</p>
+  <p>To improve them, <strong>A/B test</strong> one thing at a time — send version A to half the list, version B to the other half, keep the winner. Test the subject line first; it moves opens more than anything else. And keep it honest: don't over-mail (frequency fatigues a list fast), always make unsubscribing one easy click, and never buy or scrape addresses. This is the exact same "AI drafts, human decides" principle from Week 1, now running on a schedule — automate the routine, reserve the judgment and the discount for a human click.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Capstone: the whole course, one system</h2>
+  <p class="lead">Step back. Over five weeks you learned five things that felt separate. They aren't. SEO, ads, content, social, and email are five parts of a single marketing system that gets a stranger to discover you, trust you, follow you, and finally join a relationship you own. Click each module to see how it feeds the system.</p>
+
+  <p>Here's the big picture nobody draws for beginners. Weeks 1–4 are all <strong>reach and trust</strong> on channels you <em>rent</em> — different ways to get a stranger to find you and warm up. That's the top of the funnel. But rented reach disappears the moment you stop paying or the algorithm shifts. The lasting asset is the <em>owned audience</em> — and that's what Week 5's email list unlocks. Email sits at the centre, catches the people the earlier channels attract, and lets you reach them again and again for free through the lifecycle flows. The four channels fill the funnel; email makes the relationship compound. Click each module below, then see how they connect.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Your five-module marketing system</span>
+      <div class="controls">
+        <button onclick="engineTour()">▶ Tour modules</button>
+        <button onclick="resetEngine()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="engine" id="engine">
+      <div class="eng-modules">
+        <div class="emod em1" data-k="drop" onclick="pickEng('drop')">
+          <div class="em-wk">Week 1</div>
+          <div class="em-ic"><svg viewBox="0 0 24 24" fill="none"><rect x="3" y="8" width="18" height="12" rx="2" stroke="#EF7F1A" stroke-width="2"/><path d="M8 8V6a4 4 0 018 0v2" stroke="#EF7F1A" stroke-width="2"/></svg></div>
+          <h5>SEO</h5>
+        </div>
+        <div class="emod em2" data-k="pod" onclick="pickEng('pod')">
+          <div class="em-wk">Week 2</div>
+          <div class="em-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M6 4l6 3 6-3v5l-3 1v9H9v-9L6 9V4z" stroke="#A34E1C" stroke-width="2" fill="none" stroke-linejoin="round"/></svg></div>
+          <h5>Paid Ads</h5>
+        </div>
+        <div class="emod em3" data-k="ecom" onclick="pickEng('ecom')">
+          <div class="em-wk">Week 3</div>
+          <div class="em-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M4 6h16l-2 9H6L4 6z" stroke="#008DD2" stroke-width="2" stroke-linejoin="round"/><circle cx="9" cy="19" r="1.5" fill="#008DD2"/><circle cx="16" cy="19" r="1.5" fill="#008DD2"/></svg></div>
+          <h5>Content</h5>
+        </div>
+        <div class="emod em4" data-k="sales" onclick="pickEng('sales')">
+          <div class="em-wk">Week 4</div>
+          <div class="em-ic"><svg viewBox="0 0 24 24" fill="none"><path d="M4 20V4M4 20h16M8 16l4-5 3 3 5-7" stroke="#C9A227" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+          <h5>Social Media</h5>
+        </div>
+        <div class="emod em5" data-k="crm" onclick="pickEng('crm')">
+          <div class="em-wk">Week 5</div>
+          <div class="em-ic"><svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="9" r="4" stroke="#3E8B5A" stroke-width="2"/><path d="M5 20c0-4 3-6 7-6s7 2 7 6" stroke="#3E8B5A" stroke-width="2" stroke-linecap="round"/></svg></div>
+          <h5>AI Email</h5>
+        </div>
+      </div>
+      <div class="eng-arrows">reach &amp; earn trust <span>↓ every visitor is invited into ↓</span></div>
+      <div class="eng-crm">
+        <div class="ec-lab">The hub · the audience you own</div>
+        <h4>Your Email List</h4>
+        <p>Catches the people the four channels attract, keeps a direct line to each one, and drives the lifecycle flows that turn a single visit into an ongoing relationship.</p>
+      </div>
+      <div class="eng-loopback">↻ <b>and sends subscribers back to your content &amp; store on repeat — the system compounds</b></div>
+      <div class="eng-detail" id="engDetail"></div>
+    </div>
+  </div>
+
+  <h3>The channels fill it; email compounds it</h3>
+  <p>The single most important sentence of this whole course: <strong>getting attention is Weeks 1–4; owning the relationship is Week 5 — and the owned relationship is where the leverage is.</strong> A brand that only rents reach is a bucket with a hole in it, forever paying to refill. Add an email list and you plug the hole: the people you already reached come back on their own, for free, again and again — and you're never one algorithm change away from losing them. Here's a concrete beginner run of all five, illustrative: a small candle maker publishes an SEO blog post (Week 1) that ranks for "best soy candles"; runs a small ad set (Week 2) to a landing page; the content and social posts (Weeks 3–4) build trust and a following; every one of those places offers a simple "10% off your first order — join the list" signup; and the email flows (Week 5) welcome, nurture, and win back — so a visitor who found one blog post becomes a subscriber the shop can reach for years.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>What you can now do</h2>
+  <p class="lead">Five weeks ago, "market a small business with AI" was a vague ambition. Now it's a concrete, connected skill set. Here's the whole journey as five capabilities you actually hold — and the one honest sentence that ties them together.</p>
+
+  <p>Look at what's in your hands now. You can be found in search, buy reach with ads, create content that earns trust, build a following on social, and — the piece most people never reach — turn all of that into an audience you own and email on your own terms. That last skill is rarer and more valuable than the others, because everyone chases new traffic and almost nobody systematically keeps a direct line to the people they've already reached. You now do both. That's a complete marketing system, run by one person with AI doing the heavy lifting.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Your course capstone — five skills, one marketer</span>
+      <div class="controls">
+        <button onclick="capReveal()">✦ Reveal the journey</button>
+      </div>
+    </div>
+    <div class="cap" id="cap">
+      <div class="cap-col"><div class="cap-wk">Week 1</div><div class="cap-badge">1</div><h5>SEO</h5><div class="cap-skill">Get discovered in search with AI-assisted keywords &amp; pages.</div></div>
+      <div class="cap-col"><div class="cap-wk">Week 2</div><div class="cap-badge">2</div><h5>Paid Ads</h5><div class="cap-skill">Buy reach on purpose; write &amp; test ads without wasting budget.</div></div>
+      <div class="cap-col"><div class="cap-wk">Week 3</div><div class="cap-badge">3</div><h5>Content</h5><div class="cap-skill">Create trustworthy content that fuels every other channel.</div></div>
+      <div class="cap-col"><div class="cap-wk">Week 4</div><div class="cap-badge">4</div><h5>Social Media</h5><div class="cap-skill">Grow an audience and community with a steady AI-helped rhythm.</div></div>
+      <div class="cap-col"><div class="cap-wk">Week 5</div><div class="cap-badge">5</div><h5>AI Email</h5><div class="cap-skill">Own the relationship — automate flows, measure, and convert.</div></div>
+    </div>
+  </div>
+
+  <h3>The one sentence to leave with</h3>
+  <p>AI didn't replace the marketer — it gave one careful person the reach of a small team, across every stage from first search to a subscriber who opens your email for years. You've learned to reach <em>and</em> keep, to attract <em>and</em> own the audience, with AI drafting the work and you making the calls that matter. No channel guarantees results and nothing works overnight; automation compounds only when you keep monitoring it, and consistency beats any single clever tactic. The tools will keep changing. This shape — a connected system where you own the judgment and the audience, and AI owns the volume — is what lasts. Go build yours.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward — and the whole course in five lines</h2>
+  <p>Email is where marketing quietly builds its lasting asset. Automated flows greet every new subscriber, nurture the active ones, and rescue the ones going quiet — mostly on autopilot, with a human checkpoint where judgment matters — and a handful of honest metrics tell you what to keep. Zoomed all the way out, your five weeks aren't five skills: they're one marketing system, with your email list at its centre turning rented reach into an audience you own.</p>
+  <ul>
+    <li>The email lifecycle is a loop: new → active → at-risk → win-back → active again</li>
+    <li>A flow = trigger + wait + condition + action + human checkpoint</li>
+    <li>Measure clicks &amp; revenue over opens (Apple MPP inflates opens); A/B test one thing</li>
+    <li>Weeks 1–4 reach &amp; earn trust; Week 5's email owns the relationship &amp; compounds</li>
+    <li>You now run a complete system — reach AND own the audience — one marketer, AI-powered</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 04 of 04 · Course complete — go build your marketing system ✦</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · lifecycle loop ===== */
+const LIFE={
+  new:{tag:'Stage 1 · the first days on the list',t:'New — make the welcome unmissable',p:'They just subscribed. This window decides everything: a warm welcome series that delivers on the signup promise turns a subscriber into a fan; silence turns them into a stranger who forgets they ever joined.',auto:'Auto welcome flow: an instant hello with the promised offer, your story, and a gentle "start here" — the highest open rates you\'ll ever get.'},
+  active:{tag:'Stage 2 · the healthy middle',t:'Active — keep the relationship warm',p:'They\'re opening and clicking on rhythm. The goal isn\'t to hard-sell every send; it\'s to stay useful and present so you\'re the obvious choice when they\'re ready to buy.',auto:'Auto nurture &amp; onboarding flow, plus a steady newsletter and "picked for you" suggestions AI drafts from what they\'ve clicked before.'},
+  risk:{tag:'Stage 3 · the quiet warning',t:'At-Risk — catch the silence early',p:'The opens slow, the clicks stop, a browse or cart gets abandoned. Invisible one email at a time, but the tool reads the pattern and flags anyone who\'s gone quiet while there\'s still time to act.',auto:'Auto re-engagement flow: a friendly "still want to hear from us?" first, plus browse- and cart-abandon reminders — with your sign-off on any discount.'},
+  winback:{tag:'Stage 4 · comeback, then sunset',t:'Win-Back — revive the lapsed, retire the rest',p:'They stopped opening entirely. A well-timed, genuine win-back recovers a meaningful share — and for the truly gone, a graceful sunset (a polite goodbye, then removal) actually protects your deliverability.',auto:'Auto win-back sequence: "we miss you", a reason to return, then a final nudge — re-engagers loop back to Active; non-responders are sunset off the list.'}
+};
+const LIFEORDER=['new','active','risk','winback'];
+let lifeCur='new';
+function pickLife(k){
+  lifeCur=k;
+  document.querySelectorAll('#lifeLoop .lnode2').forEach(n=>n.classList.toggle('on',n.dataset.k===k));
+  const d=LIFE[k];
+  el('lifeDetail').innerHTML='<span class="ld-tag">'+d.tag+'</span><h4>'+d.t+'</h4><p>'+d.p+'</p><div class="ld-auto"><b>Automation —</b> '+d.auto+'</div>';
+}
+function lifeStep(dir){
+  let i=LIFEORDER.indexOf(lifeCur)+dir;
+  if(i<0)i=LIFEORDER.length-1;if(i>=LIFEORDER.length)i=0;
+  pickLife(LIFEORDER[i]);
+}
+pickLife('new');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickLife('new');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('lifeLoop'));
+
+/* ===== Figure 2 · automation builder ===== */
+let autoTimers=[];
+function runAuto(){
+  resetAuto();
+  el('btnAuto').classList.add('active');
+  const steps=document.querySelectorAll('#autoFlow .auto-step');
+  steps.forEach((s,i)=>{autoTimers.push(setTimeout(()=>s.classList.add('lit'),300+i*750))});
+}
+function resetAuto(){
+  autoTimers.forEach(t=>clearTimeout(t));autoTimers=[];
+  document.querySelectorAll('#autoFlow .auto-step').forEach(s=>s.classList.remove('lit'));
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){runAuto();o.unobserve(e.target)}}),{threshold:0.3}).observe(el('autoFlow'));
+
+/* ===== Figure 3 · capstone engine ===== */
+const ENG={
+  drop:{tag:'Week 1 · SEO',t:'Get discovered in search',p:'The lowest-cost way to be found: pages that rank for what people already search. Free, compounding discovery — and every visitor is a chance to invite them onto the list.'},
+  pod:{tag:'Week 2 · Paid Ads',t:'Buy reach on purpose',p:'When you need reach faster than SEO can grow, ads put you in front of the right people for money. Another top-of-funnel channel — point it at a signup, not just a sale.'},
+  ecom:{tag:'Week 3 · Content',t:'The trust that fuels everything',p:'Helpful content earns the trust the other channels spend. It\'s the fuel SEO ranks, ads point to, and social shares — and the reason someone bothers to subscribe.'},
+  sales:{tag:'Week 4 · Social Media',t:'Grow audience and community',p:'A steady social presence builds a following and a two-way relationship. It fills the top of the funnel and warms people up — then hands them to email to keep.'},
+  crm:{tag:'Week 5 · AI Email · the hub',t:'Own the relationship and compound',p:'The centre of the system. It catches everyone the other four channels attract, drives the lifecycle flows, and turns rented reach into an audience you own and can email for free. This is where the leverage lives.'}
+};
+const ENGORDER=['drop','pod','ecom','sales','crm'];
+let engTour=null;
+function pickEng(k){
+  document.querySelectorAll('#engine .emod').forEach(m=>m.classList.toggle('on',m.dataset.k===k));
+  const d=ENG[k];
+  el('engDetail').innerHTML='<span class="ed-tag">'+d.tag+'</span><h4>'+d.t+'</h4><p>'+d.p+'</p>';
+}
+function engineTour(){
+  if(engTour){clearInterval(engTour);engTour=null}
+  let i=0;pickEng(ENGORDER[0]);
+  engTour=setInterval(()=>{i++;if(i>=ENGORDER.length){clearInterval(engTour);engTour=null;return}pickEng(ENGORDER[i])},1600);
+}
+function resetEngine(){
+  if(engTour){clearInterval(engTour);engTour=null}
+  document.querySelectorAll('#engine .emod').forEach(m=>m.classList.remove('on'));
+  pickEng('crm');
+}
+pickEng('crm');
+const engineEl=el('engine');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){engineEl.classList.add('in');setTimeout(engineTour,700);o.unobserve(e.target)}}),{threshold:0.25}).observe(engineEl);
+
+/* ===== Figure 4 · capstone checklist ===== */
+const capEl=el('cap');
+function capReveal(){capEl.classList.add('in')}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){capEl.classList.add('in');o.unobserve(e.target)}}),{threshold:0.25}).observe(capEl);
+
+</script>
+</body>
+</html>

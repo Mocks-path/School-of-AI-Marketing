@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Email Marketing in the AI Era · Lesson 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · Owned list vs rented reach ============ */
+.sot{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 22px;position:relative}
+.sot-stage{position:relative;min-height:340px}
+.silo{
+  position:absolute;width:150px;background:var(--cream);border:2px solid var(--line);
+  border-radius:11px;padding:11px 12px;transition:all .8s cubic-bezier(.3,.7,.3,1);
+  box-shadow:0 4px 12px rgba(65,44,35,0.06);
+}
+.silo .stitle{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--tan);font-weight:600;display:flex;align-items:center;gap:6px;margin-bottom:7px}
+.silo .stitle svg{width:15px;height:15px;flex-shrink:0}
+.silo .sline{font-size:11px;color:var(--brown-dark);line-height:1.35;margin-bottom:2px}
+.silo .sline b{color:var(--orange-dark)}
+.s1{top:0;left:0} .s2{top:0;right:0} .s3{top:120px;left:-4px}
+.s4{bottom:0;left:26%} .s5{bottom:6px;right:0} .s6{top:130px;right:-2px}
+.sot.unified .silo{opacity:0;transform:translate(50%,60px) scale(.6);pointer-events:none}
+.record{
+  position:absolute;top:50%;left:50%;transform:translate(-50%,-50%) scale(.55);
+  width:300px;background:var(--brown-dark);color:#F3E7D5;border-radius:14px;
+  padding:18px 20px;opacity:0;transition:opacity .7s ease .35s,transform .7s cubic-bezier(.3,.8,.3,1) .35s;
+  box-shadow:0 18px 40px rgba(47,29,25,0.34);pointer-events:none;
+}
+.sot.unified .record{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.rec-head{display:flex;align-items:center;gap:11px;padding-bottom:12px;border-bottom:1px solid rgba(251,246,238,0.16);margin-bottom:12px}
+.rec-av{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--orange),var(--orange-dark));display:flex;align-items:center;justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:19px;color:#fff;flex-shrink:0}
+.rec-name{font-family:'Fraunces',serif;font-weight:700;font-size:18px;color:#fff;line-height:1.1}
+.rec-name span{display:block;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;color:var(--yellow);font-weight:600;margin-top:3px}
+.rec-rows{display:grid;gap:7px}
+.rec-row{display:flex;gap:9px;font-size:11.5px;line-height:1.35;opacity:0;transform:translateX(10px);transition:all .4s}
+.sot.unified .rec-row{opacity:1;transform:translateX(0)}
+.sot.unified .rec-row:nth-child(1){transition-delay:.6s}
+.sot.unified .rec-row:nth-child(2){transition-delay:.72s}
+.sot.unified .rec-row:nth-child(3){transition-delay:.84s}
+.sot.unified .rec-row:nth-child(4){transition-delay:.96s}
+.sot.unified .rec-row:nth-child(5){transition-delay:1.08s}
+.sot.unified .rec-row:nth-child(6){transition-delay:1.2s}
+.rec-row i{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;color:var(--yellow);flex:0 0 62px;font-style:normal;padding-top:1px}
+.rec-row b{color:#fff;font-weight:600}
+.sot-caption{margin-top:18px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:13px 16px;font-size:14px;color:var(--brown-dark);line-height:1.5;min-height:56px}
+.sot-caption b{color:var(--orange-dark)}
+@media(max-width:700px){
+  .sot-stage{min-height:520px}
+  .silo{width:44%;position:relative;display:inline-block;margin:5px;top:auto!important;left:auto!important;right:auto!important;bottom:auto!important}
+  .sot.unified .silo{display:none}
+  .record{width:94%}
+}
+
+/* ============ Figure 2 · Email myth vs reality (flip) ============ */
+.crmwrap{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.crmcard{height:230px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.crmwrap.show .crmcard{animation:cIn .5s forwards}
+.crmwrap.show .crmcard:nth-child(1){animation-delay:.05s}
+.crmwrap.show .crmcard:nth-child(2){animation-delay:.2s}
+.crmwrap.show .crmcard:nth-child(3){animation-delay:.35s}
+.crmwrap.show .crmcard:nth-child(4){animation-delay:.5s}
+@keyframes cIn{to{opacity:1;transform:translateY(0)}}
+.cinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.crmcard.flipped .cinner{transform:rotateY(180deg)}
+.cface{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;
+}
+.cfront{background:var(--paper);border:1px solid var(--line);text-align:center;align-items:center}
+.cfront .cicon{width:56px;height:56px;border-radius:14px;background:rgba(239,127,26,0.13);display:flex;align-items:center;justify-content:center;margin-bottom:12px}
+.cfront .cicon svg{width:30px;height:30px}
+.cfront .cq{font-family:'Fraunces',serif;font-weight:700;font-size:20px;line-height:1.15;color:var(--brown-dark);margin-bottom:6px}
+.cfront .chint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;color:var(--orange-dark);opacity:.85}
+.cback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.cback .clab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.cback p{font-size:13.5px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){
+  .crmwrap{grid-template-columns:1fr}
+  .crmcard{height:210px}
+}
+
+/* ============ Figure 3 · What AI does for email ============ */
+.land-chain{display:flex;align-items:center;gap:0;margin-bottom:20px}
+.lnode{
+  flex:1;text-align:center;padding:16px 8px;background:var(--paper);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown);font-weight:600;
+}
+.lnode .ldx{display:block;font-family:'Fraunces',serif;font-size:24px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s;text-transform:none;letter-spacing:0}
+.lnode:hover{border-color:var(--orange);transform:translateY(-2px)}
+.lnode.active{background:var(--brown-dark);border-color:var(--brown-dark);color:var(--paper)}
+.lnode.active .ldx{color:var(--orange)}
+.llink{width:22px;height:3px;background:var(--line);flex-shrink:0;position:relative}
+.llink::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.lpanel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px;min-height:240px}
+.lpanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.lpanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:4px}
+.lpanel .ltag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:block;margin-bottom:14px}
+.lpanel ul{list-style:none;display:grid;gap:9px;margin-bottom:18px}
+.lpanel li{font-size:14.5px;color:var(--ink);padding-left:24px;position:relative;line-height:1.5}
+.lpanel li::before{content:"✦";position:absolute;left:0;color:var(--orange);font-size:13px}
+.l-human{
+  background:var(--cream);border-left:3px solid var(--brown);border-radius:0 10px 10px 0;
+  padding:13px 16px;font-size:13.5px;color:var(--brown);line-height:1.5;
+}
+.l-human strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+@media(max-width:700px){
+  .land-chain{flex-wrap:wrap;gap:8px}
+  .lnode{flex:1 1 42%}
+  .llink{display:none}
+}
+
+/* ============ Figure 4 · cost-of-no-list slider ============ */
+.chaos{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.chaos-row{display:grid;grid-template-columns:200px 1fr 70px;gap:16px;align-items:center;margin-bottom:20px}
+.chaos-row label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown);font-weight:600}
+.chaos-row .cval{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--orange-dark);text-align:right}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--cream);border:1px solid var(--line);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+.chaos-result{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-top:8px;padding-top:20px;border-top:1px dashed var(--line)}
+.chaos-num{font-family:'Fraunces',serif;font-weight:800;font-size:46px;line-height:1;color:var(--orange-dark)}
+.chaos-lab{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.chaos-verdict{font-size:14.5px;color:var(--brown);font-weight:500;max-width:340px;line-height:1.45}
+@media(max-width:700px){
+  .chaos-row{grid-template-columns:1fr 60px;gap:8px}
+  .chaos-row label{grid-column:1/-1}
+  .chaos-num{font-size:36px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 01 · AI Email</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="40" rx="11" fill="#412C23"/>
+      <circle cx="22" cy="17" r="6" stroke="#EF7F1A" stroke-width="3" fill="none"/>
+      <path d="M11 33c0-6 5-9 11-9s11 3 11 9" stroke="#FECC00" stroke-width="3" fill="none" stroke-linecap="round"/>
+      <circle cx="34" cy="11" r="3" fill="#EF7F1A"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 5 · Lesson 01 · AI Email</div>
+  <h1>The one channel you actually <em>own</em>.</h1>
+  <p class="lede">You've run ads, built a following, and chased the algorithm. But social reach and search rankings are rented — the platform can change the rules overnight and your audience vanishes. Email is different. When someone gives you their address, that connection is yours to keep. This week we make it smart. This lesson explains what email marketing really is, why it's the highest-ROI owned channel you have, and what AI genuinely changes about it.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Six rented rooms, one asset you own</h2>
+  <p class="lead">Email marketing is simply sending messages to people who asked to hear from you. What makes it powerful isn't the sending — it's the ownership. Every other place you reach an audience is rented. Your email list is the one asset you actually own. Watch six rented channels collapse into the one thing you keep.</p>
+
+  <p>Here is the problem it solves. Right now your audience is scattered across places you don't control. Your followers live on Instagram. Your traffic depends on Google's ranking. Your reach is throttled by Meta's algorithm. A viral video today is invisible tomorrow. None of these are yours — the platform owns the connection, and it can change the rules, raise the ad price, or shut the account whenever it likes. You're a tenant, and the rent goes up.</p>
+  <p>Email flips this. When someone hands you their address, that permission is yours — a direct line to their inbox that no algorithm sits between. Build a list of 1,000 engaged subscribers and you can reach every one of them for roughly the price of a coffee, any time you choose. Press the button and watch six rented channels merge into the single owned asset underneath them.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Rented reach becomes an owned list</span>
+      <div class="controls">
+        <button id="btnUnify" class="active" onclick="unify(true)">▶ Own the audience</button>
+        <button onclick="unify(false)">↺ Scatter again</button>
+      </div>
+    </div>
+    <div class="sot" id="sot">
+      <div class="sot-stage">
+        <div class="silo s1">
+          <div class="stitle"><svg viewBox="0 0 15 15" fill="none"><rect x="1" y="3" width="13" height="9" rx="1.5" stroke="#A34E1C" stroke-width="1.4"/><path d="M1.5 4l6 4 6-4" stroke="#A34E1C" stroke-width="1.4"/></svg> Instagram</div>
+          <div class="sline"><b>8,400 followers</b></div>
+          <div class="sline">~4% ever see a post</div>
+        </div>
+        <div class="silo s2">
+          <div class="stitle"><svg viewBox="0 0 15 15" fill="none"><path d="M3 5h9l-1 7H4L3 5z" stroke="#A34E1C" stroke-width="1.4"/><path d="M5 5V4a2.5 2.5 0 015 0v1" stroke="#A34E1C" stroke-width="1.4"/></svg> TikTok</div>
+          <div class="sline">One viral video · <b>gone</b></div>
+          <div class="sline">Reach resets to zero</div>
+        </div>
+        <div class="silo s3">
+          <div class="stitle"><svg viewBox="0 0 15 15" fill="none"><path d="M2 3h11v7H7l-3 3v-3H2V3z" stroke="#A34E1C" stroke-width="1.4"/></svg> Google</div>
+          <div class="sline">Rank · <b>page 1 today</b></div>
+          <div class="sline">One update from lost</div>
+        </div>
+        <div class="silo s4">
+          <div class="stitle"><svg viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6" stroke="#A34E1C" stroke-width="1.4"/><path d="M5 8l2 2 3-4" stroke="#A34E1C" stroke-width="1.4"/></svg> Meta Ads</div>
+          <div class="sline">Pay again for each click</div>
+          <div class="sline">Cost: <b>rising</b></div>
+        </div>
+        <div class="silo s5">
+          <div class="stitle"><svg viewBox="0 0 15 15" fill="none"><rect x="2" y="2" width="11" height="11" rx="1.5" stroke="#A34E1C" stroke-width="1.4"/><path d="M4.5 5.5h6M4.5 8h6M4.5 10.5h4" stroke="#A34E1C" stroke-width="1.4"/></svg> YouTube</div>
+          <div class="sline">Subscribers ≠ reach</div>
+          <div class="sline">"the algorithm decides"</div>
+        </div>
+        <div class="silo s6">
+          <div class="stitle"><svg viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="5" r="2.6" stroke="#A34E1C" stroke-width="1.4"/><path d="M3 13c0-2.5 2-4 4.5-4S12 10.5 12 13" stroke="#A34E1C" stroke-width="1.4"/></svg> X / Threads</div>
+          <div class="sline">Borrowed attention</div>
+          <div class="sline">…rented, not owned</div>
+        </div>
+        <div class="record" id="record">
+          <div class="rec-head">
+            <div class="rec-av">✉</div>
+            <div class="rec-name">Your Email List<span>The one asset you own</span></div>
+          </div>
+          <div class="rec-rows">
+            <div class="rec-row"><i>Access</i><b>Direct line to every inbox — no algorithm</b></div>
+            <div class="rec-row"><i>Permission</i><b>They opted in — they asked to hear from you</b></div>
+            <div class="rec-row"><i>Cost</i><b>Reach 1,000 people ≈ price of a coffee</b></div>
+            <div class="rec-row"><i>Control</i><b>You set the rules · export it any time</b></div>
+            <div class="rec-row"><i>ROI</i><b>~$36 back per $1 spent (industry est.)</b></div>
+            <div class="rec-row"><i>Durability</i><b>Yours to keep · platform-proof</b></div>
+          </div>
+        </div>
+      </div>
+      <div class="sot-caption" id="sotCap">Six rented channels, each borrowing an audience the platform can throttle or take away. None of them is yours. Press <b>Own the audience</b>.</div>
+    </div>
+  </div>
+
+  <h3>Why "you own the list" is the whole idea</h3>
+  <p>Notice what owning the list makes possible: you decide when to reach your audience, what to say, and you pay almost nothing to do it — no bidding against competitors, no algorithm deciding who sees you. A rented channel can 10x your ad cost or ban your account tomorrow and there's nothing you can do. An owned list you can carry to any tool, any platform, forever. Everything else this week is built on top of this one shift: <strong>stop renting attention on platforms you don't control, start building an audience you keep.</strong></p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>How email actually works — and four myths to drop</h2>
+  <p class="lead">Beginners picture email as "type a message, hit send, everyone reads it." Reality is a little more interesting — and understanding it is what separates emails that land in the inbox from ones that vanish into spam. Before you send a thing, clear out the four most common myths.</p>
+
+  <p>Here's the plain-English version of how email works. You don't send from your personal Gmail — you use an <strong>ESP</strong> (email service provider) like Mailchimp or ConvertKit, built to send to many people at once. The ESP builds up a <strong>sender reputation</strong>: send to people who open and click, and inbox providers trust you; send to people who ignore or report you, and they route you to <strong>spam or the Promotions tab</strong>. That trust is called <strong>deliverability</strong> — the single most important number nobody talks about. Flip each card below to separate how email really works from what beginners assume.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Myth, or how it really works?</span>
+      <div class="controls">
+        <button onclick="flipAllCrm()">Flip all</button>
+        <button onclick="resetCrm()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="crmwrap" id="crmwrap">
+      <div class="crmcard" onclick="this.classList.toggle('flipped')">
+        <div class="cinner">
+          <div class="cface cfront">
+            <div class="cicon"><svg viewBox="0 0 30 30" fill="none"><rect x="4" y="6" width="22" height="18" rx="3" stroke="#EF7F1A" stroke-width="2.2"/><path d="M4 11h22" stroke="#EF7F1A" stroke-width="2.2"/><circle cx="9" cy="8.5" r="1" fill="#EF7F1A"/></svg></div>
+            <div class="cq">"Sent means delivered."</div>
+            <div class="chint">tap to flip</div>
+          </div>
+          <div class="cface cback">
+            <div class="clab">Not quite</div>
+            <p>Hitting send only hands your email to the ESP. Whether it reaches the <em>inbox</em> — versus spam or the Promotions tab — depends on your sender reputation. That gap between "sent" and "seen" is deliverability, and it's earned, not guaranteed.</p>
+          </div>
+        </div>
+      </div>
+      <div class="crmcard" onclick="this.classList.toggle('flipped')">
+        <div class="cinner">
+          <div class="cface cfront">
+            <div class="cicon"><svg viewBox="0 0 30 30" fill="none"><rect x="4" y="7" width="22" height="16" rx="2.5" stroke="#EF7F1A" stroke-width="2.2"/><path d="M4 9l11 7 11-7" stroke="#EF7F1A" stroke-width="2.2"/></svg></div>
+            <div class="cq">"Bigger list = better."</div>
+            <div class="chint">tap to flip</div>
+          </div>
+          <div class="cface cback">
+            <div class="clab">Backwards</div>
+            <p>A list of 500 people who open and click beats 10,000 who ignore you — cold contacts drag down your reputation and push you into spam. A small <em>engaged</em> list is worth far more than a big cold one. Quality of attention, not quantity of addresses.</p>
+          </div>
+        </div>
+      </div>
+      <div class="crmcard" onclick="this.classList.toggle('flipped')">
+        <div class="cinner">
+          <div class="cface cfront">
+            <div class="cicon"><svg viewBox="0 0 30 30" fill="none"><path d="M15 4l11 6v10l-11 6L4 20V10l11-6z" stroke="#EF7F1A" stroke-width="2.2" fill="none"/><path d="M15 15v9M4 10l11 5 11-5" stroke="#EF7F1A" stroke-width="2.2"/></svg></div>
+            <div class="cq">"Buying a list is fine."</div>
+            <div class="chint">tap to flip</div>
+          </div>
+          <div class="cface cback">
+            <div class="clab">Never</div>
+            <p>Email runs on <em>permission</em>. People must opt in — actively ask to hear from you. Bought or scraped lists mean strangers who never agreed; they report you as spam, torch your reputation, and can get your account banned. Grow it honestly or don't grow it at all.</p>
+          </div>
+        </div>
+      </div>
+      <div class="crmcard" onclick="this.classList.toggle('flipped')">
+        <div class="cinner">
+          <div class="cface cfront">
+            <div class="cicon"><svg viewBox="0 0 30 30" fill="none"><circle cx="15" cy="15" r="11" stroke="#EF7F1A" stroke-width="2.2"/><path d="M15 9v6l4 3" stroke="#EF7F1A" stroke-width="2.2" stroke-linecap="round"/></svg></div>
+            <div class="cq">"Just blast everyone the same."</div>
+            <div class="chint">tap to flip</div>
+          </div>
+          <div class="cface cback">
+            <div class="clab">Half true</div>
+            <p>Sometimes one broadcast fits all — a big announcement. But most of the time, sending the right message to the right slice of your list (new subscriber vs. loyal buyer) is what earns opens instead of unsubscribes. Segment when it matters; blast when it doesn't.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Two ideas to keep: opt-in, and broadcast vs automated</h3>
+  <p>Two building blocks you'll use all week. First, <strong>opt-in</strong> — how someone joins your list. With <em>single opt-in</em> they type an address and they're on. With <em>double opt-in</em> they also click a confirmation link, which proves the address is real and the person genuinely wants in; it grows the list slightly slower but keeps it far cleaner and protects your reputation. Second, the two ways you'll ever send: a <strong>broadcast</strong> is a one-time email you write and send now (a sale, a newsletter), while an <strong>automated</strong> email is written once and sent automatically when someone does something (joins the list, buys, goes quiet). Broadcasts are you talking to everyone today; automations are your list being looked after while you sleep.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>What AI actually changed about email</h2>
+  <p class="lead">Email marketing has existed for decades. For most of that time the hard parts were manual: staring at a blank draft, guessing at subject lines, sorting your list by hand. AI didn't invent email — it removed the friction from the four things that used to eat your afternoon. Click each capability to see the shift.</p>
+
+  <p>Keep the honest framing from Week 1: AI is a <strong>fast, tireless assistant</strong>, not magic. In email it excels at four things a human finds slow or tedious — drafting, writing subject lines, segmenting the list, and personalising at scale. But it proposes; <em>you</em> dispose. AI can write ten subject lines in seconds; you're the one who knows which sounds like your brand and won't feel like a spam blast. Used well it's leverage. Used lazily — generic blasts to your whole list — it triggers spam complaints and burns the trust email runs on. Walk the four capabilities below.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The four things AI does for email</span>
+      <div class="controls">
+        <button onclick="landStep(-1)">◀ Prev</button>
+        <button onclick="landStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="land-chain" id="landChain">
+      <div class="lnode" data-k="remember" onclick="pickLand('remember')"><span class="ldx">1</span>Draft</div>
+      <div class="llink"></div>
+      <div class="lnode" data-k="understand" onclick="pickLand('understand')"><span class="ldx">2</span>Subject Lines</div>
+      <div class="llink"></div>
+      <div class="lnode" data-k="predict" onclick="pickLand('predict')"><span class="ldx">3</span>Segment</div>
+      <div class="llink"></div>
+      <div class="lnode" data-k="act" onclick="pickLand('act')"><span class="ldx">4</span>Personalise</div>
+    </div>
+    <div class="lpanel" id="landPanel"></div>
+  </div>
+
+  <h3>Email before AI vs after, in one line</h3>
+  <p>Before AI, sending a good email meant an hour at a blank screen: write the draft, agonise over the subject line, guess who should get it. After AI it's minutes: "Here are three drafts of a welcome email in your voice, five subject lines to A/B test, and a suggested split between new subscribers and repeat buyers — pick, edit, send." Same channel, radically less friction between the idea and the send. But the timing, the taste, and the promise not to abuse your subscribers' trust — those still have to come from you. AI is leverage, not a licence to over-automate.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>The quiet cost of no list</h2>
+  <p class="lead">"I'll just post more" feels free. It isn't. Every visitor who leaves without joining your list is someone you can never reach again without paying to re-find them. Every buyer you don't email again is a repeat sale that never happens. Move the sliders and put a number on the leak.</p>
+
+  <p>Here's the truth nobody puts in the pitch for email: reaching a stranger through ads costs money every single time, while emailing someone already on your list costs almost nothing — and email returns roughly <strong>$36 for every $1 spent</strong> (industry estimate). Without a list, you keep paying to re-acquire people who already liked you enough to visit once. The calculator below estimates the yearly repeat revenue a small store leaves on the table by not capturing and emailing its visitors. It's usually far more than the email tool costs.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · The cost of no list</span>
+      <div class="controls" id="chaosPresets">
+        <button onclick="chaosPreset(1,this)">Side hustle</button>
+        <button class="active" onclick="chaosPreset(2,this)">Growing store</button>
+        <button onclick="chaosPreset(3,this)">Busy store</button>
+      </div>
+    </div>
+    <div class="chaos">
+      <div class="chaos-row">
+        <label for="slCust">Visitors per month</label>
+        <input type="range" id="slCust" min="20" max="600" step="10" value="150" oninput="calcChaos()">
+        <div class="cval" id="vCust">150</div>
+      </div>
+      <div class="chaos-row">
+        <label for="slForget">% who leave without joining</label>
+        <input type="range" id="slForget" min="0" max="80" step="5" value="45" oninput="calcChaos()">
+        <div class="cval" id="vForget">45%</div>
+      </div>
+      <div class="chaos-row">
+        <label for="slAov">Average order value</label>
+        <input type="range" id="slAov" min="15" max="150" step="5" value="45" oninput="calcChaos()">
+        <div class="cval" id="vAov">$45</div>
+      </div>
+      <div class="chaos-result">
+        <div>
+          <span class="chaos-lab">Lost email revenue / year (est.)</span>
+          <div class="chaos-num" id="chaosNum">$0</div>
+        </div>
+        <div class="chaos-verdict" id="chaosVerdict"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The four-step email engine — and this week's map</h3>
+  <p>Everything in email marketing comes down to a simple engine, and it maps exactly to this week's four lessons: <strong>(1) build the list</strong> — turn visitors into subscribers who opted in; <strong>(2) create the emails</strong> — write broadcasts and sequences worth opening; <strong>(3) automate the flows</strong> — set up welcome, nurture and win-back emails that run on their own; and <strong>(4) measure</strong> — read opens, clicks and unsubscribes to keep improving. Build → create → automate → measure. This lesson was step zero: understanding why the owned list is worth building at all. Next lesson, we start building yours.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Email is the one marketing channel you actually own — social and search you only rent. It runs on permission and trust: people opt in, and a small engaged list beats a big cold one every time. AI is real leverage here — drafting, subject lines, segmenting, personalising — but it's leverage, not magic, and generic blasts still get you marked as spam. The cost of skipping email isn't zero; it's the repeat revenue quietly leaking out of a business with no list.</p>
+  <ul>
+    <li>Email is owned; social and search are rented — you keep the list, they keep the audience</li>
+    <li>Permission-based: people opt in (single or double), never buy or scrape a list</li>
+    <li>Deliverability is earned — a small engaged list beats a big cold one</li>
+    <li>AI helps four ways: draft, subject lines, segment, personalise — leverage, not magic</li>
+    <li>The four-step engine: build the list → create → automate → measure</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 01 of 04 · Next up: Building Your Email List →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · owned list vs rented reach ===== */
+const sotEl=el('sot');
+function unify(on){
+  sotEl.classList.toggle('unified',on);
+  el('btnUnify').classList.toggle('active',on);
+  el('sotCap').innerHTML = on
+    ? 'One <b>owned list</b>. A direct line to every subscriber that no platform sits between — yours to keep, export, and reach any time for almost nothing.'
+    : 'Six rented channels, each borrowing an audience the platform can throttle or take away. None of them is yours. Press <b>Own the audience</b>.';
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){setTimeout(()=>unify(true),500);o.unobserve(e.target)}}),{threshold:0.35}).observe(sotEl);
+
+/* ===== Figure 2 · flip cards ===== */
+const crmwrap=el('crmwrap');
+function flipAllCrm(){document.querySelectorAll('.crmcard').forEach(c=>c.classList.add('flipped'))}
+function resetCrm(){document.querySelectorAll('.crmcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){crmwrap.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(crmwrap);
+
+/* ===== Figure 3 · AI-native landscape ===== */
+const LAND={
+  remember:{t:'Draft — beat the blank screen',tag:'Capability 1 · from idea to first draft in seconds',tasks:[
+    'Turn a one-line idea ("welcome new subscribers") into a full email draft in your voice',
+    'Rewrite a stiff paragraph to sound warmer, shorter, or more you',
+    'Generate a whole newsletter outline so you\'re editing, not staring',
+    'Fix tone and typos so every send reads clean without a proofreader'
+  ],h:'AI writes the first draft; you make it true and human. It removes the blank-page friction — it does not know your customers or your promise. That part is yours.'},
+  understand:{t:'Subject Lines — win the open',tag:'Capability 2 · the 30 characters that decide everything',tasks:[
+    'Write ten subject-line options so you can pick the one that fits your brand',
+    'Suggest A/B test pairs — curiosity vs. clarity — to learn what your list responds to',
+    'Flag words that commonly trip spam filters ("FREE!!!", "act now")',
+    'Draft matching preview text so the inbox line and preview work together'
+  ],h:'AI gives you options fast; you choose. A great subject line that oversells is a broken promise — pick the one that\'s honest, not just the one that gets clicks.'},
+  predict:{t:'Segment — right message, right slice',tag:'Capability 3 · sort the list without a spreadsheet',tasks:[
+    'Split your list into new subscribers vs. loyal buyers vs. gone-quiet in plain English',
+    'Suggest a segment for a specific goal ("people who opened but never bought")',
+    'Spot patterns you\'d never catch by eye (e.g. "only opens weekend sends")',
+    'Recommend who to leave OUT of a send so you don\'t annoy the wrong people'
+  ],h:'AI proposes the segments; you decide who genuinely wants that email. Sending less to the right people beats blasting everyone — that\'s how you protect deliverability.'},
+  act:{t:'Personalise — at scale, without the creep',tag:'Capability 4 · one-to-one feel, one-to-many effort',tasks:[
+    'Insert each subscriber\'s name and last-viewed product so the email feels written for them',
+    'Adapt one email into three versions for three segments in one pass',
+    'Suggest the best send time per person based on when they usually open',
+    'Draft a friendly win-back note for subscribers who\'ve gone quiet'
+  ],h:'AI makes personalisation cheap; you keep it tasteful. Too much automation feels robotic and creepy — a small personal touch beats a hundred hollow "Hi [FIRST_NAME]" blasts.'}
+};
+const LANDORDER=['remember','understand','predict','act'];
+let landCur='remember';
+function pickLand(k){
+  landCur=k;
+  document.querySelectorAll('#landChain .lnode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=LAND[k],panel=el('landPanel');
+  let html='<span class="ltag">'+d.tag+'</span><h4>'+d.t+'</h4><ul>';
+  d.tasks.forEach(t=>{html+='<li>'+t+'</li>'});
+  html+='</ul><div class="l-human"><strong>You still decide</strong>'+d.h+'</div>';
+  panel.innerHTML=html;
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function landStep(dir){
+  let i=LANDORDER.indexOf(landCur)+dir;
+  if(i<0)i=LANDORDER.length-1;
+  if(i>=LANDORDER.length)i=0;
+  pickLand(LANDORDER[i]);
+}
+pickLand('remember');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickLand('remember');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('landChain'));
+
+/* ===== Figure 4 · cost of no list ===== */
+function chaosPreset(n,btn){
+  document.querySelectorAll('#chaosPresets button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const P={1:[40,55,35],2:[150,45,45],3:[400,40,60]}[n];
+  el('slCust').value=P[0];el('slForget').value=P[1];el('slAov').value=P[2];
+  calcChaos();
+}
+function calcChaos(){
+  const cust=parseInt(el('slCust').value);
+  const forget=parseInt(el('slForget').value);
+  const aov=parseInt(el('slAov').value);
+  el('vCust').textContent=cust;
+  el('vForget').textContent=forget+'%';
+  el('vAov').textContent='$'+aov;
+  // forgotten customers who would have bought ~1.3 more times/yr if nurtured
+  const forgotten=cust*12*(forget/100);
+  const lost=Math.round(forgotten*aov*1.3);
+  el('chaosNum').textContent='$'+lost.toLocaleString();
+  let v;
+  if(lost<8000)      v='Small now — but this is the leak that grows silently as you drive more traffic.';
+  else if(lost<30000)v='Real money. A list that recovers even a third of this pays for the email tool many times over.';
+  else if(lost<90000)v='This is a salary walking out the door yearly, purely from not capturing visitors you already paid to attract.';
+  else               v='At this scale, no list isn\'t a gap — it\'s the biggest hole in the business.';
+  el('chaosVerdict').textContent=v;
+}
+calcChaos();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){calcChaos();o.unobserve(e.target)}}),{threshold:0.35}).observe(el('chaosNum'));
+
+</script>
+</body>
+</html>
