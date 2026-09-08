@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · AI Scheduling, Community & Engagement — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.55;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── CONCEPT PRIMER CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.8rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr 1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.6rem;font-size:.9rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card:nth-child(4) .compare-icon{background:linear-gradient(135deg,#8E6BC0,#6D4BA0)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+
+/* ── ACTIVITY 1: ASSEMBLE ENGAGING POST (drag to slots) ── */
+.email-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.email-wrap{grid-template-columns:1fr}}
+.email-pool{display:flex;flex-direction:column;gap:.6rem}
+.email-part-group{margin-bottom:.4rem}
+.email-part-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.4rem}
+.email-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.8rem;line-height:1.45;cursor:grab;transition:all .2s;user-select:none}
+.email-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.email-chip.dragging{opacity:.4}
+.email-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.email-slots{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem}
+.email-slot{border:2px dashed var(--border);border-radius:6px;padding:.65rem .8rem;min-height:52px;margin-bottom:.6rem;font-size:.8rem;color:var(--text-muted);transition:all .25s;background:var(--bg-card)}
+.email-slot.drag-over{border-color:var(--orange);background:var(--orange-glow)}
+.email-slot.filled{border-style:solid;border-color:var(--green);background:#fff;color:var(--text-primary)}
+.email-slot.wrongfill{border-color:var(--red);background:var(--red-light)}
+.email-slot-tag{display:block;font-family:var(--mono);font-size:.62rem;font-weight:600;color:var(--orange);letter-spacing:.05em;margin-bottom:.3rem}
+.email-slot.filled .email-slot-tag{color:#256B29}
+
+/* ── ACTIVITY 2: WEEKLY ROUTINE SEQUENCE (click order) ── */
+.chain-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.chain-grid{grid-template-columns:1fr}}
+.chain-pool{display:flex;flex-direction:column;gap:.6rem}
+.chain-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.82rem;line-height:1.5;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.chain-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.chain-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.chain-chip.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.chain-slots{display:flex;flex-direction:column;gap:.5rem}
+.chain-slot{display:flex;align-items:flex-start;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.65rem .85rem;min-height:46px;font-size:.82rem;line-height:1.5;color:var(--text-muted);transition:all .25s;background:rgba(255,255,255,0.5)}
+.chain-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.chain-slot-num{width:24px;height:24px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.chain-slot.filled .chain-slot-num{background:var(--green)}
+.chain-hintbox{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.chain-hintbox.show{display:block;animation:fadeIn .3s ease}
+
+/* ── ACTIVITY 3: ENGAGEMENT JUDGE ── */
+.judge-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.3rem;margin-bottom:.9rem;transition:border-color .3s}
+.judge-card.right{border-color:var(--green)}
+.judge-card.miss{border-color:var(--red)}
+.judge-scen{font-size:.88rem;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:.75rem}
+.judge-scen .qn{font-family:var(--mono);font-size:.7rem;color:var(--orange);background:var(--orange-glow);padding:.15rem .5rem;border-radius:4px;margin-right:.5rem}
+.judge-scen .subj{display:block;font-family:var(--mono);font-size:.78rem;font-weight:400;color:var(--text-secondary);background:var(--bg-light);border:1px solid var(--border);border-radius:6px;padding:.5rem .7rem;margin-top:.5rem}
+.judge-btns{display:flex;gap:.5rem;flex-wrap:wrap}
+.judge-btn{padding:.45rem 1.1rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.76rem;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.judge-btn:hover{border-color:var(--orange);color:var(--orange)}
+.judge-btn:disabled{cursor:not-allowed;opacity:.6}
+.judge-btn.picked-right{background:var(--green);border-color:var(--green);color:#fff;opacity:1}
+.judge-btn.picked-wrong{background:var(--red);border-color:var(--red);color:#fff;opacity:1}
+.judge-btn.reveal-right{border-color:var(--green);color:#1F5723}
+.judge-explain{display:none;margin-top:.7rem;font-size:.8rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.6rem}
+.judge-explain.show{display:block;animation:fadeIn .3s ease}
+.judge-verdict{font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase}
+.judge-verdict.v-right{color:#256B29}.judge-verdict.v-miss{color:#A03A2C}
+
+/* ── ACTIVITY 4: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.3rem;margin-bottom:.9rem;transition:border-color .3s}
+.quiz-q.right{border-color:var(--green)}
+.quiz-q.miss{border-color:var(--red)}
+.quiz-q-head{display:flex;gap:.7rem;align-items:baseline;margin-bottom:.7rem}
+.quiz-q-num{font-family:var(--mono);font-size:.7rem;font-weight:600;color:var(--orange);background:var(--orange-glow);padding:.15rem .5rem;border-radius:4px;flex-shrink:0}
+.quiz-q-text{font-size:.9rem;font-weight:600;color:var(--navy);line-height:1.5}
+.quiz-opt{display:flex;align-items:flex-start;gap:.55rem;padding:.5rem .6rem;border-radius:6px;cursor:pointer;font-size:.83rem;color:var(--text-secondary);line-height:1.45;transition:background .15s}
+.quiz-opt:hover{background:var(--bg-light)}
+.quiz-opt input{margin-top:.25rem;accent-color:var(--orange);cursor:pointer}
+.quiz-review{font-size:.76rem;line-height:1.55;margin-top:.6rem;padding:.6rem .8rem;border-radius:6px;display:none}
+.quiz-review.show{display:block;animation:fadeIn .3s ease}
+.quiz-review.good{background:var(--green-light);color:#1F5723}
+.quiz-review.bad{background:#FFF4E5;color:#7A4A0A}
+
+/* ── REFLECT / FOOTER ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 4 · AI Social Media</div>
+  <h1>AI Scheduling, Community &amp; Engagement — <em>show up consistently, reply like a human</em></h1>
+  <p class="hero-sub">Four hands-on activities. Assemble a weekly post that earns engagement, order a realistic posting &amp; engagement routine, sort healthy community habits from spammy shortcuts, then prove it with a quiz. AI helps you stay consistent — this lesson keeps your voice real.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: ASSEMBLE AN ENGAGING POST ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Assemble a post that earns real engagement</h2>
+    <p class="lesson-intro">A post that sparks a community has four parts, each doing one job: a <strong>scroll-stopping hook</strong> that earns the first second, a <strong>value or story</strong> your followers actually care about, a genuine <strong>question or invitation</strong> that invites replies, and a light <strong>call-to-follow</strong>. For each slot below, drag in the version that <em>works</em> — you'll see two options per part, one authentic and one that feels like empty engagement-bait.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">1</div>
+        <h4>Scroll-stopping hook</h4>
+        <p>A real, specific first line about <em>your</em> world. Earns the first second so the rest gets read.</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">2</div>
+        <h4>Value or story</h4>
+        <p>Something useful or human your followers care about. Makes them think "I needed this today".</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">3</div>
+        <h4>Genuine question</h4>
+        <p>One real invitation to reply — not "tag 3 friends". A question you'd actually love answered.</p>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">4</div>
+        <h4>Light call-to-follow</h4>
+        <p>A soft nudge ("follow for the weekly tip"). No shouting, no fake urgency, no spam.</p>
+      </div>
+    </div>
+    <div class="tip-note" style="margin-bottom:.5rem">💡 <strong>Same skeleton, opposite results:</strong> engagement-bait has these four parts too — a clickbait hook, a hollow "story", a "comment YES!!!" trick, and a follow-or-else demand. The <em>structure</em> isn't what wins; the <em>honesty and relevance</em> inside each part is. Build the real version below.</div>
+
+    <div class="lesson-card">
+      <div class="email-wrap">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Pick the good version of each part</h4>
+          <div class="email-pool" id="emailPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Your post draft</h4>
+          <div class="email-slots" id="emailSlots"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetEmail()">↻ Start over</button>
+      </div>
+      <div class="tip-note">💡 <strong>AI's real job here:</strong> tools can draft ten hook options or tidy your grammar in seconds — but <em>you</em> pick the one that's true and add the detail only you know. AI speeds up the draft; the authentic voice and the real question are still yours to write.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: ORDER THE WEEKLY ROUTINE ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Order a weekly posting &amp; engagement routine</h2>
+    <p class="lesson-intro">Here's the truth beginners miss: consistency beats one viral post. A simple, repeatable <strong>weekly routine</strong> — plan, batch, schedule, then show up to reply — is what grows a community. The five steps below are shuffled. Click them in the order a healthy weekly routine runs them. A wrong click nudges you.</p>
+
+    <div class="lesson-card">
+      <div class="chain-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Shuffled steps — click the next one</h4>
+          <div class="chain-pool" id="seqPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Your routine, in order</h4>
+          <div class="chain-slots" id="seqSlots"></div>
+        </div>
+      </div>
+      <div class="chain-hintbox" id="seqHint"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetSeq()">↻ Reset the sequence</button>
+      </div>
+      <div class="tip-note">💡 <strong>The golden rule of a routine:</strong> batch and schedule so posting becomes effortless, but never "set it and forget it". Scheduling handles the posting; <em>you</em> still show up to read comments and reply like a human. A feed that posts but never answers isn't a community — it's a billboard.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: ENGAGEMENT JUDGE ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Community builder or spammy shortcut? — the engagement judge</h2>
+    <p class="lesson-intro"><strong>Community</strong> is built on trust — real replies, honest presence, and respect for the platform's rules. It's easy to fake in the short term and costly to lose. Judge each habit: does it genuinely <em>build community</em>, or is it a <em>spammy shortcut</em> that erodes trust and risks your account?</p>
+
+    <div class="lesson-card">
+      <div id="judgeGrid"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetJudge()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Community &amp; engagement check — the quiz</h2>
+    <p class="lesson-intro">Six questions on consistency, scheduling, AI-assisted replies, and community ethics. Every option carries an explanation, and the wrong ones are the exact shortcuts that break trust or platform rules. Answer all six, then submit for a per-question review.</p>
+
+    <div class="lesson-card">
+      <div id="quizWrap"></div>
+      <div class="activity-feedback" id="feedback4"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="submitQuiz()">Submit answers</button>
+        <button class="btn btn-ghost" onclick="resetQuiz()">↻ Reset quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it from "seen" to "known". (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">In your own words, why does showing up consistently every week beat posting five times in one burst and then going quiet for a month?</div>
+        <textarea placeholder="Because consistency keeps me in front of my community and teaches the algorithm to trust me, while sporadic bursts get forgotten..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">AI can draft replies to comments and DMs. Where do you draw the line so your community still feels like it's talking to a real human?</div>
+        <textarea placeholder="I use AI to draft or handle simple FAQs, but I read and personalise real replies myself and never fake engagement or auto-spam DMs..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 4 · AI Social Analytics &amp; Growth</h3>
+      <p>You can show up consistently and reply like a human. Last stop: knowing what's actually working. You'll read the metrics that matter, use AI to spot patterns in your best posts, and turn insight into steady, honest growth.</p>
+      <a href="04-ai-social-analytics-growth.html" class="btn btn-primary">Continue to Lesson 4 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5);}
+
+/* ─── ACTIVITY 1: Assemble engaging post (drag good version into each slot) ─── */
+const EMAIL_PARTS = [
+  {slot:0, tag:'SCROLL-STOPPING HOOK', good:{id:'p0g', text:'"I burned my first batch of chai this morning — here\'s the 10-second fix that saved the second."'}, bad:{id:'p0b', text:'"Hey guys!!! Another amazing day, don\'t forget to like and subscribe 🙏🙏🙏"'}},
+  {slot:1, tag:'VALUE OR STORY', good:{id:'p1g', text:'"The trick: pull the pan off the heat the moment it foams. Small change, no more scorched chai."'}, bad:{id:'p1b', text:'"We are the #1 world-leading global lifestyle brand delivering premium synergy every single day!"'}},
+  {slot:2, tag:'GENUINE QUESTION', good:{id:'p2g', text:'"What\'s the one kitchen mistake you keep making? I\'ll share fixes for the top few this week."'}, bad:{id:'p2b', text:'"COMMENT \'YES\' AND TAG 3 FRIENDS to win!!! Everyone who ignores this will have bad luck 😱"'}},
+  {slot:3, tag:'LIGHT CALL-TO-FOLLOW', good:{id:'p3g', text:'"Follow along if you like small, honest kitchen wins — one new tip every Tuesday."'}, bad:{id:'p3b', text:'"FOLLOW NOW OR YOU\'LL MISS OUT FOREVER!!! Last chance, act in the next 2 HOURS!!!"'}}
+];
+let emailFilled = {};
+function renderEmail(){
+  emailFilled = {};
+  const chips = [];
+  EMAIL_PARTS.forEach(p=>{
+    chips.push({id:p.good.id, slot:p.slot, correct:true, tag:p.tag, text:p.good.text});
+    chips.push({id:p.bad.id, slot:p.slot, correct:false, tag:p.tag, text:p.bad.text});
+  });
+  $('emailPool').innerHTML = shuffle(chips).map(c=>`
+    <div class="email-chip" draggable="true" data-id="${c.id}" data-slot="${c.slot}" data-correct="${c.correct}">${c.text}</div>`).join('');
+  $('emailPool').querySelectorAll('.email-chip').forEach(chip=>{
+    chip.addEventListener('dragstart', e=>{ e.dataTransfer.setData('id', chip.dataset.id); chip.classList.add('dragging'); });
+    chip.addEventListener('dragend', ()=>chip.classList.remove('dragging'));
+  });
+  $('emailSlots').innerHTML = EMAIL_PARTS.map(p=>`
+    <div class="email-slot" data-slot="${p.slot}">
+      <span class="email-slot-tag">${p.tag}</span>
+      <span class="email-slot-body">Drag the good version here…</span>
+    </div>`).join('');
+  $('emailSlots').querySelectorAll('.email-slot').forEach(slot=>{
+    slot.addEventListener('dragover', e=>{ e.preventDefault(); slot.classList.add('drag-over'); });
+    slot.addEventListener('dragleave', ()=>slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', e=>{ e.preventDefault(); slot.classList.remove('drag-over'); dropEmail(e.dataTransfer.getData('id'), slot); });
+  });
+  $('feedback1').className = 'activity-feedback';
+}
+function dropEmail(id, slot){
+  const chip = document.querySelector(`.email-chip[data-id="${id}"]`);
+  if(!chip || chip.classList.contains('used')) return;
+  const chipSlot = +chip.dataset.slot;
+  const targetSlot = +slot.dataset.slot;
+  if(chipSlot !== targetSlot){
+    slot.classList.add('wrongfill');
+    setTimeout(()=>slot.classList.remove('wrongfill'), 500);
+    return; // belongs to a different part
+  }
+  const correct = chip.dataset.correct === 'true';
+  if(!correct){
+    // spammy version — reject with a shake feedback on the slot
+    slot.classList.add('wrongfill');
+    const body = slot.querySelector('.email-slot-body');
+    body.innerHTML = '<span style="color:#A03A2C">That version reads like engagement-bait — try the other one for this part.</span>';
+    setTimeout(()=>{ slot.classList.remove('wrongfill'); if(!emailFilled[targetSlot]) body.textContent='Drag the good version here…'; }, 1400);
+    return;
+  }
+  emailFilled[targetSlot] = true;
+  chip.classList.add('used');
+  slot.classList.add('filled');
+  slot.querySelector('.email-slot-body').textContent = chip.textContent;
+  // grey out the paired bad chip too? keep it visible so user learns, but it's harmless
+  if(Object.keys(emailFilled).length === EMAIL_PARTS.length){
+    const fb = $('feedback1');
+    fb.className='activity-feedback show success';
+    fb.innerHTML='<strong>Post assembled — hook → value → question → follow.</strong> Read it top to bottom: it opens with a real, specific moment, gives a genuinely useful tip, asks a question you\'d actually love answered, and nudges a follow softly. Compare the engagement-bait versions you skipped — hollow hype, buzzword soup, a "tag 3 friends" trick, and a follow-or-else demand. Same length, opposite trust.';
+    $('prog1').classList.add('done');
+  }
+}
+function resetEmail(){
+  renderEmail();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Order weekly routine ─── */
+const SEQ = [
+  {label:'Step 1 · Plan the week — content calendar', text:'Map a simple calendar: pick 3–4 post ideas and a cadence you can actually keep, tied to your themes.', hint:'A routine starts with a plan — decide what and when before you touch a single post.'},
+  {label:'Step 2 · Batch-create the posts', text:'Write and design all the week\'s posts in one focused sitting — AI can help draft captions and hook options.', hint:'Next, batch: making the whole week at once is far more consistent than scrambling for one post a day.'},
+  {label:'Step 3 · Schedule them to auto-publish', text:'Load the finished posts into a scheduling tool so they go out at your best times without you being online.', hint:'Once the batch is ready, schedule it — this is what keeps you consistent even on busy days.'},
+  {label:'Step 4 · Show up daily to engage', text:'Each day, spend a little time reading and replying to comments and DMs in your own human voice.', hint:'Scheduling is not the finish line — you still show up to reply. This is where community actually forms.'},
+  {label:'Step 5 · Listen, then adjust next week', text:'Notice what people responded to and what they asked for, and feed that back into next week\'s plan.', hint:'The final step is social listening — let this week\'s real feedback shape the next plan, then repeat.'}
+];
+let seqNext = 0;
+function renderSeq(){
+  seqNext = 0;
+  const order = shuffle(SEQ.map((_,i)=>i));
+  $('seqPool').innerHTML = order.map(i=>`<div class="chain-chip" data-step="${i}" onclick="clickSeq(${i})"><b style="color:var(--orange);font-size:.72rem">${SEQ[i].label}</b><br>${SEQ[i].text}</div>`).join('');
+  $('seqSlots').innerHTML = SEQ.map((_,i)=>`
+    <div class="chain-slot" id="sslot${i}">
+      <span class="chain-slot-num">${i+1}</span>
+      <span class="chain-slot-text">Touch ${i+1}…</span>
+    </div>`).join('');
+  $('seqHint').className = 'chain-hintbox';
+  $('feedback2').className = 'activity-feedback';
+}
+function clickSeq(i){
+  const chip = document.querySelector(`.chain-chip[data-step="${i}"]`);
+  const hintBox = $('seqHint');
+  if(!chip || chip.classList.contains('used')) return;
+  if(i !== seqNext){
+    chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake');
+    hintBox.className='chain-hintbox show';
+    hintBox.innerHTML=`<strong>Not yet.</strong> That touch comes later. Think about touch ${seqNext+1}: ${SEQ[seqNext].hint}`;
+    setTimeout(()=>chip.classList.remove('shake'), 500);
+    return;
+  }
+  chip.classList.add('used');
+  const slot = $('sslot'+i);
+  slot.classList.add('filled');
+  slot.querySelector('.chain-slot-text').innerHTML = `<b style="color:#256B29;font-size:.72rem">${SEQ[i].label}</b><br>${SEQ[i].text}`;
+  hintBox.className='chain-hintbox';
+  seqNext++;
+  if(seqNext >= SEQ.length){
+    const fb = $('feedback2');
+    fb.className='activity-feedback show success';
+    fb.innerHTML='<strong>Routine complete — plan, batch, schedule, engage, then listen.</strong> Notice the rhythm: plan and batch ahead so you\'re never scrambling, schedule to stay consistent, but always show up daily to reply as a real human, then let this week\'s feedback shape the next. Beginners who post in bursts and vanish get forgotten; the ones who run a steady, human routine slowly turn followers into a community that sticks around.';
+    $('prog2').classList.add('done');
+  }
+}
+function resetSeq(){
+  renderSeq();
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Engagement judge ─── */
+const JUDGE = [
+  {scen:'You use a bot to auto-DM "Hey, check out my page!" to every new follower and hundreds of strangers a day.', subj:null, answer:'spam',
+   e:'Spammy shortcut. Mass, unsolicited auto-DMs are classic spam — they annoy people, break most platforms\' rules, and can get your account restricted or banned. A real welcome (or none at all) beats a bot blasting strangers.'},
+  {scen:'You read your comments each day and reply in your own words, using AI only to draft a first version you then edit and personalise.', subj:null, answer:'safe',
+   e:'Community builder. This is exactly right. AI can speed up the draft, but you stay in the loop — reading, editing, and adding the personal touch. Followers feel heard by a human, which is what actually builds trust.'},
+  {scen:'You buy 5,000 fake followers and a batch of bot comments to make the account look popular:', subj:'"🔥🔥 First!!! Amazing content!!! 🔥🔥" — ×200 identical bot comments', answer:'spam',
+   e:'Spammy shortcut. Fake followers and bot engagement are dishonest, easy to spot, and against platform rules — they inflate vanity numbers while killing your reach and trust. Real, slower growth from genuine engagement is worth far more.'},
+  {scen:'You set up an honest FAQ auto-reply for common questions ("What are your hours?") and clearly hand off anything personal to a real person.', subj:null, answer:'safe',
+   e:'Community builder. Automating simple, repetitive FAQs is fine and helpful — as long as it\'s honest and real questions reach a human. Being upfront that a quick reply is automated, then following up personally, respects your community.'}
+];
+let judgeAns = {};
+const JUDGE_LABELS = {safe:'Builds community', spam:'Spammy shortcut'};
+function renderJudge(){
+  judgeAns = {};
+  $('judgeGrid').innerHTML = JUDGE.map((j,i)=>`
+    <div class="judge-card" id="jc${i}">
+      <div class="judge-scen"><span class="qn">Habit ${i+1}</span>${j.scen}${j.subj?`<span class="subj">${j.subj}</span>`:''}</div>
+      <div class="judge-btns">
+        <button class="judge-btn" id="jsafe${i}" onclick="answerJudge(${i},'safe')">Builds community</button>
+        <button class="judge-btn" id="jspam${i}" onclick="answerJudge(${i},'spam')">Spammy shortcut</button>
+      </div>
+      <div class="judge-explain" id="jex${i}"></div>
+    </div>`).join('');
+  $('feedback3').className = 'activity-feedback';
+}
+function answerJudge(i, choice){
+  if(judgeAns[i]!==undefined) return;
+  const j = JUDGE[i];
+  const right = choice === j.answer;
+  judgeAns[i] = right;
+  const card = $('jc'+i);
+  const safeBtn = $('jsafe'+i), spamBtn = $('jspam'+i);
+  const picked = choice==='safe' ? safeBtn : spamBtn;
+  card.classList.add(right?'right':'miss');
+  picked.classList.add(right?'picked-right':'picked-wrong');
+  if(!right){ (j.answer==='safe'?safeBtn:spamBtn).classList.add('reveal-right'); }
+  safeBtn.disabled = true; spamBtn.disabled = true;
+  const ex = $('jex'+i);
+  ex.className = 'judge-explain show';
+  ex.innerHTML = `<span class="judge-verdict ${right?'v-right':'v-miss'}">${right?'✓ Correct':'✗ Not quite'} — this is ${JUDGE_LABELS[j.answer].toLowerCase()}.</span><br>${j.e}`;
+  if(Object.keys(judgeAns).length === JUDGE.length){
+    const score = Object.values(judgeAns).filter(Boolean).length;
+    const fb = $('feedback3');
+    if(score === JUDGE.length){
+      fb.className='activity-feedback show success';
+      fb.innerHTML='<strong>4 of 4 — you\'re building trust, not faking it.</strong> Real community comes from honest habits: reply as a human, automate only simple FAQs and disclose it, and never buy fake engagement or blast spammy DMs. Do that and followers stick around. Take the shortcuts and you get vanity numbers, broken trust, and a real risk of a banned account.';
+    } else {
+      fb.className='activity-feedback show partial';
+      fb.innerHTML=`<strong>You got ${score} of 4.</strong> Re-read the cards you missed. The community trio: (1) reply like a human, using AI only to draft what you then edit; (2) automate simple FAQs honestly, hand personal stuff to a person; (3) never fake followers/engagement or auto-spam DMs — it breaks trust and platform rules. Try again.`;
+    }
+    $('prog3').classList.add('done');
+  }
+}
+function resetJudge(){
+  renderJudge();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {q:'For a beginner, what grows a community faster over time?',
+   opts:['One big burst of posts, then going quiet for weeks','Showing up consistently with a steady, sustainable cadence','Only posting when something goes viral','Never posting, just running ads'], ans:1,
+   why:'Consistency keeps you in front of your audience and teaches the algorithm to trust you. Sporadic bursts get forgotten; a steady cadence you can actually maintain compounds into real growth.'},
+  {q:'What is the main benefit of batching and scheduling your posts?',
+   opts:['It lets you ignore your audience entirely','It keeps you consistent without being online every day','It makes your posts go viral automatically','It replaces the need to ever reply to anyone'], ans:1,
+   why:'Batching all your posts at once and scheduling them means you stay consistent even on busy days. But scheduling only handles publishing — you still show up separately to engage with people.'},
+  {q:'What\'s the right way to use AI for replying to comments and DMs?',
+   opts:['Let AI auto-reply to everything with no human review','Use AI to draft, then read, edit and personalise in your own voice','Never read messages — just let the bot handle it all','Copy-paste the same AI reply to every single person'], ans:1,
+   why:'AI can speed up a first draft, but you stay in the loop — editing and adding the human touch. Fully automated, unread replies feel robotic and erode the trust that community depends on.'},
+  {q:'Which of these is a healthy way to build a real community?',
+   opts:['Buying fake followers to look popular','Genuinely engaging — replying, asking questions, listening to feedback','Auto-DMing every stranger a sales pitch','Posting only bot comments on your own content'], ans:1,
+   why:'Real community is built on genuine two-way engagement: replying, asking real questions, and listening. Fake followers and bot activity inflate vanity numbers while killing trust and reach.'},
+  {q:'When is it acceptable to automate a reply on social media?',
+   opts:['To mass-DM strangers an unsolicited sales pitch','For simple, honest FAQs — with real questions handed to a human','To fake conversations that make you look busy','Never disclose it and pretend a bot is you'], ans:1,
+   why:'Automating simple, repetitive FAQs is fine and helpful when it\'s honest and personal matters reach a person. Spammy unsolicited DMs and deceptive automation break trust and platform rules.'},
+  {q:'What does "social listening" mean for a beginner?',
+   opts:['Ignoring comments and just posting more','Paying attention to what people say and react to, then adjusting','Buying tools to spy on private messages','Only listening to your loudest critics'], ans:1,
+   why:'Social listening is simply noticing what your audience responds to, asks for, and cares about — then feeding that back into your plan. It turns followers into a community you actually understand.'}
+];
+function renderQuiz(){
+  $('quizWrap').innerHTML = QUIZ.map((item,i)=>`
+    <div class="quiz-q" id="qq${i}">
+      <div class="quiz-q-head"><span class="quiz-q-num">Q${i+1}</span><span class="quiz-q-text">${item.q}</span></div>
+      ${item.opts.map((o,j)=>`
+        <label class="quiz-opt"><input type="radio" name="quiz${i}" value="${j}"><span>${o}</span></label>`).join('')}
+      <div class="quiz-review" id="qr${i}"></div>
+    </div>`).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function submitQuiz(){
+  const fb = $('feedback4');
+  const answers = QUIZ.map((_,i)=>{
+    const sel = document.querySelector(`input[name="quiz${i}"]:checked`);
+    return sel ? +sel.value : null;
+  });
+  const blank = answers.filter(a=>a===null).length;
+  if(blank>0){
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>${blank} question${blank>1?'s':''} unanswered.</strong> Guessing is allowed, blank is not — answer everything and submit again.`;
+    return;
+  }
+  let score=0;
+  QUIZ.forEach((item,i)=>{
+    const card=$('qq'+i), rev=$('qr'+i);
+    card.classList.remove('right','miss');
+    if(answers[i]===item.ans){
+      score++; card.classList.add('right');
+      rev.className='quiz-review show good'; rev.innerHTML='✓ Correct. '+item.why;
+    } else {
+      card.classList.add('miss');
+      rev.className='quiz-review show bad';
+      rev.innerHTML=`✗ The answer is "<strong>${item.opts[item.ans]}</strong>". ${item.why}`;
+    }
+  });
+  if(score===QUIZ.length){
+    fb.className='activity-feedback show success';
+    fb.innerHTML='<strong>'+score+' of '+QUIZ.length+' — community mindset mastered.</strong> Post consistently, batch and schedule to stay steady, use AI to draft but reply as a human, and grow honestly by listening. That combination turns followers into a community that trusts you. Onward to reading the numbers that show it\'s working.';
+  } else {
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>${score} of ${QUIZ.length} — read the red notes.</strong> The misses here are the exact shortcuts that break trust or platform rules, so they\'re worth a second look. Reset and aim for a clean sweep before you manage a real community.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', ()=>{
+  renderEmail();
+  renderSeq();
+  renderJudge();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

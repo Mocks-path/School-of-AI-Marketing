@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 4 · AI Social Analytics &amp; Growth — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.55;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── CONCEPT PRIMER CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.2rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-pros{margin-top:.6rem;font-size:.75rem;line-height:1.6;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-pros .pro{color:#2E6B30;display:block}
+.compare-pros .con{color:#A03A2C;display:block}
+
+/* ── ACTIVITY 1: READ ANALYTICS IN ORDER (click order, goal→checks) ── */
+.chain-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.chain-grid{grid-template-columns:1fr}}
+.chain-pool{display:flex;flex-direction:column;gap:.6rem}
+.chain-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.82rem;line-height:1.5;font-weight:500;cursor:pointer;transition:all .2s;user-select:none;display:flex;gap:.6rem;align-items:flex-start}
+.chain-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.chain-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.chain-chip.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.chip-kind{font-family:var(--mono);font-size:.6rem;font-weight:600;padding:.15rem .4rem;border-radius:4px;flex-shrink:0;letter-spacing:.04em;margin-top:.05rem}
+.chip-kind.trigger{background:rgba(232,122,46,.18);color:var(--orange-dark)}
+.chip-kind.action{background:rgba(91,143,224,.18);color:#3159A0}
+.chain-slots{display:flex;flex-direction:column;gap:.5rem}
+.chain-slot{display:flex;align-items:flex-start;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.65rem .85rem;min-height:46px;font-size:.82rem;line-height:1.5;color:var(--text-muted);transition:all .25s;background:rgba(255,255,255,0.5)}
+.chain-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.chain-slot.trigger-slot{border-color:var(--orange)}
+.chain-slot.trigger-slot.filled{border-color:#E89B2E;background:#FFF4E5}
+.chain-slot-num{width:24px;height:24px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.68rem;font-weight:700;flex-shrink:0}
+.chain-slot.filled .chain-slot-num{background:var(--green)}
+.chain-slot.trigger-slot .chain-slot-num{background:var(--orange)}
+.chain-hintbox{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.chain-hintbox.show{display:block;animation:fadeIn .3s ease}
+
+/* ── ACTIVITY 2: MATCH GOAL TO METRIC (click-pair) ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col-title{font-family:'DM Serif Display',serif;font-size:1.02rem;color:var(--navy);margin-bottom:.6rem}
+.match-pool{display:flex;flex-direction:column;gap:.55rem}
+.match-item{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .95rem;font-size:.82rem;line-height:1.45;cursor:pointer;transition:all .2s;user-select:none;font-weight:500}
+.match-item:hover{border-color:var(--orange)}
+.match-item.selected{border-color:var(--orange);background:var(--orange-glow);box-shadow:var(--shadow-sm)}
+.match-item.matched{opacity:.45;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.match-item.shake{animation:shake .4s;border-color:var(--red);background:var(--red-light)}
+.match-item .m-badge{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:600;color:var(--orange);background:var(--orange-glow);padding:.1rem .4rem;border-radius:4px;margin-right:.4rem}
+.match-hint{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.match-hint.show{display:block;animation:fadeIn .3s ease}
+
+/* ── ACTIVITY 3: HONEST VS SHADY GROWTH JUDGE ── */
+.judge-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.3rem;margin-bottom:.9rem;transition:border-color .3s}
+.judge-card.right{border-color:var(--green)}
+.judge-card.miss{border-color:var(--red)}
+.judge-scen{font-size:.88rem;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:.75rem}
+.judge-scen .qn{font-family:var(--mono);font-size:.7rem;color:var(--orange);background:var(--orange-glow);padding:.15rem .5rem;border-radius:4px;margin-right:.5rem}
+.judge-btns{display:flex;gap:.5rem;flex-wrap:wrap}
+.judge-btn{padding:.45rem 1.1rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.76rem;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.judge-btn:hover{border-color:var(--orange);color:var(--orange)}
+.judge-btn:disabled{cursor:not-allowed;opacity:.6}
+.judge-btn.picked-right{background:var(--green);border-color:var(--green);color:#fff;opacity:1}
+.judge-btn.picked-wrong{background:var(--red);border-color:var(--red);color:#fff;opacity:1}
+.judge-btn.reveal-right{border-color:var(--green);color:#1F5723}
+.judge-explain{display:none;margin-top:.7rem;font-size:.8rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.6rem}
+.judge-explain.show{display:block;animation:fadeIn .3s ease}
+.judge-verdict{font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase}
+.judge-verdict.v-right{color:#256B29}.judge-verdict.v-miss{color:#A03A2C}
+
+/* ── ACTIVITY 4: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.3rem;margin-bottom:.9rem;transition:border-color .3s}
+.quiz-q.right{border-color:var(--green)}
+.quiz-q.miss{border-color:var(--red)}
+.quiz-q-head{display:flex;gap:.7rem;align-items:baseline;margin-bottom:.7rem}
+.quiz-q-num{font-family:var(--mono);font-size:.7rem;font-weight:600;color:var(--orange);background:var(--orange-glow);padding:.15rem .5rem;border-radius:4px;flex-shrink:0}
+.quiz-q-text{font-size:.9rem;font-weight:600;color:var(--navy);line-height:1.5}
+.quiz-opt{display:flex;align-items:flex-start;gap:.55rem;padding:.5rem .6rem;border-radius:6px;cursor:pointer;font-size:.83rem;color:var(--text-secondary);line-height:1.45;transition:background .15s}
+.quiz-opt:hover{background:var(--bg-light)}
+.quiz-opt input{margin-top:.25rem;accent-color:var(--orange);cursor:pointer}
+.quiz-review{font-size:.76rem;line-height:1.55;margin-top:.6rem;padding:.6rem .8rem;border-radius:6px;display:none}
+.quiz-review.show{display:block;animation:fadeIn .3s ease}
+.quiz-review.good{background:var(--green-light);color:#1F5723}
+.quiz-review.bad{background:#FFF4E5;color:#7A4A0A}
+
+/* ── REFLECT / FOOTER ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 4 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 4 · AI Social Media</div>
+  <h1>AI Social Analytics &amp; Growth — <em>read the numbers, grow the honest way</em></h1>
+  <p class="hero-sub">The final lesson. Sort vanity metrics from meaningful ones, read a post's numbers and decide whether to double-down, iterate, or drop it, tell real growth tactics from shady ones, then finish the week with a quiz. Turn attention into followers, emails, and offers — slowly and honestly, the only way that lasts.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: READ ANALYTICS IN ORDER ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Read your analytics in order — start with the goal, end with the decision</h2>
+    <p class="lesson-intro">Reading social analytics well is a sequence, not a stare at a dashboard. It <strong>starts</strong> with your goal ("what was this post for?"), then you check the <strong>metrics</strong> that actually match that goal, and finish with a <strong>decision</strong> about what to do next. Skip the goal and every number looks equally important — which means none of them are. Click the steps in the order a monthly review should follow. A wrong click nudges you.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">◎</div>
+        <h4>Start With the Goal</h4>
+        <p>The <strong>"what for?"</strong> — every post has a job: reach new people, spark engagement, or drive clicks. Name the goal <em>first</em>, because it decides which numbers matter.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Makes the right metric obvious</span>
+          <span class="con">− No goal = every number looks equal</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">▤</div>
+        <h4>Meaningful Metrics</h4>
+        <p>The <strong>"did it work?"</strong> — engagement rate, saves and shares, watch time, follower growth, clicks. These track real interest, not just eyeballs. Illustrative, not guaranteed.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Show genuine interest and action</span>
+          <span class="con">− Vanity likes alone can mislead you</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">⇅</div>
+        <h4>The Decision</h4>
+        <p>The <strong>"so what now?"</strong> — double-down on what worked, iterate on what nearly worked, or drop what flopped. One post is a hint; a pattern over weeks is the real signal.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Turns numbers into next steps</span>
+          <span class="con">− One data point isn't a strategy</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip-note" style="margin-bottom:.5rem">💡 <strong>Read any review as a sentence:</strong> "<em>Goal</em> was reach, <em>so I check</em> impressions and follower growth, <em>then</em> compare to my usual, <em>then</em> decide to double-down, iterate, or drop." Build exactly that flow below.</div>
+
+    <div class="lesson-card">
+      <div class="chain-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Steps (shuffled) — click the next one</h4>
+          <div class="chain-pool" id="wfPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Your review, top to bottom</h4>
+          <div class="chain-slots" id="wfSlots"></div>
+        </div>
+      </div>
+      <div class="chain-hintbox" id="wfHint"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetWf()">↻ Reset the review</button>
+      </div>
+      <div class="tip-note">💡 <strong>The one habit that separates beginners from pros:</strong> always name the <em>goal</em> first — the reason the post existed. Everything after is a <em>check</em> against that goal. Read the numbers before naming the goal and you'll chase whatever spiked, not what mattered. Goal → metrics → decision, always.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: MATCH GOAL TO METRIC ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">From goal to metric — match each goal to the number that proves it</h2>
+    <p class="lesson-intro">A metric only means something once you know what you were trying to do. Each marketing goal has <em>one</em> number that actually tells you whether it worked — reading the wrong one is how people fool themselves with vanity stats. Click a goal, then click the metric that proves it. A wrong pair shakes; a right pair locks green. (Numbers here are illustrative.)</p>
+
+    <div class="lesson-card">
+      <div class="match-grid">
+        <div>
+          <div class="match-col-title">What you were trying to do</div>
+          <div class="match-pool" id="matchNotes"></div>
+        </div>
+        <div>
+          <div class="match-col-title">The metric that proves it</div>
+          <div class="match-pool" id="matchActions"></div>
+        </div>
+      </div>
+      <div class="match-hint" id="matchHint"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMatch()">↻ Reset</button>
+      </div>
+      <div class="tip-note">💡 <strong>Why goal-first reading is a superpower:</strong> a post can rack up thousands of likes and still fail if the goal was link clicks. Match the number to the intent and you stop celebrating vanity spikes and start tracking the results that actually grow the account.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: HONEST VS SHADY GROWTH JUDGE ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Real growth, or a shady shortcut? — the judgment call</h2>
+    <p class="lesson-intro">Some growth tactics compound slowly and honestly — better hooks, series, collaborations, showing up consistently. Others buy a quick spike and quietly rot the account: bought followers, engagement pods, follow/unfollow games. Getting this line right is what separates an audience that <em>actually cares</em> from a big empty number. Judge each tactic: does it <em>grow honestly</em>, or is it a <em>shady shortcut?</em></p>
+
+    <div class="lesson-card">
+      <div id="judgeGrid"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetJudge()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Week 4 wrap-up — the analytics &amp; growth quiz</h2>
+    <p class="lesson-intro">Six questions tying the whole week together: vanity versus meaningful metrics, the double-down-iterate-drop decision, and honest growth. Every option has an explanation. Answer all six, then submit for a per-question review — and a finish line for the course.</p>
+
+    <div class="lesson-card">
+      <div id="quizWrap"></div>
+      <div class="activity-feedback" id="feedback4"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="submitQuiz()">Submit answers</button>
+        <button class="btn btn-ghost" onclick="resetQuiz()">↻ Reset quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it from "seen" to "known". (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">In your own words, why must an analytics review start with the goal? What would happen if you started by staring at the numbers instead?</div>
+        <textarea placeholder="The goal decides which metric matters. Without it, every number looks equally important, so I'd end up chasing whatever spiked instead of..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Name one meaningful metric you'd track and one vanity metric you'd stop obsessing over — and explain what makes them different.</div>
+        <textarea placeholder="I'd track saves and shares, because they show people found it worth keeping. I'd stop obsessing over raw follower count because..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Week 4 complete — you can read the data and grow honestly</h3>
+      <p>Strategy to content, scheduling to analytics — you now see how AI helps you plan, create, and measure social media without faking the growth. Numbers guide you; patience and honesty do the rest. Revisit any lesson to sharpen an activity, or start your own monthly social report.</p>
+      <a href="01-social-media-ai-era.html" class="btn btn-primary">Back to Lesson 1 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5);}
+
+/* ─── ACTIVITY 1: Read analytics in order ─── */
+const WF = [
+  {kind:'trigger', label:'GOAL', text:'Name the goal first: "This reel was meant to reach new people and grow followers."', hint:'Every review begins with the GOAL — the reason the post existed. Which block names what you were actually trying to do?'},
+  {kind:'action', label:'CHECK 1', text:'Open the platform analytics with AI and pull the metrics that match that goal (reach, follower growth).', hint:'Right after naming the goal, gather the numbers that match it. Pull the relevant metrics before judging anything.'},
+  {kind:'action', label:'CHECK 2', text:'Compare those numbers to your normal — is this reel above or below your usual average?', hint:'Once you have the numbers, they mean nothing alone. Compare against your own baseline to see if this post over- or under-performed.'},
+  {kind:'action', label:'CHECK 3', text:'Check the meaningful signals too: saves, shares, and watch-time retention — did people actually value it?', hint:'After the headline numbers, look deeper — saves, shares, and retention show real interest, not just a passing glance.'},
+  {kind:'action', label:'DECIDE', text:'Make the call: double-down on what worked, iterate on what nearly worked, or drop what flopped.', hint:'The last step is the decision — double-down, iterate, or drop. It comes last because you can only decide once you\'ve read everything.'}
+];
+let wfNext = 0;
+function renderWf(){
+  wfNext = 0;
+  const order = shuffle(WF.map((_,i)=>i));
+  $('wfPool').innerHTML = order.map(i=>`<div class="chain-chip" data-step="${i}" onclick="clickWf(${i})"><span class="chip-kind ${WF[i].kind}">${WF[i].label}</span><span>${WF[i].text}</span></div>`).join('');
+  $('wfSlots').innerHTML = WF.map((w,i)=>`
+    <div class="chain-slot ${i===0?'trigger-slot':''}" id="wslot${i}">
+      <span class="chain-slot-num">${i===0?'◎':i}</span>
+      <span class="chain-slot-text">${i===0?'Goal…':'Check '+i+'…'}</span>
+    </div>`).join('');
+  $('wfHint').className = 'chain-hintbox';
+  $('feedback1').className = 'activity-feedback';
+}
+function clickWf(i){
+  const chip = document.querySelector(`.chain-chip[data-step="${i}"]`);
+  const hintBox = $('wfHint');
+  if(!chip || chip.classList.contains('used')) return;
+  if(i !== wfNext){
+    chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake');
+    hintBox.className='chain-hintbox show';
+    const label = wfNext===0 ? 'the goal' : 'check '+wfNext;
+    hintBox.innerHTML=`<strong>Not yet.</strong> Next you need ${label}: ${WF[wfNext].hint}`;
+    setTimeout(()=>chip.classList.remove('shake'), 500);
+    return;
+  }
+  chip.classList.add('used');
+  const slot = $('wslot'+i);
+  slot.classList.add('filled');
+  slot.querySelector('.chain-slot-text').innerHTML = `<span class="chip-kind ${WF[i].kind}" style="margin-right:.4rem">${WF[i].label}</span>${WF[i].text}`;
+  hintBox.className='chain-hintbox';
+  wfNext++;
+  if(wfNext >= WF.length){
+    const fb = $('feedback1');
+    fb.className='activity-feedback show success';
+    fb.innerHTML='<strong>Review built — one goal, four checks, in order.</strong> Read it as a sentence: <em>the goal was reach → pull the matching metrics → compare to your normal → check saves, shares and retention → decide to double-down, iterate, or drop.</em> Do this every time and your numbers stop being a scary wall of stats and start being a simple set of decisions. Remember: one post is a hint, a pattern over weeks is the real signal — growth is slow and compounding, never guaranteed.';
+    $('prog1').classList.add('done');
+  }
+}
+function resetWf(){
+  renderWf();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Match goal to metric ─── */
+const MATCH = [
+  {id:'n1', note:'Goal: get in front of brand-new people who don\'t follow you yet.', action:'Reach / impressions (how many accounts saw the post).', hint:'Finding new people is about visibility — the metric is reach and impressions, not likes from existing fans.'},
+  {id:'n2', note:'Goal: prove people found the post genuinely useful and worth keeping.', action:'Saves and shares (people bookmarking or passing it on).', hint:'"Worth keeping" shows up as saves and shares — the strongest signals that content had real value.'},
+  {id:'n3', note:'Goal: send people from the post to your website or shop.', action:'Link clicks / profile visits (people leaving to act).', hint:'Driving action off-platform is measured by link clicks and profile visits, not by comments.'},
+  {id:'n4', note:'Goal: check whether a video actually held attention start to finish.', action:'Watch time / retention (how far through people watched).', hint:'Holding attention is a video metric — watch time and retention show how much people actually stayed for.'}
+];
+let matchState = { selectedNote:null, done:{} };
+function renderMatch(){
+  matchState = { selectedNote:null, done:{} };
+  $('matchNotes').innerHTML = shuffle(MATCH).map(m=>`
+    <div class="match-item" data-role="note" data-id="${m.id}" onclick="pickNote('${m.id}')">
+      <span class="m-badge">GOAL</span>${m.note}
+    </div>`).join('');
+  $('matchActions').innerHTML = shuffle(MATCH).map(m=>`
+    <div class="match-item" data-role="action" data-for="${m.id}" onclick="pickAction('${m.id}')">
+      <span class="m-badge" style="color:#3D72C9;background:rgba(91,143,224,.15)">METRIC</span>${m.action}
+    </div>`).join('');
+  $('matchHint').className = 'match-hint';
+  $('feedback2').className = 'activity-feedback';
+}
+function pickNote(id){
+  if(matchState.done[id]) return;
+  matchState.selectedNote = id;
+  document.querySelectorAll('#matchNotes .match-item').forEach(el=>el.classList.toggle('selected', el.dataset.id===id));
+  $('matchHint').className = 'match-hint';
+}
+function pickAction(forId){
+  const sel = matchState.selectedNote;
+  const hint = $('matchHint');
+  if(!sel){
+    hint.className='match-hint show';
+    hint.innerHTML='<strong>Pick a goal first.</strong> Click a goal on the left, then click the metric that proves it.';
+    return;
+  }
+  const actEl = document.querySelector(`#matchActions .match-item[data-for="${forId}"]`);
+  if(sel === forId){
+    matchState.done[sel] = true;
+    const noteEl = document.querySelector(`#matchNotes .match-item[data-id="${sel}"]`);
+    noteEl.classList.remove('selected'); noteEl.classList.add('matched');
+    actEl.classList.add('matched');
+    matchState.selectedNote = null;
+    hint.className='match-hint';
+    if(Object.keys(matchState.done).length === MATCH.length){
+      const fb=$('feedback2');
+      fb.className='activity-feedback show success';
+      fb.innerHTML='<strong>All four matched.</strong> See the logic: each goal points to <em>one metric that actually proves it</em>. Reaching new people → reach and impressions; being worth keeping → saves and shares; driving action → link clicks; holding attention → watch time. Pick your goal first and the right number is obvious — chase the wrong one and a viral-looking post can quietly be a flop. Numbers here are illustrative.';
+      $('prog2').classList.add('done');
+    }
+  } else {
+    actEl.classList.remove('shake'); void actEl.offsetWidth; actEl.classList.add('shake');
+    const correct = MATCH.find(m=>m.id===sel);
+    hint.className='match-hint show';
+    hint.innerHTML=`<strong>Not that metric.</strong> ${correct.hint}`;
+    setTimeout(()=>actEl.classList.remove('shake'), 420);
+  }
+}
+function resetMatch(){
+  renderMatch();
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Honest vs shady growth judge ─── */
+const JUDGE = [
+  {scen:'Opening every post with a strong hook, then turning your best idea into a recurring weekly series.', answer:'auto',
+   e:'Grows honestly. Hooks make people stop scrolling and a series gives them a reason to come back — both build genuine attention that compounds. This is slow, real growth: no tricks, just better content people actually want.'},
+  {scen:'Paying a website $20 to instantly add 5,000 "followers" to your account overnight.', answer:'human',
+   e:'Shady, avoid it. Bought followers are bots or dead accounts — they never engage, so your engagement rate crashes and the algorithm shows your posts to fewer real people. A big empty number that actively hurts you. There are no shortcuts to a real audience.'},
+  {scen:'Collaborating with a creator in your niche and jumping on a trend that genuinely fits your brand.', answer:'auto',
+   e:'Grows honestly. Collaborations put you in front of an aligned new audience, and riding a relevant trend rides the algorithm\'s wave — both are honest ways to reach real people. Just make the fit genuine, not forced.'},
+  {scen:'Joining an "engagement pod" where 30 accounts auto-like and comment on each other\'s posts to fake momentum.', answer:'human',
+   e:'Shady, avoid it. Pods (and follow/unfollow games) manufacture fake signals from people who don\'t care about your content. Platforms detect and penalise it, and even when they don\'t, you\'re measuring a lie. Consistency with real people beats gaming the system every time.'}
+];
+let judgeAns = {};
+const JUDGE_LABELS = {auto:'Grows honestly', human:'Shady, avoid it'};
+function renderJudge(){
+  judgeAns = {};
+  $('judgeGrid').innerHTML = JUDGE.map((j,i)=>`
+    <div class="judge-card" id="jc${i}">
+      <div class="judge-scen"><span class="qn">Tactic ${i+1}</span>${j.scen}</div>
+      <div class="judge-btns">
+        <button class="judge-btn" id="jauto${i}" onclick="answerJudge(${i},'auto')">Grows honestly</button>
+        <button class="judge-btn" id="jhuman${i}" onclick="answerJudge(${i},'human')">Shady, avoid it</button>
+      </div>
+      <div class="judge-explain" id="jex${i}"></div>
+    </div>`).join('');
+  $('feedback3').className = 'activity-feedback';
+}
+function answerJudge(i, choice){
+  if(judgeAns[i]!==undefined) return;
+  const j = JUDGE[i];
+  const right = choice === j.answer;
+  judgeAns[i] = right;
+  const card = $('jc'+i);
+  const autoBtn = $('jauto'+i), humanBtn = $('jhuman'+i);
+  const picked = choice==='auto' ? autoBtn : humanBtn;
+  card.classList.add(right?'right':'miss');
+  picked.classList.add(right?'picked-right':'picked-wrong');
+  if(!right){ (j.answer==='auto'?autoBtn:humanBtn).classList.add('reveal-right'); }
+  autoBtn.disabled = true; humanBtn.disabled = true;
+  const ex = $('jex'+i);
+  ex.className = 'judge-explain show';
+  ex.innerHTML = `<span class="judge-verdict ${right?'v-right':'v-miss'}">${right?'✓ Correct':'✗ Not quite'} — ${JUDGE_LABELS[j.answer].toLowerCase()}.</span><br>${j.e}`;
+  if(Object.keys(judgeAns).length === JUDGE.length){
+    const score = Object.values(judgeAns).filter(Boolean).length;
+    const fb = $('feedback3');
+    if(score === JUDGE.length){
+      fb.className='activity-feedback show success';
+      fb.innerHTML='<strong>4 of 4 — you know the line.</strong> The rule of thumb: <em>honest tactics build real attention that compounds</em> (hooks, series, collaborations, relevant trends, showing up consistently); <em>shady shortcuts buy a fake number that rots the account</em> (bought followers, engagement pods, follow/unfollow). Real growth is slow and there are no guarantees — but it\'s the only kind that turns into followers, emails, and offers that actually convert.';
+    } else {
+      fb.className='activity-feedback show partial';
+      fb.innerHTML=`<strong>You got ${score} of 4.</strong> Re-read the ones you missed. Ask two questions of any tactic: <em>Does it attract people who genuinely care?</em> and <em>Would I be embarrassed if the platform saw it?</em> Real fans, nothing to hide → grows honestly. Fake signals, fingers crossed → shady, avoid it. Try again.`;
+    }
+    $('prog3').classList.add('done');
+  }
+}
+function resetJudge(){
+  renderJudge();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {q:'Which of these is a "vanity metric" — one that looks good but rarely tells you much on its own?',
+   opts:['Saves and shares','Total follower count in isolation','Link clicks to your website','Watch-time retention on a video'], ans:1,
+   why:'Raw follower count alone is the classic vanity metric — it can be inflated, and it says nothing about whether those people engage or buy. Saves, clicks, and retention all track real interest or action; a big follower number by itself does not.'},
+  {q:'Before reading a post\'s numbers, what should you decide first?',
+   opts:['Which filter looked best','The goal — what the post was actually meant to do','How many hashtags to use next time','Whether to boost it with ads'], ans:1,
+   why:'Name the goal first. Reach, engagement, and clicks are all "good" numbers, but only the one matching your goal tells you if the post worked. Without a goal, you just chase whatever spiked.'},
+  {q:'One reel got huge reach but almost no saves, shares, or profile visits. The smartest decision is to...',
+   opts:['Declare it a total success because reach was high','Iterate — the hook pulled people in, so keep the format but strengthen the payoff and call-to-action','Immediately buy followers to match the reach','Post the exact same reel again unchanged'], ans:1,
+   why:'High reach with weak deeper signals means the hook worked but the value or call-to-action didn\'t land. That\'s a classic "iterate" case: keep what pulled people in, fix what failed to convert. Reach alone isn\'t the win.'},
+  {q:'Which growth tactic is honest and tends to compound over time?',
+   opts:['Buying 10,000 followers from a website','Joining an engagement pod to fake likes','Showing up consistently with strong hooks and a recurring series','Following and unfollowing hundreds of accounts a day'], ans:2,
+   why:'Consistency, strong hooks, and a series attract people who genuinely care, and that attention compounds. Bought followers, pods, and follow/unfollow all manufacture fake signals that hurt your reach and can get you penalised.'},
+  {q:'What is the healthiest, most honest way to think about social growth?',
+   opts:['Virality is the strategy — just try to go viral','Growth is slow and compounding; you turn steady attention into email sign-ups, DMs, and offers','Bigger numbers are all that matter, however you get them','Once you pick a tactic, algorithms never change so you\'re set'], ans:1,
+   why:'Virality is luck, not a plan, and algorithms shift constantly. Real growth is slow and compounding — the job is to turn the attention you earn into owned relationships (email, DMs) and clear offers. No guarantees, just honest, repeatable habits.'},
+  {q:'You\'ve now completed Week 4. Which statement best captures the whole week\'s lesson?',
+   opts:['AI can guarantee you go viral if you post enough','AI helps you plan strategy, create content, schedule, and read analytics — but honest, patient, human judgment is what actually grows an audience','Follower count is the only number worth tracking','Growth is instant if you use the right tool'], ans:1,
+   why:'That\'s the arc of the week: strategy → content → scheduling → analytics and growth. AI makes each stage faster and clearer, but the honesty, the patience, and the judgment about what to double-down on remain yours. That balance is the skill.'}
+];
+function renderQuiz(){
+  $('quizWrap').innerHTML = QUIZ.map((item,i)=>`
+    <div class="quiz-q" id="qq${i}">
+      <div class="quiz-q-head"><span class="quiz-q-num">Q${i+1}</span><span class="quiz-q-text">${item.q}</span></div>
+      ${item.opts.map((o,j)=>`
+        <label class="quiz-opt"><input type="radio" name="quiz${i}" value="${j}"><span>${o}</span></label>`).join('')}
+      <div class="quiz-review" id="qr${i}"></div>
+    </div>`).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function submitQuiz(){
+  const fb = $('feedback4');
+  const answers = QUIZ.map((_,i)=>{
+    const sel = document.querySelector(`input[name="quiz${i}"]:checked`);
+    return sel ? +sel.value : null;
+  });
+  const blank = answers.filter(a=>a===null).length;
+  if(blank>0){
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>${blank} question${blank>1?'s':''} unanswered.</strong> Guessing is allowed, blank is not — answer everything and submit again.`;
+    return;
+  }
+  let score=0;
+  QUIZ.forEach((item,i)=>{
+    const card=$('qq'+i), rev=$('qr'+i);
+    card.classList.remove('right','miss');
+    if(answers[i]===item.ans){
+      score++; card.classList.add('right');
+      rev.className='quiz-review show good'; rev.innerHTML='✓ Correct. '+item.why;
+    } else {
+      card.classList.add('miss');
+      rev.className='quiz-review show bad';
+      rev.innerHTML=`✗ The answer is "<strong>${item.opts[item.ans]}</strong>". ${item.why}`;
+    }
+  });
+  if(score===QUIZ.length){
+    fb.className='activity-feedback show success';
+    fb.innerHTML='<strong>'+score+' of '+QUIZ.length+' — Week 4 mastered, course complete.</strong> You can now read a dashboard without panicking: name the goal, check the meaningful metrics, and decide to double-down, iterate, or drop — then grow with honest tactics that compound. Virality isn\'t a strategy and there are no guarantees, but this is a genuinely job-ready skill set. Congratulations.';
+  } else {
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>${score} of ${QUIZ.length} — nearly there.</strong> Read the red notes; the vanity-vs-meaningful metrics idea and the double-down / iterate / drop decision are the two things worth locking in before you write your first monthly social report. Reset and aim for a clean sweep to finish the course strong.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', ()=>{
+  renderWf();
+  renderMatch();
+  renderJudge();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

@@ -1,0 +1,639 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · AI Social Content Creation — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.55;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── CONCEPT PRIMER CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:.85rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-pros{margin-top:.6rem;font-size:.75rem;line-height:1.6;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-pros .pro{color:#2E6B30;display:block}
+.compare-pros .con{color:#A03A2C;display:block}
+
+/* ── ACTIVITY 1: ICP BUILDER (checkbox picker) ── */
+.icp-intro{font-size:.8rem;color:var(--text-secondary);margin-bottom:.9rem;line-height:1.55}
+.icp-grid{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+@media (max-width:760px){.icp-grid{grid-template-columns:1fr}}
+.icp-trait{display:flex;align-items:flex-start;gap:.65rem;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;cursor:pointer;transition:all .2s;user-select:none}
+.icp-trait:hover{border-color:var(--orange)}
+.icp-trait.on{border-color:var(--orange);background:var(--orange-glow)}
+.icp-trait.reveal-good{border-color:var(--green);background:var(--green-light)}
+.icp-trait.reveal-bad{border-color:var(--red);background:var(--red-light)}
+.icp-check{width:20px;height:20px;border-radius:5px;border:2px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.72rem;color:#fff;margin-top:.1rem;transition:all .2s}
+.icp-trait.on .icp-check{background:var(--orange);border-color:var(--orange)}
+.icp-trait.reveal-good .icp-check{background:var(--green);border-color:var(--green)}
+.icp-trait.reveal-bad .icp-check{background:var(--red);border-color:var(--red)}
+.icp-txt{font-size:.83rem;line-height:1.45;color:var(--text-primary);font-weight:500}
+.icp-note{font-size:.72rem;color:var(--text-muted);margin-top:.25rem;display:none}
+.icp-trait.reveal-good .icp-note,.icp-trait.reveal-bad .icp-note{display:block}
+
+/* ── ACTIVITY 2: SORT LEADS (drag & drop) ── */
+.classify-grid{display:grid;grid-template-columns:1.1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.lead-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;cursor:grab;transition:all .25s;user-select:none}
+.lead-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.lead-card.dragging{opacity:.4}
+.lead-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.lead-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.lead-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.lead-name{font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--navy);margin-bottom:.3rem}
+.lead-facts{display:flex;flex-wrap:wrap;gap:.3rem}
+.lead-fact{font-size:.68rem;background:var(--bg-light);border:1px solid var(--border);border-radius:50px;padding:.15rem .55rem;color:var(--text-secondary)}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:82px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+
+/* ── ACTIVITY 3: MATCH ENRICHMENT (click-pair) ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col-title{font-family:'DM Serif Display',serif;font-size:1.02rem;color:var(--navy);margin-bottom:.6rem}
+.match-pool{display:flex;flex-direction:column;gap:.55rem}
+.match-item{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .95rem;font-size:.82rem;line-height:1.45;cursor:pointer;transition:all .2s;user-select:none;font-weight:500}
+.match-item:hover{border-color:var(--orange)}
+.match-item.selected{border-color:var(--orange);background:var(--orange-glow);box-shadow:var(--shadow-sm)}
+.match-item.matched{opacity:.45;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.match-item.shake{animation:shake .4s;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.match-item .m-badge{display:inline-block;font-family:var(--mono);font-size:.62rem;font-weight:600;color:var(--orange);background:var(--orange-glow);padding:.1rem .4rem;border-radius:4px;margin-right:.4rem}
+.match-hint{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.match-hint.show{display:block;animation:fadeIn .3s ease}
+
+/* ── ACTIVITY 4: COMPLIANCE JUDGE (quiz-style) ── */
+.judge-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.3rem;margin-bottom:.9rem;transition:border-color .3s}
+.judge-card.right{border-color:var(--green)}
+.judge-card.miss{border-color:var(--red)}
+.judge-scen{font-size:.88rem;font-weight:600;color:var(--navy);line-height:1.5;margin-bottom:.75rem}
+.judge-scen .qn{font-family:var(--mono);font-size:.7rem;color:var(--orange);background:var(--orange-glow);padding:.15rem .5rem;border-radius:4px;margin-right:.5rem}
+.judge-btns{display:flex;gap:.5rem;flex-wrap:wrap}
+.judge-btn{padding:.45rem 1.1rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.76rem;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.judge-btn:hover{border-color:var(--orange);color:var(--orange)}
+.judge-btn:disabled{cursor:not-allowed;opacity:.6}
+.judge-btn.picked-right{background:var(--green);border-color:var(--green);color:#fff;opacity:1}
+.judge-btn.picked-wrong{background:var(--red);border-color:var(--red);color:#fff;opacity:1}
+.judge-btn.reveal-right{border-color:var(--green);color:#1F5723}
+.judge-explain{display:none;margin-top:.7rem;font-size:.8rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.6rem}
+.judge-explain.show{display:block;animation:fadeIn .3s ease}
+.judge-verdict{font-weight:700;font-size:.72rem;letter-spacing:.05em;text-transform:uppercase}
+.judge-verdict.v-right{color:#256B29}.judge-verdict.v-miss{color:#A03A2C}
+
+/* ── REFLECT / FOOTER ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 4 · AI Social Media</div>
+  <h1>AI Social Content Creation — <em>make posts people stop scrolling for</em></h1>
+  <p class="hero-sub">Four hands-on activities. Build the anatomy of a scroll-stopping post, sort strong hooks from weak ones, match each content idea to the platform format that fits it, then judge four AI-content scenarios for what's honest and what crosses the line. Create content that earns attention — the smart way.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: BUILD AN ICP ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Anatomy of a scroll-stopping post</h2>
+    <p class="lesson-intro">A feed is a wall of thumbs flying past. To earn a stop, a post needs three things working together. It's the checklist every AI content tool needs from you — ask AI for "a post" and you get bland filler; ask for a <em>hook, a value, a native format</em> and you get something worth publishing. You run social for <strong>MokshPath, an online learning brand</strong>. Tick the ingredients that make a post <em>stop the scroll</em>, then check your picks.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">HOOK</div>
+        <h4>A hook</h4>
+        <p>The first line or first second that <strong>stops the thumb</strong>: "The mistake that kills 90% of study plans." No hook, no read — the rest of the post never gets seen.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Earns the first three seconds</span>
+          <span class="con">− A slow intro loses the scroll</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">VALUE</div>
+        <h4>Real value</h4>
+        <p>What the viewer <strong>gets</strong>: a tip they can use, a laugh, a moment of "that's so me". If they finish and feel nothing, they won't like, save, or follow.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Gives a reason to save or share</span>
+          <span class="con">− Empty content = a silent unfollow</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">FIT</div>
+        <h4>Native format</h4>
+        <p>Shaped for <strong>where it lives</strong>: a Reel for video, a carousel for a step-by-step, a thread for a story. The right format is what the platform pushes.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Rides how the platform shows content</span>
+          <span class="con">− A recycled flyer flops on every feed</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip-note" style="margin-bottom:.5rem">💡 <strong>The three-part test:</strong> a scroll-stopping post answers <em>does it hook</em>, <em>does it give value</em>, and <em>does it fit the format</em>. In the activity below, keep the ingredients that serve one of those three — and drop the ones that don't.</div>
+
+    <div class="lesson-card">
+      <div class="icp-intro">Select the ingredients that make a post <strong>stop the scroll and earn a save</strong>. Leave off ones that are vanity metrics, off-brand, or that only serve you and not the viewer.</div>
+      <div class="icp-grid" id="icpGrid"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkICP()">Check my post</button>
+        <button class="btn btn-ghost" onclick="resetICP()">↻ Reset</button>
+      </div>
+      <div class="tip-note">💡 <strong>Rule of thumb:</strong> a strong post has a <em>hook</em>, real <em>value</em>, and a <em>native format</em>. "Make a nice post about our course" is a wish. "A 20-second Reel that opens on the #1 study mistake, then shows the fix" is a brief AI can actually build.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: SORT LEADS BY FIT ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Sort the hooks — strong, weak, or not even a hook?</h2>
+    <p class="lesson-intro">The <strong>hook</strong> is the opening line that decides whether anyone reads the rest. A strong one is specific and creates curiosity or tension; a weak one is generic; some "openers" don't hook at all. Using the MokshPath brand from Activity 1, drag each opening line into the right pile. Wrong pills carry a hover hint with the answer.</p>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="leadList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="hot">
+            <div class="bucket-title">🔥 Strong hook — publish it</div>
+            <div class="bucket-sub">Specific &amp; sparks curiosity or tension</div>
+            <div class="bucket-drop" data-drop="hot"></div>
+          </div>
+          <div class="bucket" data-bucket="warm">
+            <div class="bucket-title">🌤 Weak hook — sharpen it</div>
+            <div class="bucket-sub">On-topic but generic or vague</div>
+            <div class="bucket-drop" data-drop="warm"></div>
+          </div>
+          <div class="bucket" data-bucket="no">
+            <div class="bucket-title">❄ Not a hook — rewrite</div>
+            <div class="bucket-sub">A slow intro that stops nobody</div>
+            <div class="bucket-drop" data-drop="no"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetLeads()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswersLeads()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: MATCH ENRICHMENT TO SOURCE ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">One idea, the right format — match content to where it shines</h2>
+    <p class="lesson-intro">The same idea can be <strong>repurposed</strong> into different shapes, but each platform pushes a specific <em>native format</em>, and picking the right one is half the reach. A step-by-step wants a carousel; a quick demo wants short-form video; a story wants a thread. Click a content idea, then click the format that fits it best. A wrong pair shakes; a right pair locks green.</p>
+
+    <div class="lesson-card">
+      <div class="match-grid">
+        <div>
+          <div class="match-col-title">The content idea</div>
+          <div class="match-pool" id="matchData"></div>
+        </div>
+        <div>
+          <div class="match-col-title">The format that fits</div>
+          <div class="match-pool" id="matchSource"></div>
+        </div>
+      </div>
+      <div class="match-hint" id="matchHint"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMatch()">↻ Reset</button>
+      </div>
+      <div class="tip-note">💡 <strong>Why format matters:</strong> the platform rewards content shaped the way it likes to show it — a Reel gets pushed to non-followers, a carousel earns saves, a thread earns replies. Repurpose one idea into the native format for each app instead of pasting the same image everywhere; that's how one idea becomes a week of reach.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: COMPLIANCE JUDGE ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Honest or over the line? — the AI-content judgment call</h2>
+    <p class="lesson-intro">AI makes it trivially easy to churn out endless posts. That's exactly why judgment matters: audiences reward <strong>authenticity</strong> and punish soulless, misleading, or fake content. AI is a great <em>drafting</em> tool — but it needs a human pass, honest disclosure where it counts, and your real personality on top. Judge each scenario: <em>honest &amp; smart</em> or <em>over the line?</em></p>
+
+    <div class="lesson-card">
+      <div id="judgeGrid"></div>
+      <div class="activity-feedback" id="feedback4"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetJudge()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it from "seen" to "known". (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Write a one-line brief for a post you could make this week. Can you name the hook, the value, and the native format?</div>
+        <textarea placeholder="A 20-second Reel opening on 'the study mistake everyone makes', that teaches the two-minute fix, shot vertical for Reels..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">AI can draft a week of posts in minutes. In your own words, why does a human pass — your voice, your take — still decide whether the content works?</div>
+        <textarea placeholder="Because AI drafts sound the same as everyone else's AI drafts. The originality and personality I add is the reason someone follows me and not..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 3 · AI Scheduling &amp; Engagement</h3>
+      <p>You can create posts worth stopping for. Next: getting them seen and keeping the conversation going. You'll plan the best times to post, batch a week of content, and use AI to reply and engage without losing your voice.</p>
+      <a href="03-ai-scheduling-engagement.html" class="btn btn-primary">Continue to Lesson 3 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5);}
+
+/* ─── ACTIVITY 1: Build an ICP ─── */
+const ICP_TRAITS = [
+  {id:'i1', txt:'Opens with a specific hook in the first line or first second', good:true, note:'✓ The hook earns the stop — without it nothing else gets seen.'},
+  {id:'i2', txt:'Gives the viewer one useful tip, laugh, or "that\'s so me" moment', good:true, note:'✓ Real value — the reason someone likes, saves, or follows.'},
+  {id:'i3', txt:'Is shaped as a native format (Reel, carousel, or thread)', good:true, note:'✓ Fits how the platform shows content, so it gets pushed further.'},
+  {id:'i4', txt:'Is a generic "Check out our new course!" broadcast', good:false, note:'✗ No hook, no value — an ad nobody asked for. The scroll wins.'},
+  {id:'i5', txt:'Sounds like the brand — MokshPath\'s real voice, not corporate filler', good:true, note:'✓ Authentic voice is the edge; it\'s why people follow you and not the feed.'},
+  {id:'i6', txt:'Stuffs in 30 trending hashtags whether they fit or not', good:false, note:'✗ Vanity tactic — hashtag spam looks desperate and rarely helps reach.'},
+  {id:'i7', txt:'Is an untouched AI draft, published exactly as generated', good:false, note:'✗ Raw AI output is generic and sounds like everyone else — it needs a human pass.'},
+  {id:'i8', txt:'Ends with a clear call to action (comment, save, or follow)', good:true, note:'✓ Tells the viewer what to do next — turns a view into engagement.'}
+];
+let icpSel = {};
+function renderICP(){
+  icpSel = {};
+  $('icpGrid').innerHTML = ICP_TRAITS.map(t=>`
+    <div class="icp-trait" data-id="${t.id}" onclick="toggleICP('${t.id}')">
+      <div class="icp-check">✓</div>
+      <div><div class="icp-txt">${t.txt}</div><div class="icp-note">${t.note}</div></div>
+    </div>`).join('');
+  $('feedback1').className = 'activity-feedback';
+}
+function toggleICP(id){
+  if($('feedback1').classList.contains('show')) return;
+  icpSel[id] = !icpSel[id];
+  document.querySelector(`.icp-trait[data-id="${id}"]`).classList.toggle('on', icpSel[id]);
+}
+function checkICP(){
+  let correct=0;
+  ICP_TRAITS.forEach(t=>{
+    const el = document.querySelector(`.icp-trait[data-id="${t.id}"]`);
+    const picked = !!icpSel[t.id];
+    const shouldPick = t.good;
+    if(picked === shouldPick) correct++;
+    el.classList.remove('on');
+    if(picked && shouldPick) el.classList.add('reveal-good');
+    else if(!picked && !shouldPick){ /* correctly left off — subtle, no mark */ }
+    else el.classList.add('reveal-bad');
+  });
+  const goodCount = ICP_TRAITS.filter(t=>t.good).length;
+  const pickedGood = ICP_TRAITS.filter(t=>t.good && icpSel[t.id]).length;
+  const pickedBad = ICP_TRAITS.filter(t=>!t.good && icpSel[t.id]).length;
+  const fb = $('feedback1');
+  if(pickedGood===goodCount && pickedBad===0){
+    fb.className='activity-feedback show success';
+    fb.innerHTML=`<strong>Scroll-stopping — all ${goodCount} ingredients in, no filler.</strong> Each one you kept does a job: a hook earns the stop, real value earns the save, a native format earns the reach, your voice earns the follow, and a clear CTA earns the action. Brief <em>this</em> into an AI content tool and you get a draft worth polishing. That's the whole game — a sharp brief in, a strong post out.`;
+  } else {
+    fb.className='activity-feedback show partial';
+    let notes=[];
+    if(pickedGood<goodCount) notes.push(`You missed ${goodCount-pickedGood} strong ingredient${goodCount-pickedGood>1?'s':''} (now green) — each one earns more attention.`);
+    if(pickedBad>0) notes.push(`You included ${pickedBad} weak choice${pickedBad>1?'s':''} (now red) — a broadcast, hashtag spam, or a raw AI draft.`);
+    fb.innerHTML=`<strong>Close — ${correct} of ${ICP_TRAITS.length} calls right.</strong> ${notes.join(' ')} Remember the test: does the ingredient help the post <em>hook</em>, deliver <em>value</em>, or <em>fit the format</em> in your real voice? If not, it's filler. Reset and try again.`;
+  }
+  $('prog1').classList.add('done');
+}
+function resetICP(){
+  renderICP();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Sort leads by fit ─── */
+const LEADS = [
+  {id:'l1', name:'"The study mistake that wastes 3 hours a week"', facts:['specific','names a real pain','sparks curiosity'], bucket:'hot', hint:'Specific, names a felt pain, and makes you need the answer — a strong scroll-stopping hook.'},
+  {id:'l2', name:'"Here are some tips to study better"', facts:['on-topic','but generic','no curiosity gap'], bucket:'warm', hint:'On-topic but bland — "some tips" promises nothing specific. Sharpen it into a number or a bold claim.'},
+  {id:'l3', name:'"Welcome to our page! We hope you enjoy our content."', facts:['slow intro','all about you','zero hook'], bucket:'no', hint:'A slow, self-focused intro that stops nobody — rewrite to lead with something the viewer wants.'},
+  {id:'l4', name:'"I failed my first three exams. Here\'s what finally worked."', facts:['personal stakes','tension','promises a payoff'], bucket:'hot', hint:'Personal stakes plus a promised payoff — that tension pulls people straight into the story. Strong hook.'},
+  {id:'l5', name:'"Education is very important for everyone in life."', facts:['vague truism','no tension','stops no thumb'], bucket:'no', hint:'A generic truism with no curiosity and no stakes — not a hook at all. Rewrite it entirely.'},
+  {id:'l6', name:'"Studying can be hard sometimes, right?"', facts:['relatable','but flat','weak curiosity'], bucket:'warm', hint:'Mildly relatable but flat — it opens a door without giving a reason to walk through. Add a specific promise.'}
+];
+const LEAD_BUCKET_NAMES = {hot:'🔥 Strong hook', warm:'🌤 Weak hook', no:'❄ Not a hook'};
+let leadsPlaced = {};
+function renderLeads(){
+  leadsPlaced = {};
+  const list = $('leadList');
+  list.innerHTML = shuffle(LEADS).map(l=>`
+    <div class="lead-card" draggable="true" data-id="${l.id}">
+      <div class="lead-name">${l.name}</div>
+      <div class="lead-facts">${l.facts.map(f=>`<span class="lead-fact">${f}</span>`).join('')}</div>
+    </div>`).join('');
+  list.querySelectorAll('.lead-card').forEach(card=>{
+    card.addEventListener('dragstart', e=>{ e.dataTransfer.setData('id', card.dataset.id); card.classList.add('dragging'); });
+    card.addEventListener('dragend', ()=>card.classList.remove('dragging'));
+  });
+  document.querySelectorAll('#activity-2 .bucket-drop').forEach(d=>d.innerHTML='');
+  $('feedback2').className = 'activity-feedback';
+}
+function setupLeadBuckets(){
+  document.querySelectorAll('#activity-2 .bucket').forEach(b=>{
+    b.addEventListener('dragover', e=>{ e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', ()=>b.classList.remove('drag-over'));
+    b.addEventListener('drop', e=>{
+      e.preventDefault(); b.classList.remove('drag-over');
+      handleLeadDrop(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleLeadDrop(id, bucket){
+  const lead = LEADS.find(l=>l.id===id);
+  if(!lead || leadsPlaced[id]) return;
+  const correct = lead.bucket === bucket;
+  leadsPlaced[id] = {bucket, correct};
+  const card = document.querySelector(`#activity-2 .lead-card[data-id="${id}"]`);
+  card.classList.add('placed', correct?'correct':'wrong');
+  const dropZone = document.querySelector(`#activity-2 [data-drop="${bucket}"]`);
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct?'correct':'wrong');
+  pill.textContent = (correct?'✓ ':'✗ ') + lead.name;
+  pill.title = correct ? lead.hint : `Correct pile: ${LEAD_BUCKET_NAMES[lead.bucket]}. ${lead.hint}`;
+  dropZone.appendChild(pill);
+  checkLeadsDone();
+}
+function checkLeadsDone(){
+  if(Object.keys(leadsPlaced).length === LEADS.length){
+    const right = Object.values(leadsPlaced).filter(p=>p.correct).length;
+    const fb = $('feedback2');
+    if(right === LEADS.length){
+      fb.className='activity-feedback show success';
+      fb.innerHTML=`<strong>All six sorted correctly.</strong> Two things decided each call: <em>specificity</em> (does it name a concrete pain or claim?) and <em>tension</em> (does it open a curiosity gap you need closed?). Strong = both. Weak = on-topic but generic. Not-a-hook = a slow, self-focused intro. When AI drafts you a hook, run it through the same two tests — and rewrite the flat ones in your own voice.`;
+    } else {
+      fb.className='activity-feedback show partial';
+      fb.innerHTML=`<strong>You got ${right} of 6.</strong> Hover any red pill for the right pile and why. Two quick tests: <em>Is it specific?</em> (vague → weak or worse) and <em>Does it make me need the next line?</em> (yes → strong, no → weak). Hit <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetLeads(){
+  renderLeads();
+  $('prog2').classList.remove('done');
+}
+function showAnswersLeads(){
+  LEADS.forEach(l=>{ if(!leadsPlaced[l.id]) handleLeadDrop(l.id, l.bucket); });
+}
+
+/* ─── ACTIVITY 3: Match enrichment data to source ─── */
+const MATCH = [
+  {id:'m1', data:'A 20-second "watch me solve it" demo', src:'Short-form video (Reel / Short / TikTok)', srcId:'s1', hint:'A quick, watch-it-happen demo belongs in short-form vertical video — that\'s what the algorithm pushes to non-followers.'},
+  {id:'m2', data:'A 5-step "how to plan your week" guide', src:'A swipeable carousel', srcId:'s2', hint:'Step-by-step teaching lives best in a carousel — each swipe is a step, and it earns saves.'},
+  {id:'m3', data:'A behind-the-scenes moment that vanishes in 24h', src:'A Story', srcId:'s3', hint:'Casual, in-the-moment, disappearing content is exactly what Stories are built for.'},
+  {id:'m4', data:'A personal "here\'s the whole journey" story', src:'A text thread', srcId:'s4', hint:'A narrative that unfolds line by line fits a thread, where each post pulls readers to the next.'}
+];
+let matchState = { selectedData:null, done:{} };
+function renderMatch(){
+  matchState = { selectedData:null, done:{} };
+  $('matchData').innerHTML = shuffle(MATCH).map(m=>`
+    <div class="match-item" data-role="data" data-id="${m.id}" onclick="pickData('${m.id}')">
+      <span class="m-badge">DATA</span>${m.data}
+    </div>`).join('');
+  $('matchSource').innerHTML = shuffle(MATCH).map(m=>`
+    <div class="match-item" data-role="src" data-id="${m.srcId}" data-for="${m.id}" onclick="pickSource('${m.id}')">
+      <span class="m-badge" style="color:#3D72C9;background:rgba(91,143,224,.15)">SOURCE</span>${m.src}
+    </div>`).join('');
+  $('matchHint').className = 'match-hint';
+  $('feedback3').className = 'activity-feedback';
+}
+function pickData(id){
+  if(matchState.done[id]) return;
+  matchState.selectedData = id;
+  document.querySelectorAll('#matchData .match-item').forEach(el=>el.classList.toggle('selected', el.dataset.id===id));
+  $('matchHint').className = 'match-hint';
+}
+function pickSource(forId){
+  const sel = matchState.selectedData;
+  const hint = $('matchHint');
+  if(!sel){
+    hint.className='match-hint show';
+    hint.innerHTML='<strong>Pick a detail first.</strong> Click a card on the left, then click where it comes from on the right.';
+    return;
+  }
+  const srcEl = document.querySelector(`#matchSource .match-item[data-for="${forId}"]`);
+  if(sel === forId){
+    matchState.done[sel] = true;
+    document.querySelector(`#matchData .match-item[data-id="${sel}"]`).classList.remove('selected');
+    document.querySelector(`#matchData .match-item[data-id="${sel}"]`).classList.add('matched');
+    srcEl.classList.add('matched');
+    matchState.selectedData = null;
+    hint.className='match-hint';
+    if(Object.keys(matchState.done).length === MATCH.length){
+      const fb=$('feedback3');
+      fb.className='activity-feedback show success';
+      fb.innerHTML='<strong>All four matched.</strong> The takeaway isn\'t memorising formats — it\'s <em>fit</em>. A quick demo wants video, a step-by-step wants a carousel, a fleeting moment wants a Story, a journey wants a thread. Take one idea, reshape it into the native format for each app, and one afternoon of work becomes a week of reach across platforms.';
+      $('prog3').classList.add('done');
+    }
+  } else {
+    srcEl.classList.remove('shake'); void srcEl.offsetWidth; srcEl.classList.add('shake');
+    const correct = MATCH.find(m=>m.id===sel);
+    hint.className='match-hint show';
+    hint.innerHTML=`<strong>Not that source.</strong> ${correct.hint}`;
+    setTimeout(()=>srcEl.classList.remove('shake'), 420);
+  }
+}
+function resetMatch(){
+  renderMatch();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Compliance judge ─── */
+const JUDGE = [
+  {scen:'You have AI generate 30 near-identical posts, publish them all untouched, and use an AI avatar to claim you personally tested a course you never took.', answer:'over',
+   e:'Over the line. Two problems: the content is soulless AI sameness that will bore your audience, and — critically — you\'re making a false claim about a real experience. Fabricating a testimonial or "personal result" is deceptive and can shred trust (and, for paid promos, break advertising rules). AI can draft; it can\'t vouch for things you never did.'},
+  {scen:'You use AI to draft a Reel script, then rewrite it in your own voice, add your real opinion, and film it yourself.', answer:'ok',
+   e:'Honest and smart. This is exactly the right use of AI — it beats the blank page, you keep creative control, and the final post carries your personality and a genuine take. AI as a first draft, you as the editor and author.'},
+  {scen:'You post an AI-generated image of a "student" who doesn\'t exist as if it\'s a real customer photo, with no note that it\'s AI.', answer:'over',
+   e:'Over the line. Presenting an AI-generated person as a real customer is misleading, and undisclosed AI imagery is increasingly against platform rules and can cross into false advertising. If you use AI visuals, use them honestly (illustrative, clearly not a real testimonial) and disclose where it matters.'},
+  {scen:'You use AI to brainstorm 20 hook ideas and repurpose one strong idea into a Reel, a carousel, and a thread — each written in your brand voice.', answer:'ok',
+   e:'Honest and smart. Using AI to generate options and to help repurpose one idea across formats is a huge time-saver, and there\'s nothing to disclose — the ideas are shaped and voiced by you. This is batching done well: more reach from one good idea, still authentically yours.'}
+];
+let judgeAns = {};
+const JUDGE_LABELS = {ok:'Honest & smart', over:'Over the line'};
+function renderJudge(){
+  judgeAns = {};
+  $('judgeGrid').innerHTML = JUDGE.map((j,i)=>`
+    <div class="judge-card" id="jc${i}">
+      <div class="judge-scen"><span class="qn">Case ${i+1}</span>${j.scen}</div>
+      <div class="judge-btns">
+        <button class="judge-btn" id="jok${i}" onclick="answerJudge(${i},'ok')">Honest &amp; smart</button>
+        <button class="judge-btn" id="jov${i}" onclick="answerJudge(${i},'over')">Over the line</button>
+      </div>
+      <div class="judge-explain" id="jex${i}"></div>
+    </div>`).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerJudge(i, choice){
+  if(judgeAns[i]!==undefined) return;
+  const j = JUDGE[i];
+  const right = choice === j.answer;
+  judgeAns[i] = right;
+  const card = $('jc'+i);
+  const okBtn = $('jok'+i), ovBtn = $('jov'+i);
+  const picked = choice==='ok' ? okBtn : ovBtn;
+  const other = choice==='ok' ? ovBtn : okBtn;
+  card.classList.add(right?'right':'miss');
+  picked.classList.add(right?'picked-right':'picked-wrong');
+  if(!right){ (j.answer==='ok'?okBtn:ovBtn).classList.add('reveal-right'); }
+  okBtn.disabled = true; ovBtn.disabled = true;
+  const ex = $('jex'+i);
+  ex.className = 'judge-explain show';
+  ex.innerHTML = `<span class="judge-verdict ${right?'v-right':'v-miss'}">${right?'✓ Correct':'✗ Not quite'} — this is ${JUDGE_LABELS[j.answer].toLowerCase()}.</span><br>${j.e}`;
+  if(Object.keys(judgeAns).length === JUDGE.length){
+    const score = Object.values(judgeAns).filter(Boolean).length;
+    const fb = $('feedback4');
+    if(score === JUDGE.length){
+      fb.className='activity-feedback show success';
+      fb.innerHTML='<strong>4 of 4 — you know where the line is.</strong> The through-line: <em>use AI to draft and brainstorm, keep humans in charge of truth and voice</em>. Untouched sameness or fabricated experiences = over the line. AI as a first draft that you edit, voice, and (where needed) disclose = exactly right. AI makes churning out content effortless, which makes <em>your</em> honesty and personality the thing that protects your brand.';
+    } else {
+      fb.className='activity-feedback show partial';
+      fb.innerHTML=`<strong>You got ${score} of 4.</strong> Re-read the cards you missed. The reliable checklist for AI content: (1) Did a human pass shape it into your real voice? (2) Is every claim actually true? (3) Where it matters, is AI use disclosed? Miss any of those and you risk boring — or misleading — your audience. Try again.`;
+    }
+    $('prog4').classList.add('done');
+  }
+}
+function resetJudge(){
+  renderJudge();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', ()=>{
+  renderICP();
+  renderLeads();
+  setupLeadBuckets();
+  renderMatch();
+  renderJudge();
+});
+</script>
+</body>
+</html>

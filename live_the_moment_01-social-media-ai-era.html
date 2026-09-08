@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 · Social Media in the AI Era — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.55;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── CONCEPT PRIMER CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-pros{margin-top:.6rem;font-size:.75rem;line-height:1.6;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-pros .pro{color:#2E6B30;display:block}
+.compare-pros .con{color:#A03A2C;display:block}
+
+/* ── ACTIVITY 1: FUNNEL ORDER (click sequence) ── */
+.chain-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.chain-grid{grid-template-columns:1fr}}
+.chain-pool{display:flex;flex-direction:column;gap:.6rem}
+.chain-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.84rem;line-height:1.5;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.chain-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.chain-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.chain-chip.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.chain-slots{display:flex;flex-direction:column;gap:.5rem}
+.chain-slot{display:flex;align-items:flex-start;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.65rem .85rem;min-height:46px;font-size:.82rem;line-height:1.5;color:var(--text-muted);transition:all .25s;background:rgba(255,255,255,0.5)}
+.chain-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.chain-slot-num{width:24px;height:24px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.chain-slot.filled .chain-slot-num{background:var(--green)}
+.chain-hintbox{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.chain-hintbox.show{display:block;animation:fadeIn .3s ease}
+
+/* ── FUNNEL VISUAL ── */
+.funnel-vis{max-width:440px;margin:1.4rem auto 0;display:none}
+.funnel-vis.show{display:block;animation:fadeIn .5s ease}
+.funnel-band{margin:0 auto .35rem;color:#fff;text-align:center;padding:.55rem .5rem;border-radius:6px;font-size:.78rem;font-weight:700;line-height:1.3}
+.funnel-band small{display:block;font-weight:400;font-size:.66rem;opacity:.85;margin-top:.1rem}
+
+/* ── ACTIVITY 2: MAP TOOLS (drag & drop) ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.84rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-text b{color:var(--navy)}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:82px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+
+/* ── ACTIVITY 3: CONVERSION MATH ── */
+.math-scenario{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1rem 0 1.4rem}
+@media (max-width:760px){.math-scenario{grid-template-columns:1fr 1fr}}
+.math-stat{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.8rem .9rem}
+.math-stat-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.25rem}
+.math-stat-value{font-family:var(--mono);font-size:1.05rem;font-weight:600;color:var(--navy)}
+.math-options{display:grid;gap:.6rem}
+.math-option{display:flex;align-items:flex-start;gap:.7rem;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;cursor:pointer;transition:all .2s;font-size:.86rem;line-height:1.5}
+.math-option:hover{border-color:var(--orange)}
+.math-option input{margin-top:.25rem;accent-color:var(--orange)}
+.math-option .opt-amount{font-family:var(--mono);font-weight:600;color:var(--navy)}
+.math-option.reveal-right{border-color:var(--green);background:var(--green-light)}
+.math-option.reveal-wrong{border-color:var(--red);background:var(--red-light)}
+.breakdown{display:none;margin-top:1.2rem}
+.breakdown.show{display:block;animation:fadeIn .4s ease}
+.breakdown table{width:100%;border-collapse:collapse;font-size:.84rem}
+.breakdown th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);padding:.45rem .6rem;border-bottom:1px solid var(--border)}
+.breakdown td{padding:.5rem .6rem;border-bottom:1px dashed var(--border);color:var(--text-secondary)}
+.breakdown td.num{font-family:var(--mono);text-align:right;color:var(--navy);font-weight:600}
+.breakdown tr.total td{border-bottom:none;font-weight:700;color:var(--navy);border-top:2px solid var(--navy)}
+
+/* ── ACTIVITY 4: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.3rem;margin-bottom:.9rem;transition:border-color .3s}
+.quiz-q.right{border-color:var(--green)}
+.quiz-q.miss{border-color:var(--red)}
+.quiz-q-head{display:flex;gap:.7rem;align-items:baseline;margin-bottom:.7rem}
+.quiz-q-num{font-family:var(--mono);font-size:.7rem;font-weight:600;color:var(--orange);background:var(--orange-glow);padding:.15rem .5rem;border-radius:4px;flex-shrink:0}
+.quiz-q-text{font-size:.9rem;font-weight:600;color:var(--navy);line-height:1.5}
+.quiz-opt{display:flex;align-items:flex-start;gap:.55rem;padding:.5rem .6rem;border-radius:6px;cursor:pointer;font-size:.83rem;color:var(--text-secondary);line-height:1.45;transition:background .15s}
+.quiz-opt:hover{background:var(--bg-light)}
+.quiz-opt input{margin-top:.25rem;accent-color:var(--orange);cursor:pointer}
+.quiz-review{font-size:.76rem;line-height:1.55;margin-top:.6rem;padding:.6rem .8rem;border-radius:6px;display:none}
+.quiz-review.show{display:block;animation:fadeIn .3s ease}
+.quiz-review.good{background:var(--green-light);color:#1F5723}
+.quiz-review.bad{background:#FFF4E5;color:#7A4A0A}
+
+/* ── REFLECT / FOOTER ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 1 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 4 · AI Social Media</div>
+  <h1>Social Media in the AI Era — <em>where attention lives and how to earn it</em></h1>
+  <p class="hero-sub">Four hands-on activities. Order the four steps of a real social engine, match each platform to the goal it serves best, run the reach math that turns posts into followers, then lock it all in with a myth-vs-reality quiz. Social is a long game — this is the map you'll use every week.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: ORDER THE FUNNEL ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Order the journey of a post — how one video travels through the feed</h2>
+    <p class="lesson-intro">When you hit "post", the app doesn't show it to everyone at once. It runs a quiet audition: a small test batch first, then wider reach <em>only if</em> people watch, engage, and save. Understanding this order is the whole game — it tells you what to optimise for. The five stages below are shuffled. Click them <strong>in the order a post actually moves through them</strong> — a wrong click shakes red and nudges you.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">👀</div>
+        <h4>Watch time</h4>
+        <p>How long people <strong>actually watch</strong> before scrolling away. The single strongest signal on video feeds — a strong first three seconds decides everything.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Rewards a genuinely useful hook</span>
+          <span class="con">− Punishes slow, rambling intros</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">❤️</div>
+        <h4>Engagement</h4>
+        <p>Likes, comments, and replies — proof that people <strong>felt something</strong>. Comments count most, because they take real effort to leave.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Signals a post worth spreading</span>
+          <span class="con">− Easy to fake with bait, easy to spot</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">🔖</div>
+        <h4>Saves &amp; shares</h4>
+        <p>When someone <strong>saves a post</strong> or sends it to a friend, they're vouching for it. The clearest sign a post earned real, lasting value.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Highest-quality signal of all</span>
+          <span class="con">− Hardest to earn — needs true usefulness</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip-note" style="margin-bottom:.5rem">💡 <strong>Before you post:</strong> the feed reads all three signals — watch time, engagement, saves &amp; shares — plus relevance to each viewer. In the activity below you'll place the five stages a post moves through in order, and see how few of the test audience it takes to unlock wide reach.</div>
+
+    <div class="lesson-card">
+      <div class="chain-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Shuffled stages — click the next one</h4>
+          <div class="chain-pool" id="funnelPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">A post's journey, first to last</h4>
+          <div class="chain-slots" id="funnelSlots"></div>
+        </div>
+      </div>
+      <div class="funnel-vis" id="funnelVis"></div>
+      <div class="chain-hintbox" id="funnelHint"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetFunnel()">↻ Reset the funnel</button>
+      </div>
+      <div class="tip-note">💡 <strong>Why the order matters:</strong> if a post gets shown to 500 people but stalls, the fix depends on <em>where</em> it stalled. Weak hook? People never watched. Watched but no comments? The idea didn't land. Knowing the stages lets you diagnose a flat post instead of just posting more and hoping. Every tactic this week plugs into one of these stages.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: MAP AI TOOLS TO THE STACK ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Match the platform to the goal it serves best</h2>
+    <p class="lesson-intro">No platform is "the best" — each is built for a different job. Trying to win everywhere is how beginners burn out. Pick one or two that fit your goal. Drag each platform-and-post idea into the goal it serves best. Guess freely; wrong pills carry a hover hint with the answer.</p>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="toolList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="lead">
+            <div class="bucket-title">Reach &amp; Discovery</div>
+            <div class="bucket-sub">Getting found by brand-new audiences</div>
+            <div class="bucket-drop" data-drop="lead"></div>
+          </div>
+          <div class="bucket" data-bucket="nurture">
+            <div class="bucket-title">Community &amp; Trust</div>
+            <div class="bucket-sub">Building a relationship over time</div>
+            <div class="bucket-drop" data-drop="nurture"></div>
+          </div>
+          <div class="bucket" data-bucket="close">
+            <div class="bucket-title">Action &amp; Conversion</div>
+            <div class="bucket-sub">Driving one clear next step</div>
+            <div class="bucket-drop" data-drop="close"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetTools()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswersTools()">Show me the answers</button>
+      </div>
+      <div class="tip-note">💡 <strong>The honest truth about platforms:</strong> being active on six platforms badly beats being consistent on one well — every single time. Consistency and authenticity on one or two platforms compound; spreading thin just spreads you thin. Pick where your audience already is, then show up.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: CONVERSION MATH ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">The reach-math challenge — where do new followers come from?</h2>
+    <p class="lesson-intro">Follow rate is the most useful number in social: <strong>of the people who reach a stage, what percentage move to the next one?</strong> Maya posts Reels for her baking studio; each new follower is worth about $60 in lifetime value to her. Below are her numbers for one week. Which option correctly reads her results — and shows the cheapest way to <em>double</em> her new followers?</p>
+
+    <div class="lesson-card">
+      <div class="math-scenario">
+        <div class="math-stat"><div class="math-stat-label">People reached (views)</div><div class="math-stat-value">2,000</div></div>
+        <div class="math-stat"><div class="math-stat-label">Profile visits</div><div class="math-stat-value">200</div></div>
+        <div class="math-stat"><div class="math-stat-label">New followers</div><div class="math-stat-value">20</div></div>
+        <div class="math-stat"><div class="math-stat-label">Value per follower</div><div class="math-stat-value">$60</div></div>
+        <div class="math-stat"><div class="math-stat-label">Visit rate (views→visits)</div><div class="math-stat-value">10%</div></div>
+        <div class="math-stat"><div class="math-stat-label">Follow rate (visits→follows)</div><div class="math-stat-value">10%</div></div>
+      </div>
+
+      <div class="math-options" id="mathOptions">
+        <label class="math-option" data-opt="a"><input type="radio" name="mathQ" value="a"><span><span class="opt-amount">$1,200 in value/week, and to double followers she just needs twice the reach.</span> More views always means more followers.</span></label>
+        <label class="math-option" data-opt="b"><input type="radio" name="mathQ" value="b"><span><span class="opt-amount">$1,200 in value/week — and lifting the visits→follows rate from 10% to 20% would double new followers with the same reach.</span></span></label>
+        <label class="math-option" data-opt="c"><input type="radio" name="mathQ" value="c"><span><span class="opt-amount">$12,000/week.</span> She's clearly crushing it, so nothing needs improving.</span></label>
+        <label class="math-option" data-opt="d"><input type="radio" name="mathQ" value="d"><span><span class="opt-amount">There's no way to know</span> — follow rates can't be calculated from these numbers.</span></label>
+      </div>
+
+      <div class="activity-feedback" id="feedback3"></div>
+
+      <div class="breakdown" id="mathBreakdown">
+        <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin:.4rem 0 .6rem">Reading Maya's week, stage by stage</h4>
+        <table>
+          <tr><th>Stage</th><th style="text-align:right">Number</th></tr>
+          <tr><td>People reached (views)</td><td class="num">2,000</td></tr>
+          <tr><td>Profile visits (10% of views)</td><td class="num">200</td></tr>
+          <tr><td>New followers (10% of visits)</td><td class="num">20</td></tr>
+          <tr><td>Value added (20 × $60)</td><td class="num">$1,200</td></tr>
+          <tr class="total"><td>If follow rate went 10% → 20%</td><td class="num">40 followers = $2,400</td></tr>
+        </table>
+        <div class="tip-note">💡 <strong>The lever most beginners miss:</strong> chasing more reach is like chasing a viral hit — even if it works once, it doesn't repeat. But lifting a <em>rate</em> (a sharper hook, a clearer bio, a stronger call to follow) doubles results from the <em>same</em> reach, every single week. That compounding is why consistency beats one viral spike.</div>
+      </div>
+
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkMath()">Check my answer</button>
+        <button class="btn btn-ghost" onclick="resetMath()">↻ Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Myth vs reality — the quiz</h2>
+    <p class="lesson-intro">Six questions on platforms, feeds, and how AI changed social. Every option has an explanation, and the wrong ones are the exact myths that waste beginners' time. Answer all six, then submit for a per-question review.</p>
+
+    <div class="lesson-card">
+      <div id="quizWrap"></div>
+      <div class="activity-feedback" id="feedback4"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="submitQuiz()">Submit answers</button>
+        <button class="btn btn-ghost" onclick="resetQuiz()">↻ Reset quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it from "seen" to "known". (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">In your own words, why does the feed only give a post wide reach <em>after</em> a small test audience engages — and what does a post that gets views but no comments tell you?</div>
+        <textarea placeholder="The feed tests a post small first, then spreads it only if people engage. Views but no comments tells me..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Maya can double followers by improving her hook and bio instead of chasing more reach. For your own idea, which one or two platforms fit your goal, and what's the first post you'd make?</div>
+        <textarea placeholder="I'd start on one platform because that's where my audience already is. My first post would be..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 2 · Creating Social Content with AI</h3>
+      <p>You know how the feed works now. Next: feeding it. You'll use AI to go from a blank page to a week of on-brand posts — ideation, hooks, captions, and editing — while keeping the authentic voice that AI alone can't fake.</p>
+      <a href="02-creating-content-with-ai.html" class="btn btn-primary">Continue to Lesson 2 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5);}
+
+/* ─── ACTIVITY 1: Order the funnel ─── */
+const FUNNEL = [
+  {stage:'YOU POST', text:'You publish the Reel or post. Nothing happens yet — the app is just deciding who to show it to first.', color:'#5B8FE0', pct:'100%', hint:'Everything starts the moment you hit publish. Before any reach, the post simply has to exist. Which block is you hitting "post"?'},
+  {stage:'TEST BATCH', text:'The app shows it to a small test audience — often a few hundred people who might find it relevant.', color:'#7C7BD8', pct:'20%', hint:'Right after posting, the app quietly shows it to a small sample first. That trial run is the TEST BATCH — it comes before any wide reach.'},
+  {stage:'ENGAGEMENT SIGNALS', text:'The app watches how that batch reacts — watch time, likes, and comments tell it if the post is worth spreading.', color:'#E89B2E', pct:'8%', hint:'Once the test batch sees it, the app measures how they react. Those watch-time and engagement readings are the ENGAGEMENT SIGNALS.'},
+  {stage:'WIDER REACH', text:'Strong signals earn a bigger audience — the post gets pushed to thousands more relevant viewers.', color:'#E87A2E', pct:'3%', hint:'Only after good signals does the post unlock a larger audience. WIDER REACH is the reward stage — it comes after the app likes what it saw.'},
+  {stage:'SAVES & SHARES', text:'The best posts get saved and sent to friends — the strongest signal of all, and what keeps reach growing for days.', color:'#4CAF50', pct:'1%', hint:'The journey doesn\'t end at reach. The very best posts get saved and shared onward — that is SAVES & SHARES, the final and strongest stage.'}
+];
+let funnelNext = 0;
+function renderFunnel(){
+  funnelNext = 0;
+  const order = shuffle(FUNNEL.map((_,i)=>i));
+  $('funnelPool').innerHTML = order.map(i=>`<div class="chain-chip" data-step="${i}" onclick="clickFunnel(${i})"><b style="color:var(--orange);font-size:.7rem;letter-spacing:.05em">${FUNNEL[i].stage}</b><br>${FUNNEL[i].text}</div>`).join('');
+  $('funnelSlots').innerHTML = FUNNEL.map((_,i)=>`
+    <div class="chain-slot" id="fslot${i}">
+      <span class="chain-slot-num">${i+1}</span>
+      <span class="chain-slot-text">Stage ${i+1}…</span>
+    </div>`).join('');
+  $('funnelVis').className = 'funnel-vis';
+  $('funnelHint').className = 'chain-hintbox';
+  $('feedback1').className = 'activity-feedback';
+}
+function clickFunnel(i){
+  const chip = document.querySelector(`.chain-chip[data-step="${i}"]`);
+  const hintBox = $('funnelHint');
+  if(!chip || chip.classList.contains('used')) return;
+  if(i !== funnelNext){
+    chip.classList.remove('shake'); void chip.offsetWidth; chip.classList.add('shake');
+    hintBox.className = 'chain-hintbox show';
+    hintBox.innerHTML = `<strong>Not yet.</strong> That stage comes later. Think about stage ${funnelNext+1}: ${FUNNEL[funnelNext].hint}`;
+    setTimeout(()=>chip.classList.remove('shake'), 500);
+    return;
+  }
+  chip.classList.add('used');
+  const slot = $('fslot'+i);
+  slot.classList.add('filled');
+  slot.querySelector('.chain-slot-text').innerHTML = `<b style="color:#256B29;font-size:.7rem;letter-spacing:.05em">${FUNNEL[i].stage}</b><br>${FUNNEL[i].text}`;
+  hintBox.className = 'chain-hintbox';
+  funnelNext++;
+  if(funnelNext >= FUNNEL.length){
+    $('funnelVis').className = 'funnel-vis show';
+    $('funnelVis').innerHTML = FUNNEL.map((f,i)=>{
+      const width = 100 - i*17;
+      return `<div class="funnel-band" style="width:${width}%;background:${f.color}">${f.stage} <small>${f.pct} of the first audience reach here</small></div>`;
+    }).join('');
+    const fb = $('feedback1');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Journey complete — YOU POST → TEST BATCH → ENGAGEMENT SIGNALS → WIDER REACH → SAVES &amp; SHARES.</strong> Notice how few make it: most posts never clear the test batch, and only the strongest earn saves and shares. That's normal — no account goes viral every time. The skill is spotting <em>which</em> stage stalls (weak hook? boring middle? no reason to save?) and fixing that one, rather than just posting more and hoping.`;
+    $('prog1').classList.add('done');
+  }
+}
+function resetFunnel(){
+  renderFunnel();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Map AI tools to the stack ─── */
+const TOOLS = [
+  {id:'t1', text:'A snappy <b>TikTok or Reels</b> trend video designed to be shown to strangers who\'ve never heard of you.', bucket:'lead', hint:'Short trend-driven video is built to get you found by brand-new audiences: Reach & Discovery.'},
+  {id:'t2', text:'A <b>YouTube Shorts</b> clip using searchable keywords so new viewers stumble onto it for months.', bucket:'lead', hint:'Searchable short video that surfaces to strangers over time is Reach & Discovery.'},
+  {id:'t3', text:'A <b>LinkedIn post</b> sharing a lesson from your work to earn trust with people already following you.', bucket:'nurture', hint:'Sharing insight to deepen trust with your existing audience is Community & Trust.'},
+  {id:'t4', text:'An <b>Instagram Stories</b> series — behind-the-scenes, polls, and Q&amp;As that keep followers close over time.', bucket:'nurture', hint:'Casual daily touch-points that build relationship over time are Community & Trust.'},
+  {id:'t5', text:'A <b>post with one clear call to action</b> — "link in bio, sign up today" — pushing one specific step.', bucket:'close', hint:'A single, clear next step to act on is Action & Conversion.'},
+  {id:'t6', text:'A <b>paid ad on Facebook</b> targeting people who visited your page, driving them to buy now.', bucket:'close', hint:'Paid promotion aimed at driving one concrete action is Action & Conversion.'}
+];
+const TOOL_BUCKET_NAMES = {lead:'Reach & Discovery', nurture:'Community & Trust', close:'Action & Conversion'};
+let toolsPlaced = {};
+function renderTools(){
+  toolsPlaced = {};
+  const list = $('toolList');
+  list.innerHTML = shuffle(TOOLS).map(s=>`
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card=>{
+    card.addEventListener('dragstart', e=>{ e.dataTransfer.setData('id', card.dataset.id); card.classList.add('dragging'); });
+    card.addEventListener('dragend', ()=>card.classList.remove('dragging'));
+  });
+  document.querySelectorAll('#activity-2 .bucket-drop').forEach(d=>d.innerHTML='');
+  $('feedback2').className = 'activity-feedback';
+}
+function setupToolBuckets(){
+  document.querySelectorAll('#activity-2 .bucket').forEach(b=>{
+    b.addEventListener('dragover', e=>{ e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', ()=>b.classList.remove('drag-over'));
+    b.addEventListener('drop', e=>{
+      e.preventDefault(); b.classList.remove('drag-over');
+      handleToolDrop(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleToolDrop(id, bucket){
+  const tool = TOOLS.find(s=>s.id===id);
+  if(!tool || toolsPlaced[id]) return;
+  const correct = tool.bucket === bucket;
+  toolsPlaced[id] = {bucket, correct};
+  const card = document.querySelector(`#activity-2 .scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct?'correct':'wrong');
+  const dropZone = document.querySelector(`#activity-2 [data-drop="${bucket}"]`);
+  const plain = tool.text.replace(/<[^>]+>/g,'');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct?'correct':'wrong');
+  pill.textContent = (correct?'✓ ':'✗ ') + plain.substring(0,40) + (plain.length>40?'…':'');
+  pill.title = correct ? tool.hint : `Correct stage: ${TOOL_BUCKET_NAMES[tool.bucket]}. ${tool.hint}`;
+  dropZone.appendChild(pill);
+  checkToolsDone();
+}
+function checkToolsDone(){
+  if(Object.keys(toolsPlaced).length === TOOLS.length){
+    const right = Object.values(toolsPlaced).filter(p=>p.correct).length;
+    const fb = $('feedback2');
+    if(right === TOOLS.length){
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six matched correctly.</strong> See the pattern: <em>short public video</em> (TikTok, Reels, Shorts) is for Reach &amp; Discovery, <em>LinkedIn posts and Stories</em> build Community &amp; Trust, and <em>clear CTAs and ads</em> drive Action &amp; Conversion. Pick the platform that fits your goal — don't post the same thing everywhere and hope. You now have the map for the whole week.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the right goal and why. Ask: is this post <em>finding</em> new people (Reach &amp; Discovery), <em>deepening</em> a relationship (Community &amp; Trust), or <em>driving one action</em> (Action &amp; Conversion)? Hit <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetTools(){
+  renderTools();
+  $('prog2').classList.remove('done');
+}
+function showAnswersTools(){
+  TOOLS.forEach(s=>{ if(!toolsPlaced[s.id]) handleToolDrop(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 3: Conversion math ─── */
+const MATH_FB = {
+  a:`<strong>Half right — the value is correct, but the plan isn't.</strong> 20 followers × $60 = $1,200, yes. But "just chase more reach" is the viral-hit trap: even if it works once, it doesn't repeat, and your follow rate stays weak. The reliable move is to lift a rate. Try again.`,
+  b:`<strong>Correct — $1,200, and the smart lever is the follow rate.</strong> 2,000 views → 200 profile visits (10%) → 20 new followers (10%) = 20 × $60 = <strong>$1,200</strong> in value. Now the key insight: if you improve the visits→follows rate from 10% to 20% (a sharper hook, a clearer bio, a real reason to follow), you get 40 followers = $2,400 — <em>double the result with the same reach</em>. Scroll the breakdown below.`,
+  c:`<strong>Off by 10×.</strong> Only <em>20 people followed</em>, not 200 — the 200 is profile visits, who mostly didn't follow. 20 × $60 = $1,200, not $12,000. And "nothing needs improving" is exactly the trap: a 10% follow rate means 90% of visitors leave without following. Try again.`,
+  d:`<strong>They absolutely can.</strong> A rate = (people who moved on) ÷ (people at the stage). Views→visits = 200÷2,000 = 10%; visits→follows = 20÷200 = 10%. Every number you need is on the card. Try again.`
+};
+function checkMath(){
+  const picked = document.querySelector('input[name="mathQ"]:checked');
+  const fb = $('feedback3');
+  if(!picked){
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Pick one of the four options first</strong>, then hit "Check my answer".`;
+    return;
+  }
+  const val = picked.value;
+  document.querySelectorAll('#activity-3 .math-option').forEach(o=>o.classList.remove('reveal-right','reveal-wrong'));
+  if(val === 'b'){
+    document.querySelector('#activity-3 .math-option[data-opt="b"]').classList.add('reveal-right');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = MATH_FB.b;
+    $('mathBreakdown').className = 'breakdown show';
+    $('prog3').classList.add('done');
+  } else {
+    document.querySelector(`#activity-3 .math-option[data-opt="${val}"]`).classList.add('reveal-wrong');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = MATH_FB[val];
+  }
+}
+function resetMath(){
+  document.querySelectorAll('input[name="mathQ"]').forEach(r=>r.checked=false);
+  document.querySelectorAll('#activity-3 .math-option').forEach(o=>o.classList.remove('reveal-right','reveal-wrong'));
+  $('feedback3').className = 'activity-feedback';
+  $('mathBreakdown').className = 'breakdown';
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {q:'What is "social media marketing" in plain English?',
+   opts:['Buying as many followers as you can, as fast as possible','Consistently sharing useful or entertaining content to build an audience and trust over time','Posting the same ad on every platform every day','A one-time viral video that makes you famous'], ans:1,
+   why:'Social marketing is a long game: showing up consistently with content people value, so an audience gets to know and trust you. Bought followers and one viral hit don\'t build that.'},
+  {q:'Roughly how does a modern feed decide who sees your post?',
+   opts:['It shows every post to all your followers in order','It tests the post on a small audience first, then widens reach only if people watch, engage, and save','It only shows posts from accounts that pay','It picks posts completely at random'], ans:1,
+   why:'The feed auditions a post on a small batch, reads the signals (watch time, engagement, saves/shares, relevance), and grows reach only if those are strong. That\'s why the first few minutes matter.'},
+  {q:'What is the difference between organic and paid social?',
+   opts:['Organic is free reach you earn; paid is reach you buy with ads','Organic is for images, paid is for video','There is no real difference anymore','Paid reach is always fake'], ans:0,
+   why:'Organic reach comes from the algorithm sharing content people engage with — no spend. Paid puts money behind a post to reach a chosen audience. Most healthy accounts use both.'},
+  {q:'How has AI most changed social media for creators?',
+   opts:['It guarantees every post goes viral','It replaced the need for any real strategy','It speeds up ideation, volume, editing, scheduling, and replies — leverage, not magic','It made human accounts obsolete'], ans:2,
+   why:'AI is a force multiplier: it helps you brainstorm, produce more, edit faster, schedule, and keep up with comments. It amplifies a good strategy — it can\'t invent one or fake authenticity for you.'},
+  {q:'What\'s the biggest risk of leaning too hard on AI for social content?',
+   opts:['Posts become too original','Content turns generic and inauthentic, and chasing virality erodes the trust that actually grows an account','AI content is banned on all platforms','It makes posting take longer'], ans:1,
+   why:'When everyone uses the same AI the same way, content blurs into sameness. Audiences can feel inauthenticity, and chasing every trend for a viral spike burns the trust that compounds. Use AI to support your voice, not replace it.'},
+  {q:'What\'s the smartest starting move for a beginner?',
+   opts:['Launch on all six platforms at once to maximise reach','Pick one or two platforms that fit your goal and post consistently','Wait until you have a viral idea before posting anything','Only ever run paid ads'], ans:1,
+   why:'Consistency on one or two well-chosen platforms beats being scattered and inconsistent across six. Show up regularly, learn what your audience responds to, then expand — steady effort compounds.'}
+];
+function renderQuiz(){
+  $('quizWrap').innerHTML = QUIZ.map((item,i)=>`
+    <div class="quiz-q" id="qq${i}">
+      <div class="quiz-q-head"><span class="quiz-q-num">Q${i+1}</span><span class="quiz-q-text">${item.q}</span></div>
+      ${item.opts.map((o,j)=>`
+        <label class="quiz-opt"><input type="radio" name="quiz${i}" value="${j}"><span>${o}</span></label>`).join('')}
+      <div class="quiz-review" id="qr${i}"></div>
+    </div>`).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function submitQuiz(){
+  const fb = $('feedback4');
+  const answers = QUIZ.map((_,i)=>{
+    const sel = document.querySelector(`input[name="quiz${i}"]:checked`);
+    return sel ? +sel.value : null;
+  });
+  const blank = answers.filter(a=>a===null).length;
+  if(blank>0){
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>${blank} question${blank>1?'s':''} unanswered.</strong> Guessing is allowed, blank is not — answer everything and submit again.`;
+    return;
+  }
+  let score=0;
+  QUIZ.forEach((item,i)=>{
+    const card=$('qq'+i), rev=$('qr'+i);
+    card.classList.remove('right','miss');
+    if(answers[i]===item.ans){
+      score++; card.classList.add('right');
+      rev.className='quiz-review show good'; rev.innerHTML='✓ Correct. '+item.why;
+    } else {
+      card.classList.add('miss');
+      rev.className='quiz-review show bad';
+      rev.innerHTML=`✗ The answer is "<strong>${item.opts[item.ans]}</strong>". ${item.why}`;
+    }
+  });
+  if(score===QUIZ.length){
+    fb.className='activity-feedback show success';
+    fb.innerHTML='<strong>'+score+' of '+QUIZ.length+' — you own the map.</strong> How feeds work, organic vs paid, what AI changed, and picking your platform: this is the frame the rest of Week 4 hangs on. Every tactic you meet from here lands somewhere on this map.';
+  } else {
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>${score} of ${QUIZ.length} — read the red notes.</strong> The feed, organic-vs-paid, and "AI is leverage not magic" ideas repeat all week, so a few minutes here pays off in every lesson that follows. Reset and aim for a clean sweep.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', ()=>{
+  renderFunnel();
+  renderTools();
+  setupToolBuckets();
+  renderQuiz();
+});
+</script>
+</body>
+</html>
