@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 · Content Marketing in the AI Era — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: CLASSIFIER ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card li::before{content:'▹';color:var(--orange);font-weight:700;flex-shrink:0}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 2: BRAND VS MARKETPLACE SORTER ── */
+.split-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.split-grid{grid-template-columns:1fr}}
+.split-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem}
+.split-card h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.3rem}
+.split-card .split-eyebrow{font-size:.66rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:.5rem;display:block}
+.split-card.brand .split-eyebrow{color:var(--orange)}
+.split-card.market .split-eyebrow{color:#5B8FE0}
+.split-card p{font-size:.8rem;color:var(--text-secondary);line-height:1.55}
+
+/* ── ACTIVITY 3: ORDER THE STACK ── */
+.chain-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.chain-grid{grid-template-columns:1fr}}
+.chain-pool{display:flex;flex-direction:column;gap:.6rem}
+.chain-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.84rem;line-height:1.5;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.chain-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.chain-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.chain-chip.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.chain-slots{display:flex;flex-direction:column;gap:.5rem}
+.chain-slot{display:flex;align-items:flex-start;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.65rem .85rem;min-height:46px;font-size:.82rem;line-height:1.5;color:var(--text-muted);transition:all .25s;background:rgba(255,255,255,0.5)}
+.chain-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.chain-slot-num{width:24px;height:24px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.chain-slot.filled .chain-slot-num{background:var(--green)}
+.chain-hintbox{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.chain-hintbox.show{display:block;animation:fadeIn .3s ease}
+
+/* ── ACTIVITY 4: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 1 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 3 · AI Content Marketing</div>
+  <h1>Content Marketing in the AI Era — <em>earn attention instead of renting it</em></h1>
+  <p class="hero-sub">Four hands-on activities. Match each piece of content to the funnel stage it serves, sort what counts as media you own versus reach you rent, click the content-engine steps into the order you'd actually run them, then lock it in with a myth-vs-reality quiz. By the end you'll see content as an asset you build, not an ad you pay for on repeat.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: MAP AI TOOLS TO STACK LAYERS ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Match the content to the stage — where does each piece belong?</h2>
+    <p class="lesson-intro">Content marketing is <strong>earning</strong> attention by being genuinely useful, not <strong>renting</strong> it with ads. But not all content does the same job — a piece that pulls in a stranger is useless for winning back a lapsed customer. Study the three funnel stages below, then drag each piece of content into the stage it serves. Guess freely — wrong pills carry a hover hint with the answer.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">AWR</div>
+        <h4>Awareness</h4>
+        <p>Content for <strong>strangers who don't know you</strong> yet: it answers a broad question and pulls people in — the top of the funnel.</p>
+        <ul>
+          <li>Blog posts &amp; how-to guides</li>
+          <li>Short social videos &amp; reels</li>
+          <li>SEO articles that rank on Google</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">CON</div>
+        <h4>Consideration</h4>
+        <p>Content for people <strong>weighing their options</strong>: it builds trust and shows why you're the right choice — the middle of the funnel.</p>
+        <ul>
+          <li>Comparison guides &amp; deep how-tos</li>
+          <li>Webinars &amp; email newsletters</li>
+          <li>Case studies that prove it works</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">C&amp;R</div>
+        <h4>Conversion &amp; Retention</h4>
+        <p>Content for people <strong>ready to buy — and buyers you want to keep</strong>: it closes the sale and earns the next one.</p>
+        <ul>
+          <li>Product demos &amp; testimonials</li>
+          <li>Onboarding &amp; how-to-use guides</li>
+          <li>Loyalty emails that bring buyers back</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-note">💡 <strong>Why the stage matters:</strong> when someone says "we need more content," always ask <em>for which stage?</em> A viral reel that never leads anyone toward a purchase, and a demo shown to people who've never heard of you, both waste effort. Matching content to the stage is what turns views into customers.</div>
+
+    <div class="lesson-card" style="margin-top:1.5rem">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="scenarioList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="content">
+            <div class="bucket-title">Awareness</div>
+            <div class="bucket-sub">Pull in strangers</div>
+            <div class="bucket-drop" data-drop="content"></div>
+          </div>
+          <div class="bucket" data-bucket="service">
+            <div class="bucket-title">Consideration</div>
+            <div class="bucket-sub">Build trust &amp; compare</div>
+            <div class="bucket-drop" data-drop="service"></div>
+          </div>
+          <div class="bucket" data-bucket="ops">
+            <div class="bucket-title">Conversion &amp; Retention</div>
+            <div class="bucket-sub">Close &amp; keep buyers</div>
+            <div class="bucket-drop" data-drop="ops"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers1()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: BRAND VS MARKETPLACE SORTER ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Owned or rented? — sort where your reach comes from</h2>
+    <p class="lesson-intro">Marketers split media into three types, but the honest divide is simple: reach you <em>own</em> versus reach you <em>rent</em>. Owned media (and the earned attention it wins) is an asset you keep; paid media is reach you rent for as long as you pay. Read the two homes, then drag each statement to where it's true. Wrong pills hover-hint the right home.</p>
+
+    <div class="split-grid">
+      <div class="split-card brand">
+        <span class="split-eyebrow">Media you own (&amp; earn)</span>
+        <h4>The audience you keep</h4>
+        <p>Your blog, website, email list, and the social following you've built — plus the earned attention it wins: shares, word of mouth, press. It takes time to build, but <strong>once it's yours it keeps working for free</strong>. This is where content marketing compounds.</p>
+      </div>
+      <div class="split-card market">
+        <span class="split-eyebrow">Reach you rent (paid)</span>
+        <h4>The audience you borrow</h4>
+        <p>Google Ads, Instagram promotions, sponsored posts. Instant reach the moment you pay — great for a fast push. But <strong>it stops the second the budget stops</strong>: you rent the attention, you never own it, and every new visit costs again.</p>
+      </div>
+    </div>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="splitList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket2="brand">
+            <div class="bucket-title">Media you own (&amp; earn)</div>
+            <div class="bucket-sub">You keep it · it compounds</div>
+            <div class="bucket-drop" data-drop2="brand"></div>
+          </div>
+          <div class="bucket" data-bucket2="market">
+            <div class="bucket-title">Reach you rent (paid)</div>
+            <div class="bucket-sub">You borrow it · it stops when you stop paying</div>
+            <div class="bucket-drop" data-drop2="market"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity2()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers2()">Show me the answers</button>
+      </div>
+      <div class="tip-note">💡 <strong>Most real businesses use both:</strong> paid ads for a fast push today, and owned content that compounds quietly for years. The mistake is renting reach forever — the day you stop paying, paid reach vanishes, while a blog post or email list you own keeps earning attention long after it was made.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: ORDER THE STACK LAYERS ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Run the content engine — click the steps in order</h2>
+    <p class="lesson-intro">Good content isn't random posting — it's a repeatable engine: <strong>strategy → create → distribute → measure</strong>. Skip a step and the whole thing sputters (creating before you know who you're for is just noise). The seven steps below are shuffled. Click them <strong>in the order you'd actually run them</strong> — a wrong click shakes red and hints at what comes next.</p>
+
+    <div class="lesson-card">
+      <div class="chain-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Shuffled steps — click the next one</h4>
+          <div class="chain-pool" id="chainPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">The engine, in run order</h4>
+          <div class="chain-slots" id="chainSlots"></div>
+        </div>
+      </div>
+      <div class="chain-hintbox" id="chainHint"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetChain()">↻ Reset the engine</button>
+      </div>
+      <div class="tip-note">💡 <strong>Notice the pattern:</strong> strategy first (who am I for, what will I say), then create, then distribute, then measure — and the measurement loops back to sharpen the next strategy. AI can accelerate every step, but it can't decide who you're really for or what you uniquely stand for. That judgment stays yours.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Myth vs reality — the quiz that ties it together</h2>
+    <p class="lesson-intro">Five common beliefs about content marketing in the AI era. Pick the honest answer for each — every option comes with an explanation, and the wrong ones are the myths that trip up beginners. Answer all five to see your score.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">↻ Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">In your own words, name the four funnel stages (awareness → consideration → conversion → retention) and one piece of content you'd make for each. Which stage does your content skip today?</div>
+        <textarea placeholder="Awareness — a how-to blog post. Consideration — a comparison guide. Conversion — a demo. Retention — a loyalty email..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Where would you use AI as leverage in your content engine — and where would you keep a human firmly in charge to avoid "AI slop" and sameness?</div>
+        <textarea placeholder="I'd let AI draft and repurpose, but keep the strategy and final voice human because..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 2 · Creating Content with AI</h3>
+      <p>You can see the whole engine. Next we roll up our sleeves on the "create" step — using AI to brainstorm ideas, draft posts and emails in your voice, and repurpose one piece into ten, all without drowning in AI slop.</p>
+      <a href="02-creating-content-with-ai.html" class="btn btn-primary">Continue to Lesson 2 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Map AI tools to stack layers ─── */
+const TOOLS = [
+  {id:'t1', text:'A "5 beginner mistakes in home baking" blog post that ranks on Google and pulls in total strangers.', hint:'It answers a broad question to attract people who don\'t know you yet — that\'s the awareness stage.', bucket:'content', why:'A search-friendly how-to post is top-of-funnel: its job is to pull in strangers, so it lives in the awareness stage.'},
+  {id:'t2', text:'A "MokshPath vs the old way" comparison guide for people already weighing their options.', hint:'It helps someone choose between options — that\'s the consideration stage.', bucket:'service', why:'A comparison guide is for people mid-decision who are weighing choices — squarely the consideration stage.'},
+  {id:'t3', text:'A short product demo video that shows exactly how the thing works, aimed at people ready to buy.', hint:'It closes the sale for a warm, ready buyer — the conversion stage.', bucket:'ops', why:'A demo that pushes a ready buyer over the line is conversion content: it turns interest into a purchase.'},
+  {id:'t4', text:'A snappy 20-second Instagram reel built to get shared and introduce your brand to new eyes.', hint:'Its whole job is reach among people who\'ve never heard of you — the awareness stage.', bucket:'content', why:'A shareable reel built for new reach is awareness content — it exists to be discovered by strangers.'},
+  {id:'t5', text:'A weekly email newsletter that builds trust with subscribers who aren\'t quite ready to buy yet.', hint:'It nurtures people who know you but haven\'t decided — the consideration stage.', bucket:'service', why:'A nurture newsletter keeps warming an audience that\'s still deciding — that\'s the consideration stage.'},
+  {id:'t6', text:'A loyalty email with a how-to-use tip and a returning-customer offer, sent to past buyers.', hint:'It keeps an existing customer coming back — the retention stage.', bucket:'ops', why:'Content aimed at keeping and re-engaging past buyers is retention — the far end of the funnel.'}
+];
+const BUCKET_NAMES = {content:'Awareness', service:'Consideration', ops:'Conversion & Retention'};
+
+let placed = {};
+function renderScenarios(){
+  const list = $('scenarioList');
+  const shuffled = [...TOOLS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket[data-bucket]').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDrop(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleDrop(id, bucket){
+  const tool = TOOLS.find(s => s.id === id);
+  if (!tool || placed[id]) return;
+  const correct = tool.bucket === bucket;
+  placed[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + tool.text.substring(0, 40) + (tool.text.length > 40 ? '…' : '');
+  pill.title = correct ? tool.why : `Correct layer: ${BUCKET_NAMES[tool.bucket]}. ${tool.why}`;
+  document.querySelector(`[data-drop="${bucket}"]`).appendChild(pill);
+  checkActivity1Done();
+}
+function checkActivity1Done(){
+  if (Object.keys(placed).length === TOOLS.length) {
+    const right = Object.values(placed).filter(p => p.correct).length;
+    const fb = $('feedback1');
+    if (right === TOOLS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct.</strong> You can now look at any piece of content and place it: awareness (blogs, reels, SEO that pull in strangers), consideration (comparisons, newsletters that build trust), or conversion & retention (demos, loyalty emails that close and keep). Matching content to the stage is what turns effort into customers.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the right stage and why. The quick test: <em>is it pulling in a stranger?</em> → awareness. <em>Is it helping someone decide?</em> → consideration. <em>Is it closing a sale or keeping a buyer?</em> → conversion & retention. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog1').classList.add('done');
+  }
+}
+function resetActivity1(){
+  placed = {};
+  $('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('[data-drop]').forEach(d => d.innerHTML = '');
+  renderScenarios();
+  $('prog1').classList.remove('done');
+}
+function showAnswers1(){
+  TOOLS.forEach(s => { if (!placed[s.id]) handleDrop(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 2: Brand vs Marketplace sorter ─── */
+const TRAITS = [
+  {id:'r1', text:'A blog post you wrote two years ago still brings in readers today — for free.', bucket:'brand', why:'A post that keeps working long after you made it is owned media — the asset compounds while you sleep.'},
+  {id:'r2', text:'The moment you switch off the budget, the visitors stop arriving completely.', bucket:'market', why:'Reach that vanishes when the money stops is rented (paid) media — you never owned that attention.'},
+  {id:'r3', text:'Your email list is yours to message any time, with no platform charging per send.', bucket:'brand', why:'An email list is the purest owned media — a direct line to your audience that no one can take or bill you for.'},
+  {id:'r4', text:'You pay per click or per thousand views, and the cost rises as you scale.', bucket:'market', why:'Paying for each click or impression is the defining trait of paid media — you rent every bit of that reach.'},
+  {id:'r5', text:'A happy customer shares your video and their friends discover you — no ad spend needed.', bucket:'brand', why:'Word of mouth and shares are earned attention that flows from owned content — you keep it, and it costs nothing.'},
+  {id:'r6', text:'You bid against competitors in an auction just to appear at the top of the results.', bucket:'market', why:'Bidding in an ad auction to be seen is paid media — the platform rents you visibility to the highest bidder.'}
+];
+const BUCKET2_NAMES = {brand:'Media you own (& earn)', market:'Reach you rent (paid)'};
+let placed2 = {};
+function renderSplit(){
+  const list = $('splitList');
+  const shuffled = [...TRAITS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id2="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('id2', card.dataset.id2);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets2(){
+  document.querySelectorAll('.bucket[data-bucket2]').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDrop2(e.dataTransfer.getData('id2'), b.dataset.bucket2);
+    });
+  });
+}
+function handleDrop2(id, bucket){
+  const trait = TRAITS.find(s => s.id === id);
+  if (!trait || placed2[id]) return;
+  const correct = trait.bucket === bucket;
+  placed2[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id2="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + trait.text.substring(0, 40) + (trait.text.length > 40 ? '…' : '');
+  pill.title = correct ? trait.why : `Correct home: ${BUCKET2_NAMES[trait.bucket]}. ${trait.why}`;
+  document.querySelector(`[data-drop2="${bucket}"]`).appendChild(pill);
+  checkActivity2Done();
+}
+function checkActivity2Done(){
+  if (Object.keys(placed2).length === TRAITS.length) {
+    const right = Object.values(placed2).filter(p => p.correct).length;
+    const fb = $('feedback2');
+    if (right === TRAITS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct.</strong> The trade is now clear: owned media is slow to build but compounds and costs nothing to keep working; paid reach is instant but vanishes the second you stop paying. Pros use both — a paid push for speed today, owned content as the asset that grows for years.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the right home. The tell: anything that <em>keeps working after you made it</em> (a post, a list, a share) is owned or earned; anything you <em>pay for by the click and lose when the budget stops</em> is rented, paid reach. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetActivity2(){
+  placed2 = {};
+  $('feedback2').className = 'activity-feedback';
+  document.querySelectorAll('[data-drop2]').forEach(d => d.innerHTML = '');
+  renderSplit();
+  $('prog2').classList.remove('done');
+}
+function showAnswers2(){
+  TRAITS.forEach(s => { if (!placed2[s.id]) handleDrop2(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 3: Order the stack layers ─── */
+const CHAIN = [
+  {text:'Strategy — decide who you\'re for and what you\'ll be known for before writing a single word.', hint:'Nothing else matters until you know WHO you\'re for and WHAT you stand for. This is the foundation.'},
+  {text:'Plan the topics — turn that strategy into a list of ideas and questions your audience actually searches.', hint:'Once you know your audience, you translate the strategy into concrete topics worth making.'},
+  {text:'Create the content — draft the post, video, or email (AI can help, but you own the voice and the facts).', hint:'With topics chosen, now you actually make the thing — this is the "create" step of the engine.'},
+  {text:'Edit &amp; fact-check — cut the AI slop, add your own angle, and make sure every claim is true.', hint:'A first draft is never the finish line: you refine and verify before anything goes public.'},
+  {text:'Distribute — publish it and push it out across your channels: SEO, email, and social.', hint:'Good content nobody sees is wasted — distribution is how it actually reaches people.'},
+  {text:'Measure — track what people read, shared, and acted on to see what actually worked.', hint:'Once it\'s live, you look at the numbers to learn which pieces earned attention and which flopped.'},
+  {text:'Repurpose &amp; loop back — turn winners into new formats and feed the lessons into the next strategy.', hint:'The engine is a loop: your best results become next month\'s content and a sharper strategy. This comes LAST.'}
+];
+let chainNext = 0;
+function renderChain(){
+  const pool = $('chainPool');
+  const slots = $('chainSlots');
+  const order = CHAIN.map((_, i) => i).sort(()=>Math.random()-0.5);
+  pool.innerHTML = order.map(i => `<div class="chain-chip" data-step="${i}" onclick="clickChain(${i})">${CHAIN[i].text}</div>`).join('');
+  slots.innerHTML = CHAIN.map((_, i) => `
+    <div class="chain-slot" id="slot${i}">
+      <span class="chain-slot-num">${i+1}</span>
+      <span class="chain-slot-text">Waiting for step ${i+1}…</span>
+    </div>`).join('');
+}
+function clickChain(i){
+  const chip = document.querySelector(`.chain-chip[data-step="${i}"]`);
+  const hintBox = $('chainHint');
+  if (!chip || chip.classList.contains('used')) return;
+  if (i !== chainNext) {
+    chip.classList.remove('shake');
+    void chip.offsetWidth;
+    chip.classList.add('shake');
+    hintBox.className = 'chain-hintbox show';
+    hintBox.innerHTML = `<strong>Not yet.</strong> That layer comes later. Think about step ${chainNext+1}: ${CHAIN[chainNext].hint}`;
+    setTimeout(() => chip.classList.remove('shake'), 500);
+    return;
+  }
+  chip.classList.add('used');
+  const slot = $('slot' + i);
+  slot.classList.add('filled');
+  slot.querySelector('.chain-slot-text').textContent = CHAIN[i].text;
+  hintBox.className = 'chain-hintbox';
+  chainNext++;
+  if (chainNext >= CHAIN.length) {
+    const fb = $('feedback3');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Engine complete — all 7 steps in run order.</strong> Notice the shape: <em>strategy → plan → create → edit → distribute → measure → repurpose</em>, and then it loops. AI can speed up almost every step, but the first one — who you're for and what you stand for — is a human call no tool makes for you. Run it as a loop and every cycle gets sharper.`;
+    $('prog3').classList.add('done');
+  }
+}
+function resetChain(){
+  chainNext = 0;
+  $('feedback3').className = 'activity-feedback';
+  $('chainHint').className = 'chain-hintbox';
+  renderChain();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {
+    q:'Myth: "Content marketing is basically the same as running ads." What\'s the reality?',
+    opts:[
+      {t:'True — both are just ways to get your message in front of people', ok:false, ex:'They share a goal but work oppositely. Ads rent attention: pay, and you\'re seen; stop paying, and you vanish. Content earns attention by being useful, and a good piece keeps working for years after it\'s made.'},
+      {t:'False — ads rent attention while it lasts; content earns attention you get to keep', ok:true, ex:'Exactly. That\'s the core distinction. An ad is an expense that resets every month; a strong blog post or video is an asset that compounds. Content is a long game, but you own what you build.'},
+      {t:'False — content is only for big brands with big budgets', ok:false, ex:'Content actually favours small players: a single genuinely helpful post can out-rank a giant. Budget helps, but usefulness and consistency — not spend — are what make content work.'}
+    ]
+  },
+  {
+    q:'Myth: "Now that AI writes content in seconds, whoever publishes the most wins." What\'s the honest take?',
+    opts:[
+      {t:'True — AI means volume is now the whole game', ok:false, ex:'This is the trap that creates "AI slop": floods of generic, samey posts that read like everyone else\'s. Search engines and readers are actively tuning it out. More of the same is not an advantage.'},
+      {t:'False — AI makes volume cheap, so quality, originality, and trust are what stand out', ok:true, ex:'Right. When everyone can generate infinite average content, the scarce thing is a real point of view, first-hand experience, and trust. AI is leverage for those things, not a substitute for them.'},
+      {t:'True, as long as a human skims it before posting', ok:false, ex:'A quick skim doesn\'t fix the core problem — sameness and thin, unverified claims. Winning content needs a genuine angle and real substance, not just a human rubber-stamp on AI output.'}
+    ]
+  },
+  {
+    q:'You want people who\'ve never heard of you to discover your brand. Which content is the right fit?',
+    opts:[
+      {t:'A detailed product demo showing every feature', ok:false, ex:'A demo is conversion content — it\'s aimed at people already interested and ready to buy. Show it to strangers and it lands flat; they don\'t care about your features yet because they don\'t know you.'},
+      {t:'An SEO blog post or shareable short video answering a common question', ok:true, ex:'That\'s awareness content: it meets strangers where they\'re already searching or scrolling, answers something they care about, and earns their first bit of attention. Discovery is the top of the funnel.'},
+      {t:'A loyalty email with a returning-customer discount', ok:false, ex:'A loyalty email is retention content — it only works for people who\'ve already bought from you. It can\'t reach strangers because they\'re not on your list yet.'}
+    ]
+  },
+  {
+    q:'Myth: "AI can run our whole content operation on autopilot — we just collect the results." What\'s the reality?',
+    opts:[
+      {t:'True — modern AI handles strategy, creation, and distribution with no human needed', ok:false, ex:'AI accelerates the work, but it doesn\'t own judgment: who you\'re really for, what you uniquely stand for, whether a claim is true, whether the voice sounds like you. Autopilot content quietly drifts into generic slop that erodes trust.'},
+      {t:'Mostly false — AI is leverage for each step, but humans still own strategy, voice, and truth', ok:true, ex:'Right. Think of AI as a fast, tireless assistant: it drafts, repurposes, and speeds you up. You still decide the strategy, protect the voice, fact-check the claims, and approve what ships. Leverage, not magic.'},
+      {t:'True, but only for social media, not blogs or email', ok:false, ex:'The channel doesn\'t change the truth: no format runs itself well without human judgment. Strategy, originality, and trust matter just as much on social as they do on a blog or newsletter.'}
+    ]
+  },
+  {
+    q:'You\'re a beginner and post inconsistently — a burst one week, then nothing for a month. What\'s the most honest advice?',
+    opts:[
+      {t:'Don\'t worry about consistency; just publish whenever inspiration strikes', ok:false, ex:'Content is a long game that rewards showing up. Sporadic bursts never let an audience form the habit of expecting you, and search engines favour steady, ongoing publishing. Inconsistency quietly stalls the whole engine.'},
+      {t:'A steady, modest cadence you can actually sustain beats occasional bursts', ok:true, ex:'Exactly. One good post a week for a year builds far more than twenty in a frantic month and then silence. Consistency compounds — and this is exactly where AI helps as leverage, making a sustainable pace realistic.'},
+      {t:'Only post when you can go viral; small posts aren\'t worth it', ok:false, ex:'Chasing virality is a lottery. The compounding comes from a body of steady, useful content that keeps getting found — most of it modest. Waiting for a home run means you rarely step up to bat.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 — you\'ve cut through the myths.</strong> You know content earns attention while ads rent it, that quality and consistency beat raw volume, how to match content to the funnel stage, and that AI is leverage — not a replacement for strategy, voice, and truth. That mental map is the backbone of everything in Week 3.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations — the wrong options are the exact myths that trip up beginners ("AI runs it on autopilot", "volume wins", "content is just ads"). The thread: content is an asset you earn and own, quality and consistency beat volume, and AI is leverage, not magic. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderScenarios();
+  setupBuckets();
+  renderSplit();
+  setupBuckets2();
+  renderChain();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

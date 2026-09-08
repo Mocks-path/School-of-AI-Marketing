@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · AI Content Creation & Repurposing — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── SHARED FEEDBACK / BUTTONS ── */
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 1: ROUTE TICKETS ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-tag{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.3rem}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+
+/* ── ACTIVITY 2: ASSEMBLE A CHATBOT ANSWER ── */
+.prompt-pool{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.frag-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .9rem;font-size:.8rem;line-height:1.45;cursor:pointer;transition:all .2s;max-width:360px;user-select:none;font-weight:500}
+.frag-chip:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.frag-chip.used{opacity:0;pointer-events:none;position:absolute;visibility:hidden}
+.frag-chip.shake{animation:shake .45s ease;border-color:var(--red);background:var(--red-light)}
+.prompt-slots{margin-top:1.4rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:90px;background:rgba(255,255,255,0.5)}
+.slot-line{display:flex;align-items:flex-start;gap:.6rem;padding:.45rem .2rem;font-size:.83rem;line-height:1.5;animation:fadeIn .35s ease}
+.slot-tag{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.05em;color:#fff;padding:.18rem .5rem;border-radius:4px;flex-shrink:0;margin-top:.1rem;text-transform:uppercase}
+.slot-line.t-ack .slot-tag{background:#5B8FE0}
+.slot-line.t-answer .slot-tag{background:var(--orange)}
+.slot-line.t-action .slot-tag{background:#66BB6A}
+.slot-line.t-safety .slot-tag{background:#8E6BC0}
+.prompt-hint{margin-top:.8rem;padding:.7rem .9rem;background:var(--red-light);border-left:3px solid var(--red);border-radius:4px;font-size:.78rem;color:#7A2A1E;line-height:1.55;display:none}
+.prompt-hint.show{display:block;animation:fadeIn .3s ease}
+.prompt-preview{margin-top:1.2rem;background:#1A1B2E;border-radius:var(--radius-sm);padding:1.2rem 1.4rem;font-size:.82rem;line-height:1.75;color:#E8E8EC;display:none;border:1px solid var(--navy)}
+.prompt-preview.show{display:block;animation:fadeIn .4s ease}
+.prompt-preview .pp-label{color:var(--orange-light);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.6rem;font-family:var(--mono)}
+.structure-bar{display:flex;gap:.4rem;margin-top:1rem;flex-wrap:wrap}
+.structure-step{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.3rem .7rem;border-radius:50px;color:#fff}
+.structure-step:nth-child(1){background:#5B8FE0}.structure-step:nth-child(3){background:var(--orange)}
+.structure-step:nth-child(5){background:#66BB6A}.structure-step:nth-child(7){background:#8E6BC0}
+.structure-arrow{color:var(--text-muted);font-weight:700;align-self:center;font-size:.75rem}
+
+/* ── ACTIVITY 3: JUDGE REVIEW RESPONSES ── */
+.mf-grid{display:grid;gap:.8rem;margin-top:.5rem}
+.mf-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem;transition:all .25s}
+.mf-card.right{border-color:var(--green);background:var(--green-light)}
+.mf-card.miss{border-color:var(--red);background:var(--red-light)}
+.mf-context{font-size:.72rem;color:var(--text-muted);font-style:italic;margin-bottom:.4rem;line-height:1.5}
+.mf-statement{font-size:.88rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.7rem}
+.mf-buttons{display:flex;gap:.5rem}
+.mf-btn{padding:.4rem 1.1rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.74rem;font-weight:700;letter-spacing:.03em;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.mf-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mf-btn:disabled{cursor:not-allowed;opacity:.55}
+.mf-btn.picked-right{background:var(--green);border-color:var(--green);color:#fff;opacity:1}
+.mf-btn.picked-wrong{background:var(--red);border-color:var(--red);color:#fff;opacity:1}
+.mf-explain{display:none;margin-top:.7rem;font-size:.8rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.6rem}
+.mf-explain.show{display:block;animation:fadeIn .3s ease}
+.mf-verdict{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+.mf-verdict.v-right{color:#256B29}
+.mf-verdict.v-miss{color:#A03A2C}
+
+/* ── ACTIVITY 4: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 3 · AI Content Marketing</div>
+  <h1>AI Content Creation & Repurposing — <em>drafts are the start, your voice is the moat</em></h1>
+  <p class="hero-sub">Four hands-on activities. Sort "AI slop" from strong, edited content; map one pillar piece into all the channel-ready pieces it can become; judge good and bad edits of an AI draft, then lock it in with a quiz. Great content isn't about generating more — it's about shaping a fast draft into something only you could publish.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: ROUTE TICKETS ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Slop or strong? — sort the AI content</h2>
+    <p class="lesson-intro">AI can fill a page in seconds — but half of it is generic "slop": vague, no real voice, nothing only you could say. Strong content is different: it's specific, carries a brand voice, and shows real experience. Drag each piece of content to where it belongs. Wrong pills hover-hint the reasoning.</p>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="ticketList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="auto">
+            <div class="bucket-title">AI slop — publish nothing yet</div>
+            <div class="bucket-sub">Generic · vague · no real voice</div>
+            <div class="bucket-drop" data-drop="auto"></div>
+          </div>
+          <div class="bucket" data-bucket="human">
+            <div class="bucket-title">Strong, edited content</div>
+            <div class="bucket-sub">Specific · on-voice · real experience</div>
+            <div class="bucket-drop" data-drop="human"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers1()">Show me the answers</button>
+      </div>
+      <div class="tip-note">💡 <strong>The draft is not the deliverable:</strong> AI gives you a fast first draft, never the final piece. The edit — adding a specific example, cutting the fluff, making it sound like you — is where generic text turns into content worth your brand's name.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: ASSEMBLE A CHATBOT ANSWER ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Turn a brief into a strong draft — block by block</h2>
+    <p class="lesson-intro">You brief AI to write a blog post: <em>"How busy parents can cook healthy weeknight dinners — for MokshPath."</em> A draft worth publishing follows a shape: <strong>HOOK → PROMISE → PROOF → CALL TO ACTION</strong>. It grabs attention, says what the reader gets, backs it with real specifics, and points them somewhere. The eight blocks are scrambled — click them in order. A wrong click explains why it doesn't fit yet.</p>
+
+    <div class="structure-bar">
+      <span class="structure-step">1 · Hook</span><span class="structure-arrow">→</span>
+      <span class="structure-step">2 · Promise</span><span class="structure-arrow">→</span>
+      <span class="structure-step">3 · Proof</span><span class="structure-arrow">→</span>
+      <span class="structure-step">4 · Call to action</span>
+    </div>
+
+    <div class="lesson-card">
+      <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy)">Click the next block of the draft</h4>
+      <div class="prompt-pool" id="fragPool"></div>
+      <div class="prompt-hint" id="promptHint"></div>
+      <div class="prompt-slots" id="promptSlots">
+        <div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="slotPlaceholder">Your content draft will build up here, block by block…</div>
+      </div>
+      <div class="prompt-preview" id="promptPreview"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity2()">↻ Start over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: JUDGE REVIEW RESPONSES ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Good edit or bad? — judge these human passes on an AI draft</h2>
+    <p class="lesson-intro">The AI draft is only step one. The human editing pass — adding real experience, fact-checking, cutting fluff, sharpening the voice — is what earns trust (and E-E-A-T). But not every "edit" helps; some make it worse. Click <strong>Good</strong> or <strong>Bad</strong> on each editing move for instant feedback. Answer all six to see your score.</p>
+
+    <div class="lesson-card">
+      <div class="mf-grid" id="mfGrid"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMF()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Content check — the quiz that keeps your voice yours</h2>
+    <p class="lesson-intro">Five real content decisions. Pick the honest answer for each — every option comes with an explanation, and the wrong ones are the shortcuts that turn your feed into forgettable slop. Answer all five to see your score.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">↻ Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Describe your brand voice in three words a stranger could actually apply. What's one thing you'd tell AI to never do when writing as MokshPath?</div>
+        <textarea placeholder="MokshPath sounds warm, plain-spoken, and encouraging. AI should never use corporate jargon like 'leverage' or 'synergy'..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Take one pillar piece you could make (a blog post or a lesson) and list three channel pieces you'd atomize it into. Which format excites you most?</div>
+        <textarea placeholder="From one 'weeknight dinners' post: a 30-sec reel, a 5-slide carousel, and an email tip. I'm most excited to..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 4 · Content Distribution & Measurement</h3>
+      <p>You can create and repurpose — now get it seen and prove it worked. Next: match each piece to the right channel and posting rhythm, and read the metrics that actually tell you what to make more of.</p>
+      <a href="04-content-distribution-measurement.html" class="btn btn-primary">Continue to Lesson 4 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Route tickets ─── */
+const TICKETS = [
+  {id:'k1', tag:'Draft', text:'"In today\'s fast-paced world, healthy eating is more important than ever. Read on to unlock the secrets to better meals."', bucket:'auto', why:'Pure slop: opens with a filler cliché, promises "secrets," and says nothing specific. Publish this and you sound like everyone else.'},
+  {id:'k2', tag:'Draft', text:'"Our last MokshPath cohort cut their weeknight cook time to 18 minutes using the 3-jar prep method — here\'s the exact routine."', bucket:'human', why:'Strong: a concrete number, a named method, and real experience from actual learners. That specificity is the moat AI can\'t fake.'},
+  {id:'k3', tag:'Draft', text:'"Leverage cutting-edge strategies to maximize your synergy and take your content to the next level in this dynamic landscape."', bucket:'auto', why:'Corporate jargon stacked on jargon, zero meaning. This is the exact "AI voice" readers now scroll straight past.'},
+  {id:'k4', tag:'Draft', text:'"I burned three dinners the week I started meal-prepping — here\'s the mistake I made and the fix that finally stuck."', bucket:'human', why:'Real, first-person experience with a specific failure. This is the E-E-A-T signal (experience) that generic AI text lacks.'},
+  {id:'k5', tag:'Draft', text:'"There are many benefits to using AI for content. AI can help in various ways and provide numerous advantages for your brand."', bucket:'auto', why:'Vague, circular, and padded — "many," "various," "numerous" with no example. Classic fluff that needs cutting, not publishing.'},
+  {id:'k6', tag:'Draft', text:'"We tested this reel hook against our usual intro: 41% more watch-through. Steal the exact opening line below."', bucket:'human', why:'A specific result, a real test, and something the reader can use immediately. Edited, on-voice, and genuinely useful.'}
+];
+const BUCKET_NAMES = {auto:'AI slop — publish nothing yet', human:'Strong, edited content'};
+let placed = {};
+function renderTickets(){
+  const list = $('ticketList');
+  const shuffled = [...TICKETS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-tag">${s.tag}</div>
+      <div class="scenario-text">${s.text}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket[data-bucket]').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDrop(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleDrop(id, bucket){
+  const ticket = TICKETS.find(s => s.id === id);
+  if (!ticket || placed[id]) return;
+  const correct = ticket.bucket === bucket;
+  placed[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + ticket.text.substring(1, 38) + '…';
+  pill.title = correct ? ticket.why : `Correct route: ${BUCKET_NAMES[ticket.bucket]}. ${ticket.why}`;
+  document.querySelector(`[data-drop="${bucket}"]`).appendChild(pill);
+  checkActivity1Done();
+}
+function checkActivity1Done(){
+  if (Object.keys(placed).length === TICKETS.length) {
+    const right = Object.values(placed).filter(p => p.correct).length;
+    const fb = $('feedback1');
+    if (right === TICKETS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six sorted correctly.</strong> You've got the eye: clichés, jargon, and vague padding → slop. Specific numbers, real experience, and a usable takeaway → strong. That's the whole editing instinct — spot what only you could have written, and cut everything a generic bot could.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the reasoning. The test: <em>Could any brand have written this exact line?</em> Yes → it's slop. <em>Is there a real number, a real story, or a real result?</em> → that's the strong, edited version. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog1').classList.add('done');
+  }
+}
+function resetActivity1(){
+  placed = {};
+  $('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('[data-drop]').forEach(d => d.innerHTML = '');
+  renderTickets();
+  $('prog1').classList.remove('done');
+}
+function showAnswers1(){
+  TICKETS.forEach(s => { if (!placed[s.id]) handleDrop(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 2: Assemble a chatbot answer ─── */
+const FRAGMENTS = [
+  {order:1, tag:'ack',    text:'It\'s 6pm, the kids are melting down, and the last thing you want is a recipe with 20 ingredients.'},
+  {order:2, tag:'ack',    text:'You don\'t need more willpower — you need a dinner plan that survives a real weeknight.'},
+  {order:3, tag:'answer', text:'In this post you\'ll get five 20-minute dinners, each built from the same short grocery list.'},
+  {order:4, tag:'answer', text:'By the end you\'ll be able to prep three nights of meals in one Sunday session — no fancy gear.'},
+  {order:5, tag:'action', text:'These are the exact meals our MokshPath cohort cooked while cutting weeknight time to 18 minutes.'},
+  {order:6, tag:'action', text:'One parent told us the 3-jar prep method finally ended the nightly "what\'s for dinner?" panic.'},
+  {order:7, tag:'safety', text:'Ready to try it? Grab the free one-page meal-prep checklist and cook your first dinner tonight.'},
+  {order:8, tag:'safety', text:'Reply and tell us which meal you\'re starting with — we\'ll cheer you on.'}
+];
+const STAGE_HINTS = {
+  ack:'Start with the HOOK — a vivid, relatable moment that pulls the reader in before you pitch anything.',
+  answer:'The PROMISE comes next: tell the reader exactly what they\'ll be able to do after reading.',
+  action:'PROOF follows the promise — real specifics and experience that show this actually works.',
+  safety:'The CALL TO ACTION comes last — one clear next step so the reader knows what to do now.'
+};
+let promptStep = 0, promptMistakes = 0;
+function renderFragments(){
+  const shuffled = [...FRAGMENTS].sort(()=>Math.random()-0.5);
+  $('fragPool').innerHTML = shuffled.map(f =>
+    `<div class="frag-chip" data-order="${f.order}" onclick="pickFragment(${f.order}, this)">${f.text}</div>`
+  ).join('');
+}
+function pickFragment(order, chip){
+  const hint = $('promptHint');
+  if (order !== promptStep + 1) {
+    promptMistakes++;
+    chip.classList.remove('shake'); void chip.offsetWidth;
+    chip.classList.add('shake');
+    const expected = FRAGMENTS.find(f => f.order === promptStep + 1);
+    hint.innerHTML = `<strong>Not yet.</strong> ${STAGE_HINTS[expected.tag]} (Block ${promptStep + 1} of 8 — you're on the <strong>${expected.tag.toUpperCase()}</strong> part.)`;
+    hint.classList.add('show');
+    return;
+  }
+  hint.classList.remove('show');
+  promptStep++;
+  chip.classList.add('used');
+  const frag = FRAGMENTS.find(f => f.order === order);
+  const ph = $('slotPlaceholder');
+  if (ph) ph.remove();
+  const line = document.createElement('div');
+  line.className = 'slot-line t-' + frag.tag;
+  const label = frag.tag === 'ack' ? 'hook' : frag.tag === 'safety' ? 'call to action' : frag.tag === 'answer' ? 'promise' : 'proof';
+  line.innerHTML = `<span class="slot-tag">${label}</span><span>${frag.text}</span>`;
+  $('promptSlots').appendChild(line);
+  if (promptStep === FRAGMENTS.length) finishPrompt();
+}
+function finishPrompt(){
+  const preview = $('promptPreview');
+  preview.innerHTML = `<span class="pp-label">Your finished draft — this shape works for almost any piece</span>` +
+    FRAGMENTS.map(f => f.text).join(' ');
+  preview.classList.add('show');
+  const fb = $('feedback2');
+  const whys = `<ul style="margin:.6rem 0 0 1.1rem;line-height:1.7">
+    <li><strong>Hook</strong> first — a reader who isn't pulled in never reaches your point.</li>
+    <li><strong>Promise</strong> tells them exactly what they'll walk away able to do — not a vague tease.</li>
+    <li><strong>Proof</strong> is your moat: real numbers, a real cohort, real experience AI can't invent.</li>
+    <li><strong>Call to action</strong> always ends with one clear next step — content with no ask is a dead end.</li></ul>`;
+  if (promptMistakes === 0) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect assembly — zero wrong clicks.</strong> You've internalized the HOOK → PROMISE → PROOF → CALL TO ACTION shape. Brief your AI in exactly this order and its drafts will read like something worth publishing instead of generic filler — then your edit adds the voice.${whys}`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Assembled — with ${promptMistakes} wrong click${promptMistakes > 1 ? 's' : ''} on the way.</strong> That's fine: the order <em>is</em> the lesson — hook before promise, proof before the ask.${whys} Hit <em>Start over</em> and try for a clean run.`;
+  }
+  $('prog2').classList.add('done');
+}
+function resetActivity2(){
+  promptStep = 0; promptMistakes = 0;
+  $('promptHint').classList.remove('show');
+  $('promptPreview').className = 'prompt-preview';
+  $('feedback2').className = 'activity-feedback';
+  $('promptSlots').innerHTML = '<div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="slotPlaceholder">Your content draft will build up here, block by block…</div>';
+  renderFragments();
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Judge review responses ─── */
+const MF = [
+  {ctx:'AI draft opened: "There are many benefits to meal-prepping."',
+   s:'The editor replaced it with: "The Sunday I prepped six jars, I saved myself four separate 6pm meltdowns — here\'s the exact routine."', a:'good',
+   e:'This swaps vague filler for a specific, first-person moment. That real experience is the E-E-A-T signal search engines and readers reward — the moat a generic draft never has.'},
+  {ctx:'AI draft claimed: "Studies show meal-prep saves the average family 12 hours a week."',
+   s:'The editor checked the source, couldn\'t find one, and cut the stat rather than publish it: "Prepping ahead frees up your weeknights — here\'s how much it saved our cohort."', a:'good',
+   e:'AI invents confident numbers. Fact-checking and cutting an unverifiable claim protects your credibility — publishing a made-up statistic to sound authoritative is how brands lose trust fast.'},
+  {ctx:'AI draft was clean but a bit flat and generic.',
+   s:'The editor "spiced it up" by pasting in three trending buzzwords and two extra adjectives per sentence: "unlock game-changing, next-level, revolutionary meal hacks."', a:'bad',
+   e:'Piling on hype words makes it more slop, not less. Good editing cuts fluff and adds specifics — it doesn\'t dress a thin draft in louder adjectives.'},
+  {ctx:'AI produced a solid 800-word draft in MokshPath\'s warm, plain-spoken voice.',
+   s:'The editor read it once, changed nothing, and hit publish because "the AI already sounded fine."', a:'bad',
+   e:'Skipping the human pass entirely is the trap. Even a good draft needs a real example, a fact-check, and a voice check — publishing raw AI is exactly how feeds fill with interchangeable content.'},
+  {ctx:'AI draft used corporate phrasing: "We aim to leverage synergies to optimize your nutrition journey."',
+   s:'The editor rewrote it in brand voice: "We\'ll help you get a good dinner on the table without the stress — that\'s it."', a:'good',
+   e:'Enforcing a defined brand voice is a core edit. Trading jargon for how MokshPath actually talks makes the piece recognizably yours instead of anonymous AI text.'},
+  {ctx:'The finished post was fully written and edited by AI with heavy human revision.',
+   s:'The editor added a short line: "Parts of this post were drafted with AI and reviewed by our team," where transparency fits the brand.', a:'good',
+   e:'Honest disclosure where it matters builds trust rather than eroding it. Being upfront that AI drafted and humans reviewed signals care — and keeps you on the right side of quality and platform rules.'}
+];
+let mfAnswered = {};
+function renderMF(){
+  const grid = $('mfGrid');
+  grid.innerHTML = MF.map((m, i) => `
+    <div class="mf-card" id="mfCard${i}">
+      <div class="mf-context">${i+1}. ${m.ctx}</div>
+      <div class="mf-statement">Edit: ${m.s}</div>
+      <div class="mf-buttons">
+        <button class="mf-btn" id="mfG${i}" onclick="answerMF(${i},'good')">GOOD EDIT</button>
+        <button class="mf-btn" id="mfB${i}" onclick="answerMF(${i},'bad')">BAD EDIT</button>
+      </div>
+      <div class="mf-explain" id="mfEx${i}"></div>
+    </div>`).join('');
+}
+function answerMF(i, choice){
+  if (mfAnswered[i] !== undefined) return;
+  const m = MF[i];
+  const right = choice === m.a;
+  mfAnswered[i] = right;
+  const card = $('mfCard' + i);
+  const pickedBtn = $(choice === 'good' ? 'mfG'+i : 'mfB'+i);
+  const otherBtn = $(choice === 'good' ? 'mfB'+i : 'mfG'+i);
+  card.classList.add(right ? 'right' : 'miss');
+  pickedBtn.classList.add(right ? 'picked-right' : 'picked-wrong');
+  pickedBtn.disabled = true; otherBtn.disabled = true;
+  const ex = $('mfEx' + i);
+  ex.className = 'mf-explain show';
+  ex.innerHTML = `<span class="mf-verdict ${right ? 'v-right' : 'v-miss'}">${right ? '✓ Correct' : '✗ Not quite'} — this is a ${m.a.toUpperCase()} edit.</span><br>${m.e}`;
+  if (Object.keys(mfAnswered).length === MF.length) {
+    const score = Object.values(mfAnswered).filter(Boolean).length;
+    const fb = $('feedback3');
+    if (score === MF.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>6 of 6 — your editing eye is sharp.</strong> The good edits all did the same things: added real experience, fact-checked and cut what couldn't be verified, enforced brand voice, and disclosed honestly. That human pass is what turns a fast AI draft into content only MokshPath could publish.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You scored ${score} of 6.</strong> Re-read the red cards — the bad edits share a tell: they pile on hype or skip the human pass entirely instead of adding specifics, checking facts, and sharpening voice. The draft is the start; your edit is the value. Hit <em>Try again</em> to retake it.`;
+    }
+    $('prog3').classList.add('done');
+  }
+}
+function resetMF(){
+  mfAnswered = {};
+  $('feedback3').className = 'activity-feedback';
+  renderMF();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {
+    q:'What\'s the best way to stop AI drafts from coming out as generic "slop"?',
+    opts:[
+      {t:'Ask for more words so the post feels thorough and complete', ok:false, ex:'Length isn\'t the problem — emptiness is. More generic text is just more slop. The fix is specificity, not volume: real examples, real numbers, a real point of view.'},
+      {t:'Give a specific brief — audience, angle, brand voice, a real example — then edit in your own experience', ok:true, ex:'A tight brief plus a human edit is the whole game. Tell AI exactly who it\'s for and how you sound, then add the story or number only you have. That\'s what makes it un-generic.'},
+      {t:'Add trending buzzwords so it sounds current and impressive', ok:false, ex:'Buzzwords are the opposite of specific — they\'re what makes text read as AI in the first place. Stacking "game-changing" and "next-level" makes a piece more forgettable, not less.'}
+    ]
+  },
+  {
+    q:'How do you get AI to write consistently in your brand voice?',
+    opts:[
+      {t:'Just tell it to "sound professional" and hope for the best', ok:false, ex:'"Professional" means nothing specific, so you\'ll get the default corporate AI tone every time. Voice has to be defined concretely or the model falls back to generic.'},
+      {t:'Define the voice in plain rules and examples — tone, words you use, words you never use — and reuse it', ok:true, ex:'A written voice guide ("warm, plain-spoken, no jargon; we say \'dinner,\' never \'nutrition solution\'") plus sample sentences gives AI a target it can actually hit — and keeps every piece recognizably MokshPath.'},
+      {t:'Accept whatever voice the AI defaults to — readers won\'t notice', ok:false, ex:'They will. The default AI voice is now instantly recognizable and forgettable. A distinct, consistent voice is one of the few things that still sets your content apart.'}
+    ]
+  },
+  {
+    q:'You wrote one strong "pillar" blog post. What does "atomizing" or repurposing it mean?',
+    opts:[
+      {t:'Posting the exact same blog link to every channel', ok:false, ex:'Dropping one link everywhere ignores how each channel works. A blog URL on Instagram or in an email underperforms — each platform wants content shaped for it, not a raw link.'},
+      {t:'Breaking that one pillar into many channel-shaped pieces — a reel, a carousel, an email, a few posts', ok:true, ex:'That\'s the leverage: one pillar becomes a week of content. The reel gets the hook, the carousel gets the steps, the email gets the takeaway — same core idea, reshaped for where each audience is.'},
+      {t:'Deleting the blog once you\'ve used the idea somewhere else', ok:false, ex:'The pillar is the asset that anchors everything and earns search traffic over time. You build outward from it — you don\'t throw it away.'}
+    ]
+  },
+  {
+    q:'An AI draft confidently states "Studies show meal-prep saves families 12 hours a week." What should you do?',
+    opts:[
+      {t:'Leave it in — a specific stat makes the post more credible', ok:false, ex:'A stat you can\'t source is a liability, not credibility. AI invents plausible-sounding numbers; publishing one that turns out false damages the trust the piece was meant to build.'},
+      {t:'Verify the claim; if you can\'t find a real source, cut it or replace it with something true you can stand behind', ok:true, ex:'Right. Fact-checking is a non-negotiable part of the human pass. AI can hallucinate confident numbers, so the accuracy — and the responsibility — is always yours.'},
+      {t:'Ask the AI if the stat is real and trust its answer', ok:false, ex:'The model that invented the stat can just as easily "confirm" it. Verification means checking a real source yourself, not asking the same tool to grade its own homework.'}
+    ]
+  },
+  {
+    q:'What\'s the honest promise of AI content creation for a small brand?',
+    opts:[
+      {t:'It replaces the need for original thinking — just generate and post', ok:false, ex:'Generate-and-post is exactly how brands drown in interchangeable slop. AI has no experiences of its own; without your ideas and edits, it can only average what already exists.'},
+      {t:'It gives you fast first drafts and scale, while your real experience and voice remain the moat', ok:true, ex:'That\'s the real win: AI removes the blank-page struggle and lets one person produce across formats — but originality, real stories, and a distinct voice are what make it yours and worth reading.'},
+      {t:'It guarantees your content will go viral because it\'s optimized', ok:false, ex:'Nothing guarantees virality, and AI-optimized filler rarely lands. What earns attention is a genuine point of view and specifics — the human parts AI can\'t supply.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 — your content instincts are sharp.</strong> You brief for specificity, enforce a defined brand voice, atomize one pillar into many channel pieces, fact-check every claim, and treat AI drafts as a starting point. That\'s how one person publishes across formats without sounding like everyone else.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations — the wrong options are the tempting shortcuts ("just generate and post", "sound professional", "trust the AI\'s stat"). The thread: AI gives you speed and drafts, but your specific experience, voice, and fact-checking are the moat. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderTickets();
+  setupBuckets();
+  renderFragments();
+  renderMF();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

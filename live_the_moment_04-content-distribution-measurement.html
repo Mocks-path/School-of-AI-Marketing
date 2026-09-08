@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 4 · AI Content Distribution & Measurement — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── SHARED FEEDBACK / BUTTONS ── */
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 1: READ A FORECAST ── */
+.math-scenario{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1rem 0 1.4rem}
+@media (max-width:760px){.math-scenario{grid-template-columns:1fr 1fr}}
+.math-stat{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.8rem .9rem}
+.math-stat-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.25rem}
+.math-stat-value{font-family:var(--mono);font-size:1.05rem;font-weight:600;color:var(--navy)}
+.forecast-chart{display:flex;align-items:flex-end;gap:.5rem;height:130px;margin:1rem 0 .4rem;padding:.6rem;background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.fc-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;height:100%;gap:.3rem}
+.fc-bar{width:100%;max-width:46px;border-radius:5px 5px 0 0;background:linear-gradient(180deg,var(--orange-light),var(--orange));transition:height .4s}
+.fc-bar.stock{background:linear-gradient(180deg,#5B8FE0,#3D72C9)}
+.fc-week{font-size:.66rem;color:var(--text-muted);font-weight:600}
+.fc-val{font-family:var(--mono);font-size:.66rem;color:var(--navy);font-weight:600}
+.fc-legend{display:flex;gap:1rem;font-size:.72rem;color:var(--text-secondary);margin-bottom:1rem}
+.fc-legend span{display:inline-flex;align-items:center;gap:.35rem}
+.fc-dot{width:11px;height:11px;border-radius:3px;display:inline-block}
+.math-options{display:grid;gap:.6rem}
+.math-option{display:flex;align-items:flex-start;gap:.7rem;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;cursor:pointer;transition:all .2s;font-size:.86rem;line-height:1.5}
+.math-option:hover{border-color:var(--orange)}
+.math-option input{margin-top:.25rem;accent-color:var(--orange)}
+.math-option .opt-amount{font-family:var(--mono);font-weight:600;color:var(--navy)}
+.math-option.reveal-right{border-color:var(--green);background:var(--green-light)}
+.math-option.reveal-wrong{border-color:var(--red);background:var(--red-light)}
+
+/* ── ACTIVITY 2: SET A DYNAMIC PRICE ── */
+.price-scenario{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1rem 0 1.2rem}
+@media (max-width:760px){.price-scenario{grid-template-columns:1fr 1fr}}
+.slider-wrap{margin:1.4rem 0 .6rem}
+.slider-label{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:.6rem}
+.slider-label .s-name{font-size:.8rem;font-weight:600;color:var(--navy)}
+.slider-label .s-price{font-family:var(--mono);font-size:1.5rem;font-weight:600;color:var(--orange)}
+input[type=range]{width:100%;accent-color:var(--orange);height:6px;cursor:pointer}
+.price-readout{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin-top:1.2rem}
+@media (max-width:760px){.price-readout{grid-template-columns:1fr}}
+.readout-stat{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.8rem .9rem;text-align:center}
+.readout-label{font-size:.64rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.3rem}
+.readout-value{font-family:var(--mono);font-size:1.15rem;font-weight:600;color:var(--navy)}
+.readout-value.good{color:#256B29}.readout-value.bad{color:#A03A2C}
+.zone-bar{height:12px;border-radius:6px;margin:.5rem 0 .3rem;background:linear-gradient(90deg,#E04E3C 0%,#E04E3C 22%,#E8A040 22%,#E8A040 40%,#4CAF50 40%,#4CAF50 72%,#E8A040 72%,#E8A040 88%,#E04E3C 88%,#E04E3C 100%);position:relative}
+.zone-marker{position:absolute;top:-4px;width:4px;height:20px;background:var(--navy);border-radius:2px;transition:left .15s}
+.zone-scale{display:flex;justify-content:space-between;font-size:.62rem;color:var(--text-muted);font-family:var(--mono)}
+
+/* ── ACTIVITY 3: MATCH KPIs TO DECISIONS ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.7rem}
+.match-pool{display:flex;flex-direction:column;gap:.6rem}
+.match-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .9rem;font-size:.82rem;line-height:1.45;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.match-chip:hover{border-color:var(--orange);transform:translateY(-1px)}
+.match-chip .kpi-name{font-family:var(--mono);font-size:.72rem;color:var(--orange);font-weight:600;display:block;margin-bottom:.2rem;text-transform:uppercase;letter-spacing:.03em}
+.match-chip.selected{border-color:var(--orange);background:var(--orange-glow)}
+.match-chip.done{opacity:.35;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.match-slot{display:flex;flex-direction:column;gap:.2rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.75rem .9rem;min-height:58px;transition:all .2s;cursor:pointer;background:rgba(255,255,255,0.5)}
+.match-slot:hover{border-color:var(--orange)}
+.match-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);cursor:default}
+.match-slot.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+.match-scenario{font-size:.83rem;font-weight:600;color:var(--navy);line-height:1.45}
+.match-answer{font-size:.78rem;color:#1F5723;line-height:1.45;display:none}
+.match-slot.filled .match-answer{display:block}
+
+/* ── ACTIVITY 4: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 4 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 3 · AI Content Marketing</div>
+  <h1>AI Content Distribution & Measurement — <em>publishing is only half the job</em></h1>
+  <p class="hero-sub">Four hands-on activities. Read one piece of content's funnel numbers to decide double-down, refresh, or retire; slide your channel mix toward the right audience; match each metric to the funnel stage it belongs to, then lock it all in with a quiz. Great content that nobody sees changes nothing — this is how you get it seen and prove it worked.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: READ A FORECAST ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Read the numbers — double-down, refresh, or retire?</h2>
+    <p class="lesson-intro">A piece of content is only worth its slot if the numbers say so. Here's how one blog post performed over its first four weeks. The blue bars show reach (people who saw it); the orange bars show signups it drove that week. Read them together with the funnel note below, then choose the smartest next move. <em>(All figures illustrative.)</em></p>
+
+    <div class="lesson-card">
+      <div class="math-scenario">
+        <div class="math-stat"><div class="math-stat-label">Piece</div><div class="math-stat-value">"AI 101" post</div></div>
+        <div class="math-stat"><div class="math-stat-label">Age</div><div class="math-stat-value">4 weeks</div></div>
+        <div class="math-stat"><div class="math-stat-label">Trend</div><div class="math-stat-value">Falling ↓</div></div>
+      </div>
+
+      <div class="fc-legend">
+        <span><span class="fc-dot" style="background:#3D72C9"></span> Reach that week (people who saw it)</span>
+        <span><span class="fc-dot" style="background:var(--orange)"></span> Signups it drove that week</span>
+      </div>
+      <div class="forecast-chart" id="forecastChart"></div>
+      <p style="font-size:.75rem;color:var(--text-secondary);margin-bottom:1.2rem;line-height:1.5">Signups: <strong>Week 1: 30</strong> · <strong>Week 2: 40</strong> · <strong>Week 3: 45</strong> · <strong>Week 4: 55</strong> — steady and climbing as you re-share it across channels. Reach is fading, but each viewer is converting <em>better</em>. Read what the two lines together are telling you. <em>(Illustrative numbers.)</em></p>
+
+      <div class="math-options" id="mathOptions">
+        <label class="math-option" data-opt="a"><input type="radio" name="mathQ" value="a"><span><span class="opt-amount">Retire it — reach is dropping, so it's clearly done.</span></span></label>
+        <label class="math-option" data-opt="b"><input type="radio" name="mathQ" value="b"><span><span class="opt-amount">Do nothing for 3 weeks</span>, then decide once it's older.</span></label>
+        <label class="math-option" data-opt="c"><input type="radio" name="mathQ" value="c"><span><span class="opt-amount">Double down.</span> Signups are rising even as reach fades, so it converts well — put more distribution behind it now.</span></label>
+        <label class="math-option" data-opt="d"><input type="radio" name="mathQ" value="d"><span><span class="opt-amount">Share it just once more</span> to be safe and cheap.</span></label>
+      </div>
+
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkForecast()">Check my answer</button>
+        <button class="btn btn-ghost" onclick="resetForecast()">↻ Reset</button>
+      </div>
+      <div class="tip-note">💡 <strong>The vanity trap:</strong> beginners judge a piece by reach alone and retire winners the moment views dip. The rule the numbers help you follow: <em>look at what the content actually drives — signups, leads, conversions — not just how many people saw it.</em></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: SET A DYNAMIC PRICE ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Set the channel mix — slide it into the reach zone</h2>
+    <p class="lesson-intro">Distribution is a balance, not a firehose. Push one piece to too few channels and almost nobody sees it; blast it to every channel at once and you spread thin, repeat yourself, and start to look like spam. Drag the slider to set how many channels you reformat this piece for. Watch effective reach, the "how it lands" read, and the live zone react. Find the sweet spot, then hit check. <em>(Illustrative model.)</em></p>
+
+    <div class="lesson-card">
+      <div class="price-scenario">
+        <div class="math-stat"><div class="math-stat-label">Owned channels you run</div><div class="math-stat-value">4</div></div>
+        <div class="math-stat"><div class="math-stat-label">Typical solid mix</div><div class="math-stat-value">3 channels</div></div>
+        <div class="math-stat"><div class="math-stat-label">Reformat time each</div><div class="math-stat-value">~15 min</div></div>
+      </div>
+
+      <div class="slider-wrap">
+        <div class="slider-label">
+          <span class="s-name">Channels you distribute to</span>
+          <span class="s-price" id="priceDisplay">3 channels</span>
+        </div>
+        <input type="range" id="priceSlider" min="14" max="45" step="1" value="29" oninput="updatePrice()">
+        <div class="zone-bar"><div class="zone-marker" id="zoneMarker" style="left:48%"></div></div>
+        <div class="zone-scale"><span>1</span><span>Too few</span><span>Sweet spot</span><span>Spread thin</span><span>All</span></div>
+      </div>
+
+      <div class="price-readout">
+        <div class="readout-stat"><div class="readout-label">Effort per piece</div><div class="readout-value" id="profitOut">45 min</div></div>
+        <div class="readout-stat"><div class="readout-label">Vs. solid mix</div><div class="readout-value" id="compareOut">On target</div></div>
+        <div class="readout-stat"><div class="readout-label">Verdict</div><div class="readout-value" id="zoneOut">Sweet spot</div></div>
+      </div>
+
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkPrice()">Check this mix</button>
+        <button class="btn btn-ghost" onclick="resetPrice()">↻ Reset to a solid mix</button>
+      </div>
+      <div class="tip-note">💡 <strong>More channels isn't always better:</strong> blasting everywhere burns time and can annoy the same followers on five feeds. The smart move is to reformat one piece for the few channels where <em>your</em> audience actually is — AI can do the reformatting fast, but you pick the channels.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: MATCH KPIs TO DECISIONS ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Match the metric to the funnel stage it measures</h2>
+    <p class="lesson-intro">A content dashboard is useless if you don't know which stage of the journey each number belongs to. Click a question on the left, then click the metric on the right that answers it. A wrong pair shakes; a right pair locks in green. (The funnel runs top to bottom: reach → engagement → traffic → signups → conversions.)</p>
+
+    <div class="lesson-card">
+      <div class="match-grid">
+        <div>
+          <div class="match-col-title">The question you're asking</div>
+          <div class="match-pool" id="matchScenarios"></div>
+        </div>
+        <div>
+          <div class="match-col-title">The metric that answers it</div>
+          <div class="match-pool" id="matchTactics"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity3()">↻ Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Distribution & measurement check — the quiz</h2>
+    <p class="lesson-intro">Five real distribution and measurement decisions. Pick the honest answer for each — every option comes with an explanation, and the wrong ones are the traps that make good content invisible or make weak numbers look like wins. Answer all five to see your score.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">↻ Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">In your own words, why is "if the content is good, people will find it" a costly belief? What does distribution actually change?</div>
+        <textarea placeholder="Because publishing is only half the job — a piece nobody sees changes nothing, so I need to..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Pick one metric you'd check every week for your content, and say what action a weak number would push you to take.</div>
+        <textarea placeholder="I'd watch signups per piece. If it dropped, I'd first check whether the call-to-action or channel was off, then..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Week 3 complete — you can run the whole AI content engine</h3>
+      <p>Strategy, creation, distribution, and measurement: you now know how the pieces fit and where AI helps in each — while judgment stays yours. Revisit any lesson to sharpen an activity, or carry these instincts into building your own content plan.</p>
+      <a href="01-content-marketing-ai-era.html" class="btn btn-primary">Back to Lesson 1 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Read the numbers ─── */
+const FORECAST = [
+  {week:'W1', stock:120, sales:30},
+  {week:'W2', stock:90,  sales:40},
+  {week:'W3', stock:50,  sales:45},
+  {week:'W4', stock:5,   sales:55}
+];
+function renderForecast(){
+  const chart = $('forecastChart');
+  const max = 130;
+  chart.innerHTML = FORECAST.map(f => `
+    <div class="fc-bar-wrap">
+      <span class="fc-val">${f.stock}</span>
+      <div class="fc-bar stock" style="height:${(f.stock/max)*100}%"></div>
+      <div class="fc-bar" style="height:${(f.sales/max)*100}%"></div>
+      <span class="fc-val">${f.sales}</span>
+      <span class="fc-week">${f.week}</span>
+    </div>`).join('');
+}
+const FORECAST_FB = {
+  a:`<strong>Not quite — you're judging by reach alone.</strong> Yes, fewer people see it each week — but look at what it <em>drives</em>: signups climbed from 30 to 55. A piece that converts better every week is a winner, not a retiree. Retiring it here means killing your best-performing content. Try again.`,
+  b:`<strong>Waiting wastes a live winner.</strong> The signups line is rising right now — this is the moment to give it more reach, not to sit on your hands for 3 weeks. "Decide later" lets a piece that's clearly working slip out of the feed while it still converts. Try again.`,
+  c:`<strong>Correct — double down.</strong> Reach is fading but signups are <em>climbing</em> (30 → 55): people who find this piece are converting better and better. That's the signal to put more distribution behind it — reformat it for another channel, add it to your newsletter, boost the post. Double-down is exactly the call these numbers are built to trigger.`,
+  d:`<strong>Right instinct, too timid.</strong> Sharing again is the right direction — but one more post barely moves the needle on a piece that's converting this well. A proven winner deserves real distribution: several channels, your newsletter, maybe a small paid boost. One share and you leave most of its potential unclaimed. Try again.`
+};
+function checkForecast(){
+  const picked = document.querySelector('input[name="mathQ"]:checked');
+  const fb = $('feedback1');
+  if (!picked) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Pick one of the four options first</strong>, then hit "Check my answer".`;
+    return;
+  }
+  const val = picked.value;
+  document.querySelectorAll('.math-option').forEach(o => o.classList.remove('reveal-right','reveal-wrong'));
+  if (val === 'c') {
+    document.querySelector('.math-option[data-opt="c"]').classList.add('reveal-right');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = FORECAST_FB.c;
+    $('prog1').classList.add('done');
+  } else {
+    document.querySelector(`.math-option[data-opt="${val}"]`).classList.add('reveal-wrong');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = FORECAST_FB[val];
+  }
+}
+function resetForecast(){
+  document.querySelectorAll('input[name="mathQ"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.math-option').forEach(o => o.classList.remove('reveal-right','reveal-wrong'));
+  $('feedback1').className = 'activity-feedback';
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Set a dynamic price ─── */
+const COST = 14, FEES = 3, COMP = 29;
+function updatePrice(){
+  const price = +$('priceSlider').value;
+  $('priceDisplay').textContent = Math.round((price - 14) / (45 - 14) * 5 + 1) + ' channels';
+  const profit = price - COST - FEES;
+  const profitEl = $('profitOut');
+  profitEl.textContent = (price - 14) * 15 + ' min';
+  profitEl.className = 'readout-value ' + (price >= 26 && price <= 32 ? 'good' : price > 38 ? 'bad' : '');
+  const compareEl = $('compareOut');
+  const diff = price - COMP;
+  if (Math.abs(diff) <= 2) { compareEl.textContent = 'On target'; compareEl.className = 'readout-value good'; }
+  else if (diff < -2) { compareEl.textContent = 'Too narrow'; compareEl.className = 'readout-value ' + (diff < -8 ? 'bad' : ''); }
+  else { compareEl.textContent = 'Too broad'; compareEl.className = 'readout-value ' + (diff > 6 ? 'bad' : ''); }
+  const zoneEl = $('zoneOut');
+  let zone;
+  if (price < 21) { zone = 'Too few'; zoneEl.className = 'readout-value bad'; }
+  else if (price <= 32) { zone = 'Sweet spot'; zoneEl.className = 'readout-value good'; }
+  else if (price <= 38) { zone = 'Getting broad'; zoneEl.className = 'readout-value'; }
+  else { zone = 'Spread thin'; zoneEl.className = 'readout-value bad'; }
+  zoneEl.textContent = zone;
+  const pct = ((price - 14) / (45 - 14)) * 100;
+  $('zoneMarker').style.left = pct + '%';
+}
+function checkPrice(){
+  const price = +$('priceSlider').value;
+  const profit = price - COST - FEES;
+  const fb = $('feedback2');
+  if (price >= 26 && price <= 32) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>That's the sweet spot.</strong> You're reformatting the piece for a focused handful of channels — enough to reach the audiences that matter without spreading yourself thin or spamming the same followers everywhere. This is exactly the balance smart distribution aims for: real reach <em>and</em> sustainable effort. Being everywhere was never the goal — being where your people are was. <em>(Illustrative.)</em>`;
+    $('prog2').classList.add('done');
+  } else if (price < 26) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Too few channels — you're leaving reach on the table.</strong> A great piece pushed to just one place barely gets seen. You put in the work to create it; give it a fair shot by reformatting it for a few more of the channels where your audience actually is. Nudge toward the sweet-spot zone and check again.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You're spread too thin.</strong> Blasting one piece to every channel burns time and hits the same followers on feed after feed — it starts to look like spam. Focus on the few channels that actually convert for you rather than chasing all of them. Slide back toward the sweet-spot zone and check again.`;
+  }
+}
+function resetPrice(){
+  $('priceSlider').value = 29;
+  updatePrice();
+  $('feedback2').className = 'activity-feedback';
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Match KPIs to decisions ─── */
+const PAIRS = [
+  {id:'m1', scenario:'"How many people actually saw this post at the very top of the funnel?"', kpi:'Reach / impressions', answer:'Reach and impressions count how many people the content was put in front of — the widest, top-of-funnel number.', note:'Reach is the starting gate: it shows exposure, but says nothing yet about whether anyone cared or acted.'},
+  {id:'m2', scenario:'"Of the people who saw it, how many liked, commented, shared, or clicked?"', kpi:'Engagement rate', answer:'Engagement rate — reactions and clicks divided by reach — shows whether the content actually resonated.', note:'High reach with low engagement means people scrolled past; the hook or topic likely missed.'},
+  {id:'m3', scenario:'"Is this content actually sending people to my site to read more?"', kpi:'Traffic / clicks', answer:'Traffic (clicks to your site) measures whether content moves people off the feed and onto your pages.', note:'Traffic is the mid-funnel bridge: interested viewers become visitors you can then guide toward signing up.'},
+  {id:'m4', scenario:'"Are visitors joining my list so I can reach them again later?"', kpi:'Leads / signups', answer:'Leads and signups count visitors who hand over an email — the point they become contactable.', note:'Signups turn a one-time visitor into an audience you own and can nurture — the real payoff of traffic.'},
+  {id:'m5', scenario:'"After all of it, is this content actually driving paying customers?"', kpi:'Conversions / content ROI', answer:'Conversions (and content ROI) tie the whole funnel to revenue — the bottom-line business result.', note:'This is the number that proves content pays back — but it takes months to build, and attribution is fuzzy.'}
+];
+let matchState = {selectedScenario:null, solved:0, mistakes:0};
+function renderMatch(){
+  matchState = {selectedScenario:null, solved:0, mistakes:0};
+  const sc = [...PAIRS].sort(()=>Math.random()-0.5);
+  const tc = [...PAIRS].sort(()=>Math.random()-0.5);
+  $('matchScenarios').innerHTML = sc.map(p =>
+    `<div class="match-chip" data-role="scenario" data-id="${p.id}" onclick="pickScenario('${p.id}', this)">${p.scenario}</div>`
+  ).join('');
+  $('matchTactics').innerHTML = tc.map(p =>
+    `<div class="match-slot" data-role="kpi" data-id="${p.id}" onclick="pickKpi('${p.id}', this)">
+       <span class="match-scenario"><span class="kpi-name">${p.kpi}</span>${p.answer}</span>
+       <span class="match-answer"></span>
+     </div>`
+  ).join('');
+  $('feedback3').className = 'activity-feedback';
+}
+function pickScenario(id, el){
+  if (el.classList.contains('done')) return;
+  document.querySelectorAll('.match-chip[data-role="scenario"]').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  matchState.selectedScenario = id;
+}
+function pickKpi(id, el){
+  if (el.classList.contains('filled')) return;
+  if (!matchState.selectedScenario) {
+    const fb = $('feedback3');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Pick a decision on the left first</strong>, then click the KPI that answers it.`;
+    return;
+  }
+  if (matchState.selectedScenario === id) {
+    const pair = PAIRS.find(p => p.id === id);
+    el.classList.add('filled');
+    el.querySelector('.match-answer').textContent = '✓ ' + pair.note;
+    const scEl = document.querySelector(`.match-chip[data-id="${id}"]`);
+    scEl.classList.remove('selected');
+    scEl.classList.add('done');
+    matchState.selectedScenario = null;
+    matchState.solved++;
+    $('feedback3').className = 'activity-feedback';
+    if (matchState.solved === PAIRS.length) finishMatch();
+  } else {
+    matchState.mistakes++;
+    el.classList.remove('shake'); void el.offsetWidth;
+    el.classList.add('shake');
+    const fb = $('feedback3');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Not the right match.</strong> Re-read the decision — what exactly does it need to <em>know</em>? Pick the KPI that measures precisely that.`;
+    setTimeout(() => el.classList.remove('shake'), 500);
+  }
+}
+function finishMatch(){
+  const fb = $('feedback3');
+  if (matchState.mistakes === 0) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>All five matched — clean run.</strong> Now a content dashboard reads like a funnel: reach shows exposure, engagement shows resonance, traffic shows movement to your site, signups grow the audience you own, and conversions prove it pays off. Read them top-to-bottom and you can spot exactly where a piece leaks. AI can pull these numbers for you — but you decide what they mean.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>All five matched — with ${matchState.mistakes} wrong attempt${matchState.mistakes > 1 ? 's' : ''}.</strong> That's fine — the pairing is the lesson. Each metric sits at one funnel stage: <em>how many saw it, how many cared, how many clicked through, how many signed up, how many converted.</em> Hit <em>Reset</em> to try for a flawless run.`;
+  }
+  $('prog3').classList.add('done');
+}
+function resetActivity3(){
+  renderMatch();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {
+    q:'You spend hours writing a genuinely great blog post, publish it, and move on to the next one. What did you just get wrong?',
+    opts:[
+      {t:'Nothing — if the content is good enough, people will find it on their own', ok:false, ex:'"Build it and they will come" almost never happens. Publishing is only half the job; without distribution, even brilliant content sits unseen. You have to actively get it in front of people.'},
+      {t:'You skipped distribution — a piece nobody sees changes nothing, no matter how good it is', ok:true, ex:'Right. Creating is half the work; getting it seen is the other half. Reformat and share it across the channels where your audience is, add it to your newsletter, and keep re-sharing evergreen pieces.'},
+      {t:'You should have made it longer so it ranks better', ok:false, ex:'Length isn\'t the lever here. The gap isn\'t the content — it\'s that no plan exists to distribute it. A shorter piece that gets seen beats a longer one that doesn\'t.'}
+    ]
+  },
+  {
+    q:'A post gets 50,000 views but only 3 signups. Your teammate calls it a huge success. Are they right?',
+    opts:[
+      {t:'Yes — 50,000 views is a massive win on its own', ok:false, ex:'Views are a vanity metric when nothing follows. 50,000 people saw it and almost none acted — that\'s reach without result. Big top-of-funnel numbers feel great but don\'t pay the bills.'},
+      {t:'Not really — reach is a vanity number until it drives a business result like signups or sales', ok:true, ex:'Exactly. Separate vanity metrics (views, likes) from business metrics (signups, leads, conversions). 50,000 views and 3 signups means the hook worked but the offer or call-to-action didn\'t — that\'s the real thing to fix.'},
+      {t:'Yes, and you should immediately spend to get 500,000 views', ok:false, ex:'Scaling a leak just leaks faster. If 50,000 views convert 3 people, more reach won\'t fix the real problem — the weak conversion step. Fix what happens after the view first.'}
+    ]
+  },
+  {
+    q:'Two months into publishing weekly, your content ROI still looks flat. What\'s the honest read?',
+    opts:[
+      {t:'Content marketing doesn\'t work — cut it and move on', ok:false, ex:'Too soon to judge. Content ROI compounds slowly: SEO, audience, and trust take months to build. Quitting at month two throws away the runway right before the payoff usually starts.'},
+      {t:'That\'s normal — content ROI takes months to build, so keep going and keep measuring', ok:true, ex:'Right. Content is a slow-compounding asset, not a paid-ad switch. Give it months, keep an eye on the early signals (traffic, signups) that lead conversions, and stay honest that attribution is fuzzy — no guarantees, but the trend is what matters.'},
+      {t:'Guarantee a positive ROI by next week so it\'s worth it', ok:false, ex:'Nobody can honestly guarantee content ROI on a timeline — and especially not in a week. Attribution is fuzzy and results compound slowly. Promising fast, certain returns is how content programs get killed unfairly.'}
+    ]
+  },
+  {
+    q:'What\'s the honest role of AI in distributing and measuring your content?',
+    opts:[
+      {t:'It decides your whole strategy so you don\'t need to understand the metrics', ok:false, ex:'Dangerous. AI can reformat a piece for each channel and pull the numbers, but if you don\'t understand what reach, engagement, and conversion mean, you can\'t tell a real win from a vanity spike — and attribution is genuinely fuzzy.'},
+      {t:'It speeds up the grunt work — reformatting per channel and summarizing metrics — while you make the calls', ok:true, ex:'That\'s the real value: AI turns one post into a thread, a caption, and a newsletter blurb in minutes, and it can summarize the dashboard. But which channels, what a number means, and double-down vs. retire stay your decisions.'},
+      {t:'It only helps brands with huge audiences and big budgets', ok:false, ex:'The opposite — a solo creator benefits most, because AI does the per-channel reformatting a big team would otherwise handle. It levels the field for the small brand doing distribution alone.'}
+    ]
+  },
+  {
+    q:'You review a monthly content report. One old post has fading reach but rising signups; another has lots of views but zero downstream action. What do you do?',
+    opts:[
+      {t:'Keep both exactly as they are — reports are just for looking at', ok:false, ex:'A report you don\'t act on is wasted work. The whole point of measuring is to decide: double-down on what converts, refresh what\'s slipping, and retire what drains effort. "Just look at it" leaves money on the table.'},
+      {t:'Double down on the converter, and refresh or retire the high-view, no-action piece', ok:true, ex:'Right. The rising-signups post is a proven winner — give it more distribution. The high-view, zero-action piece needs a refresh (better call-to-action, updated angle) or retirement if it still doesn\'t convert. Double-down, refresh, or retire is the monthly decision.'},
+      {t:'Retire the post with rising signups because its reach is falling', ok:false, ex:'That kills your best performer. Reach falling while signups rise means it converts better than ever — judging it on views alone is exactly the vanity-metric trap. Double down on it, don\'t retire it.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 — you think like a content marketer.</strong> You treat distribution as half the job, tell vanity metrics from business ones, give content ROI the months it needs, use AI for the grunt work while keeping the calls, and act on your monthly report with double-down, refresh, or retire. That's the whole Week 3 arc: create it, get it seen, prove it worked. Week 3 done.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations — the wrong options are the classic content traps ("good content finds itself", "views alone are a win", "quit ROI at month two", "let AI run strategy", "never act on the report"). The thread: publishing is only half the job — distribute honestly and measure what actually matters. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderForecast();
+  updatePrice();
+  renderMatch();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

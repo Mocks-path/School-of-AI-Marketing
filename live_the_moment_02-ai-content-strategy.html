@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · AI Content Strategy &amp; Ideation — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── SHARED FEEDBACK / BUTTONS ── */
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 1: BUILD-A-DESCRIPTION ── */
+.prompt-pool{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.frag-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .9rem;font-size:.8rem;line-height:1.45;cursor:pointer;transition:all .2s;max-width:360px;user-select:none;font-weight:500}
+.frag-chip:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.frag-chip.used{opacity:0;pointer-events:none;position:absolute;visibility:hidden}
+.frag-chip.shake{animation:shake .45s ease;border-color:var(--red);background:var(--red-light)}
+.prompt-slots{margin-top:1.4rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:90px;background:rgba(255,255,255,0.5)}
+.slot-line{display:flex;align-items:flex-start;gap:.6rem;padding:.45rem .2rem;font-size:.83rem;line-height:1.5;animation:fadeIn .35s ease}
+.slot-tag{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.05em;color:#fff;padding:.18rem .5rem;border-radius:4px;flex-shrink:0;margin-top:.1rem;text-transform:uppercase}
+.slot-line.t-hook .slot-tag{background:#5B8FE0}
+.slot-line.t-benefit .slot-tag{background:var(--orange)}
+.slot-line.t-detail .slot-tag{background:#66BB6A}
+.slot-line.t-cta .slot-tag{background:#8E6BC0}
+.prompt-hint{margin-top:.8rem;padding:.7rem .9rem;background:var(--red-light);border-left:3px solid var(--red);border-radius:4px;font-size:.78rem;color:#7A2A1E;line-height:1.55;display:none}
+.prompt-hint.show{display:block;animation:fadeIn .3s ease}
+.prompt-preview{margin-top:1.2rem;background:#1A1B2E;border-radius:var(--radius-sm);padding:1.2rem 1.4rem;font-size:.82rem;line-height:1.75;color:#E8E8EC;display:none;border:1px solid var(--navy)}
+.prompt-preview.show{display:block;animation:fadeIn .4s ease}
+.prompt-preview .pp-label{color:var(--orange-light);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.6rem;font-family:var(--mono)}
+.structure-bar{display:flex;gap:.4rem;margin-top:1rem;flex-wrap:wrap}
+.structure-step{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.3rem .7rem;border-radius:50px;color:#fff}
+.structure-step:nth-child(1){background:#5B8FE0}.structure-step:nth-child(3){background:var(--orange)}
+.structure-step:nth-child(5){background:#66BB6A}.structure-step:nth-child(7){background:#8E6BC0}
+.structure-arrow{color:var(--text-muted);font-weight:700;align-self:center;font-size:.75rem}
+
+/* ── ACTIVITY 2: IMAGERY READINESS SORTER ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+
+/* ── ACTIVITY 3: MATCH PERSONALIZATION TACTICS ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.7rem}
+.match-pool{display:flex;flex-direction:column;gap:.6rem}
+.match-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem .9rem;font-size:.82rem;line-height:1.45;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.match-chip:hover{border-color:var(--orange);transform:translateY(-1px)}
+.match-chip.selected{border-color:var(--orange);background:var(--orange-glow)}
+.match-chip.done{opacity:.35;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.match-slot{display:flex;flex-direction:column;gap:.2rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.75rem .9rem;min-height:58px;transition:all .2s;cursor:pointer;background:rgba(255,255,255,0.5)}
+.match-slot:hover{border-color:var(--orange)}
+.match-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);cursor:default}
+.match-slot.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+.match-scenario{font-size:.83rem;font-weight:600;color:var(--navy);line-height:1.45}
+.match-answer{font-size:.78rem;color:#1F5723;line-height:1.45;display:none}
+.match-slot.filled .match-answer{display:block}
+
+/* ── ACTIVITY 4: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 3 · AI Content Marketing</div>
+  <h1>AI Content Strategy &amp; Ideation — <em>plan before you publish</em></h1>
+  <p class="hero-sub">Four hands-on activities. Build a content brief the way a strategist would, sort real workflows into "smart strategy" or "no strategy," match content ideas to the funnel stage they belong in, then pin it down with a quiz. Strategy is the layer that decides whether your content earns attention — get it right and every post works harder.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: BUILD A CONTENT BRIEF ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Build the content brief — one block at a time</h2>
+    <p class="lesson-intro">Jumping straight to "write me a blog post" is how you get generic content nobody reads. A strategist writes a <em>brief</em> first, and every good brief follows a rhythm: <strong>AUDIENCE → ANGLE → SUBSTANCE → CALL TO ACTION</strong>. Who is it for and what's their pain, what promise makes them click, what real substance delivers on it, and where do they go next. The eight blocks below are scrambled. Click them in the order they should appear; a wrong click explains why it doesn't fit yet.</p>
+
+    <div class="structure-bar">
+      <span class="structure-step">1 · Audience</span><span class="structure-arrow">→</span>
+      <span class="structure-step">2 · Angle</span><span class="structure-arrow">→</span>
+      <span class="structure-step">3 · Substance</span><span class="structure-arrow">→</span>
+      <span class="structure-step">4 · Call to action</span>
+    </div>
+
+    <div class="lesson-card">
+      <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy)">Click the next block of the brief</h4>
+      <div class="prompt-pool" id="fragPool"></div>
+      <div class="prompt-hint" id="promptHint"></div>
+      <div class="prompt-slots" id="promptSlots">
+        <div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="slotPlaceholder">Your content brief will build up here, block by block…</div>
+      </div>
+      <div class="prompt-preview" id="promptPreview"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Start over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: SMART STRATEGY VS NO STRATEGY SORTER ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Smart strategy, or no strategy at all?</h2>
+    <p class="lesson-intro">The same tools and the same hour of work produce wildly different results depending on whether a strategy sits behind them. Some habits below are how planned content compounds; others are the "just post something" trap that burns effort for nothing. Drag each workflow into the right bucket. Wrong pills hover-hint the reason.</p>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="imgList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="ready">
+            <div class="bucket-title">Smart strategy</div>
+            <div class="bucket-sub">Planned, targeted, on-purpose</div>
+            <div class="bucket-drop" data-drop="ready"></div>
+          </div>
+          <div class="bucket" data-bucket="fix">
+            <div class="bucket-title">No strategy</div>
+            <div class="bucket-sub">Random, generic, or wasted</div>
+            <div class="bucket-drop" data-drop="fix"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity2()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers2()">Show me the answers</button>
+      </div>
+      <div class="tip-note">💡 <strong>The golden rule of content strategy:</strong> decide <em>who</em> it's for and <em>what job it does</em> before you write a word. AI can generate a hundred ideas in a minute — but without a pillar, a persona, and a purpose, you're just publishing noise faster.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: MATCH CONTENT IDEAS TO FUNNEL STAGES ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Match the content idea to the funnel stage</h2>
+    <p class="lesson-intro">A great idea in the wrong place falls flat. Someone just discovering your topic needs different content than someone ready to buy — that's the <em>marketing funnel</em>: awareness, consideration, decision. Click an audience moment on the left, then click the content idea and format that best serves it. A wrong pair shakes; a right pair locks in green.</p>
+
+    <div class="lesson-card">
+      <div class="match-grid">
+        <div>
+          <div class="match-col-title">The audience moment</div>
+          <div class="match-pool" id="matchScenarios"></div>
+        </div>
+        <div>
+          <div class="match-col-title">The content idea that fits</div>
+          <div class="match-pool" id="matchTactics"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity3()">↻ Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Strategy check — the quiz that keeps you honest</h2>
+    <p class="lesson-intro">Five real strategy-and-ideation decisions. Pick the honest answer for each — every option comes with an explanation, and the wrong ones are the shortcuts that quietly waste your content effort. Answer all five to see your score.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">↻ Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Name one content pillar for a brand or topic you care about, then write one audience question it could answer. Who is the persona asking it, and what's their pain?</div>
+        <textarea placeholder="Pillar: 'beginner home cooking'. Question a busy parent asks: 'What can I make in 15 minutes with 5 ingredients?'..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Where's the line for you between letting AI ideate and letting AI decide? Give one example of an AI idea you'd keep and one you'd cut, and why.</div>
+        <textarea placeholder="Keep: an idea that fits my pillar and a real audience pain. Cut: a generic 'top 10 trends' post that any brand could publish, because..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 3 · AI Content Creation</h3>
+      <p>You've got a strategy, personas, pillars, and a calendar full of vetted ideas — now it's time to write. Next: turn a brief into a draft with AI, keep your brand voice intact, and edit AI output into content that actually sounds like you.</p>
+      <a href="03-ai-content-creation.html" class="btn btn-primary">Continue to Lesson 3 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Build a content brief ─── */
+const FRAGMENTS = [
+  {order:1, tag:'hook',    text:'Audience: first-time home bakers who feel intimidated and afraid of wasting expensive ingredients.'},
+  {order:2, tag:'hook',    text:'Their pain & question: "Why does my bread turn out dense?" — they want reassurance, not a chef\'s lecture.'},
+  {order:3, tag:'benefit', text:'Angle / promise: "5 beginner bread mistakes and the one-line fix for each" — a title that answers the exact question.'},
+  {order:4, tag:'benefit', text:'Why it wins the click: it names a real fear, promises a quick fix, and fits our "beginner baking" pillar.'},
+  {order:5, tag:'detail',  text:'Substance: each mistake gets a photo, a plain-language cause, and a fix a nervous beginner can actually follow.'},
+  {order:6, tag:'detail',  text:'Format & keywords: an 800-word blog post targeting "why is my bread dense", plus a carousel to repurpose it.'},
+  {order:7, tag:'cta',     text:'Call to action: invite readers to download our free "beginner baking checklist" to capture the email.'},
+  {order:8, tag:'cta',     text:'Next step in the journey: point them to our starter-kit review post for readers ready to buy their first tools.'}
+];
+const STAGE_HINTS = {
+  hook:'Start with the AUDIENCE — name exactly who it\'s for and the pain or question they carry, before any idea.',
+  benefit:'The ANGLE comes next: the specific promise or title that makes this persona click, tied to your pillar.',
+  detail:'SUBSTANCE comes after the angle — the real value, format, and keywords that deliver on the promise.',
+  cta:'The CALL TO ACTION comes last — the next step you want the reader to take once the content has earned it.'
+};
+let promptStep = 0, promptMistakes = 0;
+function renderFragments(){
+  const shuffled = [...FRAGMENTS].sort(()=>Math.random()-0.5);
+  $('fragPool').innerHTML = shuffled.map(f =>
+    `<div class="frag-chip" data-order="${f.order}" onclick="pickFragment(${f.order}, this)">${f.text}</div>`
+  ).join('');
+}
+function pickFragment(order, chip){
+  const hint = $('promptHint');
+  if (order !== promptStep + 1) {
+    promptMistakes++;
+    chip.classList.remove('shake'); void chip.offsetWidth;
+    chip.classList.add('shake');
+    const expected = FRAGMENTS.find(f => f.order === promptStep + 1);
+    hint.innerHTML = `<strong>Not yet.</strong> ${STAGE_HINTS[expected.tag]} (Block ${promptStep + 1} of 8 — you're writing the <strong>${expected.tag.toUpperCase()}</strong> part.)`;
+    hint.classList.add('show');
+    return;
+  }
+  hint.classList.remove('show');
+  promptStep++;
+  chip.classList.add('used');
+  const frag = FRAGMENTS.find(f => f.order === order);
+  const ph = $('slotPlaceholder');
+  if (ph) ph.remove();
+  const line = document.createElement('div');
+  line.className = 'slot-line t-' + frag.tag;
+  line.innerHTML = `<span class="slot-tag">${frag.tag}</span><span>${frag.text}</span>`;
+  $('promptSlots').appendChild(line);
+  if (promptStep === FRAGMENTS.length) finishPrompt();
+}
+function finishPrompt(){
+  const preview = $('promptPreview');
+  preview.innerHTML = `<span class="pp-label">Your finished content brief — the pattern works for any piece of content</span>` +
+    FRAGMENTS.map(f => f.text).join(' ');
+  preview.classList.add('show');
+  const fb = $('feedback1');
+  const whys = `<ul style="margin:.6rem 0 0 1.1rem;line-height:1.7">
+    <li><strong>Audience</strong> comes first — a named persona and their real pain, never "everyone."</li>
+    <li><strong>Angle</strong> turns that pain into a specific promise or title that earns the click and fits a pillar.</li>
+    <li><strong>Substance</strong> spells out the real value, format, and keywords that deliver on the promise.</li>
+    <li><strong>Call to action</strong> defines the next step, so the content moves the reader forward instead of dead-ending.</li></ul>`;
+  if (promptMistakes === 0) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect assembly — zero wrong clicks.</strong> You've internalized the AUDIENCE → ANGLE → SUBSTANCE → CTA rhythm of a content brief. Hand exactly this shape to any AI: "Draft this post for this persona, with this angle, covering these points, ending in this CTA." You'll get on-strategy content, not generic filler.${whys}`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Assembled — with ${promptMistakes} wrong click${promptMistakes > 1 ? 's' : ''} on the way.</strong> No problem: the order <em>is</em> the lesson — audience before idea, promise before substance, and always a clear next step.${whys} Hit <em>Start over</em> and try for a clean run.`;
+  }
+  $('prog1').classList.add('done');
+}
+function resetActivity1(){
+  promptStep = 0; promptMistakes = 0;
+  $('promptHint').classList.remove('show');
+  $('promptPreview').className = 'prompt-preview';
+  $('feedback1').className = 'activity-feedback';
+  $('promptSlots').innerHTML = '<div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="slotPlaceholder">Your content brief will build up here, block by block…</div>';
+  renderFragments();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Smart strategy vs no strategy sorter ─── */
+const IMAGES = [
+  {id:'i1', text:'You research the questions your audience actually searches for, then build content pillars around them before writing anything.', bucket:'ready', why:'Starting from real audience questions and pillars is the core of strategy — every post has a job before it exists.'},
+  {id:'i2', text:'You keep a simple editorial calendar with a realistic cadence you can sustain, not a heroic pace you\'ll abandon in week two.', bucket:'ready', why:'A calendar and an honest cadence turn scattered posts into a compounding habit — consistency beats bursts.'},
+  {id:'i3', text:'You use AI to brainstorm 30 ideas from one pillar, then filter them down to the few that fit a persona and a keyword.', bucket:'ready', why:'AI ideates at scale, you filter with judgment — that\'s exactly how to use ideation without drowning in noise.'},
+  {id:'i4', text:'You publish whatever trending topic you saw this morning, with no tie to your audience or your pillars.', bucket:'fix', why:'Chasing random trends with no connection to your audience or pillars burns effort and confuses your brand.'},
+  {id:'i5', text:'You accept every AI-generated idea and schedule them all, without checking if any match a real audience pain.', bucket:'fix', why:'Unfiltered AI ideas are generic by default — publishing them all means volume without relevance or a point of view.'},
+  {id:'i6', text:'You write posts because "we should be posting," with no funnel stage, keyword, or goal in mind.', bucket:'fix', why:'Posting for the sake of posting has no target and no measurable job — it\'s activity mistaken for strategy.'}
+];
+const IMG_NAMES = {ready:'Smart strategy', fix:'No strategy'};
+let placedImg = {};
+function renderImages(){
+  const list = $('imgList');
+  const shuffled = [...IMAGES].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupImgBuckets(){
+  document.querySelectorAll('.bucket[data-bucket]').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDropImg(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleDropImg(id, bucket){
+  const item = IMAGES.find(s => s.id === id);
+  if (!item || placedImg[id]) return;
+  const correct = item.bucket === bucket;
+  placedImg[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + item.text.substring(0, 40) + (item.text.length > 40 ? '…' : '');
+  pill.title = correct ? item.why : `Correct bucket: ${IMG_NAMES[item.bucket]}. ${item.why}`;
+  document.querySelector(`[data-drop="${bucket}"]`).appendChild(pill);
+  checkActivity2Done();
+}
+function checkActivity2Done(){
+  if (Object.keys(placedImg).length === IMAGES.length) {
+    const right = Object.values(placedImg).filter(p => p.correct).length;
+    const fb = $('feedback2');
+    if (right === IMAGES.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct.</strong> You spotted the pattern: strategy means every piece has a <em>who</em>, a <em>pillar</em>, and a <em>purpose</em> before it's made — and AI ideas are raw material to filter, not orders to obey. That's the difference between content that compounds and content that just fills a feed.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the reason. Ask two questions of every content plan: <em>Who is this for, and what job does it do?</em> and <em>Would I still make it if no trend told me to?</em> If either answer is weak, it's no strategy. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetActivity2(){
+  placedImg = {};
+  $('feedback2').className = 'activity-feedback';
+  document.querySelectorAll('[data-drop]').forEach(d => d.innerHTML = '');
+  renderImages();
+  $('prog2').classList.remove('done');
+}
+function showAnswers2(){
+  IMAGES.forEach(s => { if (!placedImg[s.id]) handleDropImg(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 3: Match content ideas to funnel stages ─── */
+const PAIRS = [
+  {id:'m1', scenario:'Awareness: someone has the problem but has never heard of you or your topic.', answer:'A "beginner\'s guide to [topic]" blog post targeting a broad how-to keyword.', note:'Top-of-funnel content teaches and gets discovered — it answers the search, no pitch needed yet.'},
+  {id:'m2', scenario:'Consideration: they\'re weighing options and comparing a few solutions.', answer:'A "how to choose the right [product type]" comparison guide with an honest pros-and-cons.', note:'Mid-funnel readers want to compare — helpful, unbiased comparisons build the trust that earns the shortlist.'},
+  {id:'m3', scenario:'Decision: they\'re almost ready to buy but want proof it works.', answer:'A customer case study showing real before-and-after results.', note:'Bottom-of-funnel content removes the last doubt — proof and specifics convert the ready buyer.'},
+  {id:'m4', scenario:'A curious scroller on social with a 3-second attention span.', answer:'A short "did you know?" carousel or reel built from one surprising stat.', note:'Snackable, hook-first formats fit the platform and the mindset — awareness lives where attention is thin.'},
+  {id:'m5', scenario:'An existing customer you want to keep engaged after they buy.', answer:'A "get more from your purchase" tips email or onboarding series.', note:'Post-purchase content drives retention and referrals — value after the sale keeps customers loyal.'}
+];
+let matchState = {selectedScenario:null, solved:0, mistakes:0};
+function renderMatch(){
+  matchState = {selectedScenario:null, solved:0, mistakes:0};
+  const sc = [...PAIRS].sort(()=>Math.random()-0.5);
+  const tc = [...PAIRS].sort(()=>Math.random()-0.5);
+  $('matchScenarios').innerHTML = sc.map(p =>
+    `<div class="match-chip" data-role="scenario" data-id="${p.id}" onclick="pickScenario('${p.id}', this)">${p.scenario}</div>`
+  ).join('');
+  $('matchTactics').innerHTML = tc.map(p =>
+    `<div class="match-slot" data-role="tactic" data-id="${p.id}" onclick="pickTactic('${p.id}', this)">
+       <span class="match-scenario">${p.answer}</span>
+       <span class="match-answer"></span>
+     </div>`
+  ).join('');
+  $('feedback3').className = 'activity-feedback';
+}
+function pickScenario(id, el){
+  if (el.classList.contains('done')) return;
+  document.querySelectorAll('.match-chip[data-role="scenario"]').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  matchState.selectedScenario = id;
+}
+function pickTactic(id, el){
+  if (el.classList.contains('filled')) return;
+  if (!matchState.selectedScenario) {
+    const fb = $('feedback3');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Pick an audience moment on the left first</strong>, then click the content idea that fits it.`;
+    return;
+  }
+  if (matchState.selectedScenario === id) {
+    const pair = PAIRS.find(p => p.id === id);
+    el.classList.add('filled');
+    el.querySelector('.match-answer').textContent = '✓ ' + pair.note;
+    const scEl = document.querySelector(`.match-chip[data-id="${id}"]`);
+    scEl.classList.remove('selected');
+    scEl.classList.add('done');
+    matchState.selectedScenario = null;
+    matchState.solved++;
+    $('feedback3').className = 'activity-feedback';
+    if (matchState.solved === PAIRS.length) finishMatch();
+  } else {
+    matchState.mistakes++;
+    el.classList.remove('shake'); void el.offsetWidth;
+    el.classList.add('shake');
+    const fb = $('feedback3');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Not the best fit.</strong> Re-read the audience moment — what do they need <em>at this stage</em>? Pick the content idea that serves that exact intent.`;
+    setTimeout(() => el.classList.remove('shake'), 500);
+  }
+}
+function finishMatch(){
+  const fb = $('feedback3');
+  if (matchState.mistakes === 0) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>All five matched — clean run.</strong> Mapping ideas to funnel stages is what turns a pile of topics into a journey: guides that get found at awareness, comparisons that build trust at consideration, proof that closes at decision, and value that retains after the sale. Same effort, aimed on purpose.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>All five matched — with ${matchState.mistakes} wrong attempt${matchState.mistakes > 1 ? 's' : ''}.</strong> That's fine — the lesson is in the pairing. Each idea fits a specific <em>stage of intent</em>: teaching the newcomer, comparing for the researcher, proving to the almost-buyer, nurturing the customer. Hit <em>Reset</em> to try for a flawless run.`;
+  }
+  $('prog3').classList.add('done');
+}
+function resetActivity3(){
+  renderMatch();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {
+    q:'You\'re excited to start and your instinct is to open an AI tool and generate ten posts today. What should come first?',
+    opts:[
+      {t:'Nothing — just start publishing and figure out the strategy as you go', ok:false, ex:'Publishing without a strategy is how you end up with a feed of disconnected posts nobody remembers. Volume without direction doesn\'t compound — it just fills space.'},
+      {t:'A strategy: who your audience is, what pillars you\'ll own, and what each piece is meant to do', ok:true, ex:'Exactly. Strategy precedes creation. Personas, pillars, and a purpose per piece are what make the content you (or AI) create actually land and add up over time.'},
+      {t:'Buying a fancier AI tool so the output is higher quality', ok:false, ex:'A better tool can\'t fix a missing plan. The most powerful model still needs to know who it\'s for and what job the content does — that direction is yours to supply.'}
+    ]
+  },
+  {
+    q:'What is a "content pillar," and why does it matter for ideation?',
+    opts:[
+      {t:'A single viral post you keep reposting', ok:false, ex:'That\'s not a pillar. A one-off post can\'t anchor a strategy — pillars are broad themes, not individual pieces you recycle.'},
+      {t:'A core topic your brand owns, which you can break into topic clusters and dozens of related ideas', ok:true, ex:'Right. A pillar (say, "beginner baking") gives structure: it ties to your audience and SEO keywords, and one pillar can fan out into topic clusters and dozens of specific, on-strategy ideas.'},
+      {t:'The font and colors that make your posts recognizable', ok:false, ex:'That\'s visual branding, not a content pillar. Pillars are about the topics you own, not the look — though both matter for a consistent brand.'}
+    ]
+  },
+  {
+    q:'You ask AI to brainstorm and it hands you 40 content ideas in seconds. What\'s the right next move?',
+    opts:[
+      {t:'Schedule all 40 — more content is always better', ok:false, ex:'Unfiltered AI ideas are generic by default and many won\'t fit your audience or pillars. Publishing all of them is volume without relevance — the opposite of strategy.'},
+      {t:'Filter them: keep the few that match a real persona pain, a pillar, and a keyword; cut the rest', ok:true, ex:'That\'s the whole skill. AI ideates at scale; your judgment does the filtering. Keep the ideas that serve a real audience question and drop the generic filler no brand-specific reason supports.'},
+      {t:'Throw them all out — AI ideas are never any good', ok:false, ex:'Too far. AI is a genuinely great brainstorm partner — it surfaces angles you\'d miss. The value is in generating widely, then choosing wisely, not in refusing to use it.'}
+    ]
+  },
+  {
+    q:'You want to publish consistently but you\'re a team of one. How should you set your editorial cadence?',
+    opts:[
+      {t:'Commit to daily posts on five channels — go big or go home', ok:false, ex:'A pace you can\'t sustain is worse than a modest one: you\'ll burn out and go quiet, and inconsistency erodes the trust and momentum you were building.'},
+      {t:'Pick a realistic cadence you can keep for months, and put it on an editorial calendar', ok:true, ex:'This is honest and effective. One solid post a week you actually ship beats five you plan and abandon. A calendar with a sustainable rhythm is what makes content compound.'},
+      {t:'Post only when inspiration strikes — forcing a schedule kills creativity', ok:false, ex:'Waiting for inspiration means long silences and no reliability for your audience. A calendar doesn\'t kill creativity; it removes the daily "what do I post?" panic so you can focus on quality.'}
+    ]
+  },
+  {
+    q:'What\'s the honest promise of AI for content strategy and ideation for a beginner?',
+    opts:[
+      {t:'It replaces the need to understand your audience or your brand', ok:false, ex:'It never does that. AI can generate and organize ideas, but it can\'t know your audience\'s real pains or what makes your brand distinct — that judgment is your input, and it steers everything AI produces.'},
+      {t:'It lets one person ideate, plan, and organize like a whole content team — if you supply the strategy', ok:true, ex:'That\'s the real leverage: dozens of ideas from one pillar, briefs in minutes, a calendar built fast. It levels the field for a solo marketer, as long as you steer it with a clear strategy and human filtering.'},
+      {t:'It guarantees your content will go viral if you generate enough of it', ok:false, ex:'No tool guarantees reach — audience fit, timing, and quality still rule. AI helps you produce more on-strategy content; it can\'t manufacture attention that the ideas themselves don\'t earn.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 — you own the strategy layer.</strong> You know why strategy precedes creation, what a content pillar is, how to filter AI ideas down to the strong ones, how to set a cadence you can keep, and where AI's honest promise starts and stops. That's the thinking that makes every later piece of content work harder.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations — the wrong options are the beginner traps ("just start posting", "schedule all 40 AI ideas", "AI replaces knowing your audience"). The thread: AI is a brilliant idea-generator and organizer; your audience knowledge, your pillars, and your filtering are what turn it into real strategy. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderFragments();
+  renderImages();
+  setupImgBuckets();
+  renderMatch();
+  renderQuiz();
+});
+</script>
+</body>
+</html>
