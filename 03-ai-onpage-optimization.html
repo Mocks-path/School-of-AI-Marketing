@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI On-Page & Content Optimization · Lesson 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · Product-page anatomy ============ */
+.anatomy{display:grid;grid-template-columns:400px 1fr;gap:26px;align-items:start}
+.mock{
+  width:100%;max-width:392px;background:#fff;border:1px solid var(--line);
+  border-radius:16px;padding:18px;position:relative;
+  box-shadow:0 14px 34px rgba(65,44,35,0.10);
+}
+.mock [data-spot]{position:relative;border-radius:10px;transition:outline-color .3s}
+.mock [data-spot].hl{outline:2px solid var(--orange);outline-offset:3px;animation:hlPulse 1.3s ease-in-out infinite}
+@keyframes hlPulse{
+  0%,100%{outline-color:var(--orange)}
+  50%{outline-color:rgba(239,127,26,0.25)}
+}
+.spot{
+  position:absolute;top:-10px;right:-10px;width:24px;height:24px;border-radius:50%;
+  background:var(--brown-dark);color:#fff;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:2px solid var(--paper);z-index:6;transition:transform .25s,background .25s;
+  box-shadow:0 3px 8px rgba(47,29,25,0.3);
+}
+.spot:hover{transform:scale(1.2)}
+[data-spot].hl .spot{background:var(--orange);transform:scale(1.25)}
+.m-img{
+  height:148px;background:linear-gradient(135deg,#F5E7D0,#E9D2AC);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  color:var(--tan);font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;
+}
+.m-img svg{width:46px;height:36px}
+.m-stars{display:flex;align-items:center;gap:8px;margin:12px 2px 6px;font-size:14px;color:var(--orange)}
+.m-stars .cnt{font-family:'JetBrains Mono',monospace;font-size:10.5px;color:var(--muted)}
+.m-head{font-family:'Fraunces',serif;font-weight:700;font-size:20px;line-height:1.15;color:var(--brown-dark);padding:2px;margin:2px 0 8px;cursor:pointer}
+.m-price{display:flex;align-items:baseline;gap:9px;padding:3px;margin-bottom:10px;cursor:pointer}
+.m-price .now{font-family:'Fraunces',serif;font-size:24px;font-weight:800;color:var(--orange-dark)}
+.m-price .was{font-size:14px;color:var(--muted);text-decoration:line-through}
+.m-price .save{font-family:'JetBrains Mono',monospace;font-size:10px;background:var(--yellow);color:var(--brown-dark);padding:2px 7px;border-radius:4px;font-weight:600}
+.m-bullets{list-style:none;margin:0 0 12px;font-size:12.5px;color:var(--ink)}
+.m-bullets li{padding-left:18px;position:relative;margin-bottom:3px}
+.m-bullets li::before{content:"✓";position:absolute;left:2px;color:var(--orange-dark);font-weight:700}
+.m-cta{
+  background:var(--orange);color:#fff;text-align:center;font-weight:700;font-size:15px;
+  padding:13px;border-radius:10px;letter-spacing:0.01em;cursor:pointer;margin-bottom:10px;
+  box-shadow:0 5px 14px rgba(239,127,26,0.35);
+}
+.m-guar{
+  display:flex;align-items:center;gap:8px;background:var(--cream);border:1px dashed var(--line);
+  padding:8px 12px;border-radius:8px;font-size:11.5px;color:var(--brown);margin-bottom:12px;cursor:pointer;
+}
+.m-guar svg{width:16px;height:18px;flex-shrink:0}
+.m-reviews{display:grid;gap:8px;cursor:pointer;padding:2px}
+.m-rev{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:9px 11px;font-size:11.5px;color:var(--ink)}
+.m-rev .who{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);display:block;margin-top:3px}
+.m-rev .ph{display:inline-block;width:26px;height:20px;border-radius:4px;background:linear-gradient(135deg,#E9D2AC,#D9BC8C);vertical-align:middle;margin-right:6px}
+.spot-panel{
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:24px;min-height:230px;position:sticky;top:90px;
+}
+.spot-panel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sp-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange-dark);font-weight:600}
+.sp-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--brown-dark);margin:6px 0 10px}
+.sp-why{font-size:14px;color:var(--ink);margin-bottom:12px;max-width:none}
+.sp-ai{
+  font-size:13px;color:var(--brown);background:var(--cream);border-left:3px solid var(--orange);
+  padding:10px 14px;border-radius:0 8px 8px 0;max-width:none;margin:0;
+}
+.sp-ai strong{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark)}
+
+/* ============ Figure 2 · Store-type flip cards ============ */
+.cards3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;perspective:1400px}
+.fcard{position:relative;height:410px;cursor:pointer;opacity:0;transform:translateY(16px)}
+.cards3.in .fcard{animation:cardUp .6s forwards}
+.cards3.in .fcard:nth-child(1){animation-delay:.1s}
+.cards3.in .fcard:nth-child(2){animation-delay:.3s}
+.cards3.in .fcard:nth-child(3){animation-delay:.5s}
+@keyframes cardUp{to{opacity:1;transform:translateY(0)}}
+.f-inner{position:absolute;inset:0;transform-style:preserve-3d;transition:transform .75s cubic-bezier(.35,.15,.25,1)}
+.fcard.flipped .f-inner{transform:rotateY(180deg)}
+.f-face{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:16px;border:1px solid var(--line);padding:22px;display:flex;flex-direction:column;
+  transition:box-shadow .4s;
+}
+.f-front{background:var(--paper);align-items:center;justify-content:center;text-align:center;gap:8px}
+.f-front .f-icon{width:74px;height:74px;border-radius:18px;display:flex;align-items:center;justify-content:center;margin-bottom:8px}
+.f-front .f-icon svg{width:42px;height:42px}
+.fcard:nth-child(1) .f-icon{background:rgba(239,127,26,0.14)}
+.fcard:nth-child(2) .f-icon{background:rgba(163,78,28,0.12)}
+.fcard:nth-child(3) .f-icon{background:rgba(254,204,0,0.18)}
+.f-front h4{font-family:'Fraunces',serif;font-size:24px;font-weight:700;color:var(--brown-dark)}
+.f-front .tagline{font-size:13.5px;color:var(--muted);max-width:210px}
+.f-front .hint{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);margin-top:14px}
+.f-back{background:var(--brown-dark);color:#EFDFC9;transform:rotateY(180deg);font-size:12.5px;overflow:auto}
+.f-back h5{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange-light);margin:10px 0 5px}
+.f-back h5:first-child{margin-top:0}
+.f-back ul{list-style:none}
+.f-back li{padding-left:16px;position:relative;margin-bottom:3px;line-height:1.45}
+.f-back li.pro::before{content:"+";position:absolute;left:0;color:var(--yellow);font-weight:700}
+.f-back li.con::before{content:"−";position:absolute;left:0;color:var(--orange-light);font-weight:700}
+.f-back .bestfor{margin-top:auto;padding-top:12px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.06em;color:var(--yellow);border-top:1px solid rgba(251,246,238,0.15)}
+.fcard.rec .f-face{box-shadow:0 0 0 3px var(--yellow),0 14px 36px rgba(254,204,0,0.35)}
+.persona{display:flex;gap:10px;flex-wrap:wrap;margin-top:26px}
+.persona button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--paper);
+  border:1px solid var(--line);color:var(--brown);padding:9px 15px;border-radius:999px;
+  cursor:pointer;letter-spacing:0.04em;transition:all .2s;
+}
+.persona button:hover{border-color:var(--orange);color:var(--orange-dark)}
+.persona button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.rec-note{
+  margin-top:14px;font-size:14px;color:var(--brown-dark);background:var(--paper);
+  border:1px solid var(--line);border-left:3px solid var(--yellow);
+  padding:12px 16px;border-radius:0 10px 10px 0;min-height:24px;max-width:none;
+}
+.rec-note.pop{animation:panelIn .4s ease}
+
+/* ============ Figure 3 · AI copy generator ============ */
+.gen-grid{display:grid;grid-template-columns:260px 1fr;gap:24px;align-items:start}
+.opt-group{margin-bottom:20px}
+.opt-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-bottom:9px}
+.opt{display:grid;gap:7px}
+.opt button{
+  font-family:'Inter',sans-serif;font-size:13px;text-align:left;background:var(--paper);
+  border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:9px;
+  cursor:pointer;transition:all .2s;
+}
+.opt button:hover{border-color:var(--orange)}
+.opt button.on{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.gen-out{
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:28px;min-height:230px;position:relative;
+  box-shadow:0 8px 22px rgba(65,44,35,0.06);
+}
+.gen-out::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;border-radius:14px 14px 0 0;background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.gen-ph{font-size:14px;color:var(--muted);font-style:italic}
+.gen-out.live .gen-ph{display:none}
+#genText{font-family:'Fraunces',serif;font-size:18.5px;line-height:1.55;color:var(--brown-dark)}
+.cursor{display:none;color:var(--orange);font-weight:700;animation:blink 0.9s steps(1) infinite}
+.gen-out.live .cursor{display:inline}
+@keyframes blink{50%{opacity:0}}
+.gen-tagrow{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.gen-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;background:var(--cream);border:1px solid var(--line);color:var(--tan);padding:3px 9px;border-radius:4px}
+.gen-note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.04em;margin-top:14px;max-width:none}
+.gen-note strong{color:var(--orange-dark)}
+
+/* ============ Figure 4 · Trust-signal stack ============ */
+.trust-wrap{display:grid;grid-template-columns:1fr 250px;gap:30px;align-items:start}
+.chips{display:flex;flex-wrap:wrap;gap:10px}
+.chip{
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.03em;
+  border:1px solid var(--line);background:var(--paper);color:var(--brown);
+  padding:9px 15px;border-radius:999px;cursor:pointer;transition:all .25s;user-select:none;
+}
+.chip::before{content:"+ ";color:var(--orange-dark);font-weight:600}
+.chip:hover{border-color:var(--orange)}
+.chip.on{background:var(--brown-dark);color:#FBE7CB;border-color:var(--brown-dark)}
+.chip.on::before{content:"✓ ";color:var(--yellow)}
+.tower-zone{text-align:center}
+.tower{
+  height:316px;width:130px;margin:0 auto;border:1px dashed var(--line);border-radius:14px;
+  background:var(--paper);display:flex;flex-direction:column-reverse;
+  padding:5px;gap:3px;overflow:hidden;
+}
+.layer{
+  width:100%;height:0;border-radius:7px;opacity:0;flex-shrink:0;
+  transition:height .55s cubic-bezier(.3,.8,.3,1),opacity .4s;
+}
+.ly-domain{background:var(--orange)} .ly-photos{background:var(--tan)}
+.ly-reviews{background:var(--orange-dark)} .ly-ship{background:var(--yellow)}
+.ly-refund{background:var(--brown)} .ly-contact{background:var(--orange-light)}
+.ly-badges{background:var(--accent)} .ly-about{background:#C9A227}
+.t-pct{font-family:'Fraunces',serif;font-size:46px;font-weight:800;color:var(--orange-dark);line-height:1;margin-top:16px}
+.t-pct span{font-size:22px}
+.t-cap{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.t-verdict{
+  margin-top:18px;font-size:14px;color:var(--brown-dark);background:var(--paper);
+  border:1px solid var(--line);border-radius:10px;padding:12px 16px;min-height:48px;max-width:none;
+}
+.t-verdict.pop{animation:panelIn .35s ease}
+.trust-hintrow{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:16px;letter-spacing:0.04em;max-width:none}
+
+@media(max-width:880px){
+  .anatomy,.gen-grid,.trust-wrap{grid-template-columns:1fr}
+  .spot-panel{position:static}
+  .cards3{grid-template-columns:1fr;perspective:none}
+  .fcard{height:390px;max-width:420px;width:100%;margin:0 auto}
+  .tower-zone{margin-top:10px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 03 · AI On-Page SEO</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="40" rx="11" fill="#412C23"/>
+      <path d="M10 31V14.5l6 8.5 6-8.5 6 8.5 6-8.5V31" stroke="#EF7F1A" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="34" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 1 · Lesson 03 · AI On-Page SEO</div>
+  <h1>A page that <em>ranks</em>, written to be read.</h1>
+  <p class="lede">Search engines send the click; your page's only job is to earn the ranking and satisfy the person who arrives. In this lesson we dissect the anatomy of a page that ranks, match content to what searchers actually want, put AI to work drafting and optimizing copy without sliding into generic slop — and stack the E-E-A-T signals that tell Google a real human wrote this.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>On-page SEO has exactly one job</h2>
+  <p class="lead">On-page SEO is everything you control on the page itself — the words, the tags, the structure — that tells a search engine what the page is about and tells a human it's worth reading. Get it right and the same page satisfies both. Get it wrong and no amount of promotion saves it.</p>
+
+  <p>Beginners obsess over stuffing a keyword in as many times as possible. Google stopped rewarding that years ago. A page arriving in the results is really answering three blunt questions for the searcher: <strong>Is this about what I searched? Does it actually answer me? Can I trust who wrote it?</strong> A page that ranks answers all three — through its title, its headings and its body — and every on-page element exists to make one of those answers clearer.</p>
+  <p>The good news: pages that rank are boring in the best way. They follow a repeatable anatomy — a clear title tag, a single H1, a tidy URL, well-structured headings, helpful body content, internal links, described images, and schema. You are not inventing a page; you are assembling a known checklist. Explore each part below and note what AI can draft for you at every step.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Anatomy of a page that ranks</span>
+      <div class="controls">
+        <button id="tourBtn" onclick="tourSpots()">▶ Tour all</button>
+        <button onclick="resetSpots()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="anatomy">
+      <div class="mock" id="mock">
+        <div class="m-img" data-spot="img" onclick="selectSpot('img')">
+          <span class="spot">1</span>
+          <svg viewBox="0 0 46 36" fill="none"><rect x="1" y="1" width="44" height="34" rx="4" stroke="#A34E1C" stroke-width="2"/><circle cx="14" cy="12" r="4" fill="#A34E1C"/><path d="M4 30l12-11 8 7 9-9 9 10" stroke="#A34E1C" stroke-width="2" fill="none"/></svg>
+          Title tag / SERP snippet
+        </div>
+        <div class="m-stars">★★★★★ <span class="cnt">Ranking #3 · 2,400 searches/mo</span></div>
+        <div class="m-head" data-spot="head" onclick="selectSpot('head')"><span class="spot">2</span>How to fix posture: a 15-minute daily routine</div>
+        <div class="m-price" data-spot="price" onclick="selectSpot('price')">
+          <span class="spot">3</span>
+          <span class="now">/fix-posture-routine</span><span class="was">/page?id=8842</span><span class="save">CLEAN URL</span>
+        </div>
+        <ul class="m-bullets">
+          <li>Answers the searcher's exact question first</li>
+          <li>Short paragraphs, scannable subheadings</li>
+          <li>Written for a human, tuned for the engine</li>
+        </ul>
+        <div class="m-cta" data-spot="cta" onclick="selectSpot('cta')"><span class="spot">4</span>Internal link → "best desk setup for posture"</div>
+        <div class="m-guar" data-spot="guar" onclick="selectSpot('guar')">
+          <span class="spot">5</span>
+          <svg viewBox="0 0 16 18" fill="none"><path d="M8 1l7 3v5c0 4.2-3 7.4-7 8-4-.6-7-3.8-7-8V4l7-3z" stroke="#A34E1C" stroke-width="1.6" fill="none"/><path d="M5 9l2 2 4-4" stroke="#EF7F1A" stroke-width="1.8" fill="none"/></svg>
+          Image alt text · describes the photo for search &amp; screen readers
+        </div>
+        <div class="m-reviews" data-spot="rev" onclick="selectSpot('rev')">
+          <span class="spot">6</span>
+          <div class="m-rev"><span class="ph"></span>Schema markup tells Google this is a how-to guide, its steps and its author.<span class="who">FAQ · HowTo · Article structured data</span></div>
+          <div class="m-rev"><span class="ph"></span>Earns rich results — star ratings, FAQ dropdowns, step lists in the SERP.<span class="who">Validated in Google's Rich Results test</span></div>
+        </div>
+      </div>
+      <div class="spot-panel" id="spotPanel">
+        <div class="sp-tag" id="spTag">Interactive anatomy</div>
+        <div class="sp-title" id="spTitle">Click any numbered dot</div>
+        <p class="sp-why" id="spWhy">Each numbered element sends one specific signal to the search engine and the reader. Click a dot on the mock page — or press "Tour all" — to see why it matters for ranking and what AI can draft for it.</p>
+        <p class="sp-ai" id="spAi"><strong>Tip —</strong> the title tag and H1 do the heaviest lifting: they're the first things Google reads and the first thing a searcher sees. Nail those before anything else.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Structure is a signal, not decoration</h3>
+  <p>Notice what the mock page does <em>not</em> have: no keyword stuffed into every line, no ten competing headings, no meta description written for a robot. Each element sends exactly one clean signal. One page, one main topic, one H1. That clarity is what "optimized" actually looks like to a search engine — and it is far easier to build than the keyword-crammed version beginners reach for.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Match the content to what the searcher wants</h2>
+  <p class="lead">Every search has an intent hiding behind it, and it usually falls into one of three types. Write the wrong type of page for a keyword and you'll never rank for it — Google already knows what kind of answer that query deserves.</p>
+
+  <p>An <strong>informational</strong> search wants to learn: "how to fix posture", "what is E-E-A-T". A <strong>commercial</strong> search is comparing before buying: "best posture corrector", "Frase vs Clearscope". A <strong>transactional</strong> search is ready to act: "buy posture corrector", "book SEO audit". Each intent needs a different page shape — a guide, a comparison, or a lean landing page. Flip the cards to compare, then tell the chooser what your keyword sounds like.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · The search-intent chooser</span>
+      <div class="controls">
+        <button onclick="flipAll()">▶ Flip all</button>
+        <button onclick="resetCards()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="cards3" id="cards3">
+      <div class="fcard" id="c-one" onclick="this.classList.toggle('flipped')">
+        <div class="f-inner">
+          <div class="f-face f-front">
+            <div class="f-icon"><svg viewBox="0 0 42 42" fill="none"><circle cx="21" cy="21" r="17" stroke="#EF7F1A" stroke-width="2.5"/><circle cx="21" cy="21" r="9" stroke="#EF7F1A" stroke-width="2.5"/><circle cx="21" cy="21" r="3" fill="#D55222"/></svg></div>
+            <h4>Informational</h4>
+            <p class="tagline">The searcher wants to learn. Answer fully and you build trust and traffic.</p>
+            <div class="hint">Tap to flip</div>
+          </div>
+          <div class="f-face f-back">
+            <h5>Signals</h5>
+            <ul>
+              <li class="pro">Queries like "how to", "what is", "guide"</li>
+              <li class="pro">Wants a thorough, well-structured answer</li>
+              <li class="pro">Best served by a guide, tutorial or explainer</li>
+            </ul>
+            <h5>Watch out</h5>
+            <ul>
+              <li class="con">No sale here yet — don't hard-pitch</li>
+              <li class="con">Thin, generic answers get outranked fast</li>
+              <li class="con">Needs real depth and first-hand experience</li>
+            </ul>
+            <div class="bestfor">Best page: a genuinely helpful long-form guide</div>
+          </div>
+        </div>
+      </div>
+      <div class="fcard" id="c-niche" onclick="this.classList.toggle('flipped')">
+        <div class="f-inner">
+          <div class="f-face f-front">
+            <div class="f-icon"><svg viewBox="0 0 42 42" fill="none"><rect x="4" y="4" width="15" height="15" rx="4" stroke="#A34E1C" stroke-width="2.5"/><rect x="23" y="4" width="15" height="15" rx="4" stroke="#A34E1C" stroke-width="2.5"/><rect x="4" y="23" width="15" height="15" rx="4" stroke="#A34E1C" stroke-width="2.5"/><rect x="23" y="23" width="15" height="15" rx="7.5" fill="#EF7F1A"/></svg></div>
+            <h4>Commercial</h4>
+            <p class="tagline">The searcher is comparing before they buy. Help them choose honestly.</p>
+            <div class="hint">Tap to flip</div>
+          </div>
+          <div class="f-face f-back">
+            <h5>Signals</h5>
+            <ul>
+              <li class="pro">Queries like "best", "vs", "review", "top 10"</li>
+              <li class="pro">Wants comparison, pros and cons, a verdict</li>
+              <li class="pro">Best served by a review or comparison page</li>
+            </ul>
+            <h5>Watch out</h5>
+            <ul>
+              <li class="con">Empty praise reads as an affiliate trap</li>
+              <li class="con">Needs real testing, not recycled specs</li>
+              <li class="con">Hardest intent to fake experience for</li>
+            </ul>
+            <div class="bestfor">Best page: an honest, hands-on comparison</div>
+          </div>
+        </div>
+      </div>
+      <div class="fcard" id="c-gen" onclick="this.classList.toggle('flipped')">
+        <div class="f-inner">
+          <div class="f-face f-front">
+            <div class="f-icon"><svg viewBox="0 0 42 42" fill="none"><path d="M5 14l4-8h24l4 8v4a5 5 0 01-8 0 5 5 0 01-8 0 5 5 0 01-8 0 5 5 0 01-8 0v-4z" stroke="#A34E1C" stroke-width="2.4" fill="none"/><path d="M8 22v14h26V22" stroke="#A34E1C" stroke-width="2.4"/><rect x="14" y="27" width="8" height="9" fill="#FECC00"/></svg></div>
+            <h4>Transactional</h4>
+            <p class="tagline">The searcher is ready to act. Get out of their way and let them.</p>
+            <div class="hint">Tap to flip</div>
+          </div>
+          <div class="f-face f-back">
+            <h5>Signals</h5>
+            <ul>
+              <li class="pro">Queries like "buy", "price", "book", "near me"</li>
+              <li class="pro">Wants a fast, focused path to the action</li>
+              <li class="pro">Best served by a lean product or landing page</li>
+            </ul>
+            <h5>Watch out</h5>
+            <ul>
+              <li class="con">A 3,000-word essay here kills conversion</li>
+              <li class="con">Still needs enough content to rank at all</li>
+              <li class="con">Trust signals matter more than word count</li>
+            </ul>
+            <div class="bestfor">Best page: a clear, low-friction landing page</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="persona">
+      <button onclick="persona('one',this)">My keyword starts with "how to" or "what is"</button>
+      <button onclick="persona('niche',this)">My keyword has "best" or "vs" in it</button>
+      <button onclick="persona('gen',this)">My keyword has "buy", "price" or "near me"</button>
+    </div>
+    <p class="rec-note" id="recNote">Pick the line that sounds like your keyword — we'll highlight the intent that fits.</p>
+  </div>
+
+  <h3>How to read the intent before you write</h3>
+  <p>The fastest check: <strong>Google your keyword and look at what already ranks</strong>. If page one is full of guides, it's informational — write a guide. If it's comparison and "best of" lists, it's commercial — write an honest comparison. If it's product and booking pages, it's transactional — write a lean landing page. Google has already decided what that query deserves; your job is to match it better than the current results, not to argue with it.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Let AI draft and optimize — never mass-produce slop</h2>
+  <p class="lead">Writing an optimized page used to take a full day of research and drafting. AI collapses that to minutes: outlines, first drafts, meta descriptions, FAQ sections, and coverage checks against the terms your competitors use. Your job shifts from writer to editor and fact-checker.</p>
+
+  <p>Here is what AI genuinely does well for on-page work: <strong>content briefs and outlines</strong> built from what already ranks, <strong>first drafts</strong> in a tone you choose, <strong>meta descriptions and title tags</strong> under the character limits, <strong>optimization passes</strong> where tools like Surfer, Frase or Clearscope flag the topics and questions your draft is missing, and <strong>FAQ sections</strong> drawn from the "People also ask" box. It is a genuine force multiplier — used with a human in the loop.</p>
+  <p>And here is the part hype merchants skip: <strong>AI will happily produce generic slop.</strong> Ask it for "a blog post about posture" and you'll get bland, sourceless filler that says nothing only your page could say — exactly the thin, mass-produced content Google's helpful-content stance is built to bury. The fix is specificity: a tight brief, your own first-hand experience, and a real human editing pass on every draft. AI drafts; you make it worth reading. Try the simulator below — three topics, three prompt styles, nine distinct drafts.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · AI content generator (simulated)</span>
+      <div class="controls">
+        <button onclick="genCopy()">▶ Generate</button>
+        <button onclick="clearCopy()">↺ Clear</button>
+      </div>
+    </div>
+    <div class="gen-grid">
+      <div>
+        <div class="opt-group">
+          <div class="opt-label">1 · Pick a topic</div>
+          <div class="opt" id="prodOpt">
+            <button class="on" onclick="pickProd('posture',this)">How to fix posture</button>
+            <button onclick="pickProd('collar',this)">Best dog collars for night walks</button>
+            <button onclick="pickProd('roller',this)">Reusable vs sticky lint rollers</button>
+          </div>
+        </div>
+        <div class="opt-group">
+          <div class="opt-label">2 · Pick a prompt style</div>
+          <div class="opt" id="toneOpt">
+            <button class="on" onclick="pickTone('playful',this)">Lazy prompt (slop)</button>
+            <button onclick="pickTone('premium',this)">Specific brief</button>
+            <button onclick="pickTone('solver',this)">Brief + real experience</button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="gen-tagrow"><span class="gen-tag" id="tagProd">How to fix posture</span><span class="gen-tag" id="tagTone">Lazy prompt (slop)</span></div>
+        <div class="gen-out" id="genOut">
+          <div class="gen-ph">Pick a topic and a prompt style, then press ▶ Generate to watch the draft appear.</div>
+          <span id="genText"></span><span class="cursor" id="genCur">▍</span>
+        </div>
+        <p class="gen-note"><strong>The prompt decides everything — vague in, slop out.</strong> A tight brief and your own first-hand experience are what separate a page that ranks from the thin content Google's helpful-content stance filters away.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>The editing pass that makes it human</h3>
+  <p>Treat every AI draft as a talented intern's first attempt. Cut the throat-clearing intro ("In today's fast-paced world…"), replace generic claims with the one detail only you know from doing the thing, add a real example or a photo you took, and read it aloud once — if a sentence sounds like no person would say it, rewrite it. Ten minutes of editing on a two-minute draft is still far faster than a blank page — and it is the difference between content Google helps and content it hides.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>E-E-A-T is a stack, and Google audits every page for it</h2>
+  <p class="lead">Google judges content by <strong>E-E-A-T</strong> — Experience, Expertise, Authoritativeness and Trust. No single tag sets it; it's the sum of many small signals that a real, qualified human stands behind the page. The more you stack, the more a page earns the benefit of the doubt.</p>
+
+  <p>Think about how <em>you</em> judge an article you've never seen before. You don't consciously score it — but a named author with credentials, first-hand photos, citations, a clear date, and a real "About" page each quietly nudge you from "who wrote this?" toward "I trust this". Google's raters do the same, and its systems approximate it. The fix is mechanical: stack the signals one by one until doubt has nowhere left to live. Toggle them below and watch the E-E-A-T meter respond.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · The E-E-A-T signal-stack builder</span>
+      <div class="controls">
+        <button onclick="fullStack()">▶ Full stack</button>
+        <button onclick="bareMin()">↺ Bare minimum</button>
+      </div>
+    </div>
+    <div class="trust-wrap" id="trustWrap">
+      <div>
+        <div class="chips">
+          <span class="chip" id="ch-domain" onclick="chipToggle('domain')">Named author</span>
+          <span class="chip" id="ch-photos" onclick="chipToggle('photos')">First-hand experience</span>
+          <span class="chip" id="ch-reviews" onclick="chipToggle('reviews')">Original photos / data</span>
+          <span class="chip" id="ch-ship" onclick="chipToggle('ship')">Cited sources</span>
+          <span class="chip" id="ch-refund" onclick="chipToggle('refund')">Author bio &amp; credentials</span>
+          <span class="chip" id="ch-contact" onclick="chipToggle('contact')">Clear publish / update date</span>
+          <span class="chip" id="ch-badges" onclick="chipToggle('badges')">HTTPS &amp; contact info</span>
+          <span class="chip" id="ch-about" onclick="chipToggle('about')">About page</span>
+        </div>
+        <div class="t-verdict" id="tVerdict">Toggle signals on and off to see how Google's trust in the page reacts.</div>
+        <p class="trust-hintrow">First-hand experience and original photos carry the most weight — they're the two things mass-produced AI content can't fake.</p>
+      </div>
+      <div class="tower-zone">
+        <div class="tower">
+          <div class="layer ly-domain" id="ly-domain"></div>
+          <div class="layer ly-photos" id="ly-photos"></div>
+          <div class="layer ly-reviews" id="ly-reviews"></div>
+          <div class="layer ly-ship" id="ly-ship"></div>
+          <div class="layer ly-refund" id="ly-refund"></div>
+          <div class="layer ly-contact" id="ly-contact"></div>
+          <div class="layer ly-badges" id="ly-badges"></div>
+          <div class="layer ly-about" id="ly-about"></div>
+        </div>
+        <div class="t-pct"><span id="tNum">6</span><span>%</span></div>
+        <div class="t-cap">E-E-A-T strength</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The stack, in the order to build it</h3>
+  <p>Add a <strong>named author</strong> first — anonymous content struggles to earn trust. Weave in <strong>first-hand experience</strong>; a line like "when I tested this for three weeks" is something AI alone cannot honestly write. Then <strong>original photos or data</strong> you produced, <strong>cited sources</strong> for any claim you didn't verify yourself, an <strong>author bio with real credentials</strong>, a <strong>clear publish and update date</strong>, <strong>HTTPS and visible contact info</strong>, and an <strong>About page</strong> that sounds like real people. None of these is glamorous. Together they are the difference between content Google helps and content it quietly buries.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now know what on-page SEO is <em>for</em>. A page is not a keyword container — it is an answer built for one searcher and legible to one search engine. The anatomy is known, the intent is a deliberate match, AI writes the drafts, you make them human, and E-E-A-T is built signal by signal until doubt runs out of room.</p>
+  <ul>
+    <li>Structure is a signal, not decoration — title, H1 and headings do the heavy lifting</li>
+    <li>Match the page to search intent — informational, commercial or transactional</li>
+    <li>AI drafts, humans make it worth reading — never publish generic slop</li>
+    <li>First-hand experience is the one thing AI alone can't fake — add yours</li>
+    <li>Stack all eight E-E-A-T signals so Google helps your page instead of hiding it</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 03 of 04 · Next up: AI Off-Page SEO &amp; Authority →</footer>
+<script>
+
+/* ============ Figure 1 · Hotspot anatomy ============ */
+const SPOTS={
+  img:{n:1,t:"Title tag & SERP snippet",
+    why:"The title tag is the blue clickable line Google shows in the results, and one of the strongest on-page signals of what the page is about. Put the main keyword near the front, keep it under about 60 characters so it isn't truncated, and write it for a human deciding whether to click — not just for the crawler.",
+    ai:"Ask AI for 10 title-tag options under 60 characters that lead with your keyword, then pick the one a real person would actually click. Generating options is the machine's job; choosing the honest, non-clickbait one is yours."},
+  head:{n:2,t:"H1 heading",
+    why:"The H1 is the visible headline on the page, and there should be exactly one. It confirms the topic to both the reader and the search engine, and it usually mirrors the title tag without being identical. Sub-sections then use H2 and H3 in a logical hierarchy — headings are the outline Google reads to understand your page.",
+    ai:"AI can draft an H1 plus a full heading outline from the search intent. Ask it to structure H2s around the questions in the 'People also ask' box, then edit for a clean, logical flow."},
+  price:{n:3,t:"Clean URL slug",
+    why:"A short, readable URL like /fix-posture-routine tells the reader and the engine what to expect before the page even loads. Avoid dates, IDs and stop-word soup. Use hyphens, lowercase, and the main keyword once. You rarely need to change a URL later — get it clean the first time.",
+    ai:"AI can suggest a short slug from your title, but keep it human-readable and stable. Never change a live URL without a redirect — that's a you decision, not the model's."},
+  cta:{n:4,t:"Internal links",
+    why:"Internal links pass relevance and authority between your own pages and help Google discover and understand them. Link with descriptive anchor text ('best desk setup for posture'), not 'click here'. A strong page should point to a few closely related pages, and be pointed to in return.",
+    ai:"AI can scan your existing content and suggest relevant internal links plus natural anchor text. Confirm each target page actually exists and truly relates — don't link for the sake of it."},
+  guar:{n:5,t:"Image alt text",
+    why:"Every meaningful image needs alt text: a short, plain description of what the image shows. It helps screen-reader users, and it helps Google understand and rank your images. Describe the picture honestly — 'person adjusting a posture corrector at a desk' — rather than stuffing keywords.",
+    ai:"AI can draft accurate alt text from an image in seconds. Read it back and make sure it truthfully describes the picture; a keyword-stuffed alt tag helps no one and can look like spam."},
+  rev:{n:6,t:"Schema (structured data)",
+    why:"Schema is a bit of code that labels your content for search engines — 'this is a how-to, these are its steps, this is the author'. It doesn't rank you directly, but it can earn rich results: star ratings, FAQ dropdowns and step lists that make your listing bigger and more clickable.",
+    ai:"AI can generate valid FAQ, HowTo or Article schema for you to paste into the page. Always run it through Google's Rich Results test before publishing to confirm it's valid and eligible."}
+};
+const spotOrder=["img","head","price","cta","guar","rev"];
+let tourTimer=null,tourIdx=0;
+function selectSpot(k){
+  document.querySelectorAll('#mock [data-spot]').forEach(el=>el.classList.remove('hl'));
+  const region=document.querySelector('#mock [data-spot="'+k+'"]');
+  if(region)region.classList.add('hl');
+  const d=SPOTS[k],panel=document.getElementById('spotPanel');
+  document.getElementById('spTag').textContent='Element '+d.n+' of 6';
+  document.getElementById('spTitle').textContent=d.t;
+  document.getElementById('spWhy').textContent=d.why;
+  document.getElementById('spAi').innerHTML='<strong>AI assist —</strong> '+d.ai;
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function tourSpots(){
+  stopTour();
+  const btn=document.getElementById('tourBtn');btn.classList.add('active');
+  tourIdx=0;selectSpot(spotOrder[0]);
+  tourTimer=setInterval(()=>{
+    tourIdx++;
+    if(tourIdx>=spotOrder.length){stopTour();return}
+    selectSpot(spotOrder[tourIdx]);
+  },3200);
+}
+function stopTour(){
+  if(tourTimer){clearInterval(tourTimer);tourTimer=null}
+  document.getElementById('tourBtn').classList.remove('active');
+}
+function resetSpots(){
+  stopTour();
+  document.querySelectorAll('#mock [data-spot]').forEach(el=>el.classList.remove('hl'));
+  document.getElementById('spTag').textContent='Interactive anatomy';
+  document.getElementById('spTitle').textContent='Click any numbered dot';
+  document.getElementById('spWhy').textContent='Each numbered element sends one specific signal to the search engine and the reader. Click a dot on the mock page — or press “Tour all” — to see why it matters for ranking and what AI can draft for it.';
+  document.getElementById('spAi').innerHTML='<strong>Tip —</strong> the title tag and H1 do the heaviest lifting: they’re the first things Google reads and the first thing a searcher sees. Nail those before anything else.';
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){tourSpots();o.unobserve(e.target)}}),{threshold:0.4}).observe(document.getElementById('mock'));
+
+/* ============ Figure 2 · Store-type flip cards ============ */
+const cardsEl=document.getElementById('cards3');
+function flipAll(){document.querySelectorAll('.fcard').forEach(c=>c.classList.add('flipped'))}
+function resetCards(){
+  document.querySelectorAll('.fcard').forEach(c=>c.classList.remove('flipped','rec'));
+  document.querySelectorAll('.persona button').forEach(b=>b.classList.remove('active'));
+  document.getElementById('recNote').textContent='Pick the line that sounds like your keyword — we’ll highlight the intent that fits.';
+}
+const RECS={
+  one:{card:'c-one',msg:'That’s informational intent. The searcher wants to learn, so write a genuinely helpful guide that answers the question fully — depth and first-hand experience win here, not a sales pitch.'},
+  niche:{card:'c-niche',msg:'That’s commercial intent. The searcher is comparing before buying, so write an honest, hands-on comparison with real pros and cons and a clear verdict — recycled specs get outranked.'},
+  gen:{card:'c-gen',msg:'That’s transactional intent. The searcher is ready to act, so give them a lean, low-friction landing page — a 3,000-word essay here just gets in the way of the click.'}
+};
+function persona(key,btn){
+  document.querySelectorAll('.persona button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.fcard').forEach(c=>c.classList.remove('rec'));
+  const r=RECS[key];
+  document.getElementById(r.card).classList.add('rec');
+  const note=document.getElementById('recNote');
+  note.textContent=r.msg;
+  note.classList.remove('pop');void note.offsetWidth;note.classList.add('pop');
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){cardsEl.classList.add('in');o.unobserve(e.target)}}),{threshold:0.25}).observe(cardsEl);
+
+/* ============ Figure 3 · AI copy generator (pre-baked) ============ */
+const COPY={
+  posture:{
+    playful:"In today’s fast-paced world, good posture is more important than ever. Poor posture can lead to a variety of health issues. In this article, we will explore some helpful tips to improve your posture. By following these simple steps, you can stand taller and feel better. Posture is a key part of overall wellness that many people overlook.  ← Notice: sourceless, says nothing specific, could describe any topic. This is slop.",
+    premium:"To fix your posture, start with a 15-minute daily routine built around three moves: a doorway chest stretch, a seated row with a resistance band, and a wall-angel to open the shoulders. Do them once in the morning and once mid-afternoon, when desk slouch peaks. Keep your screen at eye level and your feet flat. Consistency over four to six weeks is what retrains the muscle memory.  ← Specific, structured, genuinely useful — but still no personal proof.",
+    solver:"I fixed a decade of desk slouch with a 15-minute routine, and here’s exactly what worked. Mornings: doorway chest stretch, then wall-angels — the first week my shoulders ached, which physios told me is normal for tight pecs. Afternoons, when my slouch was worst, I added band rows. Photos of my side profile at week 1 and week 6 are below. What surprised me: raising my monitor 10cm did more than any exercise.  ← Specific AND backed by first-hand experience. This is what E-E-A-T rewards."
+  },
+  collar:{
+    playful:"When it comes to keeping your dog safe on night walks, choosing the right collar is very important. There are many great options available on the market today. In this guide, we will look at some of the best dog collars for night walks. A good collar can make all the difference for your furry friend’s safety.  ← Generic, tests nothing, ranks nothing. Pure filler.",
+    premium:"For night walks, prioritise collars that are visible from at least 300 metres, USB-rechargeable rather than battery-swap, and rated waterproof (IP65 or better). We compared six models on brightness, battery life and strap comfort. Fibre-optic glow collars beat single-LED clips for even visibility, but drain faster; pick based on how long your evening walks actually run.  ← Concrete criteria and a real comparison frame.",
+    solver:"I walk a black Labrador on unlit lanes, so I tested six night collars over a winter. The clip-on LED I started with fell off twice; a driver later told me he genuinely couldn’t see her until 20 metres. The fibre-optic collar was visible from the end of my street — I paced it at 380 metres. Charge lasted my week of hour-long walks. Comparison photos taken from a car at dusk are below.  ← Tested, measured, photographed. Nobody can fake this."
+  },
+  roller:{
+    playful:"Dealing with pet hair and lint can be a real hassle for many people. Fortunately, there are several types of lint rollers to choose from. In this post, we compare reusable and sticky lint rollers to help you decide. Both options have their pros and cons, so read on to find out which is right for you.  ← Says it will compare, then compares nothing specific. Thin content.",
+    premium:"Sticky rollers cost roughly £0.10 per sheet and a 60-sheet refill lasts about a month of daily use — call it £15 a year. A reusable micro-bristle roller is a one-off £12 and rinses clean under a tap. Reusables win on cost and waste but are slower on fine cat hair; sticky sheets grip faster but run out at the worst moment. Choose on how much hair you fight daily.  ← Real numbers, honest trade-offs.",
+    solver:"I own two shedding cats, so I ran a sticky roller and a reusable side by side for a month. The sticky refills cost me £14 over the year I tracked; the reusable was £12 once. On my black coat, the sticky sheet cleared fine hair in two passes, the reusable in four — but I never once ran out mid-rush. Weighed-lint results and photos of both after one pass are below.  ← Lived-in, measured, specific to me. That’s the signal AI alone can’t produce."
+  }
+};
+const PRODNAMES={posture:"How to fix posture",collar:"Best dog collars for night walks",roller:"Reusable vs sticky lint rollers"};
+const TONENAMES={playful:"Lazy prompt (slop)",premium:"Specific brief",solver:"Brief + real experience"};
+let curProd='posture',curTone='playful',typer=null;
+function pickProd(p,btn){
+  curProd=p;
+  document.querySelectorAll('#prodOpt button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('tagProd').textContent=PRODNAMES[p];
+}
+function pickTone(t,btn){
+  curTone=t;
+  document.querySelectorAll('#toneOpt button').forEach(b=>b.classList.remove('on'));
+  btn.classList.add('on');
+  document.getElementById('tagTone').textContent=TONENAMES[t];
+}
+function genCopy(){
+  if(typer){clearInterval(typer);typer=null}
+  const txt=COPY[curProd][curTone];
+  const out=document.getElementById('genOut'),el=document.getElementById('genText');
+  out.classList.add('live');
+  el.textContent='';
+  let i=0;
+  typer=setInterval(()=>{
+    i++;
+    el.textContent=txt.slice(0,i);
+    if(i>=txt.length){clearInterval(typer);typer=null}
+  },16);
+}
+function clearCopy(){
+  if(typer){clearInterval(typer);typer=null}
+  document.getElementById('genText').textContent='';
+  document.getElementById('genOut').classList.remove('live');
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){genCopy();o.unobserve(e.target)}}),{threshold:0.4}).observe(document.getElementById('genOut'));
+
+/* ============ Figure 4 · Trust-stack builder ============ */
+const CHIPW={domain:12,photos:16,reviews:18,ship:12,refund:12,contact:8,badges:10,about:6};
+const trustOn={domain:false,photos:false,reviews:false,ship:false,refund:false,contact:false,badges:false,about:false};
+function chipToggle(id){trustOn[id]=!trustOn[id];updateStack()}
+function fullStack(){for(const k in trustOn)trustOn[k]=true;updateStack()}
+function bareMin(){for(const k in trustOn)trustOn[k]=(k==='domain'||k==='photos');updateStack()}
+function updateStack(){
+  let pct=6;
+  for(const k in trustOn){
+    const chip=document.getElementById('ch-'+k),layer=document.getElementById('ly-'+k);
+    if(trustOn[k]){
+      pct+=CHIPW[k];
+      chip.classList.add('on');
+      layer.style.height=(CHIPW[k]*3)+'px';
+      layer.style.opacity='1';
+    }else{
+      chip.classList.remove('on');
+      layer.style.height='0px';
+      layer.style.opacity='0';
+    }
+  }
+  document.getElementById('tNum').textContent=pct;
+  let v;
+  if(pct<25)v='Looks mass-produced — anonymous, sourceless, exactly what the helpful-content stance filters out.';
+  else if(pct<45)v='Thin. A crawler might index it, but it has little reason to rank over a page with real experience.';
+  else if(pct<65)v='Getting there — the topic is covered, but Google still can’t tell who stands behind it.';
+  else if(pct<85)v='Solid. Named, sourced and dated — this reads like a person who actually knows the topic.';
+  else v='Strong E-E-A-T — real experience, real author, real proof. Doubt has nowhere left to live.';
+  const vd=document.getElementById('tVerdict');
+  vd.textContent=v;
+  vd.classList.remove('pop');void vd.offsetWidth;vd.classList.add('pop');
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){bareMin();o.unobserve(e.target)}}),{threshold:0.35}).observe(document.getElementById('trustWrap'));
+
+</script>
+</body>
+</html>

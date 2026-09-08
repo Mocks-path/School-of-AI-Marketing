@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Technical SEO, Links &amp; Measurement · Lesson 04</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ── page-specific: decision tree ─────────────────────────── */
+.tree{display:flex;flex-direction:column;gap:16px;align-items:center}
+.tlevel{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;width:100%}
+.tnode{
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:20px 22px;width:min(100%,440px);text-align:center;display:none;
+}
+.tnode.shown{display:block;animation:nodeIn .45s both}
+@keyframes nodeIn{from{opacity:0;transform:translateY(14px) scale(.97)}to{opacity:1;transform:none}}
+.tnode .tq{font-family:'Fraunces',serif;font-size:19px;font-weight:600;color:var(--brown-dark);line-height:1.25}
+.tnode .thint{font-size:12px;color:var(--muted);margin-top:6px}
+.tchoice{display:flex;gap:10px;justify-content:center;margin-top:14px;flex-wrap:wrap}
+.tchoice button{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;
+  background:var(--cream);border:1px solid var(--line);color:var(--brown);
+  padding:8px 18px;border-radius:999px;cursor:pointer;transition:all .2s;
+}
+.tchoice button:hover{border-color:var(--orange);color:var(--orange-dark)}
+.tchoice button.picked{background:var(--orange);border-color:var(--orange);color:#fff}
+.tleaf{
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  width:min(100%,440px);display:none;overflow:hidden;text-align:left;
+}
+.tleaf.shown{display:block;animation:nodeIn .5s both}
+.tleaf .tband{
+  padding:12px 18px;font-family:'JetBrains Mono',monospace;font-size:11px;
+  letter-spacing:0.12em;text-transform:uppercase;color:#fff;font-weight:600;
+}
+.tleaf.rec-paid .tband{background:var(--orange-dark)}
+.tleaf.rec-hybrid .tband{background:var(--tan)}
+.tleaf.rec-organic .tband{background:var(--brown)}
+.tleaf.rec-ugc .tband{background:var(--accent)}
+.tleaf .tbody{padding:16px 18px}
+.tleaf h4{font-family:'Fraunces',serif;font-size:20px;color:var(--brown-dark);margin-bottom:6px}
+.tleaf .tdesc{font-size:13px;color:var(--muted);margin-bottom:12px;max-width:none}
+.tpc{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tpc h5{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;margin-bottom:6px}
+.tpc .tp h5{color:var(--orange-dark)} .tpc .tc h5{color:var(--muted)}
+.tpc ul{list-style:none;display:grid;gap:5px}
+.tpc li{font-size:12.5px;color:var(--ink);padding-left:16px;position:relative;line-height:1.45}
+.tpc .tp li::before{content:"+";position:absolute;left:0;color:var(--orange);font-weight:700}
+.tpc .tc li::before{content:"−";position:absolute;left:0;color:var(--muted);font-weight:700}
+.tdown{font-family:'Fraunces',serif;font-size:20px;color:var(--orange);line-height:1;display:none}
+.tdown.shown{display:block;animation:nodeIn .4s both}
+
+/* ── page-specific: ad anatomy timeline ───────────────────── */
+.tl-wrap{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px 24px 20px}
+.tl-scale{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-bottom:6px}
+.tl-bar{display:flex;height:66px;border-radius:10px;overflow:visible;position:relative}
+.tl-seg{
+  position:relative;cursor:pointer;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;gap:2px;color:#fff;
+  transition:filter .2s;border-right:2px solid var(--paper);
+}
+.tl-seg:first-child{border-radius:10px 0 0 10px}
+.tl-seg:last-child{border-radius:0 10px 10px 0;border-right:none}
+.tl-seg .sname{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;font-weight:600}
+.tl-seg .stime{font-family:'JetBrains Mono',monospace;font-size:9px;opacity:.85}
+.tl-seg:hover{filter:brightness(1.12)}
+.tl-seg.active{box-shadow:inset 0 0 0 3px var(--yellow)}
+.tl-seg.s0{flex:2;background:var(--orange-dark)}
+.tl-seg.s1{flex:6;background:var(--tan)}
+.tl-seg.s2{flex:12;background:var(--orange)}
+.tl-seg.s3{flex:5;background:var(--brown)}
+.tl-seg.s4{flex:5;background:var(--accent)}
+.tl-head{
+  position:absolute;top:-8px;bottom:-8px;width:3px;left:0;
+  background:var(--brown-dark);border-radius:2px;opacity:0;z-index:5;pointer-events:none;
+}
+.tl-head::after{content:"";position:absolute;top:-5px;left:-4.5px;width:12px;height:12px;border-radius:50%;background:var(--brown-dark)}
+.tl-head.sweep{opacity:1}
+.tl-detail{margin-top:22px}
+.tl-beat{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;color:var(--orange-dark);margin-bottom:12px;
+}
+.tl-cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px}
+.tl-card{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;animation:nodeIn .35s both}
+.tl-card h5{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:8px}
+.tl-card p{font-size:13px;color:var(--ink);margin:0;max-width:none;line-height:1.5}
+.tl-card.script p{font-family:'Fraunces',serif;font-style:italic;font-size:15px;color:var(--brown-dark)}
+.tl-jump{margin-top:16px;display:flex;gap:8px;flex-wrap:wrap}
+
+/* ── page-specific: ROAS calculator ───────────────────────── */
+.calc{display:grid;grid-template-columns:1fr 1.1fr;gap:28px;align-items:start}
+.calc-in{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px}
+.srow{margin-bottom:18px}
+.srow:last-child{margin-bottom:0}
+.slab{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px}
+.slab .sname{font-size:13px;font-weight:600;color:var(--brown-dark)}
+.slab .sval{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--orange-dark)}
+input[type=range]{width:100%;accent-color:var(--orange);cursor:pointer;height:26px}
+.cogs-row{border-top:1px dashed var(--line);margin-top:18px;padding-top:16px}
+.cogs-row .sname{font-size:13px;font-weight:600;color:var(--brown-dark)}
+.cogs-row .snote{font-size:11.5px;color:var(--muted);margin:4px 0 10px;max-width:none}
+.calc-out{display:grid;gap:12px}
+.out-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.out{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px}
+.out .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+.out .v{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--brown-dark)}
+.roas-hero{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 20px;display:flex;align-items:center;justify-content:space-around;gap:14px;flex-wrap:wrap}
+.roas-hero .blk{text-align:center}
+.roas-hero .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:2px}
+.roas-hero .big{font-family:'Fraunces',serif;font-size:52px;font-weight:800;line-height:1;color:var(--brown-dark)}
+.roas-hero .mid{font-family:'Fraunces',serif;font-size:30px;font-weight:700;line-height:1.2;color:var(--tan)}
+.v.pos,.mid.pos{color:#2E7D46}
+.v.neg,.mid.neg{color:var(--orange-dark)}
+.verdict{
+  border-radius:10px;padding:14px 18px;font-family:'JetBrains Mono',monospace;
+  font-size:12px;letter-spacing:0.06em;font-weight:600;line-height:1.5;
+  border:1px solid var(--line);background:var(--paper);color:var(--muted);transition:all .3s;
+}
+.verdict.kill{background:rgba(213,82,34,0.10);border-color:var(--orange-dark);color:var(--orange-dark)}
+.verdict.iter{background:rgba(254,204,0,0.16);border-color:#C79F00;color:#7A6200}
+.verdict.scaleup{background:rgba(46,125,70,0.10);border-color:#2E7D46;color:#2E7D46}
+
+/* ── page-specific: 7-day launch plan ─────────────────────── */
+.week{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:12px}
+.day{
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  overflow:hidden;opacity:0;transform:translateY(12px);transition:border-color .3s;
+}
+.week.reveal .day{animation:dayIn .5s forwards}
+.week.reveal .day:nth-child(1){animation-delay:.05s}
+.week.reveal .day:nth-child(2){animation-delay:.15s}
+.week.reveal .day:nth-child(3){animation-delay:.25s}
+.week.reveal .day:nth-child(4){animation-delay:.35s}
+.week.reveal .day:nth-child(5){animation-delay:.45s}
+.week.reveal .day:nth-child(6){animation-delay:.55s}
+.week.reveal .day:nth-child(7){animation-delay:.65s}
+@keyframes dayIn{to{opacity:1;transform:translateY(0)}}
+.day.open{border-color:var(--orange)}
+.day-head{padding:15px 18px;cursor:pointer;display:flex;align-items:center;gap:12px;user-select:none}
+.day-num{
+  font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:600;letter-spacing:0.08em;
+  background:var(--brown-dark);color:var(--paper);padding:5px 9px;border-radius:6px;white-space:nowrap;
+}
+.day.open .day-num{background:var(--orange)}
+.day-head h4{font-family:'Fraunces',serif;font-size:16.5px;color:var(--brown-dark);flex:1;line-height:1.25}
+.day-caret{font-family:'JetBrains Mono',monospace;color:var(--muted);font-size:12px;transition:transform .3s}
+.day.open .day-caret{transform:rotate(90deg);color:var(--orange-dark)}
+.day-body{max-height:0;overflow:hidden;transition:max-height .45s ease}
+.day.open .day-body{max-height:560px}
+.day-inner{padding:0 18px 16px}
+.day-inner ul{list-style:none;display:grid;gap:5px;margin-bottom:12px}
+.day-inner li{font-size:13px;color:var(--ink);padding-left:16px;position:relative;line-height:1.5}
+.day-inner li::before{content:"·";position:absolute;left:2px;color:var(--orange);font-weight:700}
+.day-ai{background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:10px 12px;margin-bottom:10px}
+.day-ai .k,.day-done .k{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--tan);display:block;margin-bottom:3px;font-weight:600}
+.day-ai p{font-size:12.5px;color:var(--ink);margin:0;max-width:none;line-height:1.5}
+.day-done{border-left:3px solid var(--orange);padding-left:10px}
+.day-done p{font-size:12.5px;color:var(--muted);margin:0;max-width:none;font-style:italic}
+
+@media(max-width:760px){
+  .calc{grid-template-columns:1fr}
+  .out-grid{grid-template-columns:1fr 1fr}
+  .tpc{grid-template-columns:1fr}
+  .tl-seg .stime{display:none}
+  .roas-hero .big{font-size:42px}
+}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 04 · AI SEO</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 30V15l6 8 4-9 4 9 6-8v15" stroke="#EF7F1A" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+      <circle cx="22" cy="10" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 1 · Lesson 04 · AI SEO</div>
+  <h1>Technical SEO: <em>plumbing</em>, links, and proof.</h1>
+  <p class="lede">You have keywords, content, and a site. Now comes the part that separates "published a page" from "ranking on Google": making sure search engines can actually crawl and index you, earning links that vouch for you, and reading the numbers without kidding yourself. Fair warning — SEO is a months-long game with no guaranteed rankings, and that's fine, because the compounding is worth the wait.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Fix the foundation or chase links? Pick with your data, not your gut</h2>
+  <p class="lead">Great content still won't rank if Google can't crawl or index it, or if nobody links to you. Technical SEO and authority are the two halves of the foundation. Neither is "better." The right first move depends on one blunt question about whether search engines can even see your site.</p>
+
+  <p><strong>Technical SEO</strong> is the plumbing: crawlability (can bots reach your pages?), indexing (did Google actually store them?), your <code>XML sitemap</code> and <code>robots.txt</code>, site speed and Core Web Vitals, mobile-friendliness, and HTTPS. It's unglamorous but decisive — if a page can't be crawled or is accidentally blocked, no amount of good writing will save it. Fixing technical issues is often the fastest win a beginner can get.</p>
+  <p><strong>Authority</strong> (backlinks — other trustworthy sites linking to yours) is Google's word-of-mouth. A link from a respected site is a vote of confidence, and it is slow, unpredictable, and outside your direct control. You might pitch twenty journalists and hear back from one. But authority <em>compounds</em>: earn a strong link and it keeps passing trust for years. Never buy links — Google penalises paid link schemes, and it can tank a site you spent months building.</p>
+  <p>The best beginner play is usually neither extreme: <strong>fix the crawl-and-index basics first, then earn links ethically</strong>. The moment a technical audit is clean — pages indexed, fast, mobile-friendly — pour your energy into digital PR and genuinely useful content that people <em>want</em> to link to. Let the foundation carry the authority.</p>
+  <p>Walk the tree below and answer honestly — especially question one. "Search Console shows indexing problems" means Google is quietly ignoring pages you worked hard on.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The SEO priority decision tree</span>
+      <div class="controls">
+        <button onclick="treeRestart()">↺ Restart tree</button>
+        <button onclick="treeFull()">Show full map</button>
+      </div>
+    </div>
+    <div class="tree" id="tree">
+      <div class="tnode" id="q1">
+        <div class="tq">Does Google Search Console show crawl or indexing problems?</div>
+        <div class="thint">Check the Pages report: are your key pages actually "indexed", or excluded/blocked?</div>
+        <div class="tchoice">
+          <button onclick="treePick(this,'q1','q2')">Yes, problems</button>
+          <button onclick="treePick(this,'q1','q3')">No, all indexed</button>
+        </div>
+      </div>
+      <div class="tdown" id="d1">↓</div>
+      <div class="tlevel">
+        <div class="tnode" id="q2">
+          <div class="tq">Is it a blocking issue, or slow pages and Core Web Vitals?</div>
+          <div class="thint">Blocked/no-indexed pages hide you entirely. Speed just costs you rankings gradually.</div>
+          <div class="tchoice">
+            <button onclick="treePick(this,'q2','leafPaid')">Pages blocked / not indexed</button>
+            <button onclick="treePick(this,'q2','leafHybrid')">Slow / poor Core Web Vitals</button>
+          </div>
+        </div>
+        <div class="tnode" id="q3">
+          <div class="tq">Do you already have useful, link-worthy content people cite?</div>
+          <div class="thint">Original data, tools, or genuinely helpful guides — the stuff sites link to on purpose.</div>
+          <div class="tchoice">
+            <button onclick="treePick(this,'q3','leafOrganic')">Yes, I have assets</button>
+            <button onclick="treePick(this,'q3','leafUgc')">Not really yet</button>
+          </div>
+        </div>
+      </div>
+      <div class="tdown" id="d2">↓</div>
+      <div class="tlevel">
+        <div class="tleaf rec-paid" id="leafPaid">
+          <div class="tband">Route · Fix indexing now</div>
+          <div class="tbody">
+            <h4>Unblock and re-submit your pages</h4>
+            <p class="tdesc">Check robots.txt and noindex tags, fix broken redirects, then request indexing in Search Console. You are removing a wall, not tuning speed.</p>
+            <div class="tpc">
+              <div class="tp"><h5>Honest pros</h5><ul><li>Can recover hidden pages within days</li><li>Highest-leverage fix a beginner can make</li><li>Often costs nothing but attention</li></ul></div>
+              <div class="tc"><h5>Honest cons</h5><ul><li>One wrong robots.txt line can hide the site</li><li>Google re-crawls on its own schedule</li><li>Indexing is allowed, never guaranteed</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="tleaf rec-hybrid" id="leafHybrid">
+          <div class="tband">Route · Speed &amp; mobile (recommended)</div>
+          <div class="tbody">
+            <h4>Improve Core Web Vitals &amp; mobile UX</h4>
+            <p class="tdesc">Run PageSpeed Insights, compress images, cut heavy scripts, and confirm the site is mobile-friendly. Small, steady wins that lift every page.</p>
+            <div class="tpc">
+              <div class="tp"><h5>Honest pros</h5><ul><li>Better speed helps users and rankings</li><li>Fixes usually apply site-wide at once</li><li>Clear before/after scores to track</li></ul></div>
+              <div class="tc"><h5>Honest cons</h5><ul><li>Slower payoff — weeks, not days</li><li>Some fixes need developer help</li><li>Speed alone won't outrank better content</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="tleaf rec-organic" id="leafOrganic">
+          <div class="tband">Route · Digital PR &amp; links</div>
+          <div class="tbody">
+            <h4>Pitch your best asset for backlinks</h4>
+            <p class="tdesc">You already have something link-worthy. Pitch journalists, bloggers, and relevant sites with a genuinely useful angle. Earn links, never buy them.</p>
+            <div class="tpc">
+              <div class="tp"><h5>Honest pros</h5><ul><li>Earned links compound trust for years</li><li>Builds real authority Google respects</li><li>Existing assets make outreach believable</li></ul></div>
+              <div class="tc"><h5>Honest cons</h5><ul><li>It's a numbers game — most pitches get ignored</li><li>May take dozens of emails per link</li><li>Zero links is a real possible outcome</li></ul></div>
+            </div>
+          </div>
+        </div>
+        <div class="tleaf rec-ugc" id="leafUgc">
+          <div class="tband">Route · Build a link-worthy asset</div>
+          <div class="tbody">
+            <h4>Create something worth linking to first</h4>
+            <p class="tdesc">No links come without a reason to link. Use AI to help draft an original guide, a small free tool, or a data roundup — then pitch it. Slower, but it's the honest path.</p>
+            <div class="tpc">
+              <div class="tp"><h5>Honest pros</h5><ul><li>Gives you a real reason for others to link</li><li>Doubles as content that ranks on its own</li><li>Ethical — no risky paid-link schemes</li></ul></div>
+              <div class="tc"><h5>Honest cons</h5><ul><li>Building the asset takes real time</li><li>You still have to do the outreach after</li><li>Good ideas can still get overlooked</li></ul></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one mistake this tree prevents</h3>
+  <p>Beginners chase backlinks because links feel like "real SEO," while Google is quietly failing to index half their pages — effort spent, nothing ranking. If the honest answer to question one is "yes, problems," fixing the technical foundation isn't the boring chore. It's the correct first move, and often the fastest win you'll get.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Anatomy of a technical SEO audit</h2>
+  <p class="lead">A good technical audit — the kind that finds why pages won't rank — follows the same five stages almost every time: crawl, index, speed, architecture, fix. Learn the flow, and AI can help you work through it far faster.</p>
+
+  <p>The single most important idea in technical SEO: <strong>crawlability comes before everything</strong>. If Google's bot can't reach a page — blocked by <code>robots.txt</code>, hidden behind a broken link, or stuck on a redirect loop — nothing else matters, because that page effectively doesn't exist in search. That first stage is the <em>crawl</em>, and pros always confirm it before touching anything downstream.</p>
+  <p>After the crawl, the audit follows a reliable arc: confirm pages are actually <strong>indexed</strong>, check <strong>speed</strong> and Core Web Vitals, review site <strong>architecture</strong> and internal links, and finish by prioritising the <strong>fixes</strong> — most impactful first.</p>
+  <p>Where does AI fit? It's your analyst and triage partner, not your crawler. A tool like Screaming Frog does the crawling; AI reads the export, clusters similar issues, drafts a plain-English fix list, and suggests internal links between related pages. A human still decides what ships, because AI can misread context or over-flag harmless things.</p>
+  <p>Below is a full audit, stage by stage. Press <strong>▶ Play</strong> to sweep through it, or click any segment to study it.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · A technical SEO audit, dissected</span>
+      <div class="controls">
+        <button id="tlPlayBtn" onclick="tlPlay()">▶ Play</button>
+        <button onclick="tlReset()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="tl-wrap">
+      <div class="tl-scale"><span>0s</span><span>5s</span><span>10s</span><span>15s</span><span>20s</span><span>25s</span><span>30s</span></div>
+      <div class="tl-bar" id="tlBar">
+        <div class="tl-seg s0" onclick="tlJump(0)"><span class="sname">Crawl</span><span class="stime">0–2s</span></div>
+        <div class="tl-seg s1" onclick="tlJump(1)"><span class="sname">Index</span><span class="stime">2–8s</span></div>
+        <div class="tl-seg s2" onclick="tlJump(2)"><span class="sname">Speed</span><span class="stime">8–20s</span></div>
+        <div class="tl-seg s3" onclick="tlJump(3)"><span class="sname">Architecture</span><span class="stime">20–25s</span></div>
+        <div class="tl-seg s4" onclick="tlJump(4)"><span class="sname">Fix</span><span class="stime">25–30s</span></div>
+        <div class="tl-head" id="tlHead"></div>
+      </div>
+      <div class="tl-detail">
+        <div class="tl-beat" id="tlBeat">Crawl · 0–2s</div>
+        <div class="tl-cards" id="tlCards">
+          <div class="tl-card"><h5>This beat must…</h5><p id="tlJob"></p></div>
+          <div class="tl-card script"><h5>Sample script line</h5><p id="tlScript"></p></div>
+          <div class="tl-card"><h5>What AI generates</h5><p id="tlAi"></p></div>
+        </div>
+        <div class="tl-jump controls">
+          <button onclick="tlJump(0)">Crawl</button>
+          <button onclick="tlJump(1)">Index</button>
+          <button onclick="tlJump(2)">Speed</button>
+          <button onclick="tlJump(3)">Architecture</button>
+          <button onclick="tlJump(4)">Fix</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>How to actually use AI here</h3>
+  <p>Prompt it with the export, not "audit my site": <em>"Here is a Screaming Frog crawl export. Group the issues into indexing, speed, and internal-linking buckets, rank them by likely SEO impact, and explain each fix in plain English for a non-coder."</em> Keep the three highest-impact fixes and start there. AI's job is triage and clustering; yours is judgement — verify each flagged issue is real before you change anything, because a wrong "fix" can hide good pages.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Search Console: the numbers that tell you the truth</h2>
+  <p class="lead">Google Search Console gives you four numbers for every page and query: impressions, clicks, CTR, and average position. Clicks ÷ impressions × 100 is your CTR. A page can rack up thousands of impressions and still send you almost nobody — a "good-sounding" ranking can quietly be doing nothing.</p>
+
+  <p>That's because impressions aren't visits. A page ranking at position 8 barely gets seen; move it to position 3 and clicks can multiply. So every page has a rough <strong>expected CTR</strong> for its position: <code>position × CTR curve</code> tells you whether a page is under- or over-performing. A page at position 3 pulling 1% CTR is <em>underperforming</em> — a better title and meta description could double its clicks without ranking a single spot higher.</p>
+  <p>Here is the part most beginners skip: <strong>SEO takes months, and there are no guaranteed rankings.</strong> That's normal. The skill isn't hitting page one overnight — it's a monthly routine where you decide, with rules written down, when to <em>refresh</em> a page, <em>scale</em> a winner, or <em>kill</em> a dead one. Two useful rules of thumb (all figures below are illustrative):</p>
+  <p><strong>Refresh rule — impressions, no clicks:</strong> if a page gets thousands of impressions but almost no clicks, ranking is fine but the title/snippet is dull. Rewrite the title and meta description, then retest.<br>
+  <strong>Kill-or-scale rule:</strong> a page climbing in position and clicks month over month gets more internal links and expansion (scale); a page stuck at page three for months with no movement gets pruned or merged (kill). Sunk effort isn't a strategy.</p>
+  <p>Play with the illustrative calculator below. Notice how brutally sensitive clicks are to average position and CTR — and how the expected-CTR line shifts what "good" means.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Search Console click calculator (illustrative)</span>
+      <div class="controls">
+        <button onclick="calcPreset('rough')">New page, month 1</button>
+        <button onclick="calcPreset('good')">After a refresh</button>
+        <button onclick="calcPreset('reset')">↺ Defaults</button>
+      </div>
+    </div>
+    <div class="calc" id="calc">
+      <div class="calc-in">
+        <div class="srow">
+          <div class="slab"><span class="sname">Monthly impressions (hundreds)</span><span class="sval" id="vSpend">$30</span></div>
+          <input type="range" id="rSpend" min="10" max="100" step="5" value="30" oninput="calc()">
+        </div>
+        <div class="srow">
+          <div class="slab"><span class="sname">Impressions needed per click</span><span class="sval" id="vCpc">$1.20</span></div>
+          <input type="range" id="rCpc" min="0.40" max="3.00" step="0.05" value="1.20" oninput="calc()">
+        </div>
+        <div class="srow">
+          <div class="slab"><span class="sname">Click-through rate (CTR)</span><span class="sval" id="vConv">1.5%</span></div>
+          <input type="range" id="rConv" min="0.5" max="5" step="0.1" value="1.5" oninput="calc()">
+        </div>
+        <div class="srow">
+          <div class="slab"><span class="sname">Value per visit ($)</span><span class="sval" id="vAov">$35</span></div>
+          <input type="range" id="rAov" min="15" max="80" step="1" value="35" oninput="calc()">
+        </div>
+        <div class="cogs-row">
+          <span class="sname">Expected value floor per visit</span>
+          <p class="snote">A rough "cost to earn a visit" benchmark, plus ~4% overhead, used to gauge if a page is worth the effort. Illustrative only.</p>
+          <div class="controls">
+            <button id="cogsLean" onclick="setCogs(8,this)">Low $8</button>
+            <button id="cogsTyp" class="active" onclick="setCogs(12,this)">Typical $12</button>
+            <button id="cogsHeavy" onclick="setCogs(18,this)">High $18</button>
+          </div>
+        </div>
+      </div>
+      <div class="calc-out">
+        <div class="out-grid">
+          <div class="out"><span class="k">Clicks / month</span><span class="v" id="oClicks">–</span></div>
+          <div class="out"><span class="k">Converting visits</span><span class="v" id="oOrders">–</span></div>
+          <div class="out"><span class="k">Traffic value</span><span class="v" id="oRev">–</span></div>
+        </div>
+        <div class="roas-hero">
+          <div class="blk"><span class="k">Value ratio</span><span class="big" id="oRoas">–</span></div>
+          <div class="blk"><span class="k">Break-even ratio</span><span class="mid" id="oBe">–</span></div>
+          <div class="blk"><span class="k">Net value (illustrative)</span><span class="mid" id="oProfit">–</span></div>
+        </div>
+        <div class="verdict" id="oVerdict">Move a slider to see the verdict.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Reading the verdict like a pro</h3>
+  <p>The verdict compares a page's performance to its <em>expected</em> CTR for that position, not to some magic number. Far below expectation? Prune or rewrite — clinging to a dead page is not a strategy. Hovering near the line? That's the interesting zone: a sharper title, a better meta description, or a few internal links can tip it over. Comfortably above? Expand the winner <em>patiently</em> — rankings build over months, not overnight, and there are never guarantees.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>The 7-step monthly SEO routine</h2>
+  <p class="lead">SEO reporting fails from vagueness, not difficulty. Here is one monthly routine, one job per step, with a clear "done" line for each — so you always know whether this month's review actually happened.</p>
+
+  <p>Set expectations first: <strong>the goal of one month is not a page-one ranking.</strong> The goal is a complete, repeatable loop — technical health checked, metrics pulled, wins scaled, losers pruned, a decision made — plus honest data about what's moving. SEO takes months and guarantees nothing. The people who win are the ones whose routine is small, consistent, and documented.</p>
+  <p>Click any step to expand it, or press <strong>▶ Walk the routine</strong> to tour all seven.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · One routine, one job per step</span>
+      <div class="controls">
+        <button onclick="walkWeek()">▶ Walk the routine</button>
+        <button onclick="collapseWeek()">Collapse all</button>
+      </div>
+    </div>
+    <div class="week" id="week">
+      <div class="day" id="day1">
+        <div class="day-head" onclick="toggleDay('day1')"><span class="day-num">Step 1</span><h4>Run a technical health check</h4><span class="day-caret">▸</span></div>
+        <div class="day-body"><div class="day-inner">
+          <ul><li>Crawl the site with Screaming Frog; check for broken links, redirect chains, and noindex tags</li><li>Confirm the XML sitemap and robots.txt are correct in Search Console</li><li>Spot-check Core Web Vitals and mobile-friendliness on your key pages</li></ul>
+          <div class="day-ai"><span class="k">AI assist</span><p>Paste the crawl export into AI and ask it to flag the top technical issues in plain English. Verify each one before acting.</p></div>
+          <div class="day-done"><span class="k">Done when</span><p>No blocking crawl/index errors on key pages, and a short list of any real issues to fix.</p></div>
+        </div></div>
+      </div>
+      <div class="day" id="day2">
+        <div class="day-head" onclick="toggleDay('day2')"><span class="day-num">Step 2</span><h4>Pull the Search Console numbers</h4><span class="day-caret">▸</span></div>
+        <div class="day-body"><div class="day-inner">
+          <ul><li>Export impressions, clicks, CTR, and average position for the last 28 days</li><li>Compare against the previous period — note what rose and what fell</li><li>Cross-check ranking movements in a rank tracker (Ahrefs or Semrush)</li></ul>
+          <div class="day-ai"><span class="k">AI assist</span><p>Feed AI the Search Console export; ask for the top 5 rising and top 5 falling queries, and a plausible reason for each.</p></div>
+          <div class="day-done"><span class="k">Done when</span><p>You have this month's four core metrics saved, with clear notes on the biggest movers.</p></div>
+        </div></div>
+      </div>
+      <div class="day" id="day3">
+        <div class="day-head" onclick="toggleDay('day3')"><span class="day-num">Step 3</span><h4>Fix the top 3 technical issues</h4><span class="day-caret">▸</span></div>
+        <div class="day-body"><div class="day-inner">
+          <ul><li>Take the highest-impact issues from Step 1 and fix them first</li><li>Speed wins: compress images, defer scripts, lean on PageSpeed Insights</li><li>Re-submit fixed pages for indexing and confirm they recover</li></ul>
+          <div class="day-ai"><span class="k">AI assist</span><p>Triage and plain-English fix lists are AI's home turf. The judgement call on what to actually change is yours — verify before you ship.</p></div>
+          <div class="day-done"><span class="k">Done when</span><p>The three priority issues are fixed and re-checked, with before/after scores noted.</p></div>
+        </div></div>
+      </div>
+      <div class="day" id="day4">
+        <div class="day-head" onclick="toggleDay('day4')"><span class="day-num">Step 4</span><h4>Tidy internal links &amp; architecture</h4><span class="day-caret">▸</span></div>
+        <div class="day-body"><div class="day-inner">
+          <ul><li>Cluster related pages into topics and link them to each other</li><li>Add links from strong pages to important ones sitting too deep</li><li>Write your refresh / scale / kill rules down BEFORE you touch content</li></ul>
+          <div class="day-ai"><span class="k">AI assist</span><p>Ask AI to group your pages into topic clusters and suggest internal links — a fast way to spread authority sensibly.</p></div>
+          <div class="day-done"><span class="k">Done when</span><p>Related pages link to each other, buried pages have a route in, and your decision rules are written where you can't ignore them.</p></div>
+        </div></div>
+      </div>
+      <div class="day" id="day5">
+        <div class="day-head" onclick="toggleDay('day5')"><span class="day-num">Step 5</span><h4>Read the data — prune the losers</h4><span class="day-caret">▸</span></div>
+        <div class="day-body"><div class="day-inner">
+          <ul><li>Thousands of impressions but almost no clicks? Rewrite the title and snippet</li><li>Stuck deep on page three for months with no movement? Prune or merge it</li><li>Do NOT touch anything borderline — give it one more month of data first</li></ul>
+          <div class="day-ai"><span class="k">AI assist</span><p>Paste each page's impressions, clicks, CTR, and position; ask AI to sort them into refresh / watch / winner with reasons.</p></div>
+          <div class="day-done"><span class="k">Done when</span><p>Every key page has a written verdict, and dead pages are actually pruned or merged — not "monitored."</p></div>
+        </div></div>
+      </div>
+      <div class="day" id="day6">
+        <div class="day-head" onclick="toggleDay('day6')"><span class="day-num">Step 6</span><h4>Refresh the near-misses</h4><span class="day-caret">▸</span></div>
+        <div class="day-body"><div class="day-inner">
+          <ul><li>Take a page ranking on the edge of page one and update it — fresh info, better title</li><li>Improve the meta description and add 2–3 internal links to it</li><li>Earn one ethical link if you can — a genuine pitch, never a bought link</li></ul>
+          <div class="day-ai"><span class="k">AI assist</span><p>Tell AI which page under-performs its position; ask for a sharper title, meta description, and a short list of sections to add.</p></div>
+          <div class="day-done"><span class="k">Done when</span><p>The refreshed page is republished, internally linked, and logged so next month's data is a clean comparison.</p></div>
+        </div></div>
+      </div>
+      <div class="day" id="day7">
+        <div class="day-head" onclick="toggleDay('day7')"><span class="day-num">Step 7</span><h4>Decide: scale, refresh, or move on</h4><span class="day-caret">▸</span></div>
+        <div class="day-body"><div class="day-inner">
+          <ul><li>Page climbing in position and clicks? Scale it — expand and add internal links</li><li>Close to page one with a clear fix? Queue one more refresh next month</li><li>No movement anywhere after months? Prune it and redirect the effort</li></ul>
+          <div class="day-ai"><span class="k">AI assist</span><p>Have AI write the monthly summary: what rose, what fell, and the top 3 hypotheses to test next month.</p></div>
+          <div class="day-done"><span class="k">Done when</span><p>A decision is made and written down. "Let's see how it goes" is not one of the three options.</p></div>
+        </div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>What a "successful" first month really looks like</h3>
+  <p>A genuinely good month one: you fixed two indexing errors, sped up your slowest pages, refreshed one near-miss title that lifted its CTR, pruned two dead pages, and confirmed your best guide finally getting indexed. Rankings barely moved yet — and that's fine. The loop works, the foundation is cleaner, and next month starts from there, not from zero. SEO compounds; patience is the strategy.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Rankings are earned through crawlable, fast pages and honest links — never bought. A page can't rank if Google can't crawl or index it. Search Console metrics only mean something next to a page's <em>expected</em> CTR. And SEO is a months-long compounding game with no guarantees. Run the routine, read the numbers, make the call.</p>
+  <ul>
+    <li>Technical foundation first: crawlability, indexing, sitemap, robots.txt, speed, mobile, HTTPS</li>
+    <li>Architecture &amp; internal links spread authority; AI clusters pages and suggests links</li>
+    <li>Authority = earned backlinks. Build link-worthy assets and do digital PR — never buy links</li>
+    <li>Measure with Search Console: impressions, clicks, CTR, average position + rank tracking</li>
+    <li>Monthly loop = check tech, pull data, refresh / scale / kill. Patience beats guarantees</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 04 of 04 · Week 1 AI SEO complete — Week 2: Content &amp; Authority at Scale →</footer>
+<script>
+
+/* ══ Figure 1 · decision tree ══ */
+const TREE_KIDS={
+  q1:['q2','q3','leafPaid','leafHybrid','leafOrganic','leafUgc'],
+  q2:['leafPaid','leafHybrid'],
+  q3:['leafOrganic','leafUgc']
+};
+const TREE_ALL=['q1','q2','q3','leafPaid','leafHybrid','leafOrganic','leafUgc'];
+function tShow(id){
+  const el=document.getElementById(id);
+  el.classList.remove('shown');void el.offsetWidth;el.classList.add('shown');
+}
+function tHide(id){
+  const el=document.getElementById(id);
+  el.classList.remove('shown');
+  el.querySelectorAll('.tchoice button').forEach(b=>b.classList.remove('picked'));
+}
+function treeArrows(){
+  const anyL2=['q2','q3'].some(id=>document.getElementById(id).classList.contains('shown'));
+  const anyL3=['leafPaid','leafHybrid','leafOrganic','leafUgc'].some(id=>document.getElementById(id).classList.contains('shown'));
+  document.getElementById('d1').classList.toggle('shown',anyL2);
+  document.getElementById('d2').classList.toggle('shown',anyL3);
+}
+function treePick(btn,nodeId,showId){
+  btn.parentElement.querySelectorAll('button').forEach(b=>b.classList.remove('picked'));
+  btn.classList.add('picked');
+  TREE_KIDS[nodeId].forEach(id=>{if(id!==showId)tHide(id)});
+  tShow(showId);
+  treeArrows();
+}
+function treeRestart(){
+  TREE_ALL.forEach(id=>{if(id!=='q1')tHide(id)});
+  document.querySelectorAll('#q1 .tchoice button').forEach(b=>b.classList.remove('picked'));
+  tShow('q1');
+  treeArrows();
+}
+function treeFull(){
+  TREE_ALL.forEach(id=>tShow(id));
+  document.querySelectorAll('#tree .tchoice button').forEach(b=>b.classList.remove('picked'));
+  treeArrows();
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{
+  if(e.isIntersecting){tShow('q1');o.unobserve(e.target)}
+}),{threshold:0.3}).observe(document.getElementById('tree'));
+
+/* ══ Figure 2 · ad anatomy timeline ══ */
+const TL_DATA=[
+  {beat:"Crawl · 0–2s",
+   job:"Confirm search bots can actually reach every important page — nothing downstream matters until this passes.",
+   script:"“Is robots.txt accidentally blocking a folder, and are there redirect loops or broken links eating the crawl?”",
+   ai:"Reads a Screaming Frog crawl and flags blocked URLs, redirect chains, and orphan pages in plain English. You confirm which are real."},
+  {beat:"Index · 2–8s",
+   job:"Check that crawled pages are actually stored in Google's index — 'crawled, not indexed' means invisible in search.",
+   script:"“In Search Console's Pages report, how many key URLs are 'indexed' versus excluded, and why?”",
+   ai:"Summarises the indexing report, groups exclusion reasons, and suggests which pages to submit or fix first — not guaranteed, just prioritised."},
+  {beat:"Speed · 8–20s",
+   job:"Measure real-world load speed and Core Web Vitals — slow, janky pages lose both users and rankings.",
+   script:"“Run PageSpeed Insights: are large images, heavy scripts, or slow servers dragging LCP and CLS into the red?”",
+   ai:"Turns the PageSpeed report into a prioritised, non-technical fix list — compress these images, defer this script. A human ships the changes."},
+  {beat:"Architecture · 20–25s",
+   job:"Review site structure and internal links so important pages sit close to the homepage and support each other.",
+   script:"“Do related pages link to each other, or are your best guides buried five clicks deep with no internal links?”",
+   ai:"Clusters related pages and suggests sensible internal links between them — spreading authority and helping crawlers find everything."},
+  {beat:"Fix · 25–30s",
+   job:"Turn findings into a ranked action list — most-impactful, lowest-effort fixes first. Don't fix everything at once.",
+   script:"“Which two changes will move the needle most this month, and which can wait until next?”",
+   ai:"Drafts a prioritised fix roadmap grouped by impact and effort, so you tackle the highest-leverage issues first and skip busywork."}
+];
+const TL_BOUNDS=[0,2,8,20,25];   /* segment start times, video-seconds */
+const TL_MS_PER_S=300;           /* playback compression: 30s video → 9s sweep */
+let tlTimers=[];
+function tlSet(i){
+  document.querySelectorAll('#tlBar .tl-seg').forEach((s,k)=>s.classList.toggle('active',k===i));
+  const d=TL_DATA[i];
+  document.getElementById('tlBeat').textContent=d.beat;
+  document.getElementById('tlJob').textContent=d.job;
+  document.getElementById('tlScript').textContent=d.script;
+  document.getElementById('tlAi').textContent=d.ai;
+  const cards=document.getElementById('tlCards');
+  cards.querySelectorAll('.tl-card').forEach(c=>{
+    c.style.animation='none';void c.offsetWidth;c.style.animation='';
+  });
+}
+function tlJump(i){tlStop();tlSet(i)}
+function tlStop(){
+  tlTimers.forEach(t=>clearTimeout(t));tlTimers=[];
+  const head=document.getElementById('tlHead');
+  head.style.transition='none';head.classList.remove('sweep');head.style.left='0%';
+  document.getElementById('tlPlayBtn').classList.remove('active');
+}
+function tlPlay(){
+  tlStop();
+  const head=document.getElementById('tlHead');
+  document.getElementById('tlPlayBtn').classList.add('active');
+  head.classList.add('sweep');
+  void head.offsetWidth; /* flush so the transition starts from 0% */
+  head.style.transition='left '+(30*TL_MS_PER_S)+'ms linear';
+  head.style.left='calc(100% - 3px)';
+  TL_BOUNDS.forEach((sec,i)=>{
+    tlTimers.push(setTimeout(()=>tlSet(i),sec*TL_MS_PER_S));
+  });
+  tlTimers.push(setTimeout(()=>{
+    head.classList.remove('sweep');
+    document.getElementById('tlPlayBtn').classList.remove('active');
+  },30*TL_MS_PER_S+200));
+}
+function tlReset(){tlStop();tlSet(0)}
+tlSet(0);
+new IntersectionObserver((es,o)=>es.forEach(e=>{
+  if(e.isIntersecting){tlPlay();o.unobserve(e.target)}
+}),{threshold:0.4}).observe(document.getElementById('tlBar'));
+
+/* ══ Figure 3 · ROAS calculator ══ */
+let COGS=12;
+const FEE_RATE=0.04; /* payment + platform fees as share of AOV */
+function money(n){return (n<0?'-$':'$')+Math.abs(n).toFixed(2)}
+function setCogs(v,btn){
+  COGS=v;
+  ['cogsLean','cogsTyp','cogsHeavy'].forEach(id=>document.getElementById(id).classList.remove('active'));
+  btn.classList.add('active');
+  calc();
+}
+function calc(){
+  const spend=parseFloat(document.getElementById('rSpend').value);
+  const cpc=parseFloat(document.getElementById('rCpc').value);
+  const conv=parseFloat(document.getElementById('rConv').value);
+  const aov=parseFloat(document.getElementById('rAov').value);
+  document.getElementById('vSpend').textContent='$'+spend;
+  document.getElementById('vCpc').textContent='$'+cpc.toFixed(2);
+  document.getElementById('vConv').textContent=conv.toFixed(1)+'%';
+  document.getElementById('vAov').textContent='$'+aov;
+
+  const fees=FEE_RATE*aov;
+  const clicks=spend/cpc;
+  const orders=clicks*conv/100;
+  const revenue=orders*aov;
+  const roas=revenue/spend;
+  const margin=aov-COGS-fees;
+  const be=margin>0?aov/margin:Infinity;
+  const profit=revenue-spend-orders*(COGS+fees);
+
+  document.getElementById('oClicks').textContent=clicks.toFixed(1);
+  document.getElementById('oOrders').textContent=orders.toFixed(2);
+  document.getElementById('oRev').textContent=money(revenue);
+  document.getElementById('oRoas').textContent=roas.toFixed(2);
+  document.getElementById('oBe').textContent=(be===Infinity?'∞':be.toFixed(2));
+
+  const p=document.getElementById('oProfit');
+  p.textContent=money(profit)+'/day';
+  p.classList.remove('pos','neg');
+  p.classList.add(profit>=0?'pos':'neg');
+
+  const v=document.getElementById('oVerdict');
+  v.classList.remove('kill','iter','scaleup');
+  if(be===Infinity){
+    v.classList.add('kill');
+    v.textContent='KILL — the value floor is above what a visit is worth here. Target easier keywords or a higher-intent topic first.';
+    return;
+  }
+  const ratio=roas/be;
+  if(ratio<0.75){
+    v.classList.add('kill');
+    v.textContent='KILL — this page is far under its expected CTR, at '+Math.round(ratio*100)+'% of the break-even line ('+be.toFixed(2)+'). Prune, merge, or rewrite from scratch.';
+  }else if(ratio<=1.1){
+    v.classList.add('iter');
+    v.textContent='REFRESH — close to the expected-CTR line ('+be.toFixed(2)+'). Rewrite the title and meta description, add internal links, then retest next month.';
+  }else{
+    v.classList.add('scaleup');
+    v.textContent='SCALE — comfortably above the expected-CTR line ('+be.toFixed(2)+'). Expand this winner and pass it more internal links; SEO gains build slowly, so stay patient.';
+  }
+}
+function calcPreset(which){
+  const s=document.getElementById('rSpend'),c=document.getElementById('rCpc'),
+        n=document.getElementById('rConv'),a=document.getElementById('rAov');
+  if(which==='rough'){s.value=30;c.value=1.80;n.value=0.8;a.value=30}
+  else if(which==='good'){s.value=40;c.value=0.90;n.value=2.4;a.value=42}
+  else{s.value=30;c.value=1.20;n.value=1.5;a.value=35}
+  calc();
+}
+calc();
+new IntersectionObserver((es,o)=>es.forEach(e=>{
+  if(e.isIntersecting){calc();o.unobserve(e.target)}
+}),{threshold:0.3}).observe(document.getElementById('calc'));
+
+/* ══ Figure 4 · 7-day launch plan ══ */
+const DAY_IDS=['day1','day2','day3','day4','day5','day6','day7'];
+let walkTimers=[];
+function toggleDay(id){
+  clearWalk();
+  document.getElementById(id).classList.toggle('open');
+}
+function openOnly(id){
+  DAY_IDS.forEach(d=>document.getElementById(d).classList.toggle('open',d===id));
+}
+function clearWalk(){walkTimers.forEach(t=>clearTimeout(t));walkTimers=[]}
+function walkWeek(){
+  clearWalk();
+  DAY_IDS.forEach(d=>document.getElementById(d).classList.remove('open'));
+  DAY_IDS.forEach((d,i)=>{
+    walkTimers.push(setTimeout(()=>openOnly(d),400+i*1100));
+  });
+}
+function collapseWeek(){
+  clearWalk();
+  DAY_IDS.forEach(d=>document.getElementById(d).classList.remove('open'));
+}
+const weekEl=document.getElementById('week');
+new IntersectionObserver((es,o)=>es.forEach(e=>{
+  if(e.isIntersecting){
+    weekEl.classList.remove('reveal');void weekEl.offsetWidth;weekEl.classList.add('reveal');
+    o.unobserve(e.target);
+  }
+}),{threshold:0.15}).observe(weekEl);
+
+</script>
+</body>
+</html>

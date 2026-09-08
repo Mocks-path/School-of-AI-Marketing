@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Keyword & Topic Research · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:42px;height:66px}
+}
+
+/* ===== page-specific: criteria cards (section 01) ===== */
+.crit-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:22px 0}
+.crit{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px}
+.crit .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--tan);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.crit h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.crit p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== radar (figure 1) ===== */
+.rad-flex{display:grid;grid-template-columns:1.2fr 1fr;gap:26px;align-items:center}
+.rad-svg{width:100%;height:auto;display:block}
+.rad-grid{fill:none;stroke:var(--line);stroke-width:1}
+.rad-spoke{stroke:var(--line);stroke-width:1}
+.rad-lab{font-family:'JetBrains Mono',monospace;font-size:11px;fill:var(--muted);letter-spacing:0.05em;text-transform:uppercase}
+.rad-vv{fill:var(--orange-dark);font-weight:600}
+#radPoly{fill:rgba(239,127,26,0.22);stroke:var(--orange);stroke-width:2.5;stroke-linejoin:round}
+.rad-dot{fill:var(--orange-dark);stroke:var(--paper);stroke-width:2}
+.rad-panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px}
+.rad-name{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:6px}
+.rad-score-row{display:flex;align-items:baseline;gap:10px;margin-bottom:6px}
+.rad-score{font-family:'Fraunces',serif;font-weight:800;font-size:52px;line-height:1;color:var(--brown-dark)}
+.rad-outof{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted)}
+.rad-verdict{font-size:14px;color:var(--brown);border-left:3px solid var(--orange);padding-left:12px;margin-bottom:18px;min-height:44px}
+.rad-w{display:grid;gap:12px;border-top:1px dashed var(--line);padding-top:16px}
+.rw label{display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.rw strong{color:var(--orange-dark)}
+.rw input[type=range]{width:100%;accent-color:var(--orange);cursor:pointer}
+.rad-note{font-size:12px;color:var(--muted);margin:10px 0 0;max-width:none}
+
+/* ===== lifecycle (figure 2) ===== */
+.life-svg{width:100%;height:auto;display:block;touch-action:none}
+#lifeCurve{fill:none;stroke:var(--orange-dark);stroke-width:3;stroke-linecap:round}
+.life-axis{stroke:var(--brown);stroke-width:1.5}
+.pband{fill:var(--paper);opacity:0;transition:opacity .3s}
+.pband.on{opacity:1;fill:rgba(239,127,26,0.10)}
+.ptick{font-family:'JetBrains Mono',monospace;font-size:11px;fill:var(--muted);text-anchor:middle;letter-spacing:0.08em;text-transform:uppercase}
+.pline{stroke:var(--line);stroke-width:1;stroke-dasharray:3 4}
+#lifeMk{cursor:grab}
+#lifeMk:active{cursor:grabbing}
+.mk-ring{fill:none;stroke:var(--orange);stroke-width:2;opacity:.6;animation:mkPulse 1.8s infinite}
+@keyframes mkPulse{0%{r:9;opacity:.6}100%{r:22;opacity:0}}
+.mk-dot{fill:var(--orange);stroke:var(--paper);stroke-width:2.5}
+.mk-pill{fill:var(--brown-dark)}
+.mk-txt{font-family:'JetBrains Mono',monospace;font-size:10px;fill:#FBE7CB;text-anchor:middle;letter-spacing:0.12em;font-weight:600}
+.life-panel{display:grid;grid-template-columns:auto 1fr;gap:8px 18px;align-items:baseline;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 22px;margin-top:18px}
+.life-tag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:#fff;padding:4px 10px;border-radius:4px;white-space:nowrap}
+.life-tag.good{background:var(--orange)}
+.life-tag.warn{background:var(--tan)}
+.life-tag.bad{background:var(--brown-dark)}
+.life-panel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark)}
+.life-panel p{grid-column:1/-1;font-size:14px;color:var(--muted);margin:0;max-width:none}
+.drag-hint{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange-dark);letter-spacing:0.08em;margin-top:10px}
+
+/* ===== funnel (figure 3) ===== */
+.fwrap{display:grid;gap:0}
+.fstage{display:grid;grid-template-columns:150px 1fr;gap:20px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px 22px}
+.fmeta .fnum{font-family:'Fraunces',serif;font-weight:800;font-size:34px;line-height:1;color:var(--brown-dark);display:block}
+.fmeta .flab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+.fdots{display:flex;flex-wrap:wrap;gap:6px;align-items:center;min-height:34px}
+.fdot{width:11px;height:11px;border-radius:3px;background:var(--brown);opacity:0;transform:scale(.2)}
+#fs2 .fdot{width:17px;height:17px;border-radius:4px;background:var(--tan)}
+#fs3 .fdot{width:24px;height:24px;border-radius:6px;background:var(--orange-dark)}
+#fs4 .fdot{width:36px;height:36px;border-radius:9px;background:var(--orange)}
+.fwrap.p1 #fs1 .fdot{animation:fpop .45s forwards}
+.fwrap.p2 #fs2 .fdot{animation:fpop .45s forwards}
+.fwrap.p3 #fs3 .fdot{animation:fpop .45s forwards}
+.fwrap.p4 #fs4 .fdot{animation:fpop .5s forwards,fwin 1.8s .6s infinite}
+.fwrap.p1b #fs1 .fdot:not(.keep){animation-name:fdim;animation-duration:.55s}
+.fwrap.p1b #fs1 .fdot.keep{background:var(--orange);box-shadow:0 0 0 2px rgba(239,127,26,.25)}
+@keyframes fpop{from{opacity:0;transform:scale(.2)}to{opacity:1;transform:scale(1)}}
+@keyframes fdim{from{opacity:1;transform:scale(1)}to{opacity:.12;transform:scale(.7)}}
+@keyframes fwin{0%{box-shadow:0 0 0 0 rgba(239,127,26,.55)}70%{box-shadow:0 0 0 18px rgba(239,127,26,0)}100%{box-shadow:0 0 0 0 rgba(239,127,26,0)}}
+.flt{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);opacity:.45;padding:10px 22px;display:flex;align-items:center;gap:10px;transition:all .4s}
+.flt .arr{color:var(--orange);font-size:14px}
+.fwrap.p1b #ff1,.fwrap.q2 #ff2,.fwrap.q3 #ff3{opacity:1;color:var(--orange-dark);font-weight:600}
+
+/* ===== signal source cards (section 03) ===== */
+.sig-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin:22px 0}
+.sig{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:18px}
+.sig .k{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;background:var(--orange-dark);display:inline-block;padding:3px 8px;border-radius:4px;margin-bottom:8px}
+.sig h4{font-family:'Fraunces',serif;font-size:17px;color:var(--brown-dark);margin-bottom:5px}
+.sig p{font-size:13px;color:var(--muted);margin:0;max-width:none}
+
+/* ===== checklist (figure 4) ===== */
+.vwrap{display:grid;grid-template-columns:1.15fr 1fr;gap:26px;align-items:start}
+.vprod{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:12px}
+.vprod strong{color:var(--orange-dark)}
+#vlist{display:grid;gap:8px}
+.vitem{display:flex;gap:12px;align-items:flex-start;background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:14px;color:var(--brown);transition:border-color .2s;opacity:0;transform:translateX(-14px)}
+.vitem:hover{border-color:var(--orange)}
+.vitem input{width:18px;height:18px;margin-top:2px;accent-color:var(--orange);cursor:pointer;flex-shrink:0}
+#vlist.go .vitem{animation:vIn .45s forwards}
+#vlist.go .vitem:nth-child(1){animation-delay:.05s}
+#vlist.go .vitem:nth-child(2){animation-delay:.13s}
+#vlist.go .vitem:nth-child(3){animation-delay:.21s}
+#vlist.go .vitem:nth-child(4){animation-delay:.29s}
+#vlist.go .vitem:nth-child(5){animation-delay:.37s}
+#vlist.go .vitem:nth-child(6){animation-delay:.45s}
+#vlist.go .vitem:nth-child(7){animation-delay:.53s}
+#vlist.go .vitem:nth-child(8){animation-delay:.61s}
+@keyframes vIn{to{opacity:1;transform:translateX(0)}}
+.vside{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;position:sticky;top:90px}
+.vbar{height:16px;background:var(--cream);border:1px solid var(--line);border-radius:8px;overflow:hidden;margin:8px 0 10px}
+#vfill{height:100%;width:0%;background:linear-gradient(90deg,var(--orange),var(--orange-dark));transition:width .5s ease;border-radius:8px}
+.vscore-row{display:flex;justify-content:space-between;align-items:baseline;font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)}
+.vscore-row strong{font-family:'Fraunces',serif;font-size:34px;color:var(--brown-dark)}
+.vpanel{margin-top:16px;border-left:3px solid var(--line);padding-left:14px;transition:border-color .3s}
+.vpanel.v-bad{border-color:var(--brown-dark)}
+.vpanel.v-warn{border-color:var(--tan)}
+.vpanel.v-good{border-color:var(--orange)}
+.vpanel.v-great{border-color:var(--yellow)}
+.vtag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;font-weight:600;color:var(--brown-dark)}
+.vpanel p{font-size:14px;color:var(--muted);margin:6px 0 0;max-width:none}
+
+@media(max-width:700px){
+  .rad-flex,.vwrap{grid-template-columns:1fr}
+  .fstage{grid-template-columns:1fr;gap:10px;padding:14px 16px}
+  .vside{position:static}
+  .life-panel{grid-template-columns:1fr}
+}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 02 · AI SEO</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M12 31V15l10 10 10-10v16" stroke="#EF7F1A" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="22" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 1 · Lesson 02 · AI SEO</div>
+  <h1>Chase keywords with <em>intent</em>, not guesses.</h1>
+  <p class="lede">Most "keyword hacks" sell a shortcut. This lesson sells a method: know what a good keyword actually looks like, read the search intent behind it, let AI brainstorm the topics — and accept that AI only suggests. The SERP and the market decide, and every volume number is an estimate.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>What a good keyword actually looks like</h2>
+  <p class="lead">Beginners chase the keyword with the biggest number. Professionals score keywords against criteria. The difference sounds small — it's the whole game.</p>
+
+  <p>A good keyword isn't a "high-traffic phrase." It's a keyword where six specific things line up at the same time. Miss one and the effort quietly wastes away: a term with 90,000 searches you can never rank for is dead. A keyword that ranks easily but nobody who searches it ever buys is dead. Here are the six tests, in plain language:</p>
+
+  <div class="crit-grid">
+    <div class="crit"><span class="k">Test 1</span><h4>Clear search intent</h4><p>You can tell why someone types it — informational, commercial, transactional, or navigational. If you can't name the intent, you can't build the right page for it.</p></div>
+    <div class="crit"><span class="k">Test 2</span><h4>Real search volume</h4><p>Enough people actually search it to matter. Estimates are approximate, but a keyword with 20 searches a month rarely earns a whole page of effort.</p></div>
+    <div class="crit"><span class="k">Test 3</span><h4>Winnable difficulty</h4><p>Keyword difficulty is low enough that a newer site can realistically rank. Chasing a KD 80 term with a month-old blog is paying to lose.</p></div>
+    <div class="crit"><span class="k">Test 4</span><h4>Business value</h4><p>The searcher is someone you can actually help or sell to. "Best CRM for freelancers" beats "what is a database" if you sell CRM software.</p></div>
+    <div class="crit"><span class="k">Test 5</span><h4>Intent match to your page</h4><p>The page you'd build genuinely answers the query. If Google shows product pages and you'd publish a blog post, you've misread the intent.</p></div>
+    <div class="crit"><span class="k">Test 6</span><h4>Beats the SERP test</h4><p>Search it yourself. If page one is all giant brands and forums, ask what unique angle earns your spot — otherwise the SERP has already decided.</p></div>
+  </div>
+
+  <h3>Score it, don't fall for the volume</h3>
+  <p>Put those tests on a radar and every keyword becomes a shape. A good one is a <em>big, balanced</em> hexagon. A trap keyword is a spiky one — great on two axes, collapsed on one. Try the three sample keywords below, then drag the weight sliders: if business value matters more to you than raw reach, say so with a number, and watch the total score respond.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Good-keyword radar</span>
+      <div class="controls">
+        <button id="rb0" onclick="radSet(0)">best running shoes</button>
+        <button id="rb1" onclick="radSet(1)">email marketing tips</button>
+        <button id="rb2" onclick="radSet(2)">marketing</button>
+      </div>
+    </div>
+    <div class="rad-flex">
+      <svg class="rad-svg" viewBox="0 0 500 400" xmlns="http://www.w3.org/2000/svg" aria-label="Keyword criteria radar chart">
+        <g id="radGrid"></g>
+        <polygon id="radPoly" points="250,195 250,195 250,195 250,195 250,195 250,195"></polygon>
+        <circle class="rad-dot" id="rd0" r="4.5" cx="250" cy="195"/>
+        <circle class="rad-dot" id="rd1" r="4.5" cx="250" cy="195"/>
+        <circle class="rad-dot" id="rd2" r="4.5" cx="250" cy="195"/>
+        <circle class="rad-dot" id="rd3" r="4.5" cx="250" cy="195"/>
+        <circle class="rad-dot" id="rd4" r="4.5" cx="250" cy="195"/>
+        <circle class="rad-dot" id="rd5" r="4.5" cx="250" cy="195"/>
+        <text class="rad-lab" x="250" y="34" text-anchor="middle">Clear intent <tspan class="rad-vv" id="rv0">0</tspan></text>
+        <text class="rad-lab" x="382" y="118" text-anchor="start">Biz value <tspan class="rad-vv" id="rv1">0</tspan></text>
+        <text class="rad-lab" x="382" y="282" text-anchor="start">Intent match <tspan class="rad-vv" id="rv2">0</tspan></text>
+        <text class="rad-lab" x="250" y="364" text-anchor="middle">Low difficulty <tspan class="rad-vv" id="rv3">0</tspan></text>
+        <text class="rad-lab" x="118" y="282" text-anchor="end">Rank chance <tspan class="rad-vv" id="rv4">0</tspan></text>
+        <text class="rad-lab" x="118" y="118" text-anchor="end">Search volume <tspan class="rad-vv" id="rv5">0</tspan></text>
+      </svg>
+      <div class="rad-panel">
+        <div class="rad-name" id="radName">Pick a keyword →</div>
+        <div class="rad-score-row"><span class="rad-score" id="radScore">0.0</span><span class="rad-outof">/ 10 weighted</span></div>
+        <div class="rad-verdict" id="radVerdict">Waiting for a keyword to score.</div>
+        <div class="rad-w">
+          <div class="rw">
+            <label>Clear-intent weight <strong id="wd0">1.0×</strong></label>
+            <input type="range" id="ws0" min="0" max="2" step="0.25" value="1" oninput="radW()">
+          </div>
+          <div class="rw">
+            <label>Business-value weight <strong id="wd1">1.0×</strong></label>
+            <input type="range" id="ws1" min="0" max="2" step="0.25" value="1" oninput="radW()">
+          </div>
+          <div class="rw">
+            <label>Low-difficulty weight <strong id="wd3">1.0×</strong></label>
+            <input type="range" id="ws3" min="0" max="2" step="0.25" value="1" oninput="radW()">
+          </div>
+        </div>
+        <p class="rad-note">Difficulty is scored <em>inverted</em>: a 9 means the keyword is easy to rank, a 2 means the SERP is fiercely competitive. Other axes are weighted at 1.0×.</p>
+      </div>
+    </div>
+  </div>
+
+  <p>Notice what the radar does to "marketing": huge search volume, collapsed on everything else. That's the classic beginner trap — a fat head term with no clear intent, sky-high difficulty, and no business value. The shape tells you the truth the volume number won't.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Every keyword carries an intent — match the journey stage</h2>
+  <p class="lead">A searcher isn't a single type — they move along a journey: navigational, informational, commercial, transactional. Where a keyword sits on that spectrum decides what page wins.</p>
+
+  <p>Here's the trap of <strong>transactional</strong> intent ("buy running shoes online"): it converts hardest, so it's exactly what beginners chase first. But those terms are the most contested — every ecommerce giant bids on them, difficulty is highest, and the searcher has already decided where they might buy. You compete most fiercely for the searcher who is nearly gone.</p>
+  <p><strong>Informational</strong> intent is the opposite ("how to break in running shoes"): huge volume, far less competition, and a searcher you can genuinely help before they're ready to buy. You earn trust early, then guide them toward commercial and transactional pages later. Drag the marker below and feel how the intent — and the right content — changes across the spectrum.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · The search-intent spectrum</span>
+      <div class="controls">
+        <button id="lb0" onclick="lifeSnap(0)">Navigational</button>
+        <button id="lb1" onclick="lifeSnap(1)">Informational</button>
+        <button id="lb2" onclick="lifeSnap(2)">Commercial</button>
+        <button id="lb3" onclick="lifeSnap(3)">Transactional</button>
+        <button id="lb4" onclick="lifeSnap(4)">Branded buy</button>
+      </div>
+    </div>
+    <svg class="life-svg" id="lifeSvg" viewBox="0 0 700 320" xmlns="http://www.w3.org/2000/svg" aria-label="Search-intent spectrum curve with draggable marker">
+      <g id="lifeBands"></g>
+      <line class="life-axis" x1="40" y1="280" x2="660" y2="280"/>
+      <text class="ptick" x="52" y="140" transform="rotate(-90 52 140)">volume →</text>
+      <path id="lifeCurve" d=""/>
+      <g id="lifeTicks"></g>
+      <g id="lifeMk" transform="translate(95,240)">
+        <circle class="mk-ring" r="9"/>
+        <circle class="mk-dot" r="8"/>
+        <rect class="mk-pill" x="-58" y="-44" width="116" height="22" rx="11"/>
+        <text class="mk-txt" y="-29">YOU ARE HERE</text>
+      </g>
+    </svg>
+    <div class="drag-hint">↔ Drag the marker along the spectrum, or tap an intent button</div>
+    <div class="life-panel">
+      <span class="life-tag warn" id="lifeTag">FINDS YOUR BRAND</span>
+      <h4 id="lifePhase">Navigational</h4>
+      <p id="lifeMsg">The searcher already knows where they're going.</p>
+    </div>
+  </div>
+
+  <h3>How do you read a keyword's intent?</h3>
+  <p>You don't guess it — you read the clues. <strong>Informational:</strong> question words like "how", "what", "why", "guide", "tips" — the searcher wants to learn. <strong>Commercial:</strong> "best", "review", "vs", "top" — they're comparing before they buy. <strong>Transactional:</strong> "buy", "price", "discount", "near me" — they're ready to act. The fastest tell is the SERP itself: Google shows blog posts for informational, comparison pages for commercial, and product or store pages for transactional. In the next section, you'll see how AI turns hours of this classification into minutes.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>AI brainstorms the topics. You make the call.</h2>
+  <p class="lead">AI won't hand you a guaranteed ranking — nothing will. What it does brilliantly is compress research time: brainstorming, grouping, and drafting at a scale no human matches.</p>
+
+  <p>Manual keyword research means staring at a blank Keyword Planner, exporting messy CSVs, and grouping thousands of terms by hand. An AI assistant like ChatGPT or Claude does the brainstorming and clustering in minutes. What it can't do is verify — it doesn't know the true search volume, the real difficulty, or that the "great keyword" it invented has almost no searches. Treat AI as a fast, tireless research assistant whose numbers you always check against a real tool.</p>
+
+  <div class="sig-grid">
+    <div class="sig"><span class="k">Brainstorm</span><h4>ChatGPT &amp; Claude</h4><p>Ask AI to expand one seed keyword into 50 related terms, long-tail variations, and question phrases. Brilliant for ideas and topic clusters — but it guesses at volume, so never trust its numbers.</p></div>
+    <div class="sig"><span class="k">Estimate</span><h4>Keyword Planner &amp; Trends</h4><p>Google Keyword Planner gives real (if bucketed) volume and CPC ranges; Google Trends shows whether interest is rising or seasonal. This is where AI's guesses meet actual data.</p></div>
+    <div class="sig"><span class="k">Measure</span><h4>Ahrefs &amp; Semrush</h4><p>These give keyword difficulty, precise volume estimates, and who currently ranks. A difficulty score is a rank-chance signal — KD 15 is winnable, KD 70 is a fortress.</p></div>
+    <div class="sig"><span class="k">Confirm</span><h4>Search Console</h4><p>Google Search Console shows the queries you already rank for and their real impressions and clicks. The best keyword ideas often hide in terms you're on page two for right now.</p></div>
+  </div>
+
+  <h3>The funnel: 50 → 10 → 3 → 1</h3>
+  <p>Speed without discipline just means finding bad keywords faster. The professionals' habit is a funnel: brainstorm wide with <strong>50 raw ideas</strong> (AI makes this cheap), screen them against the six tests down to a <strong>shortlist of 10</strong>, validate those hard with real volume and difficulty data down to <strong>3</strong>, and build one focused pillar page or cluster around <strong>one</strong>. Falling for the biggest number at step one is how people skip the filters — and the filters are the method.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The research funnel</span>
+      <div class="controls">
+        <button onclick="fPlay()">▶ Play</button>
+        <button onclick="fReset()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="fwrap" id="fwrap">
+      <div class="fstage">
+        <div class="fmeta"><span class="fnum">50</span><span class="flab">raw ideas</span></div>
+        <div class="fdots" id="fs1"></div>
+      </div>
+      <div class="flt" id="ff1"><span class="arr">↓</span> Criteria screen — kill anything that fails the six tests</div>
+      <div class="fstage">
+        <div class="fmeta"><span class="fnum">10</span><span class="flab">shortlisted</span></div>
+        <div class="fdots" id="fs2"></div>
+      </div>
+      <div class="flt" id="ff2"><span class="arr">↓</span> Data validation — real volume, difficulty, SERP intent</div>
+      <div class="fstage">
+        <div class="fmeta"><span class="fnum">3</span><span class="flab">validated</span></div>
+        <div class="fdots" id="fs3"></div>
+      </div>
+      <div class="flt" id="ff3"><span class="arr">↓</span> One pillar page — publish, then let the SERP decide</div>
+      <div class="fstage">
+        <div class="fmeta"><span class="fnum">1</span><span class="flab">pillar</span></div>
+        <div class="fdots" id="fs4"></div>
+      </div>
+    </div>
+  </div>
+
+  <p>Be honest with yourself about the last stage: the one keyword you build around <em>still might not rank</em>. Google reveals the true winner over weeks, not on publish day. The funnel doesn't promise a top spot — it promises that when a keyword doesn't land, you wasted a research hour, not a month of content, because you validated with real data before you wrote a word.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Validate hard before you write a single word</h2>
+  <p class="lead">Validation is a checklist, not a feeling. Run every shortlisted keyword through the same eight questions and let the count — not the tempting volume number — decide what happens next.</p>
+
+  <p>Each item below is binary on purpose. "Kind of matches the intent" is a no. "Difficulty is high but maybe I'll rank anyway" is a no. The discipline of answering honestly is exactly what separates research from wishful thinking. A quick prompt to kick it off: <code>Act as an SEO strategist. Give me 30 keyword ideas around "email marketing for small business", grouped into topic clusters with a pillar page for each, and label the likely intent — but tell me you're estimating, and remind me to confirm volume and difficulty in a real tool.</code> Then score the sample keyword yourself, or hit <em>Check typical winner</em> — note that even strong keywords rarely go 8 for 8.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Validation checklist</span>
+      <div class="controls">
+        <button onclick="vPreset()">Check typical winner</button>
+        <button onclick="vClear()">↺ Clear</button>
+      </div>
+    </div>
+    <div class="vwrap">
+      <div>
+        <div class="vprod">Scoring: <strong>"email marketing tips for small business"</strong> <em>(illustrative numbers)</em></div>
+        <div id="vlist">
+          <label class="vitem"><input type="checkbox" onchange="vUpdate()"><span>Intent is clear and matches a page you'd build (informational how-to guide)</span></label>
+          <label class="vitem"><input type="checkbox" onchange="vUpdate()"><span>Real search volume confirmed in a tool (~1,900/mo, illustrative)</span></label>
+          <label class="vitem"><input type="checkbox" onchange="vUpdate()"><span>Keyword difficulty is winnable for your site (KD ~22, illustrative)</span></label>
+          <label class="vitem"><input type="checkbox" onchange="vUpdate()"><span>Clear business value — the searcher could become a customer (CPC ~$4.10)</span></label>
+          <label class="vitem"><input type="checkbox" onchange="vUpdate()"><span>Page one isn't locked up by giant brands with no gap to exploit</span></label>
+          <label class="vitem"><input type="checkbox" onchange="vUpdate()"><span>The SERP shows the content type you'd publish (guides, not product pages)</span></label>
+          <label class="vitem"><input type="checkbox" onchange="vUpdate()"><span>Evergreen demand, or a season long enough to matter (Trends is stable)</span></label>
+          <label class="vitem"><input type="checkbox" onchange="vUpdate()"><span>Fits a topic cluster — it supports a pillar page, not a stray post</span></label>
+        </div>
+      </div>
+      <div class="vside">
+        <div class="vscore-row"><span>Validation score</span><strong id="vnum">0 / 8</strong></div>
+        <div class="vbar"><div id="vfill"></div></div>
+        <div class="vpanel" id="vpanel">
+          <span class="vtag" id="vtag">Verdict</span>
+          <p id="vmsg">Tick what a real tool confirms — not what AI or your hopes suggest.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>What the thresholds mean — and the red flags</h3>
+  <p><strong>0–3:</strong> drop it and feel nothing — the funnel exists so that dropping is cheap. <strong>4–5:</strong> the evidence is thin; refine the intent or pick a lower-difficulty long-tail before you write. <strong>6–7:</strong> promising — this earns a real pillar page built around the cluster it anchors. <strong>8:</strong> rare; publish, then track it in Search Console and improve as the SERP responds. Watch the red flags too: AI inventing keywords with near-zero real volume, chasing high difficulty because the volume looks big, a mismatch between the keyword's intent and the page you'd build, and trusting any single volume estimate as exact. Whatever the score says, the final judge is Google's own ranking — the checklist just decides what's worth writing.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Keyword research is a filtering discipline, not a volume grab. Good keywords pass six tests at once, match the searcher's intent to the page you'd build, and survive a funnel that trims 50 raw ideas into one pillar page. AI compresses the brainstorming, grouping, and drafting — but the verification, and the judgment, stay yours.</p>
+  <ul>
+    <li>Intent over volume · score keywords against criteria, never against the biggest number</li>
+    <li>Match the journey stage · informational earns trust before transactional earns the sale</li>
+    <li>AI brainstorms — ideas, clusters, questions · a real tool confirms volume and difficulty</li>
+    <li>50 → 10 → 3 → 1 · funnel discipline builds pillars, not stray posts</li>
+    <li>AI suggests, the SERP decides · every volume number is an estimate — verify like it's true</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 02 of 04 · Next up: Writing SEO Content with AI →</footer>
+<script>
+
+/* ============ Figure 1 · Radar ============ */
+const NS='http://www.w3.org/2000/svg';
+const RCX=250,RCY=195,RR=140;
+const radAng=[0,1,2,3,4,5].map(i=>-Math.PI/2+i*Math.PI/3);
+function radPt(i,v){const r=RR*v/10;return [RCX+r*Math.cos(radAng[i]),RCY+r*Math.sin(radAng[i])]}
+(function buildGrid(){
+  const g=document.getElementById('radGrid');
+  [2.5,5,7.5,10].forEach(l=>{
+    const p=document.createElementNS(NS,'polygon');
+    p.setAttribute('class','rad-grid');
+    p.setAttribute('points',radAng.map((_,i)=>radPt(i,l).map(n=>n.toFixed(1)).join(',')).join(' '));
+    g.appendChild(p);
+  });
+  radAng.forEach((_,i)=>{
+    const ln=document.createElementNS(NS,'line');
+    const [x,y]=radPt(i,10);
+    ln.setAttribute('class','rad-spoke');
+    ln.setAttribute('x1',RCX);ln.setAttribute('y1',RCY);
+    ln.setAttribute('x2',x.toFixed(1));ln.setAttribute('y2',y.toFixed(1));
+    g.appendChild(ln);
+  });
+})();
+const radPresets=[
+  {name:'best running shoes',vals:[9,8,8,2,3,9]},
+  {name:'email marketing tips',vals:[8,7,8,7,8,6]},
+  {name:'marketing',vals:[3,3,4,1,2,9]}
+];
+let radCur=[0,0,0,0,0,0],radRAF=null,W=[1,1,1,1,1,1];
+const radPoly=document.getElementById('radPoly');
+function radRender(){
+  radPoly.setAttribute('points',radCur.map((v,i)=>radPt(i,v).map(n=>n.toFixed(1)).join(',')).join(' '));
+  radCur.forEach((v,i)=>{
+    const [x,y]=radPt(i,v);
+    const d=document.getElementById('rd'+i);
+    d.setAttribute('cx',x.toFixed(1));d.setAttribute('cy',y.toFixed(1));
+    document.getElementById('rv'+i).textContent=v.toFixed(1);
+  });
+  radScoreUpd();
+}
+function radScoreUpd(){
+  const sw=W.reduce((a,b)=>a+b,0);
+  const s=radCur.reduce((a,v,i)=>a+v*W[i],0)/sw;
+  document.getElementById('radScore').textContent=s.toFixed(1);
+  const mn=Math.min.apply(null,radCur);
+  let v;
+  if(s>=7&&mn>3.2)v='Strong keyword — big and balanced. Move it to validation.';
+  else if(s>=7)v='High score, but one axis has collapsed. Check the weak leg before you commit — spiky shapes are traps.';
+  else if(s>=5.5)v='Shortlist material — workable, but it needs a sharper long-tail angle to earn a page.';
+  else v='Skip. The numbers don’t earn a page, no matter how big the volume looks.';
+  document.getElementById('radVerdict').textContent=v;
+}
+function radAnimate(target){
+  if(radRAF)cancelAnimationFrame(radRAF);
+  const start=radCur.slice(),t0=performance.now(),dur=700;
+  function step(now){
+    const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);
+    radCur=start.map((s,i)=>s+(target[i]-s)*e);
+    radRender();
+    if(k<1)radRAF=requestAnimationFrame(step);
+  }
+  radRAF=requestAnimationFrame(step);
+}
+function radSet(i){
+  document.getElementById('radName').textContent=radPresets[i].name;
+  [0,1,2].forEach(j=>document.getElementById('rb'+j).classList.toggle('active',j===i));
+  radAnimate(radPresets[i].vals);
+}
+function radW(){
+  [0,1,3].forEach(i=>{
+    W[i]=parseFloat(document.getElementById('ws'+i).value);
+    document.getElementById('wd'+i).textContent=W[i].toFixed(2).replace(/0$/,'')+'×';
+  });
+  radScoreUpd();
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){radSet(0);o.unobserve(e.target)}}),{threshold:0.35}).observe(radPoly.closest('.illus'));
+
+/* ============ Figure 2 · Lifecycle ============ */
+const lifeSvg=document.getElementById('lifeSvg'),lifeMk=document.getElementById('lifeMk');
+const LIFE_PH=[
+  {t0:0,t1:0.18,name:'Navigational',tag:'FINDS YOUR BRAND',cls:'warn',msg:'The searcher already knows where they are going — "MokshPath login", "Gmail". Great if it is your brand, near-impossible to win if it is someone else\'s. Build these pages, don\'t fight over rivals\'.'},
+  {t0:0.18,t1:0.40,name:'Informational',tag:'BEST ENTRY',cls:'good',msg:'The sweet spot for new sites — "how to write a newsletter", "what is SEO". High volume, lower competition, and a searcher you can genuinely help. Earn trust here, then guide them onward.'},
+  {t0:0.40,t1:0.56,name:'Commercial',tag:'COMPARING',cls:'warn',msg:'They are researching before buying — "best email tools", "Semrush vs Ahrefs". Higher value and more competition. Comparison and review pages win, and your unique angle matters.'},
+  {t0:0.56,t1:0.76,name:'Transactional',tag:'READY TO BUY',cls:'warn',msg:'They are ready to act — "buy running shoes online", "CRM pricing". Converts best, but difficulty is highest and giants bid hard. Only enter with a genuinely strong page or a niche long-tail.'},
+  {t0:0.76,t1:1,name:'Branded buy',tag:'BRAND LOYAL',cls:'bad',msg:'"Buy Nike Pegasus" — the searcher has chosen a brand. If it is not yours, the SERP has already decided. Compete only where you own the brand or a legitimate reseller angle.'}
+];
+function lifeY(x){const t=(x-40)/620;return 265-205*Math.exp(-Math.pow(t-0.47,2)/(2*0.185*0.185))}
+(function buildLife(){
+  let d='M40 '+lifeY(40).toFixed(1);
+  for(let x=48;x<=660;x+=8)d+=' L'+x+' '+lifeY(x).toFixed(1);
+  document.getElementById('lifeCurve').setAttribute('d',d);
+  const bands=document.getElementById('lifeBands'),ticks=document.getElementById('lifeTicks');
+  LIFE_PH.forEach((p,i)=>{
+    const r=document.createElementNS(NS,'rect');
+    r.setAttribute('x',(40+p.t0*620).toFixed(1));r.setAttribute('y',30);
+    r.setAttribute('width',((p.t1-p.t0)*620).toFixed(1));r.setAttribute('height',250);
+    r.setAttribute('class','pband');r.setAttribute('id','pb'+i);
+    bands.appendChild(r);
+    if(i>0){
+      const ln=document.createElementNS(NS,'line');
+      ln.setAttribute('class','pline');
+      const bx=(40+p.t0*620).toFixed(1);
+      ln.setAttribute('x1',bx);ln.setAttribute('y1',30);ln.setAttribute('x2',bx);ln.setAttribute('y2',280);
+      bands.appendChild(ln);
+    }
+    const tx=document.createElementNS(NS,'text');
+    tx.setAttribute('class','ptick');
+    tx.setAttribute('x',(40+(p.t0+p.t1)/2*620).toFixed(1));tx.setAttribute('y',302);
+    tx.textContent=p.name;
+    ticks.appendChild(tx);
+  });
+})();
+let lifeX=95,lifeRAF=null,lifeDrag=false;
+function lifePhaseIdx(x){const t=(x-40)/620;for(let i=0;i<LIFE_PH.length;i++){if(t<=LIFE_PH[i].t1)return i}return 4}
+function lifeMove(x){
+  x=Math.max(40,Math.min(660,x));lifeX=x;
+  lifeMk.setAttribute('transform','translate('+x.toFixed(1)+','+lifeY(x).toFixed(1)+')');
+  const i=lifePhaseIdx(x),p=LIFE_PH[i];
+  document.getElementById('lifePhase').textContent=p.name;
+  document.getElementById('lifeMsg').textContent=p.msg;
+  const tag=document.getElementById('lifeTag');
+  tag.textContent=p.tag;tag.className='life-tag '+p.cls;
+  for(let j=0;j<5;j++){
+    document.getElementById('pb'+j).classList.toggle('on',j===i);
+    document.getElementById('lb'+j).classList.toggle('active',j===i);
+  }
+}
+function lifeSnap(i){
+  if(lifeRAF)cancelAnimationFrame(lifeRAF);
+  const p=LIFE_PH[i],target=40+(p.t0+p.t1)/2*620,start=lifeX,t0=performance.now(),dur=500;
+  function step(now){
+    const k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);
+    lifeMove(start+(target-start)*e);
+    if(k<1)lifeRAF=requestAnimationFrame(step);
+  }
+  lifeRAF=requestAnimationFrame(step);
+}
+function lifeEvX(e){
+  const pt=e.touches?e.touches[0]:e;
+  const r=lifeSvg.getBoundingClientRect();
+  return (pt.clientX-r.left)*700/r.width;
+}
+lifeMk.addEventListener('mousedown',e=>{lifeDrag=true;e.preventDefault()});
+lifeMk.addEventListener('touchstart',e=>{lifeDrag=true;e.preventDefault()},{passive:false});
+window.addEventListener('mousemove',e=>{if(lifeDrag)lifeMove(lifeEvX(e))});
+window.addEventListener('touchmove',e=>{if(lifeDrag){lifeMove(lifeEvX(e));e.preventDefault()}},{passive:false});
+window.addEventListener('mouseup',()=>lifeDrag=false);
+window.addEventListener('touchend',()=>lifeDrag=false);
+lifeSvg.addEventListener('click',e=>{if(e.target.closest('#lifeMk'))return;lifeMove(lifeEvX(e))});
+lifeMove(95);
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){lifeSnap(1);o.unobserve(e.target)}}),{threshold:0.4}).observe(lifeSvg);
+
+/* ============ Figure 3 · Funnel ============ */
+const fwrap=document.getElementById('fwrap'),fT=[];
+(function buildFunnel(){
+  const counts=[50,10,3,1],ids=['fs1','fs2','fs3','fs4'],gaps=[0.025,0.09,0.14,0];
+  ids.forEach((id,s)=>{
+    const el=document.getElementById(id);
+    for(let i=0;i<counts[s];i++){
+      const d=document.createElement('span');
+      d.className='fdot'+(s===0&&i%5===2?' keep':'');
+      d.style.animationDelay=(i*gaps[s]).toFixed(3)+'s';
+      el.appendChild(d);
+    }
+  });
+})();
+function fReset(){
+  while(fT.length)clearTimeout(fT.pop());
+  fwrap.classList.remove('p1','p1b','p2','q2','p3','q3','p4');
+}
+function fPlay(){
+  fReset();
+  void fwrap.offsetWidth;
+  fwrap.classList.add('p1');
+  fT.push(setTimeout(()=>fwrap.classList.add('p1b'),1900));
+  fT.push(setTimeout(()=>fwrap.classList.add('p2'),2800));
+  fT.push(setTimeout(()=>fwrap.classList.add('q2'),3800));
+  fT.push(setTimeout(()=>fwrap.classList.add('p3'),4500));
+  fT.push(setTimeout(()=>fwrap.classList.add('q3'),5400));
+  fT.push(setTimeout(()=>fwrap.classList.add('p4'),6100));
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){fPlay();o.unobserve(e.target)}}),{threshold:0.3}).observe(fwrap);
+
+/* ============ Figure 4 · Checklist ============ */
+const vboxes=Array.prototype.slice.call(document.querySelectorAll('#vlist input'));
+function vUpdate(){
+  const n=vboxes.filter(b=>b.checked).length;
+  document.getElementById('vfill').style.width=(n/8*100)+'%';
+  document.getElementById('vnum').textContent=n+' / 8';
+  const panel=document.getElementById('vpanel'),tag=document.getElementById('vtag'),msg=document.getElementById('vmsg');
+  panel.className='vpanel';
+  if(n===0){tag.textContent='Verdict';msg.textContent='Tick what a real tool confirms — not what AI or your hopes suggest.';return}
+  if(n<=3){panel.classList.add('v-bad');tag.textContent='Drop it';msg.textContent='Too many failed tests. Dropping it now costs you nothing — that’s the whole point of validating before you write.'}
+  else if(n<=5){panel.classList.add('v-warn');tag.textContent='Risky — keep researching';msg.textContent='Some evidence, big gaps. Refine the intent or find a lower-difficulty long-tail before you commit a page to it.'}
+  else if(n<=7){panel.classList.add('v-good');tag.textContent='Promising — build the page';msg.textContent='This earns a real pillar page built around the cluster it anchors. Then Search Console and the SERP make the final call.'}
+  else{panel.classList.add('v-great');tag.textContent='Rare — publish and track';msg.textContent='8 for 8 almost never happens. Publish it, watch it in Search Console, and improve as Google responds over the weeks.'}
+}
+function vPreset(){
+  const win=[1,1,1,1,0,1,1,1];
+  vboxes.forEach((b,i)=>b.checked=!!win[i]);
+  vUpdate();
+}
+function vClear(){vboxes.forEach(b=>b.checked=false);vUpdate()}
+const vlist=document.getElementById('vlist');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){vlist.classList.remove('go');void vlist.offsetWidth;vlist.classList.add('go');o.unobserve(e.target)}}),{threshold:0.25}).observe(vlist);
+
+</script>
+</body>
+</html>

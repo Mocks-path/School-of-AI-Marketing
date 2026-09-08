@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>SEO in the AI Era · Lesson 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · order flow ============ */
+.flow{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:30px 22px 22px;position:relative}
+.flow-row{display:flex;align-items:stretch;gap:0}
+.fnode{
+  flex:0 0 auto;width:150px;text-align:center;padding:16px 10px 13px;
+  background:var(--cream);border:2px solid var(--line);border-radius:12px;
+  transition:border-color .3s,background .3s,transform .3s,box-shadow .3s;
+}
+.fnode h5{font-family:'Fraunces',serif;font-size:16px;color:var(--brown-dark);line-height:1.15;margin-bottom:4px}
+.fnode .fsub{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);line-height:1.4;display:block}
+.fnode .fmark{width:34px;height:34px;border-radius:50%;background:var(--brown-dark);color:var(--paper);font-family:'Fraunces',serif;font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;margin:0 auto 8px;transition:background .3s}
+.fnode.on{border-color:var(--orange);background:#FDEBD7;transform:translateY(-4px);box-shadow:0 8px 18px rgba(239,127,26,0.22)}
+.fnode.on .fmark{background:var(--orange)}
+.fconn{flex:1;min-width:26px;align-self:center;height:3px;background:var(--line);position:relative;border-radius:2px}
+.fdot{
+  position:absolute;top:50%;left:0;width:15px;height:15px;border-radius:50%;
+  transform:translate(-50%,-50%);opacity:0;z-index:2;
+}
+.fdot.money{background:var(--yellow);border:2px solid var(--tan);box-shadow:0 0 0 4px rgba(254,204,0,0.25)}
+.fdot.pkg{background:var(--brown);border:2px solid var(--brown-dark);box-shadow:0 0 0 4px rgba(65,44,35,0.15)}
+.fconn.go .fdot,.frail.go .fdot{animation:dotR 1.35s ease-in-out forwards}
+.fconn.go.rev .fdot,.frail.go.rev .fdot{animation:dotL 1.35s ease-in-out forwards}
+@keyframes dotR{0%{left:0%;opacity:0}14%{opacity:1}86%{opacity:1}100%{left:100%;opacity:0}}
+@keyframes dotL{0%{left:100%;opacity:0}14%{opacity:1}86%{opacity:1}100%{left:0%;opacity:0}}
+.frail{margin:30px 10px 6px;height:3px;background:var(--line);position:relative;border-radius:2px}
+.frail-label{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);text-align:center;margin-top:8px}
+.flow.drop #fnWh,.flow.drop #fc3{display:none}
+.fcap-wrap{display:flex;gap:14px;align-items:flex-start;margin-top:20px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-height:74px}
+.fstep{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.08em;color:#fff;background:var(--orange);border-radius:6px;padding:4px 9px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.fcap{font-size:14.5px;color:var(--brown-dark);line-height:1.5}
+.fkey{display:flex;gap:22px;margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.fkey span{display:inline-flex;align-items:center;gap:7px}
+.fkey i{width:12px;height:12px;border-radius:50%;display:inline-block}
+.fkey .km{background:var(--yellow);border:2px solid var(--tan)}
+.fkey .kp{background:var(--brown);border:2px solid var(--brown-dark)}
+@media(max-width:700px){
+  .flow{padding:18px 10px 14px}
+  .fnode{width:96px;padding:10px 5px 9px}
+  .fnode h5{font-size:12.5px}
+  .fnode .fsub{font-size:8px}
+  .fnode .fmark{width:26px;height:26px;font-size:13px}
+}
+
+/* ============ Figure 2 · margin stack ============ */
+.mcalc{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.mrows{display:grid;gap:18px;margin-bottom:24px}
+.mrow{display:grid;grid-template-columns:180px 1fr 84px;gap:16px;align-items:center}
+.mrow label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown);font-weight:600}
+.mrow .mval{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:600;color:var(--orange-dark);text-align:right}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--cream);border:1px solid var(--line);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+.mbar{display:flex;height:52px;border-radius:10px;overflow:hidden;border:1px solid var(--line);background:repeating-linear-gradient(45deg,#F4E9D8 0 8px,var(--cream) 8px 16px)}
+.mseg{height:100%;transition:width .45s ease;min-width:0}
+.mseg.sp{background:var(--brown)} .mseg.ss{background:var(--tan)}
+.mseg.sa{background:var(--orange-dark)} .mseg.sf{background:#8B7A6C}
+.mseg.spr{background:var(--yellow)}
+.mlegend{display:flex;flex-wrap:wrap;gap:14px;margin-top:12px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted)}
+.mlegend span{display:inline-flex;align-items:center;gap:6px}
+.mlegend i{width:11px;height:11px;border-radius:3px;display:inline-block}
+.mresult{display:flex;align-items:baseline;gap:18px;flex-wrap:wrap;margin-top:22px;padding-top:18px;border-top:1px dashed var(--line)}
+.mprofit{font-family:'Fraunces',serif;font-weight:800;font-size:46px;line-height:1;color:var(--brown-dark);transition:color .3s}
+.mprofit.neg{color:var(--orange-dark)}
+.mprofit-label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.mverdict{font-size:14.5px;color:var(--brown);font-weight:500;max-width:340px;line-height:1.45}
+.mprice{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);margin-bottom:16px}
+.mprice strong{color:var(--brown-dark);font-size:16px}
+@media(max-width:700px){
+  .mrow{grid-template-columns:1fr 70px;gap:10px}
+  .mrow label{grid-column:1/-1}
+  .mprofit{font-size:36px}
+}
+
+/* ============ Figure 3 · AI map ============ */
+.aimap-chain{display:flex;align-items:center;gap:0;margin-bottom:20px}
+.ainode{
+  flex:1;text-align:center;padding:16px 8px;background:var(--paper);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;font-family:'JetBrains Mono',monospace;
+  font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown);font-weight:600;
+}
+.ainode .aidx{display:block;font-family:'Fraunces',serif;font-size:24px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s;text-transform:none;letter-spacing:0}
+.ainode:hover{border-color:var(--orange);transform:translateY(-2px)}
+.ainode.active{background:var(--brown-dark);border-color:var(--brown-dark);color:var(--paper)}
+.ainode.active .aidx{color:var(--orange)}
+.ailink{width:26px;height:3px;background:var(--line);flex-shrink:0;position:relative}
+.ailink::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.aipanel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px;min-height:250px}
+.aipanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.aipanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:4px}
+.aipanel .aitag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:block;margin-bottom:14px}
+.aipanel ul{list-style:none;display:grid;gap:9px;margin-bottom:18px}
+.aipanel li{font-size:14.5px;color:var(--ink);padding-left:24px;position:relative;line-height:1.5}
+.aipanel li::before{content:"✦";position:absolute;left:0;color:var(--orange);font-size:13px}
+.ai-human{
+  background:var(--cream);border-left:3px solid var(--brown);border-radius:0 10px 10px 0;
+  padding:13px 16px;font-size:13.5px;color:var(--brown);line-height:1.5;
+}
+.ai-human strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+@media(max-width:700px){
+  .aimap-chain{flex-wrap:wrap;gap:8px}
+  .ainode{flex:1 1 42%}
+  .ailink{display:none}
+}
+
+/* ============ Figure 4 · hype cards ============ */
+.hgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.hcard{height:215px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.hgrid.show .hcard{animation:hIn .5s forwards}
+.hgrid.show .hcard:nth-child(1){animation-delay:.05s}
+.hgrid.show .hcard:nth-child(2){animation-delay:.2s}
+.hgrid.show .hcard:nth-child(3){animation-delay:.35s}
+.hgrid.show .hcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.hinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.hcard.flipped .hinner{transform:rotateY(180deg)}
+.hface{
+  position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center;
+}
+.hfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.hfront .hclaim{font-family:'Fraunces',serif;font-weight:800;font-size:27px;line-height:1.1;margin-bottom:8px}
+.hfront .hsub{font-size:13px;opacity:.92;max-width:260px}
+.hfront .hhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.hback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.hback .hlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.hback p{font-size:13.5px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){
+  .hgrid{grid-template-columns:1fr}
+  .hcard{height:200px}
+  .hfront .hclaim{font-size:23px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 01 · AI SEO</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="13" width="36" height="27" rx="6" fill="#412C23"/>
+      <path d="M14 13 C14 4.5 30 4.5 30 13" stroke="#EF7F1A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M12 32 L12 22 L17 28 L22 21 L27 28 L32 22 L32 32" stroke="#FECC00" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="36" cy="9" r="4.5" fill="#EF7F1A"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 1 · Lesson 01 · AI SEO</div>
+  <h1>SEO in the <em>AI era</em>.</h1>
+  <p class="lede">SEO is how people find you when they aren't already looking for you — free, compounding traffic from search. It's a real discipline with real, slow payoffs, and most sites that dabble give up too early. AI doesn't change that patience. What it changes is the workload: keyword research, content, technical fixes and reporting that once took weeks now take days. This lesson gives you the honest map before you write a single page.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Crawl, index, rank</h2>
+  <p class="lead">Strip away the jargon and SEO is one simple loop: a search engine <strong>crawls</strong> the open web, <strong>indexes</strong> what it finds, and <strong>ranks</strong> pages so the best answer shows up first. Your job is to be that best answer — and to be reachable when the crawler comes.</p>
+
+  <p>With paid ads, you rent attention: the moment you stop paying, the traffic stops. That's rented land. SEO is different — you earn a spot in the index, and a page that ranks can send free visitors for months or years with no per-click bill. That compounding is what makes SEO worth the wait.</p>
+  <p>Here's the sequence in a classic search. A crawler like Googlebot follows links to your page, stores a copy in the index, then — when someone types a query — scores every candidate on relevance, authority and experience, and returns a ranked list of ten blue links. You climb that list by being genuinely more useful than the pages above you. The barrier to entry is low, which is exactly why beginners can start today, and exactly why the competition for good keywords is fierce.</p>
+  <p>Press the two buttons below and watch how the answer reaches the searcher — through a classic ranked list, or through an AI engine that reads the page and writes the answer for them. That single shift is what this lesson is about.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · How your page becomes an answer</span>
+      <div class="controls">
+        <button id="btnDrop" class="active" onclick="runFlow('drop')">▶ AI search</button>
+        <button id="btnTrad" onclick="runFlow('trad')">▶ Classic search</button>
+        <button onclick="resetFlow(true)">↺ Reset</button>
+      </div>
+    </div>
+    <div class="flow drop" id="flow">
+      <div class="flow-row">
+        <div class="fnode" id="fnCust">
+          <div class="fmark">Q</div>
+          <h5>Searcher</h5>
+          <span class="fsub">Types a query</span>
+        </div>
+        <div class="fconn" id="fc1"><div class="fdot money"></div></div>
+        <div class="fnode" id="fnStore">
+          <div class="fmark">P</div>
+          <h5>Your Page</h5>
+          <span class="fsub">Content · answers · trust</span>
+        </div>
+        <div class="fconn" id="fc2"><div class="fdot money"></div></div>
+        <div class="fnode" id="fnWh">
+          <div class="fmark">I</div>
+          <h5>The Index</h5>
+          <span class="fsub">Stored · scored · ranked</span>
+        </div>
+        <div class="fconn" id="fc3"><div class="fdot pkg"></div></div>
+        <div class="fnode" id="fnSup">
+          <div class="fmark">E</div>
+          <h5>Search Engine</h5>
+          <span class="fsub">Crawls &amp; returns results</span>
+        </div>
+      </div>
+      <div class="frail" id="frail"><div class="fdot pkg"></div></div>
+      <div class="frail-label" id="frailLabel">← the answer travels this rail, right to left</div>
+      <div class="fcap-wrap">
+        <div class="fstep" id="fstep">— / —</div>
+        <div class="fcap" id="fcap">Press ▶ AI search or ▶ Classic search to run the sequence.</div>
+      </div>
+      <div class="fkey">
+        <span><i class="km"></i> query</span>
+        <span><i class="kp"></i> answer</span>
+      </div>
+    </div>
+  </div>
+
+  <h3>What the engine is really scoring</h3>
+  <p>Notice what stays inside "Your Page" in the AI run: no separate ranked list — the engine reads your content and speaks the answer directly. Behind both flows, the engine is grading three things: <em>relevance</em> (does this page match the intent behind the query?), <em>authority</em> (do other trusted sites and sources vouch for it?), and <em>experience</em> (is it fast, readable, and clearly written by someone who knows the topic?). You don't own the ranking — you earn it. Low cost to publish, high patience required.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>The keyword math nobody shows you</h2>
+  <p class="lead">Beginners rarely fail because their writing is bad. They fail because they chase keywords they can never win — and don't check the math until months of effort are gone. Let's check it now, with typical real-world numbers.</p>
+
+  <p>Think of every keyword as an opportunity with a fixed size. A high-value keyword might be "worth" <strong>100</strong> points of monthly traffic if you rank first. But that headline number isn't yours to keep. Ranking eats into it: <strong>competition strength</strong> (how strong the sites already ranking are), the <strong>content depth</strong> you'll need to match them, and <strong>link and authority cost</strong> (the effort to earn enough trust signals to compete). Add a small slice for technical friction — a slow or hard-to-crawl site — and your "easy 100" quietly shrinks to a realistic few.</p>
+  <p>Authority is the variable that decides winnable, because it's the one you can't fake overnight. Content you can write today; technical fixes are one-time; but authority is earned slowly, link by link and month by month. A keyword that's winnable against three weak competitors becomes hopeless when a big brand publishes on it — with nothing else changed. Drag the sliders and feel how fast the yellow "realistic upside" slice disappears.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · The keyword value stack, live</span>
+      <div class="controls" id="priceBtns">
+        <button onclick="setPrice(19.99,this)">$19.99</button>
+        <button class="active" onclick="setPrice(29.99,this)">$29.99</button>
+        <button onclick="setPrice(49.99,this)">$49.99</button>
+      </div>
+    </div>
+    <div class="mcalc">
+      <div class="mprice">Traffic value of rank #1: <strong id="mPriceLbl">$29.99</strong> &nbsp;·&nbsp; technical friction fixed at ~4% of value</div>
+      <div class="mrows">
+        <div class="mrow">
+          <label for="slProd">Competition strength</label>
+          <input type="range" id="slProd" min="2" max="25" step="0.5" value="8" oninput="calcMargin()">
+          <div class="mval" id="vProd">$8.00</div>
+        </div>
+        <div class="mrow">
+          <label for="slShip">Content depth needed</label>
+          <input type="range" id="slShip" min="0" max="12" step="0.5" value="5" oninput="calcMargin()">
+          <div class="mval" id="vShip">$5.00</div>
+        </div>
+        <div class="mrow">
+          <label for="slAds">Link &amp; authority cost</label>
+          <input type="range" id="slAds" min="0" max="30" step="1" value="14" oninput="calcMargin()">
+          <div class="mval" id="vAds">$14.00</div>
+        </div>
+      </div>
+      <div class="mbar" id="mbar">
+        <div class="mseg sp" id="segP"></div>
+        <div class="mseg ss" id="segS"></div>
+        <div class="mseg sa" id="segA"></div>
+        <div class="mseg sf" id="segF"></div>
+        <div class="mseg spr" id="segPr"></div>
+      </div>
+      <div class="mlegend">
+        <span><i style="background:var(--brown)"></i> competition</span>
+        <span><i style="background:var(--tan)"></i> content</span>
+        <span><i style="background:var(--orange-dark)"></i> authority</span>
+        <span><i style="background:#8B7A6C"></i> technical ~4%</span>
+        <span><i style="background:var(--yellow)"></i> realistic upside</span>
+      </div>
+      <div class="mresult">
+        <div>
+          <span class="mprofit-label">Realistic upside</span>
+          <div class="mprofit" id="profitNum">$0.00</div>
+        </div>
+        <div class="mverdict" id="verdict"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Three habits of the sites that rank</h3>
+  <p><strong>They pick winnable keywords first.</strong> If a term only works when the competition is weak, it doesn't work — because a bigger brand will eventually publish on it. Start where you can realistically win.<br>
+  <strong>They aim for intent, not just volume.</strong> A lower-traffic keyword you can actually rank #1 for beats a huge one you'll never crack. Big terms with strong competitors leave no room for a beginner.<br>
+  <strong>They know their difficulty ceiling.</strong> The competition and authority level at which a keyword becomes unwinnable is judged before the first draft is written — and terms above that ceiling are set aside without ego.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>The four-step SEO engine</h2>
+  <p class="lead">SEO isn't one skill — it's a loop with four stages: <strong>research</strong> what to target, <strong>create</strong> content that answers it, earn the <strong>technical and authority</strong> signals that let it rank, then <strong>measure</strong> what happened and feed it back in. These four stages are exactly the four lessons of this week, and AI plugs into each one differently.</p>
+
+  <p>The honest framing for this whole course: treat AI as a <strong>fast, tireless intern</strong>. It produces drafts, volume and speed at near-zero cost. It does not produce judgment or lived expertise. At each stage below, notice the pattern — AI generates the options, a human picks the bet and adds the real experience. The people who win with AI are the ones who use the saved time to ship <em>more well-targeted pages</em>, not the ones who assume the output is already correct.</p>
+  <p>Click each stage in the engine to see the concrete tasks AI takes off your plate — and the decision that stubbornly stays yours.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The four-step SEO engine</span>
+      <div class="controls">
+        <button onclick="stageStep(-1)">◀ Prev stage</button>
+        <button onclick="stageStep(1)">Next stage ▶</button>
+      </div>
+    </div>
+    <div class="aimap-chain" id="aiChain">
+      <div class="ainode" data-k="research" onclick="pickStage('research')"><span class="aidx">1</span>Research</div>
+      <div class="ailink"></div>
+      <div class="ainode" data-k="store" onclick="pickStage('store')"><span class="aidx">2</span>Content</div>
+      <div class="ailink"></div>
+      <div class="ainode" data-k="mkt" onclick="pickStage('mkt')"><span class="aidx">3</span>Authority</div>
+      <div class="ailink"></div>
+      <div class="ainode" data-k="support" onclick="pickStage('support')"><span class="aidx">4</span>Measure</div>
+    </div>
+    <div class="aipanel" id="aiPanel"></div>
+  </div>
+
+  <h3>The compression, in numbers</h3>
+  <p>Before AI tooling, a realistic solo timeline from "keyword idea" to "researched, written, published page" was three to five days of focused work. With the tasks above delegated, a beginner can do a solid first draft in an afternoon. That's the real advantage — not better rankings, but <strong>more well-targeted pages per month</strong> for the same hours. Rankings still take weeks or months to build, so the winner is usually whoever can consistently ship useful pages long enough for the compounding to kick in.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Hype vs. reality: four claims, flipped</h2>
+  <p class="lead">Every "rank #1 overnight" pitch you'll see makes some version of these four promises. Before you build anything, flip each card and read what the claim looks like from inside real search results. Setting expectations now is cheaper than learning them after months of effort.</p>
+
+  <p>None of this means "don't do it." It means: go in as a publisher, not a hack-hunter. The realistic path is boring and repeatable — pick winnable keywords, write genuinely useful pages, earn trust slowly, measure, repeat. AI makes each loop faster and cheaper. It does not remove the loop, and it does not remove the wait.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Flip the claim</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all realities</button>
+        <button onclick="allHype()">↺ Back to hype</button>
+      </div>
+    </div>
+    <div class="hgrid" id="hgrid">
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"Rank #1 overnight"</div>
+            <div class="hsub">Publish today, top of Google tomorrow.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">Reality</div>
+            <p>New pages typically take weeks to months to climb, because trust and links accrue slowly. AI shrinks the time to <em>produce</em> a page from days to hours — it doesn't shrink the time for the engine to trust and rank it.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"AI writes it all"</div>
+            <div class="hsub">Just generate 500 pages and rank.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">Reality</div>
+            <p>AI is a fast intern: superb at drafts and speed, poor at judgment and firsthand experience. Which keyword to target, whether the answer is actually right, the real example only you can give — those stay human. Thin AI-only pages at scale get filtered, not rewarded.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"Traffic in 30 days"</div>
+            <div class="hsub">First month, first flood of visitors.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">Reality</div>
+            <p>Most beginners publish 10–20 pages before a handful start ranking, and meaningful traffic often shows up in months three to six. Each page takes real research and writing. The honest clock reads in months, and many people quit exactly one month before it compounds.</p>
+          </div>
+        </div>
+      </div>
+      <div class="hcard" onclick="this.classList.toggle('flipped')">
+        <div class="hinner">
+          <div class="hface hfront">
+            <div class="hclaim">"AI killed SEO"</div>
+            <div class="hsub">ChatGPT answers everything — search is dead.</div>
+            <div class="hhint">tap to flip</div>
+          </div>
+          <div class="hface hback">
+            <div class="hlab">Reality</div>
+            <p>AI Overviews and chatbots answer more queries without a click, so some traffic shrinks — but those engines still <em>read your content</em> to build their answers. The game shifts to being the trusted source they cite. That's the new discipline: GEO / AEO, optimizing to be the answer.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-sentence version</h3>
+  <p>SEO is a slow, compounding game of becoming the most useful answer to a search — where AI lets one careful person research, write and publish at the speed of a small team, and where the person, not the AI, still supplies the judgment and real expertise that earn the ranking.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now know the loop, the math and the machine's real role. SEO means earning free, compounding traffic by being the best answer a search engine can crawl, index and rank — where authority is the slow variable you can't fake. AI now reads your content to build AI Overviews and chatbot answers, so the target widens from ranking to being cited: GEO / AEO. AI compresses every stage of the engine from days to hours, which buys you more good pages, not instant rankings. The next lesson puts that speed to work on the decision that matters most: which keywords to chase.</p>
+  <ul>
+    <li>Crawl, index, rank — be reachable, then be the best answer</li>
+    <li>Winnable upside = value − competition − content − authority − technical; authority is the slow variable</li>
+    <li>Judge a keyword's difficulty ceiling before you write the page</li>
+    <li>AI = fast intern: drafts and volume from it, judgment and real experience from you</li>
+    <li>Expect months to compound and GEO/AEO alongside classic SEO, not overnight #1s</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 01 of 04 · Next up: AI Keyword Research →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · order flow ===== */
+const flowEl=el('flow'),fcap=el('fcap'),fstep=el('fstep');
+let flowTimers=[];
+const FLOWS={
+  drop:[
+    {n:['fnCust','fnStore'],c:[['fc1','money',false]],cap:'A searcher asks an AI engine — Google’s AI Overview, or ChatGPT — a real question in plain language. The query goes OUT looking for the best source.'},
+    {n:['fnStore'],c:[],cap:'There’s no ten-blue-links page here. The engine reaches straight into content it has already read — including, if you’ve earned it, your page.'},
+    {n:['fnStore','fnSup'],c:[['fc2','money',false]],cap:'The engine pulls facts from your page and a few other trusted sources to compose one answer. To be included, your page had to be clear, accurate and crawlable.'},
+    {n:['fnSup','fnCust'],c:[['frail','pkg',true]],cap:'The engine writes the answer and delivers it right in the chat or the AI Overview — often with a citation link back to you. This is the zero-click world.'},
+    {n:['fnStore'],c:[],cap:'The prize shifts: not always a click, but being the source the AI trusts and cites. Optimizing to be that answer is GEO / AEO — the new layer on top of SEO.'}
+  ],
+  trad:[
+    {n:['fnSup','fnStore'],c:[['fc3','pkg',true],['fc2','pkg',true]],cap:'First, a crawler like Googlebot follows links across the web and fetches a copy of your page. If it can’t reach you, nothing else here can happen.'},
+    {n:['fnWh','fnStore'],c:[['fc3','pkg',true]],cap:'The page is stored and processed in THE INDEX — a giant library of the web. Being indexed is the price of admission to ever showing up.'},
+    {n:['fnCust','fnSup'],c:[['fc1','money',false]],cap:'A searcher types a query. The engine scores every indexed page on relevance, authority and experience — one ranked list at a time.'},
+    {n:['fnWh','fnCust'],c:[['frail','pkg',true]],cap:'The engine returns ten blue links, best answer first. The searcher clicks — this is the classic click-through SEO has always optimized for.'},
+    {n:['fnWh'],c:[],cap:'Traffic only flows if you rank high enough to be seen. Every page buried on result page two is real content, sitting in the index — earning nothing.'}
+  ]
+};
+function clearFlowState(){
+  ['fnCust','fnStore','fnWh','fnSup'].forEach(id=>el(id).classList.remove('on'));
+  ['fc1','fc2','fc3','frail'].forEach(id=>el(id).classList.remove('go','rev'));
+}
+function applyFlowStep(s,i,total){
+  clearFlowState();
+  s.n.forEach(id=>el(id).classList.add('on'));
+  s.c.forEach(pair=>{
+    const c=el(pair[0]),d=c.querySelector('.fdot');
+    d.className='fdot '+pair[1];
+    void c.offsetWidth;
+    if(pair[2])c.classList.add('rev');
+    c.classList.add('go');
+  });
+  fstep.textContent=(i+1)+' / '+total;
+  fcap.textContent=s.cap;
+}
+function runFlow(mode){
+  resetFlow(false);
+  el('btnDrop').classList.toggle('active',mode==='drop');
+  el('btnTrad').classList.toggle('active',mode==='trad');
+  flowEl.classList.remove('drop','trad');
+  flowEl.classList.add(mode);
+  el('frailLabel').textContent = mode==='drop'
+    ? '← the AI engine delivers the written answer along this rail'
+    : '← the ranked results travel back to the searcher along this rail';
+  const steps=FLOWS[mode];
+  steps.forEach((s,i)=>{
+    flowTimers.push(setTimeout(()=>applyFlowStep(s,i,steps.length), 300+i*2100));
+  });
+}
+function resetFlow(full){
+  flowTimers.forEach(t=>clearTimeout(t));
+  flowTimers=[];
+  clearFlowState();
+  if(full){
+    fstep.textContent='— / —';
+    fcap.textContent='Press ▶ AI search or ▶ Classic search to run the sequence.';
+  }
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){runFlow('drop');o.unobserve(e.target)}}),{threshold:0.35}).observe(flowEl);
+
+/* ===== Figure 2 · margin stack ===== */
+let price=29.99;
+function setPrice(p,btn){
+  price=p;
+  document.querySelectorAll('#priceBtns button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  el('mPriceLbl').textContent='$'+p.toFixed(2);
+  calcMargin();
+}
+function calcMargin(){
+  const prod=parseFloat(el('slProd').value);
+  const ship=parseFloat(el('slShip').value);
+  const ads=parseFloat(el('slAds').value);
+  const fees=price*0.04;
+  const profit=price-prod-ship-ads-fees;
+  el('vProd').textContent='$'+prod.toFixed(2);
+  el('vShip').textContent='$'+ship.toFixed(2);
+  el('vAds').textContent='$'+ads.toFixed(2);
+  const w=v=>Math.max(0,(v/price)*100);
+  el('segP').style.width=w(prod)+'%';
+  el('segS').style.width=w(ship)+'%';
+  el('segA').style.width=w(ads)+'%';
+  el('segF').style.width=w(fees)+'%';
+  el('segPr').style.width=w(profit)+'%';
+  const pn=el('profitNum');
+  pn.textContent=(profit<0?'−$':'$')+Math.abs(profit).toFixed(2);
+  pn.classList.toggle('neg',profit<0);
+  let v;
+  if(profit<0)      v='Unwinnable. The competition and authority needed swamp the traffic on offer — pick a different keyword.';
+  else if(profit<3) v='Break-even territory. You could technically rank, but the effort barely returns any traffic. Not worth it yet.';
+  else if(profit<8) v='Winnable — but tight. One strong new competitor publishing on this term erases your edge.';
+  else              v='A healthy beginner target. Now the real question is whether you can earn the authority to hold the spot.';
+  el('verdict').textContent=v;
+}
+calcMargin();
+
+/* ===== Figure 3 · AI plug-in map ===== */
+const AIMAP={
+  research:{t:'Research — find what to target',tag:'Stage 1 · Lesson 2 · weeks compressed to hours',tasks:[
+    'Brainstorm hundreds of keyword and question ideas around a topic with ChatGPT',
+    'Cluster those keywords by search intent — informational, commercial, navigational',
+    'Pull volume, difficulty and trend data from Ahrefs, Semrush and Google Trends',
+    'Draft a scorecard ranking 10 candidate keywords by winnability for a new site'
+  ],h:'AI surfaces candidates and data. Whether a keyword fits your topic, your authority level and an audience you actually understand — that bet is yours to place.'},
+  store:{t:'Content — create the best answer',tag:'Stage 2 · Lesson 3 · days compressed to an afternoon',tasks:[
+    'Draft titles, headings and outlines that match the searcher’s intent',
+    'Write a strong first draft, then help you tighten, structure and format it',
+    'Suggest FAQ, schema and internal-link opportunities to strengthen the page',
+    'Adapt one article into a summary, a checklist and social snippets in minutes'
+  ],h:'AI writes the draft; you supply the firsthand experience, real examples and accuracy check that make a page genuinely helpful — and worth ranking.'},
+  mkt:{t:'Technical & authority — earn the ranking',tag:'Stage 3 · Lesson 4 · scattered fixes, one checklist',tasks:[
+    'Explain a Google Search Console coverage or Core Web Vitals report in plain English',
+    'Flag crawl, indexing, speed and mobile issues from a site audit',
+    'Draft personalized outreach emails to earn links and mentions',
+    'Suggest topic clusters and internal links that build topical authority'
+  ],h:'AI spots the issues and drafts the outreach; you do the real relationship-building and decide which technical fixes actually move the needle.'},
+  support:{t:'Measure — learn and feed it back',tag:'Stage 4 · Lesson 4 · numbers turned into next moves',tasks:[
+    'Summarise Google Search Console clicks, impressions and average position over time',
+    'Spot pages slipping in rank or gaining “almost there” impressions',
+    'Suggest which existing pages to refresh, merge or expand next',
+    'Turn a month of data into a short “what worked and what to do next” note'
+  ],h:'AI reads the dashboards; you decide the strategy — which pages to double down on, which to retire, and when a slow-burn page just needs more patience.'}
+};
+const AIORDER=['research','store','mkt','support'];
+let aiCurrent='research';
+function pickStage(k){
+  aiCurrent=k;
+  document.querySelectorAll('#aiChain .ainode').forEach(n=>{
+    n.classList.toggle('active',n.dataset.k===k);
+  });
+  const d=AIMAP[k],panel=el('aiPanel');
+  let html='<span class="aitag">'+d.tag+'</span><h4>'+d.t+'</h4><ul>';
+  d.tasks.forEach(t=>{html+='<li>'+t+'</li>'});
+  html+='</ul><div class="ai-human"><strong>Human still decides</strong>'+d.h+'</div>';
+  panel.innerHTML=html;
+  panel.classList.remove('swap');
+  void panel.offsetWidth;
+  panel.classList.add('swap');
+}
+function stageStep(dir){
+  let i=AIORDER.indexOf(aiCurrent)+dir;
+  if(i<0)i=AIORDER.length-1;
+  if(i>=AIORDER.length)i=0;
+  pickStage(AIORDER[i]);
+}
+pickStage('research');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickStage('research');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('aiChain'));
+
+/* ===== Figure 4 · hype vs reality ===== */
+const hgrid=el('hgrid');
+function allReal(){document.querySelectorAll('.hcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.hcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(hgrid);
+
+</script>
+</body>
+</html>
