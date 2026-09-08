@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Content Distribution & Measurement · Lesson 04</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · Demand forecast chart ============ */
+.fc-chart{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.fc-svg-wrap{position:relative}
+.fc-legend{display:flex;gap:20px;margin-top:14px;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.05em;text-transform:uppercase;color:var(--muted)}
+.fc-legend span{display:inline-flex;align-items:center;gap:7px}
+.fc-legend i{width:16px;height:3px;border-radius:2px;display:inline-block}
+.fc-legend i.hist{background:var(--brown)}
+.fc-legend i.fore{background:var(--orange);background-image:none}
+.fc-legend i.band{background:rgba(239,127,26,0.25);height:11px;border-radius:3px}
+.fc-read{display:flex;gap:14px;margin-top:18px;flex-wrap:wrap}
+.fc-card{flex:1;min-width:140px;background:var(--cream);border:1px solid var(--line);border-radius:11px;padding:14px 16px}
+.fc-card .fck{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);margin-bottom:4px}
+.fc-card .fcv{font-family:'Fraunces',serif;font-size:24px;font-weight:800;color:var(--orange-dark);line-height:1}
+.fc-card .fcn{font-size:11.5px;color:var(--brown);margin-top:4px;max-width:none}
+.dash-path{stroke-dasharray:5 4}
+.grow-line{stroke-dasharray:1200;stroke-dashoffset:1200;transition:stroke-dashoffset 1.6s ease}
+.grow-line.go{stroke-dashoffset:0}
+.fc-band{opacity:0;transition:opacity .8s ease .8s}
+.fc-band.go{opacity:1}
+
+/* ============ Figure 2 · Dynamic pricing slider ============ */
+.dp-wrap{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px}
+.dp-sliders{display:grid;gap:20px;margin-bottom:22px}
+.dp-row{display:grid;grid-template-columns:180px 1fr 96px;gap:16px;align-items:center}
+.dp-row label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600}
+.dp-row .dpval{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--orange-dark);text-align:right}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--cream);border:1px solid var(--line);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+.dp-suggest{display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:18px 20px;margin-bottom:16px}
+.dp-price-block{text-align:center}
+.dp-plabel{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:3px}
+.dp-price{font-family:'Fraunces',serif;font-size:40px;font-weight:800;color:var(--brown-dark);line-height:1;transition:color .3s}
+.dp-arrow{font-size:26px;color:var(--orange);font-weight:700}
+.dp-ai-price{color:var(--orange-dark)}
+.dp-verdict{font-size:14px;color:var(--brown);flex:1;min-width:200px;line-height:1.45;max-width:none}
+.dp-bars{display:flex;gap:12px}
+.dp-bar-card{flex:1;background:var(--cream);border:1px solid var(--line);border-radius:11px;padding:14px;text-align:center}
+.dp-bar-track{height:80px;display:flex;align-items:flex-end;justify-content:center;margin-bottom:8px}
+.dp-bar{width:44px;border-radius:6px 6px 0 0;background:linear-gradient(0deg,var(--tan),var(--orange));transition:height .4s;min-height:4px}
+.dp-bar-card .dbk{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+.dp-bar-card .dbv{font-family:'Fraunces',serif;font-size:19px;font-weight:800;color:var(--orange-dark);margin-top:2px}
+.dp-note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:16px;max-width:none}
+.dp-note strong{color:var(--orange-dark)}
+@media(max-width:700px){
+  .dp-row{grid-template-columns:1fr 80px;gap:10px}
+  .dp-row label{grid-column:1/-1}
+  .dp-price{font-size:32px}
+}
+
+/* ============ Figure 3 · Inventory signal panel ============ */
+.inv-panel{display:grid;gap:12px}
+.inv-item{
+  display:grid;grid-template-columns:1fr auto;gap:16px;align-items:center;
+  background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+  border-left:5px solid var(--line);transition:all .3s;opacity:0;transform:translateX(-12px);
+}
+.inv-panel.in .inv-item{animation:invIn .5s forwards}
+.inv-panel.in .inv-item:nth-child(1){animation-delay:.05s}
+.inv-panel.in .inv-item:nth-child(2){animation-delay:.15s}
+.inv-panel.in .inv-item:nth-child(3){animation-delay:.25s}
+.inv-panel.in .inv-item:nth-child(4){animation-delay:.35s}
+@keyframes invIn{to{opacity:1;transform:translateX(0)}}
+.inv-item.crit{border-left-color:var(--orange-dark)}
+.inv-item.warn{border-left-color:var(--yellow)}
+.inv-item.ok{border-left-color:#4ADE80}
+.inv-item.over{border-left-color:var(--accent)}
+.inv-main{min-width:0}
+.inv-name{font-family:'Fraunces',serif;font-size:16px;font-weight:700;color:var(--brown-dark);line-height:1.15}
+.inv-bar-wrap{margin-top:8px}
+.inv-bar-track{height:9px;border-radius:5px;background:var(--cream);border:1px solid var(--line);overflow:hidden;position:relative}
+.inv-bar-fill{height:100%;border-radius:5px;width:0;transition:width 1s ease}
+.inv-item.crit .inv-bar-fill{background:var(--orange-dark)}
+.inv-item.warn .inv-bar-fill{background:var(--yellow)}
+.inv-item.ok .inv-bar-fill{background:#4ADE80}
+.inv-item.over .inv-bar-fill{background:var(--accent)}
+.inv-stock{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.04em;color:var(--muted);margin-top:6px}
+.inv-signal{text-align:right;min-width:150px}
+.inv-badge{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;font-weight:600;padding:4px 9px;border-radius:6px;display:inline-block;margin-bottom:5px}
+.inv-item.crit .inv-badge{background:#FEE2E2;color:#991B1B}
+.inv-item.warn .inv-badge{background:#FEF3C7;color:#92400E}
+.inv-item.ok .inv-badge{background:#DCFCE7;color:#166534}
+.inv-item.over .inv-badge{background:#DBEAFE;color:#1E40AF}
+.inv-action{font-size:11.5px;color:var(--brown);max-width:170px;margin:0;line-height:1.35;display:inline-block}
+@media(max-width:700px){
+  .inv-item{grid-template-columns:1fr}
+  .inv-signal{text-align:left}
+  .inv-action{max-width:none}
+}
+
+/* ============ Figure 4 · Ops loop / human boundary ============ */
+.loop-wrap{display:grid;grid-template-columns:1fr 320px;gap:26px;align-items:start}
+.loop-ring{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:20px;min-height:320px}
+.loop-node{
+  position:absolute;width:132px;text-align:center;padding:12px 8px;border:2px solid var(--line);
+  border-radius:11px;background:var(--cream);cursor:pointer;transition:all .25s;
+}
+.loop-node:hover{border-color:var(--orange);transform:scale(1.04)}
+.loop-node.active{border-color:var(--brown-dark);background:#FDEBD7;box-shadow:0 8px 18px rgba(239,127,26,0.2)}
+.loop-node .lnn{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--orange-dark);font-weight:600}
+.loop-node .lnt{font-family:'Fraunces',serif;font-size:14px;color:var(--brown-dark);line-height:1.1;margin-top:2px}
+.loop-node .lntag{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.05em;text-transform:uppercase;margin-top:4px;padding:2px 6px;border-radius:4px;display:inline-block}
+.loop-node .lntag.ai{background:rgba(239,127,26,0.16);color:var(--orange-dark)}
+.loop-node .lntag.you{background:rgba(0,141,210,0.14);color:var(--accent)}
+#ln0{top:14px;left:50%;transform:translateX(-50%)}
+#ln0.active{transform:translateX(-50%) scale(1.04)}
+#ln1{top:44%;right:14px}
+#ln2{bottom:14px;left:50%;transform:translateX(-50%)}
+#ln2.active{transform:translateX(-50%) scale(1.04)}
+#ln3{top:44%;left:14px}
+.loop-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0}
+.loop-panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;min-height:260px;position:sticky;top:90px}
+.loop-panel.swap{animation:bubIn .4s ease}
+@keyframes bubIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.lp-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600}
+.lp-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--brown-dark);margin:6px 0 10px}
+.lp-body{font-size:14px;color:var(--ink);margin-bottom:14px;max-width:none}
+.lp-who{font-size:13px;color:var(--brown);background:var(--cream);border-left:3px solid var(--brown);padding:11px 14px;border-radius:0 8px 8px 0;max-width:none;margin:0}
+.lp-who strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+@media(max-width:880px){
+  .loop-wrap{grid-template-columns:1fr}
+  .loop-panel{position:static}
+  .loop-ring{min-height:360px}
+}
+
+/* ============ Figure 5 · Week recap ============ */
+.recap-chain{display:flex;align-items:center;gap:0;margin-bottom:20px}
+.recap-node{
+  flex:1;text-align:center;padding:16px 8px;background:var(--paper);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;transition:all .25s;
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.06em;color:var(--brown);font-weight:600;
+}
+.recap-node .rcn{display:block;font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--line);margin-bottom:4px;transition:color .25s}
+.recap-node:hover{border-color:var(--orange);transform:translateY(-2px)}
+.recap-node.active{background:var(--brown-dark);border-color:var(--brown-dark);color:var(--paper)}
+.recap-node.active .rcn{color:var(--orange)}
+.recap-link{width:24px;height:3px;background:var(--line);flex-shrink:0;position:relative}
+.recap-link::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.recap-panel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px;min-height:150px}
+.recap-panel.swap{animation:bubIn .4s ease}
+.recap-panel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:6px}
+.recap-panel .rtag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:block;margin-bottom:12px}
+.recap-panel p{font-size:14.5px;color:var(--ink);max-width:none;margin-bottom:12px}
+.recap-panel .rthread{font-size:13px;color:var(--brown);background:var(--cream);border-left:3px solid var(--orange);padding:11px 14px;border-radius:0 8px 8px 0;max-width:none;margin:0}
+.recap-panel .rthread strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark)}
+@media(max-width:700px){
+  .recap-chain{flex-wrap:wrap;gap:8px}
+  .recap-node{flex:1 1 40%}
+  .recap-link{display:none}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 04 · AI Content Marketing</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="40" rx="11" fill="#412C23"/>
+      <path d="M10 31V14.5l6 8.5 6-8.5 6 8.5 6-8.5V31" stroke="#EF7F1A" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="34" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 3 · Lesson 04 · AI Content Marketing</div>
+  <h1>Publishing is only <em>half the job</em>.</h1>
+  <p class="lede">Hitting "publish" feels like the finish line, but it's really the halfway mark — a great piece nobody sees earns nothing. Getting it in front of the right people, then reading whether it actually worked, is the other half. AI helps you reshape one piece for every channel and turn a pile of confusing metrics into a clear "double-down, refresh or retire" decision. This lesson shows you how to distribute smartly and measure honestly.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Distribution: why publishing is only half the job</h2>
+  <p class="lead">The most common mistake in content marketing is treating "publish" as the finish line. A brilliant post left to fend for itself on one channel reaches almost nobody. Distribution — deliberately pushing each piece to where your audience already is — is the other half of the work, and it's where reach is either built or wasted.</p>
+
+  <p>Think of every piece of content as needing a delivery plan, not just a home. AI helps you read what's happening now: which channels are actually growing your reach, and roughly where that reach is heading if you keep showing up. Crucially, a good projection isn't a single confident line — it's a line with a shaded band showing the range of likely outcomes, because content growth is bumpy and never guaranteed. That band is the honest admission that momentum can stall. Watch the reach trend draw itself below, then read what it tells you to do. (Numbers here are illustrative.)</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Reach trend over the next 6 weeks (illustrative)</span>
+      <div class="controls">
+        <button id="fcBtn" onclick="drawForecast()">▶ Show trend</button>
+        <button onclick="resetForecast()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="fc-chart">
+      <div class="fc-svg-wrap">
+        <svg viewBox="0 0 640 260" width="100%" xmlns="http://www.w3.org/2000/svg" font-family="'JetBrains Mono',monospace">
+          <!-- grid -->
+          <line x1="46" y1="30" x2="46" y2="220" stroke="#E8DCC8" stroke-width="1"/>
+          <line x1="46" y1="220" x2="620" y2="220" stroke="#E8DCC8" stroke-width="1"/>
+          <line x1="46" y1="170" x2="620" y2="170" stroke="#F0E7D6" stroke-width="1"/>
+          <line x1="46" y1="120" x2="620" y2="120" stroke="#F0E7D6" stroke-width="1"/>
+          <line x1="46" y1="70" x2="620" y2="70" stroke="#F0E7D6" stroke-width="1"/>
+          <!-- y labels -->
+          <text x="38" y="223" font-size="9" fill="#6E5C50" text-anchor="end">0</text>
+          <text x="38" y="173" font-size="9" fill="#6E5C50" text-anchor="end">5k</text>
+          <text x="38" y="123" font-size="9" fill="#6E5C50" text-anchor="end">10k</text>
+          <text x="38" y="73" font-size="9" fill="#6E5C50" text-anchor="end">15k</text>
+          <!-- divider between history and forecast -->
+          <line x1="345" y1="30" x2="345" y2="220" stroke="#D8C9AF" stroke-width="1" stroke-dasharray="3 4"/>
+          <text x="345" y="245" font-size="8.5" fill="#A34E1C" text-anchor="middle" letter-spacing="1">TODAY</text>
+          <text x="195" y="245" font-size="8.5" fill="#6E5C50" text-anchor="middle" letter-spacing="1">PAST REACH</text>
+          <text x="490" y="245" font-size="8.5" fill="#D55222" text-anchor="middle" letter-spacing="1">PROJECTED</text>
+          <!-- confidence band -->
+          <path class="fc-band" id="fcBand" d="M345,150 L400,135 L455,120 L510,100 L565,82 L620,60 L620,120 L565,138 L510,152 L455,166 L400,178 L345,182 Z" fill="rgba(239,127,26,0.22)"/>
+          <!-- history line -->
+          <polyline class="grow-line" id="fcHist" points="46,175 96,168 146,178 196,160 246,158 296,150 345,150" fill="none" stroke="#412C23" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <!-- forecast line -->
+          <polyline class="grow-line dash-path" id="fcFore" points="345,150 400,138 455,124 510,110 565,96 620,80" fill="none" stroke="#EF7F1A" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <circle cx="345" cy="150" r="4" fill="#412C23"/>
+          <circle cx="620" cy="80" r="4" fill="#EF7F1A"/>
+        </svg>
+      </div>
+      <div class="fc-legend">
+        <span><i class="hist"></i> Actual past reach</span>
+        <span><i class="fore"></i> Projected (most likely)</span>
+        <span><i class="band"></i> Likely range</span>
+      </div>
+      <div class="fc-read">
+        <div class="fc-card"><div class="fck">Trend</div><div class="fcv">↑ Rising</div><div class="fcn">Weekly reach is climbing as you distribute consistently — not a one-off viral spike.</div></div>
+        <div class="fc-card"><div class="fck">Week 6 reach</div><div class="fcv">~14k</div><div class="fcn">Likely between 12k and 16.5k people — that spread is the honesty band. Illustrative.</div></div>
+        <div class="fc-card"><div class="fck">So you should</div><div class="fcv">Keep going</div><div class="fcn">Momentum is real but fragile — keep distributing on the channels that are working, don't coast.</div></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Match the content to the channel</h3>
+  <p>Reach only grows when the content actually fits where you put it. Distribution isn't blasting the same link everywhere — it's shaping each piece for three kinds of channel. <strong>Owned</strong> channels are the ones you control: your email list, your blog, your site. <strong>Earned</strong> channels are attention others give you for free: shares, mentions, someone reposting you, a comment thread that takes off. <strong>Paid</strong> channels are reach you rent: boosted posts and ads. A long how-to guide belongs on your blog and email; a punchy tip belongs in a short social clip; a proof point belongs in an ad. Same idea, different shape — pick the channel first, then fit the content to it.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>One piece, every channel: let AI reformat it</h2>
+  <p class="lead">Writing something once and shaping it for each channel used to be a whole afternoon. AI collapses that into minutes — feed it one strong piece and it drafts the email version, the short social post, the ad line. The three dials below decide how much a channel is worth your effort, so you spend your energy where the payoff is real. (All figures illustrative.)</p>
+
+  <p>Don't reformat blindly for every channel — some are worth more of your effort than others. Three simple questions decide it: is your <strong>audience</strong> actually on that channel, does the piece <strong>fit</strong> the channel's format without a fight, and how much <strong>budget</strong> are you willing to put behind it? When your people are there and the format fits, invest more — draft a richer version, maybe put paid budget behind it. When they aren't, keep it light. AI does the reshaping; you decide where it's worth doing. Move the sliders and watch the suggested effort level respond.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · AI channel-effort suggester (illustrative)</span>
+      <div class="controls" id="dpPresets">
+        <button onclick="dpPreset('hot')">Perfect fit</button>
+        <button onclick="dpPreset('war')">Wrong channel</button>
+        <button onclick="dpPreset('slow')">Weak fit</button>
+      </div>
+    </div>
+    <div class="dp-wrap">
+      <div class="dp-suggest">
+        <div class="dp-price-block">
+          <div class="dp-plabel">Base effort/piece</div>
+          <div class="dp-price">₹1,499</div>
+        </div>
+        <div class="dp-arrow">→</div>
+        <div class="dp-price-block">
+          <div class="dp-plabel">AI suggests</div>
+          <div class="dp-price dp-ai-price" id="dpSuggest">₹1,499</div>
+        </div>
+        <div class="dp-verdict" id="dpVerdict">Balanced fit — the AI keeps your effort roughly where it is. Move a slider to shift the picture.</div>
+      </div>
+      <div class="dp-sliders">
+        <div class="dp-row">
+          <label for="dpDemand">Audience on this channel</label>
+          <input type="range" id="dpDemand" min="0" max="100" value="50" oninput="dpCalc()">
+          <div class="dpval" id="dpDemandV">Some</div>
+        </div>
+        <div class="dp-row">
+          <label for="dpStock">Ease of adapting</label>
+          <input type="range" id="dpStock" min="0" max="100" value="50" oninput="dpCalc()">
+          <div class="dpval" id="dpStockV">Medium</div>
+        </div>
+        <div class="dp-row">
+          <label for="dpComp">Budget you'll back it</label>
+          <input type="range" id="dpComp" min="0" max="100" value="50" oninput="dpCalc()">
+          <div class="dpval" id="dpCompV">Some</div>
+        </div>
+      </div>
+      <div class="dp-bars">
+        <div class="dp-bar-card"><div class="dp-bar-track"><div class="dp-bar" id="barMargin" style="height:50%"></div></div><div class="dbk">Effort/piece ₹</div><div class="dbv" id="dpMargin">₹499</div></div>
+        <div class="dp-bar-card"><div class="dp-bar-track"><div class="dp-bar" id="barVol" style="height:50%"></div></div><div class="dbk">Pieces you can ship</div><div class="dbv" id="dpVol">Steady</div></div>
+        <div class="dp-bar-card"><div class="dp-bar-track"><div class="dp-bar" id="barProfit" style="height:50%"></div></div><div class="dbk">Rel. payoff</div><div class="dbv" id="dpProfit">100%</div></div>
+      </div>
+      <p class="dp-note"><strong>AI reshapes; you decide where it's worth it.</strong> Don't pour effort into a channel your audience isn't on, and never let AI post a version you haven't read — a clumsy auto-reformat on the wrong channel wastes reach and can dent trust.</p>
+    </div>
+  </div>
+
+  <h3>A distribution checklist for every piece</h3>
+  <p>Before you hit publish, run each piece through the same short checklist so nothing good dies in silence. <strong>One:</strong> which owned channel is its home (blog, email, site)? <strong>Two:</strong> which earned moment can you seed — a share, a mention, a reply to a relevant thread? <strong>Three:</strong> is it worth any paid budget, even ₹500 (illustrative), to test reach? <strong>Four:</strong> what's the single native version for each channel you'll actually post — email subject line, social hook, ad line? <strong>Five:</strong> when will you check back on the numbers? AI can draft steps one through four in minutes; the checklist just makes sure you never skip distribution and quietly waste the writing.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>The metrics that matter — and the ones that lie</h2>
+  <p class="lead">A viral post that brings zero customers is a vanity trophy; a quiet guide that fills your email list is a business win. AI reads each piece's numbers by funnel stage and tells you the honest signal — double-down, refresh, keep, or retire — instead of letting a big like-count fool you.</p>
+
+  <p>You can't judge content by one number. AI reads each piece across the funnel: <strong>reach and impressions</strong> at the top (how many saw it), <strong>engagement</strong> in the middle (did they care), <strong>traffic and leads</strong> lower down (did they click through and sign up), and <strong>conversions</strong> at the bottom (did it lead to a sale). Then it flags each piece: <strong>double-down</strong> (a proven winner — make more like it), <strong>refresh</strong> (was strong, now fading — update it), <strong>keep</strong> (steady, leave it), or <strong>retire</strong> (lots of views, no business result — stop feeding it). Read the panel below — this is the report a small brand should run every month. Numbers are illustrative.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · AI content-performance signal panel (illustrative)</span>
+      <div class="controls">
+        <button onclick="invFill()">▶ Read signals</button>
+        <button onclick="invReset()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="inv-panel" id="invPanel">
+      <div class="inv-item crit">
+        <div class="inv-main">
+          <div class="inv-name">"5 email mistakes" how-to guide</div>
+          <div class="inv-bar-wrap"><div class="inv-bar-track"><div class="inv-bar-fill" data-w="92"></div></div></div>
+          <div class="inv-stock">4.2k reads · 6% clicked through · 38 email signups</div>
+        </div>
+        <div class="inv-signal">
+          <span class="inv-badge">● Double-down · make more</span>
+          <p class="inv-action">A proven winner — good reach AND real signups. Make more like it and reshare it.</p>
+        </div>
+      </div>
+      <div class="inv-item warn">
+        <div class="inv-main">
+          <div class="inv-name">"2024 tools roundup" blog post</div>
+          <div class="inv-bar-wrap"><div class="inv-bar-track"><div class="inv-bar-fill" data-w="55"></div></div></div>
+          <div class="inv-stock">2.8k reads · 3% clicked through · signups fading month over month</div>
+        </div>
+        <div class="inv-signal">
+          <span class="inv-badge">◐ Refresh · update it</span>
+          <p class="inv-action">Was a strong performer, now fading and dated. Refresh the content and re-distribute it.</p>
+        </div>
+      </div>
+      <div class="inv-item ok">
+        <div class="inv-main">
+          <div class="inv-name">Weekly tips newsletter</div>
+          <div class="inv-bar-wrap"><div class="inv-bar-track"><div class="inv-bar-fill" data-w="70"></div></div></div>
+          <div class="inv-stock">1.9k opens · 4% clicked through · steady signups</div>
+        </div>
+        <div class="inv-signal">
+          <span class="inv-badge">✓ Keep · steady earner</span>
+          <p class="inv-action">Quietly doing its job every week. Nothing to change — keep it running as is.</p>
+        </div>
+      </div>
+      <div class="inv-item over">
+        <div class="inv-main">
+          <div class="inv-name">"Behind the scenes" viral reel</div>
+          <div class="inv-bar-wrap"><div class="inv-bar-track"><div class="inv-bar-fill" data-w="96"></div></div></div>
+          <div class="inv-stock">61k views · 0.2% clicked through · 1 signup</div>
+        </div>
+        <div class="inv-signal">
+          <span class="inv-badge">▲ Retire · vanity only</span>
+          <p class="inv-action">Huge views, almost no business result. Fun, but stop pouring effort here — it's a vanity trophy.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Vanity metrics vs business metrics</h3>
+  <p>Notice how the panel refuses to be dazzled by big numbers. The viral reel has by far the most views, yet it's the one marked "retire" — 61k people watched and exactly one signed up. That's the whole trap of <em>vanity metrics</em>: views, likes and follower counts feel like success but don't pay rent. <em>Business metrics</em> — email signups, leads, sales, and a simple content ROI (what a piece earned versus what it cost to make and promote) — are the ones that matter. AI's job here is to keep pulling your eye down the funnel, from "who saw it" to "what did it actually do for the business."</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>The measurement loop — and the report that runs it</h2>
+  <p class="lead">Distribution and measurement aren't separate chores — they're one continuous loop. AI does most of the counting and sorting, but at two points your judgment decides everything. Click around the loop to see exactly where.</p>
+
+  <p>The loop is simple: AI <strong>measures</strong> what each piece did, <strong>attributes</strong> the result back to the content that earned it, <strong>recommends</strong> a call — double-down, refresh, keep or retire — and, once you say yes, you <strong>act</strong>. Then it measures again. The machine spins the counting faster than any human. But two nodes are yours: setting the <em>goal</em> the numbers are judged against, and making the <em>final double-down-or-retire decision</em> — because attribution is fuzzy and a number alone can't tell you what a piece is really worth. Click each node to see who owns it and why.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · The content measurement loop</span>
+      <div class="controls">
+        <button onclick="loopStep(1)">Next node ▶</button>
+      </div>
+    </div>
+    <div class="loop-wrap">
+      <div class="loop-ring" id="loopRing">
+        <svg class="loop-svg" viewBox="0 0 400 300" preserveAspectRatio="none">
+          <path d="M200,50 C300,55 350,110 350,150 C350,200 290,250 200,250 C110,250 50,200 50,150 C50,110 100,55 200,50" fill="none" stroke="#E8DCC8" stroke-width="2" stroke-dasharray="4 5"/>
+          <path id="loopArc" d="M200,50 C300,55 350,110 350,150" fill="none" stroke="#EF7F1A" stroke-width="2.5" stroke-dasharray="500" stroke-dashoffset="500" style="transition:stroke-dashoffset .6s"/>
+        </svg>
+        <div class="loop-node active" id="ln0" onclick="pickNode(0)"><div class="lnn">Step 1</div><div class="lnt">Measure</div><span class="lntag ai">AI</span></div>
+        <div class="loop-node" id="ln1" onclick="pickNode(1)"><div class="lnn">Step 2</div><div class="lnt">Attribute</div><span class="lntag ai">AI</span></div>
+        <div class="loop-node" id="ln2" onclick="pickNode(2)"><div class="lnn">Step 3</div><div class="lnt">Recommend</div><span class="lntag ai">AI</span></div>
+        <div class="loop-node" id="ln3" onclick="pickNode(3)"><div class="lnn">Step 4</div><div class="lnt">Decide</div><span class="lntag you">You choose</span></div>
+      </div>
+      <div class="loop-panel" id="loopPanel">
+        <div class="lp-tag" id="lpTag">Node 1 of 4</div>
+        <div class="lp-title" id="lpTitle">Measure</div>
+        <p class="lp-body" id="lpBody"></p>
+        <p class="lp-who" id="lpWho"></p>
+      </div>
+    </div>
+  </div>
+
+  <h3>A simple monthly content report — and why ROI takes months</h3>
+  <p>You don't need a fancy dashboard. Once a month, list your pieces, note reach, engagement, traffic and signups for each, mark every one double-down / refresh / keep / retire, and write one line on what you'll do next month. AI can assemble the whole thing in minutes. Two honest cautions: first, <strong>attribution is fuzzy</strong> — someone often reads a blog post, sees a reel, then buys weeks later from an email, and no tool can perfectly split the credit, so treat the numbers as a compass, not a verdict. Second, <strong>content ROI takes months</strong> — a new blog or channel rarely pays off in weeks; it compounds slowly. There are no guarantees, so judge on the trend across several months, not one noisy week.</p>
+
+  <h3>The whole week, on one line</h3>
+  <p>You've now walked the entire AI content-marketing workflow from strategy to measurement. Click each lesson below to recall its single most important idea — and notice the pattern that runs through all four: AI supplies the speed, the volume and the pattern-spotting, while a human supplies the judgment, the taste and the honest read of what actually worked.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 5 · Week 3 recap — four lessons, one thread</span>
+      <div class="controls">
+        <button onclick="recapStep(1)">Next lesson ▶</button>
+      </div>
+    </div>
+    <div class="recap-wrap">
+      <div class="recap-chain" id="recapChain">
+        <div class="recap-node active" data-k="0" onclick="pickRecap(0)"><span class="rcn">L01</span>AI Era</div>
+        <div class="recap-link"></div>
+        <div class="recap-node" data-k="1" onclick="pickRecap(1)"><span class="rcn">L02</span>Strategy</div>
+        <div class="recap-link"></div>
+        <div class="recap-node" data-k="2" onclick="pickRecap(2)"><span class="rcn">L03</span>Creation</div>
+        <div class="recap-link"></div>
+        <div class="recap-node" data-k="3" onclick="pickRecap(3)"><span class="rcn">L04</span>Distribute</div>
+      </div>
+      <div class="recap-panel" id="recapPanel"></div>
+    </div>
+  </div>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Publishing is only half the job — distribution and honest measurement are the other half, and AI makes both doable for a team of one. Match each piece to owned, earned and paid channels. Let AI reshape one piece for every channel, but invest effort where your audience actually is. Judge by business metrics, not vanity views. And run one simple monthly report that ends every piece on a clear call: double-down, refresh, keep or retire.</p>
+  <ul>
+    <li>Publishing is half the job — distribution to the right channels is the other half</li>
+    <li>Owned, earned & paid — match the content to the channel, then let AI reformat it</li>
+    <li>Vanity metrics (views, likes) flatter you; business metrics (leads, sales) pay you</li>
+    <li>Measurement is one loop: measure → attribute → recommend → decide, then repeat</li>
+    <li>Attribution is fuzzy & ROI takes months — judge the trend; double-down, refresh or retire</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 04 of 04 · Week 3 complete · AI Content Marketing ✦</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ============ Figure 1 · Forecast ============ */
+function drawForecast(){
+  resetForecast();
+  el('fcBtn').classList.add('active');
+  setTimeout(()=>el('fcHist').classList.add('go'),100);
+  setTimeout(()=>el('fcFore').classList.add('go'),900);
+  setTimeout(()=>el('fcBand').classList.add('go'),1000);
+  setTimeout(()=>el('fcBtn').classList.remove('active'),2600);
+}
+function resetForecast(){
+  el('fcHist').classList.remove('go');
+  el('fcFore').classList.remove('go');
+  el('fcBand').classList.remove('go');
+  el('fcBtn').classList.remove('active');
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){drawForecast();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('fcHist'));
+
+/* ============ Figure 2 · Dynamic pricing ============ */
+const BASE=1499,COST=1000;
+function lbl(v,arr){return arr[Math.min(arr.length-1,Math.floor(v/100*arr.length))]}
+function dpCalc(){
+  const dRaw=+el('dpDemand').value, sRaw=+el('dpStock').value, cRaw=+el('dpComp').value;
+  el('dpDemandV').textContent=lbl(dRaw,['Almost none','Few','Some','Many','Most of them']);
+  el('dpStockV').textContent=lbl(sRaw,['Effortless','Easy','Medium','Fiddly','A whole rebuild']);
+  el('dpCompV').textContent=lbl(cRaw,['None','A little','Some','Solid','Big push']);
+  // audience high -> up; easier to adapt -> up; more budget -> up
+  const demandF=(dRaw-50)/50*0.14;     // +/-14%
+  const stockF=(50-sRaw)/50*0.08;      // low stock -> up
+  const compF=(cRaw-50)/50*0.10;       // rivals pricier -> we can be pricier
+  let mult=1+demandF+stockF+compF;
+  mult=Math.max(0.82,Math.min(1.22,mult));
+  const price=Math.round(BASE*mult/10)*10;
+  el('dpSuggest').textContent='₹'+price.toLocaleString('en-IN');
+  const margin=price-COST;
+  el('dpMargin').textContent='₹'+margin.toLocaleString('en-IN');
+  // volume proxy: higher price -> lower volume
+  const volIdx=Math.round(100-(mult-0.82)/0.40*100);
+  el('dpVol').textContent=volIdx>66?'Wider':volIdx>40?'Steady':'Narrow';
+  const relProfit=Math.round((margin/(BASE-COST))*(0.6+volIdx/250)*100);
+  el('dpProfit').textContent=relProfit+'%';
+  el('barMargin').style.height=Math.max(6,Math.min(100,margin/700*100))+'%';
+  el('barVol').style.height=Math.max(6,volIdx)+'%';
+  el('barProfit').style.height=Math.max(6,Math.min(100,relProfit))+'%';
+  let v;
+  if(mult>1.10)v='Your audience is here and it adapts easily — the AI says INVEST MORE. Draft a rich native version and consider paid budget. This channel earns your effort.';
+  else if(mult<0.92)v='Few of your people here, or a painful rebuild — the AI says keep it LIGHT. A quick auto-reformat at most; don\'t burn an afternoon on low payoff.';
+  else v='Balanced fit — the AI keeps your effort roughly where it is. A solid native version, no big push needed.';
+  el('dpVerdict').textContent=v;
+}
+function dpPreset(k){
+  const P={hot:[92,18,70],war:[45,80,10],slow:[20,88,45]};
+  el('dpDemand').value=P[k][0];el('dpStock').value=P[k][1];el('dpComp').value=P[k][2];
+  dpCalc();
+}
+dpCalc();
+
+/* ============ Figure 3 · Inventory ============ */
+function invFill(){
+  el('invPanel').classList.add('in');
+  document.querySelectorAll('.inv-bar-fill').forEach(b=>{b.style.width=b.dataset.w+'%'});
+}
+function invReset(){
+  el('invPanel').classList.remove('in');
+  document.querySelectorAll('.inv-bar-fill').forEach(b=>{b.style.width='0%'});
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){invFill();o.unobserve(e.target)}}),{threshold:0.3}).observe(el('invPanel'));
+
+/* ============ Figure 4 · Ops loop ============ */
+const NODES=[
+  {t:'Measure',body:'AI continuously tracks what each piece did: reach, impressions, engagement, clicks, and email signups, per piece and per channel. It never sleeps and never miscounts, turning scattered platform stats into one clean view.',who:'AI owns this',whoTxt:'Pure data collection — let the machine pull the numbers from every channel. There\'s no human judgment in counting views and clicks accurately.'},
+  {t:'Attribute',body:'AI links results back to the content that earned them — this signup came after that guide, this sale followed that email. It\'s the funnel view from Figure 3, tracing top-of-funnel views down to bottom-of-funnel action.',who:'AI helps, but it\'s fuzzy',whoTxt:'AI does its best to connect content to outcomes, but attribution is genuinely fuzzy — people touch many pieces before buying. Read it as a compass, not a courtroom verdict.'},
+  {t:'Recommend',body:'AI proposes the call for each piece: double-down, refresh, keep or retire (Figure 3). It hands you options with reasons, not commands — "this reel is all views and no signups; retire it."',who:'Shared — AI suggests, you set the goal',whoTxt:'AI generates the recommendation, but only against the goal YOU defined — is this piece meant to build reach, grow the list, or drive sales? The goal decides whether a number is good or bad.'},
+  {t:'Decide',body:'You make the final call: double-down on the winner, refresh the fader, keep the steady earner, retire the vanity piece. Small tweaks can auto-run; the big "make more of this" bets are yours.',who:'You choose',whoTxt:'Automate the small housekeeping. But the double-down-or-retire decision is yours — because a fuzzy number can\'t see brand fit, taste, or a strategy shift. This is where your judgment earns its keep.'}
+];
+let loopIdx=0;
+function pickNode(i){
+  loopIdx=i;
+  for(let k=0;k<4;k++)el('ln'+k).classList.toggle('active',k===i);
+  const d=NODES[i],p=el('loopPanel');
+  el('lpTag').textContent='Node '+(i+1)+' of 4';
+  el('lpTitle').textContent=d.t;
+  el('lpBody').textContent=d.body;
+  el('lpWho').innerHTML='<strong>'+d.who+'</strong>'+d.whoTxt;
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+  const arc=el('loopArc');
+  arc.style.strokeDashoffset=(500-(i+1)/4*500);
+}
+function loopStep(dir){
+  loopIdx=(loopIdx+dir+4)%4;
+  pickNode(loopIdx);
+}
+pickNode(0);
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickNode(0);o.unobserve(e.target)}}),{threshold:0.3}).observe(el('loopRing'));
+
+/* ============ Figure 5 · Week recap ============ */
+const RECAP=[
+  {t:'Lesson 01 · Content Marketing in the AI Era',tag:'The ground has shifted',body:'Content marketing means earning attention with something genuinely useful, not shouting ads. AI changes the economics — a solo marketer can now produce and personalize at a scale that used to need a whole team.',thread:'AI multiplies your output; only you can decide it\'s worth reading.'},
+  {t:'Lesson 02 · AI Content Strategy & Ideation',tag:'A plan before a keyboard',body:'Strategy comes first: who you\'re for, what you\'ll say, where it lives. AI mines audience questions and generates a mountain of ideas, but you pick the few that fit your brand and your goal.',thread:'AI floods you with ideas; you choose the ones on-strategy.'},
+  {t:'Lesson 03 · AI Content Creation & Repurposing',tag:'One idea, many shapes',body:'AI drafts fast and repurposes one strong piece into many — a post becomes a thread, a script, an email. You bring the angle, the truth-check and the final edit that makes it sound like you.',thread:'AI drafts and repurposes; you edit for truth and voice.'},
+  {t:'Lesson 04 · AI Content Distribution & Measurement',tag:'Publishing is half the job',body:'AI reshapes each piece for owned, earned and paid channels, then reads the numbers by funnel stage — running the measure→attribute→recommend→decide loop. You hold two nodes: the goal, and the final double-down-or-retire call.',thread:'AI counts and sorts; you set the goal and make the honest call.'}
+];
+let recapIdx=0;
+function pickRecap(i){
+  recapIdx=i;
+  document.querySelectorAll('#recapChain .recap-node').forEach(n=>n.classList.toggle('active',+n.dataset.k===i));
+  const d=RECAP[i],p=el('recapPanel');
+  p.innerHTML='<span class="rtag">'+d.tag+'</span><h4>'+d.t+'</h4><p>'+d.body+'</p><div class="rthread"><strong>The thread — </strong>'+d.thread+'</div>';
+  p.classList.remove('swap');void p.offsetWidth;p.classList.add('swap');
+}
+function recapStep(dir){recapIdx=(recapIdx+dir+4)%4;pickRecap(recapIdx)}
+pickRecap(0);
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickRecap(0);o.unobserve(e.target)}}),{threshold:0.3}).observe(el('recapChain'));
+
+</script>
+</body>
+</html>

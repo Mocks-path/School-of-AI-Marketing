@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Content Marketing in the AI Era · Lesson 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · Layered stack ============ */
+.stack-wrap{display:grid;grid-template-columns:1fr 340px;gap:26px;align-items:start}
+.stack{display:grid;gap:10px}
+.slayer{
+  display:flex;align-items:center;gap:14px;background:var(--paper);
+  border:2px solid var(--line);border-radius:12px;padding:14px 16px;cursor:pointer;
+  transition:all .28s;position:relative;opacity:0;transform:translateX(-14px);
+}
+.stack.in .slayer{animation:layIn .5s forwards}
+.stack.in .slayer:nth-child(1){animation-delay:.05s}
+.stack.in .slayer:nth-child(2){animation-delay:.13s}
+.stack.in .slayer:nth-child(3){animation-delay:.21s}
+.stack.in .slayer:nth-child(4){animation-delay:.29s}
+.stack.in .slayer:nth-child(5){animation-delay:.37s}
+.stack.in .slayer:nth-child(6){animation-delay:.45s}
+.stack.in .slayer:nth-child(7){animation-delay:.53s}
+@keyframes layIn{to{opacity:1;transform:translateX(0)}}
+.slayer:hover{border-color:var(--orange);transform:translateX(4px)}
+.slayer.active{border-color:var(--brown-dark);background:#FDEBD7;box-shadow:0 8px 20px rgba(239,127,26,0.18)}
+.slnum{
+  width:34px;height:34px;border-radius:9px;flex-shrink:0;display:flex;align-items:center;
+  justify-content:center;font-family:'Fraunces',serif;font-weight:800;font-size:16px;color:#fff;
+}
+.slayer:nth-child(1) .slnum{background:var(--orange)}
+.slayer:nth-child(2) .slnum{background:var(--tan)}
+.slayer:nth-child(3) .slnum{background:var(--orange-dark)}
+.slayer:nth-child(4) .slnum{background:#C9A227}
+.slayer:nth-child(5) .slnum{background:var(--brown)}
+.slayer:nth-child(6) .slnum{background:var(--accent)}
+.slayer:nth-child(7) .slnum{background:#8B7A6C}
+.slmain{flex:1;min-width:0}
+.slname{font-family:'Fraunces',serif;font-weight:700;font-size:17px;color:var(--brown-dark);line-height:1.15}
+.sldesc{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.slai{
+  flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;
+  text-transform:uppercase;font-weight:600;background:var(--yellow);color:var(--brown-dark);
+  padding:4px 8px;border-radius:5px;display:flex;align-items:center;gap:5px;
+}
+.slai .spark{width:8px;height:8px;background:var(--orange-dark);border-radius:50%;animation:sparkPulse 1.8s ease-in-out infinite}
+@keyframes sparkPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.5);opacity:.4}}
+.stack-panel{
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:24px;min-height:300px;position:sticky;top:90px;
+}
+.stack-panel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sp-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange-dark);font-weight:600}
+.sp-title{font-family:'Fraunces',serif;font-size:23px;font-weight:700;color:var(--brown-dark);margin:6px 0 4px}
+.sp-role{font-size:13.5px;color:var(--muted);margin-bottom:14px;max-width:none}
+.sp-panel ul{list-style:none;display:grid;gap:8px;margin-bottom:16px}
+.sp-panel li{font-size:13.5px;color:var(--ink);padding-left:22px;position:relative;line-height:1.45;max-width:none}
+.sp-panel li::before{content:"✦";position:absolute;left:0;color:var(--orange);font-size:12px}
+.sp-human{
+  font-size:12.5px;color:var(--brown);background:var(--cream);border-left:3px solid var(--brown);
+  padding:10px 13px;border-radius:0 8px 8px 0;max-width:none;margin:0;
+}
+.sp-human strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+@media(max-width:880px){
+  .stack-wrap{grid-template-columns:1fr}
+  .stack-panel{position:static}
+}
+@media(max-width:700px){
+  .slai{display:none}
+}
+
+/* ============ Figure 2 · Order journey pulse ============ */
+.journey{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:28px 22px 22px}
+.jrow{display:flex;align-items:stretch;gap:0;flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px}
+.jnode{
+  flex:0 0 auto;width:118px;text-align:center;padding:14px 8px 12px;
+  background:var(--cream);border:2px solid var(--line);border-radius:11px;
+  transition:all .3s;
+}
+.jnode .jic{width:38px;height:38px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;border-radius:10px;background:var(--paper);border:1px solid var(--line);transition:all .3s}
+.jnode .jic svg{width:20px;height:20px}
+.jnode h5{font-family:'Fraunces',serif;font-size:13.5px;color:var(--brown-dark);line-height:1.1;margin-bottom:3px}
+.jnode .jai{font-family:'JetBrains Mono',monospace;font-size:8px;letter-spacing:0.06em;text-transform:uppercase;color:var(--tan);line-height:1.3;display:block}
+.jnode.on{border-color:var(--orange);background:#FDEBD7;transform:translateY(-4px);box-shadow:0 8px 16px rgba(239,127,26,0.2)}
+.jnode.on .jic{background:var(--orange);border-color:var(--orange)}
+.jnode.on .jic svg *{stroke:#fff}
+.jconn{flex:1;min-width:14px;align-self:center;height:3px;background:var(--line);border-radius:2px;position:relative;margin-top:-14px}
+.jconn.lit{background:var(--orange)}
+.jcap-wrap{display:flex;gap:14px;align-items:flex-start;margin-top:22px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;min-height:70px}
+.jstep{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;letter-spacing:0.08em;color:#fff;background:var(--orange);border-radius:6px;padding:4px 9px;white-space:nowrap;flex-shrink:0;margin-top:2px}
+.jcap{font-size:14px;color:var(--brown-dark);line-height:1.5}
+@media(max-width:700px){
+  .jnode{width:100px}
+  .jnode h5{font-size:12px}
+}
+
+/* ============ Figure 3 · Brand vs marketplace ============ */
+.bm-toggle{display:flex;gap:0;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:4px;width:fit-content;margin-bottom:22px}
+.bm-toggle button{
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.06em;
+  border:none;background:transparent;color:var(--brown);padding:9px 20px;border-radius:999px;cursor:pointer;transition:all .25s;
+}
+.bm-toggle button.active{background:var(--brown-dark);color:#fff}
+.bm-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.bm-col{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;transition:all .3s;position:relative}
+.bm-col.dim{opacity:.42;filter:grayscale(0.4)}
+.bm-col h4{font-family:'Fraunces',serif;font-size:21px;font-weight:700;color:var(--brown-dark);margin-bottom:2px;display:flex;align-items:center;gap:9px}
+.bm-col .bm-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.bm-brand .bm-ic{background:rgba(239,127,26,0.14)}
+.bm-market .bm-ic{background:rgba(0,141,210,0.12)}
+.bm-col .bm-sub{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-bottom:16px}
+.bm-col ul{list-style:none;display:grid;gap:9px}
+.bm-col li{font-size:13px;color:var(--ink);padding-left:22px;position:relative;line-height:1.4;max-width:none}
+.bm-col li.plus::before{content:"+";position:absolute;left:2px;color:var(--orange-dark);font-weight:700;font-size:15px}
+.bm-col li.minus::before{content:"−";position:absolute;left:2px;color:var(--tan);font-weight:700;font-size:15px}
+.bm-col .bm-ai{margin-top:16px;font-size:12px;color:var(--brown);background:var(--cream);border-left:3px solid var(--orange);padding:9px 12px;border-radius:0 8px 8px 0;line-height:1.45;max-width:none}
+.bm-col .bm-ai strong{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark);display:block;margin-bottom:3px}
+@media(max-width:700px){
+  .bm-grid{grid-template-columns:1fr}
+}
+
+/* ============ Figure 4 · Build-vs-buy readiness ============ */
+.rd-chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:20px}
+.rd-chip{
+  font-family:'JetBrains Mono',monospace;font-size:11.5px;letter-spacing:0.03em;
+  border:1px solid var(--line);background:var(--paper);color:var(--brown);
+  padding:9px 15px;border-radius:999px;cursor:pointer;transition:all .25s;user-select:none;
+}
+.rd-chip::before{content:"○ ";color:var(--muted)}
+.rd-chip:hover{border-color:var(--orange)}
+.rd-chip.on{background:var(--brown-dark);color:#FBE7CB;border-color:var(--brown-dark)}
+.rd-chip.on::before{content:"● ";color:var(--yellow)}
+.rd-meter-wrap{display:grid;grid-template-columns:1fr 220px;gap:26px;align-items:center}
+.rd-track{height:22px;border-radius:11px;background:var(--paper);border:1px solid var(--line);overflow:hidden;position:relative}
+.rd-fill{height:100%;width:0;border-radius:11px;background:linear-gradient(90deg,var(--orange),var(--yellow));transition:width .5s cubic-bezier(.3,.8,.3,1)}
+.rd-scorebox{text-align:center}
+.rd-score{font-family:'Fraunces',serif;font-size:52px;font-weight:800;color:var(--orange-dark);line-height:1}
+.rd-scap{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted)}
+.rd-verdict{margin-top:20px;font-size:14.5px;color:var(--brown-dark);background:var(--paper);border:1px solid var(--line);border-left:3px solid var(--yellow);padding:14px 18px;border-radius:0 10px 10px 0;max-width:none;min-height:52px}
+.rd-verdict.pop{animation:panelIn .35s ease}
+@media(max-width:700px){
+  .rd-meter-wrap{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 01 · AI Content</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="13" width="36" height="27" rx="6" fill="#412C23"/>
+      <path d="M14 13 C14 4.5 30 4.5 30 13" stroke="#EF7F1A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M12 32 L12 22 L17 28 L22 21 L27 28 L32 22 L32 32" stroke="#FECC00" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="36" cy="9" r="4.5" fill="#EF7F1A"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 3 · Lesson 01 · AI Content</div>
+  <h1>Content marketing in the <em>AI era</em>.</h1>
+  <p class="lede">Content marketing isn't one thing — it's a system of seven parts stacked on top of each other, from the strategy nobody sees to the measurement that tells you what worked. AI now lives in every part. This lesson gives you the whole map, so when a tool promises to "write your content for you," you know exactly which part it's touching and which decisions still belong to you.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Content is a system, not a single post</h2>
+  <p class="lead">Beginners picture "content marketing" as the one clever post that goes viral. That post is real — but it's only the top of a tower. Underneath it sit six more parts doing quiet, unglamorous work, and content fails when any one of them breaks.</p>
+
+  <p>Here's the core idea: ads <strong>rent</strong> attention — you pay, people look, you stop paying and they vanish. Content <strong>earns</strong> attention — you publish something genuinely useful, and it keeps working for months. Think of the content engine like running a small newsroom. <strong>Strategy</strong> decides who you serve and why. Then comes <strong>ideation</strong> (the story ideas), <strong>creation</strong> (writing and making the piece), <strong>distribution</strong> (getting it seen), <strong>repurposing</strong> (turning one piece into ten), <strong>engagement</strong> (replying and building trust), and <strong>measurement</strong> (counting what actually landed). A brilliant post nobody distributes serves no one. Every part has to work — and AI has quietly moved into all seven.</p>
+  <p>Click any part below to see what it actually does, where AI plugs in, and the decision that stubbornly stays human. The little yellow badge marks every part AI now touches — which, you'll notice, is all of them.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The seven-part content engine</span>
+      <div class="controls">
+        <button onclick="stackStep(-1)">◀ Prev</button>
+        <button onclick="stackStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="stack-wrap">
+      <div class="stack" id="stackEl">
+        <div class="slayer" data-k="storefront" onclick="pickLayer('storefront')">
+          <div class="slnum">1</div>
+          <div class="slmain"><div class="slname">Strategy</div><div class="sldesc">Who you serve & why it matters</div></div>
+          <div class="slai"><span class="spark"></span>AI</div>
+        </div>
+        <div class="slayer" data-k="catalog" onclick="pickLayer('catalog')">
+          <div class="slnum">2</div>
+          <div class="slmain"><div class="slname">Ideation</div><div class="sldesc">Topics, angles, hooks, questions</div></div>
+          <div class="slai"><span class="spark"></span>AI</div>
+        </div>
+        <div class="slayer" data-k="checkout" onclick="pickLayer('checkout')">
+          <div class="slnum">3</div>
+          <div class="slmain"><div class="slname">Creation</div><div class="sldesc">Drafting the actual piece</div></div>
+          <div class="slai"><span class="spark"></span>AI</div>
+        </div>
+        <div class="slayer" data-k="marketing" onclick="pickLayer('marketing')">
+          <div class="slnum">4</div>
+          <div class="slmain"><div class="slname">Distribution</div><div class="sldesc">Getting the piece seen</div></div>
+          <div class="slai"><span class="spark"></span>AI</div>
+        </div>
+        <div class="slayer" data-k="fulfillment" onclick="pickLayer('fulfillment')">
+          <div class="slnum">5</div>
+          <div class="slmain"><div class="slname">Repurposing</div><div class="sldesc">Turn one piece into ten</div></div>
+          <div class="slai"><span class="spark"></span>AI</div>
+        </div>
+        <div class="slayer" data-k="support" onclick="pickLayer('support')">
+          <div class="slnum">6</div>
+          <div class="slmain"><div class="slname">Engagement</div><div class="sldesc">Replying, community, trust</div></div>
+          <div class="slai"><span class="spark"></span>AI</div>
+        </div>
+        <div class="slayer" data-k="analytics" onclick="pickLayer('analytics')">
+          <div class="slnum">7</div>
+          <div class="slmain"><div class="slname">Measurement</div><div class="sldesc">What landed, what's next</div></div>
+          <div class="slai"><span class="spark"></span>AI</div>
+        </div>
+      </div>
+      <div class="stack-panel sp-panel" id="stackPanel">
+        <div class="sp-tag" id="slTag">Interactive engine</div>
+        <div class="sp-title" id="slTitle">Click any part</div>
+        <p class="sp-role" id="slRole">Each of the seven parts does one job. Click one on the left — or press Next — to see what AI takes off your plate there, and the call that stays yours.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Why the whole engine matters to you</h3>
+  <p>You don't have to run all seven parts by hand — modern tools and AI hand you most of them pre-assembled. But you <em>do</em> have to understand them, because when your content flops you need to know which part to inspect. Nobody sees it? That's a distribution problem. People see it but don't care? That's a strategy or ideation problem. They read but never come back? That's an engagement or measurement problem. The engine is your diagnostic map.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Follow one piece of content through all seven parts</h2>
+  <p class="lead">The parts feel abstract until you watch a single blog post travel through them. One idea, one publish — and every part lights up in turn, each with AI doing part of the work.</p>
+
+  <p>Here's the honest thing about the engine: a reader never sees six of the seven parts, yet all seven decide whether they trust you. A weak topic (ideation), a post nobody shared (distribution), or a comment you never answered (engagement) — any of these quietly wastes the effort your strategy set out to earn. Watch the pulse travel below and notice how AI touches the piece at every single stop, from the topic idea it surfaced to the plain-English report that tells you whether it worked.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · One post, seven parts</span>
+      <div class="controls">
+        <button id="jPlay" onclick="runJourney()">▶ Follow the post</button>
+        <button onclick="resetJourney()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="journey">
+      <div class="jrow" id="jrow">
+        <div class="jnode" id="jn0">
+          <div class="jic"><svg viewBox="0 0 20 20" fill="none"><circle cx="10" cy="6" r="3.2" stroke="#A34E1C" stroke-width="1.7"/><path d="M4 17c0-3.3 2.7-6 6-6s6 2.7 6 6" stroke="#A34E1C" stroke-width="1.7"/></svg></div>
+          <h5>Strategy</h5><span class="jai">AI audience research</span>
+        </div>
+        <div class="jconn" id="jc0"></div>
+        <div class="jnode" id="jn1">
+          <div class="jic"><svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="12" rx="2" stroke="#A34E1C" stroke-width="1.7"/><path d="M3 8h14M7 12h6" stroke="#A34E1C" stroke-width="1.7"/></svg></div>
+          <h5>Ideation</h5><span class="jai">AI suggests topics</span>
+        </div>
+        <div class="jconn" id="jc1"></div>
+        <div class="jnode" id="jn2">
+          <div class="jic"><svg viewBox="0 0 20 20" fill="none"><path d="M3 5h13l-1.3 8H5.3L4 3H2" stroke="#A34E1C" stroke-width="1.7" fill="none"/><circle cx="7" cy="16" r="1.3" fill="#A34E1C"/><circle cx="13" cy="16" r="1.3" fill="#A34E1C"/></svg></div>
+          <h5>Creation</h5><span class="jai">AI drafts copy</span>
+        </div>
+        <div class="jconn" id="jc2"></div>
+        <div class="jnode" id="jn3">
+          <div class="jic"><svg viewBox="0 0 20 20" fill="none"><path d="M3 10l14-6-4 14-3-5-5-3z" stroke="#A34E1C" stroke-width="1.7" fill="none"/></svg></div>
+          <h5>Distribution</h5><span class="jai">AI schedules posts</span>
+        </div>
+        <div class="jconn" id="jc3"></div>
+        <div class="jnode" id="jn4">
+          <div class="jic"><svg viewBox="0 0 20 20" fill="none"><rect x="3" y="7" width="9" height="8" stroke="#A34E1C" stroke-width="1.7"/><path d="M12 9h3l2 3v3h-5" stroke="#A34E1C" stroke-width="1.7" fill="none"/><circle cx="6" cy="16" r="1.4" fill="#A34E1C"/><circle cx="14" cy="16" r="1.4" fill="#A34E1C"/></svg></div>
+          <h5>Repurposing</h5><span class="jai">AI reformats</span>
+        </div>
+        <div class="jconn" id="jc4"></div>
+        <div class="jnode" id="jn5">
+          <div class="jic"><svg viewBox="0 0 20 20" fill="none"><path d="M3 4h14v9H8l-3 3V13H3z" stroke="#A34E1C" stroke-width="1.7" fill="none"/></svg></div>
+          <h5>Engagement</h5><span class="jai">AI drafts replies</span>
+        </div>
+        <div class="jconn" id="jc5"></div>
+        <div class="jnode" id="jn6">
+          <div class="jic"><svg viewBox="0 0 20 20" fill="none"><path d="M3 16V4M3 16h14M6 13l3-4 3 2 4-6" stroke="#A34E1C" stroke-width="1.7" fill="none"/></svg></div>
+          <h5>Measurement</h5><span class="jai">AI reports results</span>
+        </div>
+      </div>
+      <div class="jcap-wrap">
+        <div class="jstep" id="jStep">— / 7</div>
+        <div class="jcap" id="jCap">Press ▶ Follow the post to watch a single piece of content move through all seven parts of the engine.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>One weak part drags down all the others</h3>
+  <p>Notice the sequence isn't optional. Skip real strategy and your best writing serves the wrong reader. Skip measurement and you keep publishing the same posts that quietly flop. Because the parts connect, effort spent on the weakest one usually returns more than polishing the one that's already good — a lesson beginners learn slowly when they obsess over word choice on a post nobody was ever going to see, because they never distributed it.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Two homes for your content: owned or paid media</h2>
+  <p class="lead">Every piece we've mapped has to live somewhere. You get two fundamental choices — publish on media you own, like your blog and email list, or pay to place it, like ads and sponsorships. AI helps in both, but they hand you very different amounts of control.</p>
+
+  <p><strong>Owned media</strong> (your blog, newsletter, your own YouTube channel) is your own house: you own the audience, set every rule, keep the reader's email, and build an asset that compounds for years. <strong>Paid media</strong> is renting a billboard in a busy street: enormous instant reach, an audience you didn't build, results that arrive fast — but the moment you stop paying, the attention stops, and you never got to keep the visitor. Toggle between them below and watch what you actually own in each.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Owned vs. paid media</span>
+      <div class="controls" id="bmBtns">
+        <div class="bm-toggle">
+          <button class="active" onclick="bmFocus('both',this)">Compare both</button>
+          <button onclick="bmFocus('brand',this)">Owned media</button>
+          <button onclick="bmFocus('market',this)">Paid media</button>
+        </div>
+      </div>
+    </div>
+    <div class="bm-grid">
+      <div class="bm-col bm-brand" id="bmBrand">
+        <h4><span class="bm-ic"><svg viewBox="0 0 22 22" fill="none"><path d="M3 9l8-6 8 6v9a1 1 0 01-1 1H4a1 1 0 01-1-1z" stroke="#D55222" stroke-width="1.8" fill="none"/><rect x="8" y="12" width="6" height="7" stroke="#D55222" stroke-width="1.8"/></svg></span>Owned media</h4>
+        <div class="bm-sub">You own the audience</div>
+        <ul>
+          <li class="plus">You keep the reader's email — reaching them again is free</li>
+          <li class="plus">Full control of voice, message and format</li>
+          <li class="plus">You're building an asset that compounds, not renting reach</li>
+          <li class="minus">No built-in audience — it grows slowly at first</li>
+          <li class="minus">You must earn trust one useful piece at a time</li>
+        </ul>
+        <div class="bm-ai"><strong>Where AI helps</strong>AI drafts your posts, generates images, outlines newsletters and repurposes one piece into many — filling the parts that would otherwise slow a small team to a crawl.</div>
+      </div>
+      <div class="bm-col bm-market" id="bmMarket">
+        <h4><span class="bm-ic"><svg viewBox="0 0 22 22" fill="none"><path d="M3 8l2-4h12l2 4v2a3 3 0 01-6 0 3 3 0 01-6 0 3 3 0 01-4 0z" stroke="#008DD2" stroke-width="1.7" fill="none"/><path d="M5 12v7h12v-7" stroke="#008DD2" stroke-width="1.7"/></svg></span>Paid media</h4>
+        <div class="bm-sub">You rent someone else's reach</div>
+        <ul>
+          <li class="plus">Millions of ready eyeballs reached instantly</li>
+          <li class="plus">Precise targeting handled by the platform</li>
+          <li class="plus">Fast to launch — fund the ad and you're live</li>
+          <li class="minus">Attention stops the moment your budget stops</li>
+          <li class="minus">Rising costs and platform rules sit outside your control</li>
+        </ul>
+        <div class="bm-ai"><strong>Where AI helps</strong>AI writes dozens of ad variations, generates creative images, and predicts which audiences to test — but the budget and the offer you're promoting stay your call.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The grown-up answer: use both — and chase earned</h3>
+  <p>There's a third kind worth naming: <strong>earned media</strong> — the shares, mentions and word-of-mouth you don't pay for, which good content generates on its own. Most durable brands use all three. Paid media buys fast discovery, owned media captures the relationship and compounds for years, and earned media is the bonus reach great content earns for free. Paid is renting attention; owned is building an asset. AI lowers the cost of running owned media at real volume — which is exactly why content marketing stopped being a big-company-only luxury.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Which parts should <em>you</em> build first?</h2>
+  <p class="lead">You can't perfect seven parts on day one, and you shouldn't try. The right first move depends on what you already have. Check the boxes that describe you and the meter will tell you how ready your content engine really is — and where to spend your next hour.</p>
+
+  <p>The trap beginners fall into is chasing volume (more posts, faster) while ignoring the parts that build trust — a clear reader in mind, a plan for who will actually see it, and a way to tell what worked. Content isn't "ready" because you published a lot; it's ready when a stranger can find it, get real value from it, want more, come back, and when <em>you</em> can see what landed. Every piece should also serve one stage of the funnel — awareness (they discover you), consideration (they weigh you up), conversion (they act), and retention (they stay). Tick what's true for you below.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Content-readiness check</span>
+      <div class="controls">
+        <button onclick="rdAll()">▶ Check all</button>
+        <button onclick="rdNone()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="rd-chips" id="rdChips">
+      <span class="rd-chip" onclick="rdToggle('store',this)">A clear reader & topic in mind</span>
+      <span class="rd-chip" onclick="rdToggle('cat',this)">A running list of topic ideas</span>
+      <span class="rd-chip" onclick="rdToggle('pay',this)">One piece actually finished</span>
+      <span class="rd-chip" onclick="rdToggle('mkt',this)">A channel to publish & share it</span>
+      <span class="rd-chip" onclick="rdToggle('ful',this)">A plan to repurpose one into many</span>
+      <span class="rd-chip" onclick="rdToggle('sup',this)">You reply to comments & messages</span>
+      <span class="rd-chip" onclick="rdToggle('ana',this)">A way to measure what worked</span>
+    </div>
+    <div class="rd-meter-wrap">
+      <div class="rd-track"><div class="rd-fill" id="rdFill"></div></div>
+      <div class="rd-scorebox">
+        <div class="rd-score"><span id="rdNum">0</span>/7</div>
+        <div class="rd-scap">Parts ready</div>
+      </div>
+    </div>
+    <div class="rd-verdict" id="rdVerdict">Tick every part that's genuinely done. Be honest — a half-built part is a zero, not a one.</div>
+  </div>
+
+  <h3>The four-step content engine — and this week's map</h3>
+  <p>Everything above collapses into four steps you'll follow all week: <strong>(1) strategy</strong> — decide who you serve and why; <strong>(2) create</strong> — make the piece; <strong>(3) distribute</strong> — get it seen and repurpose it; <strong>(4) measure</strong> — learn what worked and do more of it. That's the plan for MokshPath's Week 3: one lesson per step. Here's how AI reshaped all four: it collapsed creation time (a first draft in minutes, not hours), turned a blank page into a hundred ideas, and made repurposing one post into ten nearly free. But that same speed created a real risk — the internet is filling with generic "AI slop" that all sounds the same, and readers can smell it. When everyone can generate volume, sameness is the default and trust becomes the scarce thing. The beginner's opportunity is exactly there: AI hands you a professional's output speed, so your edge is no longer typing faster — it's having a real point of view, a specific reader, and the honesty AI can't fake. Content is a long game and AI is leverage, not magic. It multiplies whatever you feed it — so quality and consistency beat raw volume every time. Note: figures here are illustrative, meant to show the shape, not promise a result.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Content marketing is a seven-part engine — strategy, ideation, creation, distribution, repurposing, engagement, measurement — and AI now works inside every one. Your job isn't to grind out all seven by hand; it's to understand them well enough to know which part to fix when a post flops. Ads rent attention; content earns it and compounds into an asset. AI is leverage, not magic — it multiplies whatever you feed it, so quality and consistency beat volume.</p>
+  <ul>
+    <li>Content is a seven-part engine, not a single lucky post</li>
+    <li>Ads rent attention; content earns it — an asset, not an expense</li>
+    <li>AI plugs into all seven — but the point of view and the reader stay human</li>
+    <li>Owned media compounds; paid media stops the moment you stop paying</li>
+    <li>Quality and consistency beat volume — AI slop earns nothing</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 01 of 04 · Next up: Creating Content with AI →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ============ Figure 1 · Layered stack ============ */
+const LAYERS={
+  storefront:{t:"Strategy",role:"The part nobody sees — who you serve, what you help them do, and why they should care. The foundation everything else rests on.",tasks:[
+    "AI researches your audience's real questions and the words they use",
+    "Maps content ideas to funnel stages — awareness, consideration, conversion, retention",
+    "Analyzes what competitors publish so you can find the gap they left open"
+  ],h:"AI gathers the intel — but the point of view, the specific reader you serve, and what you refuse to say are yours to set."},
+  catalog:{t:"Ideation",role:"The running well of topics, angles and hooks — the raw material every piece is built from.",tasks:[
+    "Turns one theme into fifty headline and angle variations in seconds",
+    "Suggests hooks and questions your audience is actually searching for",
+    "Clusters loose ideas into an organized, publishable content calendar"
+  ],h:"AI floods you with options — you pick the few worth making, guided by what only you know about your reader."},
+  checkout:{t:"Creation",role:"Drafting the actual piece — the post, script, email or caption. The step AI changed the most.",tasks:[
+    "Drafts a full first version in your brand voice in minutes, not hours",
+    "Generates supporting images and outlines without a designer",
+    "Rewrites, tightens and adapts a draft for tone, length or reading level"
+  ],h:"AI drafts fast — but you fact-check every claim, add the real story, and cut the generic \"AI slop\" a reader can smell."},
+  marketing:{t:"Distribution",role:"Getting the finished piece in front of people — because a post nobody sees earns nothing.",tasks:[
+    "Reformats one piece into platform-native posts for each channel",
+    "Suggests the best times to publish based on when your audience is active",
+    "Drafts the hooks, captions and subject lines that make people click"
+  ],h:"AI schedules and adapts — you decide which channels are worth your effort and whether a message rings true."},
+  fulfillment:{t:"Repurposing",role:"Turning one strong piece into ten — the highest-leverage habit in all of content marketing.",tasks:[
+    "Splits one long article into a week of short social posts",
+    "Turns a blog post into an email, a script, and a set of quote cards",
+    "Adapts a single idea across formats without starting from a blank page"
+  ],h:"AI reformats endlessly — you make sure each version still says something true and worth a reader's time."},
+  support:{t:"Engagement",role:"Replying, building community and turning a one-time reader into someone who trusts you and comes back.",tasks:[
+    "Drafts thoughtful replies to comments and DMs in your voice",
+    "Surfaces recurring questions that become your next pieces of content",
+    "Summarizes the mood of a comment thread so you know what's landing"
+  ],h:"AI absorbs the volume — but a real human reply, an honest answer to a hard question, is what actually earns trust."},
+  analytics:{t:"Measurement",role:"The quiet part that counts what landed, what flopped, and what to make next — how a long game stays honest.",tasks:[
+    "Turns raw analytics into plain-English \"what changed this week\"",
+    "Spots which topics and formats actually drove reach and return visits",
+    "Flags the pieces worth repurposing again because they keep performing"
+  ],h:"AI surfaces the pattern — the call on what to do about it, and whether to trust a spike, stays yours."}
+};
+const LORDER=['storefront','catalog','checkout','marketing','fulfillment','support','analytics'];
+let curLayer=null;
+function pickLayer(k){
+  curLayer=k;
+  document.querySelectorAll('#stackEl .slayer').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=LAYERS[k],panel=el('stackPanel');
+  el('slTag').textContent='Part '+(LORDER.indexOf(k)+1)+' of 7';
+  el('slTitle').textContent=d.t;
+  el('slRole').textContent=d.role;
+  let html='<span class="sp-tag" id="slTag">Part '+(LORDER.indexOf(k)+1)+' of 7</span>';
+  html+='<div class="sp-title">'+d.t+'</div>';
+  html+='<p class="sp-role">'+d.role+'</p><ul>';
+  d.tasks.forEach(t=>{html+='<li>'+t+'</li>'});
+  html+='</ul><div class="sp-human"><strong>Human still decides</strong>'+d.h+'</div>';
+  panel.innerHTML=html;
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function stackStep(dir){
+  let i=curLayer?LORDER.indexOf(curLayer)+dir:0;
+  if(i<0)i=LORDER.length-1;
+  if(i>=LORDER.length)i=0;
+  pickLayer(LORDER[i]);
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){el('stackEl').classList.add('in');pickLayer('storefront');o.unobserve(e.target)}}),{threshold:0.25}).observe(el('stackEl'));
+
+/* ============ Figure 2 · Order journey ============ */
+const JCAPS=[
+  "It starts with STRATEGY. AI has already mapped your reader's real questions, so you know exactly who this post is for and why it matters to them.",
+  "In IDEATION, AI turns your theme into fifty angles — you pick the one hook your reader is actually searching for and can't find done well.",
+  "At CREATION, AI drafts a full first version in your voice in minutes — then you fact-check it, add the real story, and cut the generic filler.",
+  "DISTRIBUTION reshapes the piece for each channel and schedules it for when your audience is awake — because a post nobody sees earns nothing.",
+  "REPURPOSING's AI splits the one post into a week of short clips, an email and quote cards — one idea, ten pieces, almost no extra work.",
+  "A reader leaves a sharp comment — ENGAGEMENT drafts a reply in your voice, but you send the honest human answer that actually earns their trust.",
+  "Finally, MEASUREMENT records the whole run and reports it in plain English — telling you this format worked, so make more like it next week."
+];
+let jTimers=[];
+function lightNode(i){
+  for(let k=0;k<7;k++){
+    el('jn'+k).classList.toggle('on',k===i);
+    if(k<6)el('jc'+k).classList.toggle('lit',k<i);
+  }
+  el('jStep').textContent=(i+1)+' / 7';
+  el('jCap').textContent=JCAPS[i];
+}
+function runJourney(){
+  resetJourney();
+  el('jPlay').classList.add('active');
+  for(let i=0;i<7;i++){
+    jTimers.push(setTimeout(()=>{lightNode(i);if(i===6)el('jPlay').classList.remove('active')},300+i*1500));
+  }
+}
+function resetJourney(){
+  jTimers.forEach(t=>clearTimeout(t));jTimers=[];
+  for(let k=0;k<7;k++){el('jn'+k).classList.remove('on');if(k<6)el('jc'+k).classList.remove('lit')}
+  el('jStep').textContent='— / 7';
+  el('jCap').textContent='Press ▶ Follow the post to watch a single piece of content move through all seven parts of the engine.';
+  el('jPlay').classList.remove('active');
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){runJourney();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('jrow'));
+
+/* ============ Figure 3 · Brand vs marketplace ============ */
+function bmFocus(mode,btn){
+  document.querySelectorAll('#bmBtns button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  el('bmBrand').classList.toggle('dim',mode==='market');
+  el('bmMarket').classList.toggle('dim',mode==='brand');
+}
+
+/* ============ Figure 4 · Readiness ============ */
+const rdOn={store:false,cat:false,pay:false,mkt:false,ful:false,sup:false,ana:false};
+function rdToggle(k,chip){rdOn[k]=!rdOn[k];chip.classList.toggle('on',rdOn[k]);rdUpdate()}
+function rdAll(){document.querySelectorAll('#rdChips .rd-chip').forEach((c,i)=>{const k=Object.keys(rdOn)[i];rdOn[k]=true;c.classList.add('on')});rdUpdate()}
+function rdNone(){document.querySelectorAll('#rdChips .rd-chip').forEach((c,i)=>{const k=Object.keys(rdOn)[i];rdOn[k]=false;c.classList.remove('on')});rdUpdate()}
+function rdUpdate(){
+  let n=0;for(const k in rdOn)if(rdOn[k])n++;
+  el('rdNum').textContent=n;
+  el('rdFill').style.width=(n/7*100)+'%';
+  let v;
+  if(n===0)v='Nothing ready yet — that's fine, everyone starts here. Start with strategy: decide who you serve and why before you write a word.';
+  else if(n<=2)v='A skeleton engine. You might be posting, but a stranger can\'t yet find you, get real value, and want to come back. Keep building.';
+  else if(n<=4)v='Halfway. Creation is often done — it\'s the quieter parts (distribution, repurposing, measurement) that turn one post into momentum.';
+  else if(n<=6)v='Almost there. Find the one unchecked part — that\'s your single highest-value hour of work right now.';
+  else v='Full engine running. Strangers can find you, value you, come back, and you can see what worked. Now stay consistent — content is a long game.';
+  const vd=el('rdVerdict');vd.textContent=v;
+  vd.classList.remove('pop');void vd.offsetWidth;vd.classList.add('pop');
+}
+rdUpdate();
+
+</script>
+</body>
+</html>

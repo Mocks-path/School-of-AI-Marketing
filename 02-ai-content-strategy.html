@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Content Strategy & Ideation · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · Product page anatomy hotspots ============ */
+.anatomy{display:grid;grid-template-columns:400px 1fr;gap:26px;align-items:start}
+.mock{
+  width:100%;max-width:392px;background:#fff;border:1px solid var(--line);
+  border-radius:16px;padding:18px;position:relative;
+  box-shadow:0 14px 34px rgba(65,44,35,0.10);
+}
+.mock [data-spot]{position:relative;border-radius:10px;transition:outline-color .3s}
+.mock [data-spot].hl{outline:2px solid var(--orange);outline-offset:3px;animation:hlPulse 1.3s ease-in-out infinite}
+@keyframes hlPulse{0%,100%{outline-color:var(--orange)}50%{outline-color:rgba(239,127,26,0.25)}}
+.spot{
+  position:absolute;top:-10px;right:-10px;width:24px;height:24px;border-radius:50%;
+  background:var(--brown-dark);color:#fff;font-family:'JetBrains Mono',monospace;
+  font-size:11px;font-weight:600;display:flex;align-items:center;justify-content:center;
+  cursor:pointer;border:2px solid var(--paper);z-index:6;transition:transform .25s,background .25s;
+  box-shadow:0 3px 8px rgba(47,29,25,0.3);
+}
+.spot:hover{transform:scale(1.2)}
+[data-spot].hl .spot{background:var(--orange);transform:scale(1.25)}
+.m-img{
+  height:140px;background:linear-gradient(135deg,#F5E7D0,#E9D2AC);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;
+  color:var(--tan);font-family:'JetBrains Mono',monospace;font-size:10px;
+  letter-spacing:0.14em;text-transform:uppercase;cursor:pointer;border-radius:10px;
+}
+.m-img svg{width:46px;height:36px}
+.m-thumbs{display:flex;gap:6px;margin:8px 2px 10px;cursor:pointer}
+.m-thumbs .th{width:38px;height:32px;border-radius:6px;background:linear-gradient(135deg,#EBD6B4,#DCC191);border:1px solid var(--line)}
+.m-thumbs .th.sel{outline:2px solid var(--orange)}
+.m-head{font-family:'Fraunces',serif;font-weight:700;font-size:19px;line-height:1.15;color:var(--brown-dark);padding:2px;margin:2px 0 8px;cursor:pointer}
+.m-price{display:flex;align-items:baseline;gap:9px;padding:3px;margin-bottom:10px;cursor:pointer}
+.m-price .now{font-family:'Fraunces',serif;font-size:23px;font-weight:800;color:var(--orange-dark)}
+.m-price .was{font-size:13px;color:var(--muted);text-decoration:line-through}
+.m-desc{font-size:12px;color:var(--ink);line-height:1.5;padding:3px;margin-bottom:10px;cursor:pointer;border-radius:8px}
+.m-cta{
+  background:var(--orange);color:#fff;text-align:center;font-weight:700;font-size:15px;
+  padding:12px;border-radius:10px;cursor:pointer;margin-bottom:12px;
+  box-shadow:0 5px 14px rgba(239,127,26,0.35);
+}
+.m-recs{cursor:pointer;padding:2px;border-radius:8px}
+.m-recs .rlbl{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--tan);margin-bottom:6px;display:block}
+.m-recs .rrow{display:flex;gap:8px}
+.m-recs .rcard{flex:1;background:var(--cream);border:1px solid var(--line);border-radius:8px;padding:6px;text-align:center}
+.m-recs .rcard .rimg{height:34px;border-radius:5px;background:linear-gradient(135deg,#EBD6B4,#DCC191);margin-bottom:4px}
+.m-recs .rcard .rp{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--brown-dark);font-weight:600}
+.spot-panel{
+  background:var(--paper);border:1px solid var(--line);border-radius:14px;
+  padding:24px;min-height:250px;position:sticky;top:90px;
+}
+.spot-panel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+.sp-tag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.14em;text-transform:uppercase;color:var(--orange-dark);font-weight:600}
+.sp-title{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--brown-dark);margin:6px 0 10px}
+.sp-why{font-size:14px;color:var(--ink);margin-bottom:12px;max-width:none}
+.sp-ai{font-size:13px;color:var(--brown);background:var(--cream);border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 8px 8px 0;max-width:none;margin:0}
+.sp-ai strong{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark)}
+@media(max-width:880px){
+  .anatomy{grid-template-columns:1fr}
+  .spot-panel{position:static}
+}
+
+/* ============ Figure 2 · Before / after description ============ */
+.ba-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;align-items:stretch}
+.ba-col{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;position:relative;display:flex;flex-direction:column}
+.ba-before{border-style:dashed}
+.ba-after{border:2px solid var(--orange);box-shadow:0 10px 26px rgba(239,127,26,0.12)}
+.ba-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;padding:4px 10px;border-radius:5px;align-self:flex-start;margin-bottom:14px}
+.ba-before .ba-lbl{background:var(--cream);color:var(--muted)}
+.ba-after .ba-lbl{background:var(--orange);color:#fff}
+.ba-txt{font-family:'Fraunces',serif;font-size:15px;line-height:1.55;color:var(--brown-dark)}
+.ba-before .ba-txt{color:var(--muted)}
+.ba-cursor{color:var(--orange);font-weight:700;animation:blink .9s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+.ba-metrics{display:flex;gap:14px;margin-top:16px;padding-top:14px;border-top:1px dashed var(--line);flex-wrap:wrap}
+.ba-metric{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+.ba-metric b{display:block;font-family:'Fraunces',serif;font-size:20px;color:var(--orange-dark);text-transform:none;letter-spacing:0}
+.ba-before .ba-metric b{color:var(--muted)}
+.ba-note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:16px;max-width:none}
+.ba-note strong{color:var(--orange-dark)}
+@media(max-width:700px){
+  .ba-grid{grid-template-columns:1fr}
+}
+
+/* ============ Figure 3 · Imagery transform ============ */
+.img-demo{display:grid;grid-template-columns:1fr 300px;gap:26px;align-items:start}
+.img-stage{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px;text-align:center}
+.img-canvas{
+  height:230px;border-radius:12px;position:relative;overflow:hidden;
+  display:flex;align-items:center;justify-content:center;transition:all .6s;
+  background:repeating-linear-gradient(45deg,#F0E4D0 0 12px,#F7EEDD 12px 24px);
+}
+.img-canvas .prod{
+  width:130px;height:130px;border-radius:16px;position:relative;z-index:3;transition:all .6s;
+  background:linear-gradient(135deg,var(--tan),var(--orange-dark));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 24px rgba(65,44,35,0.25);
+}
+.img-canvas .prod svg{width:56px;height:56px}
+.img-canvas.scene-studio{background:radial-gradient(circle at 50% 40%,#fff 0%,#EDE3D2 100%)}
+.img-canvas.scene-life{background:linear-gradient(160deg,#D9E8F0 0%,#EDE0CB 60%,#C9A876 100%)}
+.img-canvas.scene-life::after{content:"";position:absolute;bottom:0;left:0;right:0;height:60px;background:linear-gradient(0deg,rgba(65,44,35,0.15),transparent)}
+.img-canvas.scene-holiday{background:linear-gradient(160deg,#2F1D19 0%,#6E3A28 100%)}
+.img-canvas.scene-holiday::before{content:"✦ ✦ ✦";position:absolute;top:16px;left:0;right:0;text-align:center;color:var(--yellow);letter-spacing:22px;font-size:13px;opacity:.85}
+.img-label{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);margin-top:14px}
+.img-controls{display:grid;gap:10px}
+.img-controls .icl{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.iopt{display:grid;gap:7px}
+.iopt button{
+  font-family:'Inter',sans-serif;font-size:13px;text-align:left;background:var(--paper);
+  border:1px solid var(--line);color:var(--ink);padding:10px 14px;border-radius:9px;cursor:pointer;transition:all .2s;
+}
+.iopt button:hover{border-color:var(--orange)}
+.iopt button.on{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.img-caption{margin-top:16px;font-size:13px;color:var(--brown);background:var(--cream);border-left:3px solid var(--orange);padding:10px 14px;border-radius:0 8px 8px 0;max-width:none;min-height:44px}
+@media(max-width:880px){
+  .img-demo{grid-template-columns:1fr}
+}
+
+/* ============ Figure 4 · Personalization split ============ */
+.pers-wrap{display:grid;gap:18px}
+.pers-picker{display:flex;gap:10px;flex-wrap:wrap}
+.pers-picker button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--paper);
+  border:1px solid var(--line);color:var(--brown);padding:9px 15px;border-radius:999px;
+  cursor:pointer;letter-spacing:0.03em;transition:all .2s;display:flex;align-items:center;gap:8px;
+}
+.pers-picker button:hover{border-color:var(--orange)}
+.pers-picker button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.pers-picker .dot{width:9px;height:9px;border-radius:50%}
+.pers-screen{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;position:relative;overflow:hidden}
+.pers-screen::before{content:"";position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--orange),var(--yellow))}
+.pers-hero{font-family:'Fraunces',serif;font-size:22px;font-weight:700;color:var(--brown-dark);line-height:1.2;margin-bottom:6px;transition:opacity .3s}
+.pers-sub{font-size:14px;color:var(--muted);margin-bottom:16px;max-width:none;transition:opacity .3s}
+.pers-row{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.pers-card{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center;transition:all .3s;opacity:0;transform:translateY(8px)}
+.pers-screen.show .pers-card{animation:pcIn .4s forwards}
+.pers-screen.show .pers-card:nth-child(1){animation-delay:.05s}
+.pers-screen.show .pers-card:nth-child(2){animation-delay:.13s}
+.pers-screen.show .pers-card:nth-child(3){animation-delay:.21s}
+@keyframes pcIn{to{opacity:1;transform:translateY(0)}}
+.pers-card .pcimg{height:56px;border-radius:8px;margin-bottom:8px}
+.pers-card .pcname{font-family:'Fraunces',serif;font-size:13px;font-weight:600;color:var(--brown-dark);line-height:1.2}
+.pers-card .pcprice{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--orange-dark);font-weight:600;margin-top:3px}
+.pers-explain{font-size:13px;color:var(--brown);background:var(--cream);border-left:3px solid var(--brown);padding:11px 15px;border-radius:0 8px 8px 0;max-width:none}
+.pers-explain strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+@media(max-width:700px){
+  .pers-row{grid-template-columns:1fr;gap:8px}
+}
+
+/* ============ Figure 5 · Trap flip cards ============ */
+.trap-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.trap-card{height:210px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.trap-grid.show .trap-card{animation:trapIn .5s forwards}
+.trap-grid.show .trap-card:nth-child(1){animation-delay:.05s}
+.trap-grid.show .trap-card:nth-child(2){animation-delay:.2s}
+.trap-grid.show .trap-card:nth-child(3){animation-delay:.35s}
+.trap-grid.show .trap-card:nth-child(4){animation-delay:.5s}
+@keyframes trapIn{to{opacity:1;transform:translateY(0)}}
+.trap-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.trap-card.flipped .trap-inner{transform:rotateY(180deg)}
+.trap-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center}
+.trap-front{background:linear-gradient(135deg,var(--orange-dark) 0%,var(--tan) 100%);color:#fff;text-align:center;align-items:center}
+.trap-front .trap-claim{font-family:'Fraunces',serif;font-weight:800;font-size:26px;line-height:1.1;margin-bottom:8px}
+.trap-front .trap-sub{font-size:13px;opacity:.94;max-width:260px}
+.trap-front .trap-hint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.8}
+.trap-back{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.trap-back .trap-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.trap-back p{font-size:13.5px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){
+  .trap-grid{grid-template-columns:1fr}
+  .trap-card{height:200px}
+  .trap-front .trap-claim{font-size:23px}
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 02 · AI Marketing</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="2" y="2" width="40" height="40" rx="11" fill="#412C23"/>
+      <path d="M10 31V14.5l6 8.5 6-8.5 6 8.5 6-8.5V31" stroke="#EF7F1A" stroke-width="3.4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="34" cy="10.5" r="3" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 3 · Lesson 02 · AI Marketing</div>
+  <h1>A plan comes <em>before the post</em>.</h1>
+  <p class="lede">Most beginners open a blank doc and ask AI to "write something." That's how you drown in content nobody reads. Strategy comes first: who you're for, what they're stuck on, and the handful of topics you'll own. Then AI turns one topic into dozens of ideas in seconds. This lesson shows you exactly where strategy earns its keep — and where letting AI ideate unchecked wastes weeks of work.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Anatomy of a content strategy that writes itself</h2>
+  <p class="lead">A real strategy is a stack of decisions made before a single post: know the person, name their pain, pick the pillars, cluster the topics, ideate at volume, map to the funnel, then plan the calendar. AI helps at each step — but only if you know what each step is for.</p>
+
+  <p>A beginner who skips straight to "write me a blog post" is guessing, not marketing. Strategy is the sequence of choices — who you're for, what keeps them up at night, which few topics you'll be known for — that turns random posts into a library that compounds. Each step is a place AI can do the heavy lifting at speed. But ideas generated with no strategy behind them are worse than no ideas — they read like everyone else's feed and rank for nothing. Click each numbered dot to see the job it does and where AI genuinely helps.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Content-strategy anatomy, AI's role in each step</span>
+      <div class="controls">
+        <button id="tourBtn" onclick="tourSpots()">▶ Tour all</button>
+        <button onclick="resetSpots()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="anatomy">
+      <div class="mock" id="mock">
+        <div class="m-img" data-spot="img" onclick="selectSpot('img')">
+          <span class="spot">1</span>
+          <svg viewBox="0 0 46 36" fill="none"><rect x="1" y="1" width="44" height="34" rx="4" stroke="#A34E1C" stroke-width="2"/><circle cx="14" cy="12" r="4" fill="#A34E1C"/><path d="M4 30l12-11 8 7 9-9 9 10" stroke="#A34E1C" stroke-width="2" fill="none"/></svg>
+          Audience persona
+        </div>
+        <div class="m-thumbs" data-spot="gallery" onclick="selectSpot('gallery')">
+          <span class="spot">2</span>
+          <div class="th sel"></div><div class="th"></div><div class="th"></div><div class="th"></div>
+        </div>
+        <div class="m-head" data-spot="title" onclick="selectSpot('title')"><span class="spot">3</span>Content pillars: the 3–4 topics you'll be known for</div>
+        <div class="m-price" data-spot="price" onclick="selectSpot('price')">
+          <span class="spot">4</span>
+          <span class="now">6 clusters</span><span class="was">1 pillar</span>
+        </div>
+        <div class="m-desc" data-spot="desc" onclick="selectSpot('desc')">
+          <span class="spot">5</span>
+          One pillar becomes dozens of ideas: ask AI to break "budgeting for beginners" into every question a nervous first-timer would type, then keep the honest ones. Volume in seconds, filtered by you.
+        </div>
+        <div class="m-cta" data-spot="cta" onclick="selectSpot('cta')"><span class="spot">6</span>Map to funnel &amp; format</div>
+        <div class="m-recs" data-spot="recs" onclick="selectSpot('recs')">
+          <span class="spot">7</span>
+          <span class="rlbl">This month's calendar</span>
+          <div class="rrow">
+            <div class="rcard"><div class="rimg"></div><div class="rp">Wk 1</div></div>
+            <div class="rcard"><div class="rimg"></div><div class="rp">Wk 2</div></div>
+            <div class="rcard"><div class="rimg"></div><div class="rp">Wk 3</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="spot-panel" id="spotPanel">
+        <div class="sp-tag" id="spTag">Interactive anatomy</div>
+        <div class="sp-title" id="spTitle">Click any numbered dot</div>
+        <p class="sp-why" id="spWhy">Each numbered step of a strategy does one job — and each is a place AI can do the heavy lifting in seconds. Click a dot on the blueprint, or press "Tour all," to see the job and where the machine helps.</p>
+        <p class="sp-ai" id="spAi"><strong>Tip —</strong> persona, pillars and clusters all come before you write a word. Get that first stretch right and every idea AI generates afterward lands on target.</p>
+      </div>
+    </div>
+  </div>
+
+  <h3>Strategy is the map you draw before the drive</h3>
+  <p>Setting off without a route, you'll burn fuel wandering; with one, every turn moves you closer. Your content strategy is that map — persona, pains, pillars, clusters — and every post you write becomes one confident turn toward an audience you actually understand. AI can draw route options at a speed no planner can match. What it can't do is know your reader better than you, which is why every step below pairs an AI draft with a human check.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Before &amp; after: one pillar becomes an idea bank</h2>
+  <p class="lead">A pillar on its own is just a topic label — "budgeting for beginners." It doesn't tell you what to post on Tuesday. AI's real gift in ideation is turning one broad pillar into a specific, ranked list of ideas your persona would actually search. Watch it happen.</p>
+
+  <p>The "before" text below is a bare pillar: correct, but useless on a blank calendar. It names the topic. The "after" is what AI produces when you feed it the pillar plus your exact persona and their pains — a batch of concrete, question-shaped ideas mapped to funnel stages. The difference isn't decoration; it's the gap between staring at "budgeting" and knowing you'll publish "the 50/30/20 rule explained with one salary" on Tuesday. Press Ideate and watch one pillar bloom into a month of posts.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Pillar → ranked idea bank</span>
+      <div class="controls">
+        <button id="baBtn" onclick="runRewrite()">▶ Ideate with AI</button>
+        <button onclick="resetRewrite()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="ba-grid">
+      <div class="ba-col ba-before">
+        <span class="ba-lbl">Before · bare pillar</span>
+        <div class="ba-txt">Pillar: "Budgeting for beginners." Persona: nervous first-earner, 23, first salary, scared of "doing money wrong." That's the whole plan. Now what do we actually post — this week, next week, all month?</div>
+        <div class="ba-metrics">
+          <div class="ba-metric">Reads like<b>A topic label</b></div>
+          <div class="ba-metric">Tells you<b>Nothing to post</b></div>
+        </div>
+      </div>
+      <div class="ba-col ba-after">
+        <span class="ba-lbl">After · AI idea bank</span>
+        <div class="ba-txt"><span id="baText"></span><span class="ba-cursor" id="baCur" style="display:none">▍</span></div>
+        <div class="ba-metrics" id="baMetrics" style="opacity:0">
+          <div class="ba-metric">Reads like<b>A month of posts</b></div>
+          <div class="ba-metric">Speaks to<b>The first-earner</b></div>
+        </div>
+      </div>
+    </div>
+    <p class="ba-note"><strong>AI drafts the ideas — you own the judgement.</strong> Notice these are questions your persona would really type, not clickbait. AI generates twenty; you keep the eight that fit your pillar and cut anything you can't cover honestly. Illustrative example — your own persona will surface its own questions.</p>
+  </div>
+
+  <h3>The ideation prompt that keeps you focused</h3>
+  <p>A good ideation prompt has three ingredients: the pillar ("budgeting for beginners"), the exact persona ("a 23-year-old on their first salary, scared of doing money wrong"), and one instruction — <em>frame every idea as a question they'd actually search</em>. Feed it those and it reliably turns one topic into dozens of usable ideas. Skip the persona and you get generic listicles; skip the "as a question" framing and you get vague themes you still can't schedule. The machine ideates; you filter every idea against what you can genuinely teach.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>One idea, many funnel stages &amp; formats</h2>
+  <p class="lead">One good idea is not one post. The same topic can be reshaped for a first-time stranger, a warm follower comparing options, or someone ready to act — and delivered as a reel, a carousel, or a guide. Try it on the idea below.</p>
+
+  <p>Not everyone who meets your content is ready for the same thing. A stranger needs a friendly, awareness-stage hook; a warm follower wants a consideration-stage comparison; someone at the bottom wants a clear, decision-stage nudge. AI helps you take one idea and restage it for each stage and each format — a snappy reel for reach, a saveable carousel for consideration, a step-by-step guide for the ready-to-act. Pick a stage and watch the same idea change shape. The honest caveat lives right below the demo.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · One idea across funnel stages (illustrative)</span>
+      <div class="controls">
+        <button onclick="setScene('studio')">Awareness</button>
+        <button onclick="setScene('life')">Consideration</button>
+        <button onclick="setScene('holiday')">Decision</button>
+      </div>
+    </div>
+    <div class="img-demo">
+      <div class="img-stage">
+        <div class="img-canvas scene-plain" id="imgCanvas">
+          <div class="prod"><svg viewBox="0 0 56 56" fill="none"><rect x="14" y="10" width="28" height="36" rx="6" stroke="#fff" stroke-width="3"/><path d="M28 18v10l6 4" stroke="#FECC00" stroke-width="3" fill="none" stroke-linecap="round"/></svg></div>
+        </div>
+        <div class="img-label" id="imgLabel">Raw idea · not yet mapped</div>
+      </div>
+      <div>
+        <div class="img-controls">
+          <div class="icl">Pick a funnel stage</div>
+          <div class="iopt" id="sceneOpt">
+            <button class="on" onclick="setScene('plain')">Raw idea (unmapped)</button>
+            <button onclick="setScene('studio')">Awareness · reel</button>
+            <button onclick="setScene('life')">Consideration · carousel</button>
+            <button onclick="setScene('holiday')">Decision · guide</button>
+          </div>
+        </div>
+        <div class="img-caption" id="imgCaption">Start with the bare idea straight out of the bank. Now pick a funnel stage and watch AI reshape the very same idea for that reader and format.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Powerful, but with a hard line</h3>
+  <p>Mapping ideas to stages and formats is genuinely a superpower for a solo marketer — but it comes with a rule you break at your peril: <strong>don't reshape the same idea into ten near-identical posts and call it a strategy.</strong> Reframing one topic for genuinely different readers is smart; spinning it into filler that says the same thing ten ways just to fill a calendar is noise your audience tunes out. Use AI to serve each stage a real, distinct value — never to inflate one thin idea into a week of repeats.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Personas: a different plan for every reader</h2>
+  <p class="lead">The reason strategy works is personas. Define who you're for — their pains, their questions, their words — and every ideation prompt afterward aims true. AI can build a rich persona from a few notes, then generate ideas tuned to each one. Three readers, one brand, three content plans.</p>
+
+  <p>Post for "everyone" and you connect with no one. Name a specific person and the ideas write themselves: the anxious first-earner needs reassurance and simple wins; the ambitious side-hustler wants growth tactics; the overwhelmed parent wants fast, guilt-free money habits. This isn't guesswork — it's the discipline of picturing one real reader and their pains before you ideate. Switch between three personas below and watch the same brand's plan rearrange itself around each one.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · One brand, three personas</span>
+      <div class="controls">
+        <button onclick="cycleShopper()">▶ Cycle persona</button>
+      </div>
+    </div>
+    <div class="pers-wrap">
+      <div class="pers-picker" id="persPicker">
+        <button class="active" onclick="setShopper('new',this)"><span class="dot" style="background:var(--orange)"></span>Anxious first-earner</button>
+        <button onclick="setShopper('gadget',this)"><span class="dot" style="background:var(--accent)"></span>Ambitious side-hustler</button>
+        <button onclick="setShopper('gift',this)"><span class="dot" style="background:var(--yellow)"></span>Overwhelmed parent</button>
+      </div>
+      <div class="pers-screen show" id="persScreen">
+        <div class="pers-hero" id="persHero"></div>
+        <div class="pers-sub" id="persSub"></div>
+        <div class="pers-row" id="persRow"></div>
+      </div>
+      <div class="pers-explain" id="persExplain">
+        <strong>Why the plan shifts</strong>
+        <span id="persWhy"></span>
+      </div>
+    </div>
+  </div>
+
+  <h3>From ideas to a calendar you can actually keep</h3>
+  <p>A bank of ideas still isn't a plan until it's on a calendar. The editorial calendar is simply which idea goes out on which day, on which channel. For a beginner, the winning cadence is one you can sustain, not one that looks impressive: <strong>two posts a week, every week (illustrative)</strong> beats seven for a fortnight and then silence. Consistency is the strategy. Each calendar slot then gets a one-page <em>content brief</em> — the persona, the pillar, the funnel stage, the format, the single question the piece answers, and the call to action. Hand AI that brief and the draft comes back on-strategy; skip it and you're back to "write me something." Don't publish without a strategy — and remember AI's ideas always need your human filter before they reach the calendar.</p>
+
+  <h3>The four traps to sidestep</h3>
+  <p>Every superpower in this lesson comes with a matching way to hurt yourself. Below are the four mistakes beginners make most often with AI content strategy. Flip each card to see the trap on the front and the fix on the back — reading them now is far cheaper than learning them from weeks of posts that reach no one.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 5 · Flip the trap → the fix</span>
+      <!-- strategy traps -->
+
+      <div class="controls">
+        <button onclick="trapAll()">Show all fixes</button>
+        <button onclick="trapReset()">↺ Back to traps</button>
+      </div>
+    </div>
+    <div class="trap-grid" id="trapGrid">
+      <div class="trap-card" onclick="this.classList.toggle('flipped')">
+        <div class="trap-inner">
+          <div class="trap-face trap-front">
+            <div class="trap-claim">Creation before strategy</div>
+            <div class="trap-sub">Asking AI to "write a post" before you've defined a persona or pillar.</div>
+            <div class="trap-hint">tap to flip</div>
+          </div>
+          <div class="trap-face trap-back">
+            <div class="trap-lbl">The fix</div>
+            <p>Do the strategy first, always: one persona, their pains, 3–4 pillars. Only then ideate. A post with no strategy behind it reaches no one and ranks for nothing.</p>
+          </div>
+        </div>
+      </div>
+      <div class="trap-card" onclick="this.classList.toggle('flipped')">
+        <div class="trap-inner">
+          <div class="trap-face trap-front">
+            <div class="trap-claim">Publishing raw AI ideas</div>
+            <div class="trap-sub">Dumping all twenty AI ideas onto the calendar without filtering.</div>
+            <div class="trap-hint">tap to flip</div>
+          </div>
+          <div class="trap-face trap-back">
+            <div class="trap-lbl">The fix</div>
+            <p>AI ideas always need a human filter. Keep only the ones you can teach honestly and that fit a pillar; cut the clickbait and the topics you can't cover. Volume is AI's; judgement is yours.</p>
+          </div>
+        </div>
+      </div>
+      <div class="trap-card" onclick="this.classList.toggle('flipped')">
+        <div class="trap-inner">
+          <div class="trap-face trap-front">
+            <div class="trap-claim">Too many pillars</div>
+            <div class="trap-sub">Chasing ten topics at once, so you're known for none of them.</div>
+            <div class="trap-hint">tap to flip</div>
+          </div>
+          <div class="trap-face trap-back">
+            <div class="trap-lbl">The fix</div>
+            <p>Pick just 3–4 pillars and cluster topics under each. Depth beats spread — an audience follows you for a clear promise, not a random mix. Say no to the topics that don't serve your persona.</p>
+          </div>
+        </div>
+      </div>
+      <div class="trap-card" onclick="this.classList.toggle('flipped')">
+        <div class="trap-inner">
+          <div class="trap-face trap-front">
+            <div class="trap-claim">Unrealistic cadence</div>
+            <div class="trap-sub">Promising daily posts, burning out, then going silent for a month.</div>
+            <div class="trap-hint">tap to flip</div>
+          </div>
+          <div class="trap-face trap-back">
+            <div class="trap-lbl">The fix</div>
+            <p>Set a cadence you can keep — two posts a week, every week, beats a heroic sprint and a crash. Consistency compounds; gaps reset the clock. Plan the pace you'll still hit in month three.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The through-line of every trap</h3>
+  <p>Notice all four traps are the same mistake wearing different clothes: letting AI's speed replace your <em>strategy</em> and your <em>judgement</em>. The tool is happy to generate endlessly — it has no focus, only fluency. Yours is the focus in the loop: the persona, the pillars, the honest filter, the sustainable pace. Keep those in your hands and AI makes a solo marketer look like a whole content team; hand them over, and it just makes noise faster.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>A content strategy is the plan you make before you write — persona, pillars, clusters, calendar. AI can then turn one pillar into dozens of ideas, reshape each for the funnel, and tune a plan to every persona, giving a solo marketer the output of a whole team. But every superpower here shares one guardrail: AI generates at volume; your strategy and human filter decide what's worth publishing.</p>
+  <ul>
+    <li>Strategy comes before creation — never ask AI to "write something" first</li>
+    <li>Define one persona and their pains, then build 3–4 pillars and topic clusters</li>
+    <li>AI turns one pillar into dozens of ideas — you keep only the honest ones</li>
+    <li>Map each idea to a funnel stage and format, then onto a realistic calendar</li>
+    <li>A sustainable cadence and a content brief beat a heroic burst and silence</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 02 of 04 · Next up: AI Copywriting &amp; Drafting →</footer>
+<script>
+
+function el(id){return document.getElementById(id)}
+
+/* ============ Figure 1 · Hotspot anatomy ============ */
+const SPOTS={
+  img:{n:1,t:"Audience persona",why:"The first decision of any strategy — it answers \"who am I for?\" before a word is written. Naming one real reader, their pains and their questions, beats writing for \"everyone\" every time.",ai:"AI can build a rich persona from a few notes — likely questions, fears, the words they use. You confirm it against real people you actually know."},
+  gallery:{n:2,t:"Pains & questions",why:"Under the persona sit the specific problems they'd type into a search bar. Each pain you name removes one reason your content misses. This is the raw material for every idea.",ai:"AI lists dozens of the questions your persona is likely asking, in their own language — a fast starting map. You keep the ones that ring true."},
+  title:{n:3,t:"Content pillars",why:"A pillar names a topic you'll be known for, not everything you could post. \"Budgeting for beginners\" beats \"personal finance\" — 3–4 focused pillars beat ten scattered ones.",ai:"Ask AI to propose pillars from your persona's pains, then cut to the 3–4 you can truly own. Generating options is the machine's job; choosing focus is yours."},
+  price:{n:4,t:"Topic clusters & SEO",why:"Each pillar breaks into a cluster of related topics — tied back to the keywords real people search. Clusters turn one broad theme into a map of specific, findable posts.",ai:"AI suggests cluster topics and groups keyword ideas from your research, but you check search intent and pick the terms you can genuinely rank for."},
+  desc:{n:5,t:"Ideation",why:"This is where one pillar becomes dozens of ideas. Good ideation translates a topic into the exact questions your persona would search. Figure 2 shows it happen live.",ai:"AI turns one pillar into a ranked idea bank in seconds — in any format. You filter every idea against what you can teach honestly before it goes near the calendar."},
+  cta:{n:6,t:"Funnel & format mapping",why:"One idea, many jobs. Each idea maps to a funnel stage — awareness, consideration, decision — and a format — reel, carousel, guide. Mapping stops you posting only for one kind of reader.",ai:"AI proposes stage-and-format variants of one idea to test — a reel for reach vs a guide for the ready-to-act. Pick a couple that add real value; don't spin ten filler repeats."},
+  recs:{n:7,t:"Editorial calendar",why:"The calendar is which idea goes out which day, on which channel. Done right, a realistic cadence you can keep turns a pile of ideas into a library that compounds week after week.",ai:"AI can draft a month's schedule and a one-page brief per slot, so drafting stays on-strategy. You set a pace you'll still hit in month three — the single most reliable win here."}
+};
+const spotOrder=["img","gallery","title","price","desc","cta","recs"];
+let tourTimer=null,tourIdx=0;
+function selectSpot(k){
+  document.querySelectorAll('#mock [data-spot]').forEach(e=>e.classList.remove('hl'));
+  const region=document.querySelector('#mock [data-spot="'+k+'"]');
+  if(region)region.classList.add('hl');
+  const d=SPOTS[k],panel=el('spotPanel');
+  el('spTag').textContent='Element '+d.n+' of 7';
+  el('spTitle').textContent=d.t;
+  el('spWhy').textContent=d.why;
+  el('spAi').innerHTML='<strong>AI assist —</strong> '+d.ai;
+  panel.classList.remove('swap');void panel.offsetWidth;panel.classList.add('swap');
+}
+function tourSpots(){
+  stopTour();el('tourBtn').classList.add('active');
+  tourIdx=0;selectSpot(spotOrder[0]);
+  tourTimer=setInterval(()=>{tourIdx++;if(tourIdx>=spotOrder.length){stopTour();return}selectSpot(spotOrder[tourIdx])},3000);
+}
+function stopTour(){if(tourTimer){clearInterval(tourTimer);tourTimer=null}el('tourBtn').classList.remove('active')}
+function resetSpots(){
+  stopTour();
+  document.querySelectorAll('#mock [data-spot]').forEach(e=>e.classList.remove('hl'));
+  el('spTag').textContent='Interactive anatomy';
+  el('spTitle').textContent='Click any numbered dot';
+  el('spWhy').textContent='Each numbered step of a strategy does one job — and each is a place AI can do the heavy lifting in seconds. Click a dot on the blueprint, or press "Tour all," to see the job and where the machine helps.';
+  el('spAi').innerHTML='<strong>Tip —</strong> persona, pillars and clusters all come before you write a word. Get that first stretch right and every idea AI generates afterward lands on target.';
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){tourSpots();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('mock'));
+
+/* ============ Figure 2 · Rewrite ============ */
+const AFTER="From one pillar, twelve post ideas — as questions your first-earner would really type. TOP: \"How much of my first salary should I actually save?\" · \"The 50/30/20 rule explained with one real payslip.\" · \"Do I need a budget if I earn very little?\" · \"5 subscriptions quietly draining your salary.\" · \"How to build a ₹10,000 emergency fund on a starter income.\" · \"Budgeting apps vs a plain notebook — which for a beginner?\" AI generated the list; you keep the eight you can teach honestly and drop the rest.";
+let baTyper=null;
+function runRewrite(){
+  resetRewrite();
+  el('baBtn').classList.add('active');
+  el('baCur').style.display='inline';
+  const t=el('baText');let i=0;
+  baTyper=setInterval(()=>{
+    i++;t.textContent=AFTER.slice(0,i);
+    if(i>=AFTER.length){clearInterval(baTyper);baTyper=null;el('baCur').style.display='none';el('baMetrics').style.opacity='1';el('baBtn').classList.remove('active')}
+  },14);
+}
+function resetRewrite(){
+  if(baTyper){clearInterval(baTyper);baTyper=null}
+  el('baText').textContent='';el('baCur').style.display='none';
+  el('baMetrics').style.opacity='0';el('baBtn').classList.remove('active');
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){runRewrite();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('baText').closest('.ba-after'));
+
+/* ============ Figure 3 · Imagery ============ */
+const SCENES={
+  plain:{cls:'scene-plain',label:'Raw idea · not yet mapped',cap:'Start with the bare idea straight out of the bank. Now pick a funnel stage and watch AI reshape the very same idea for that reader and format.'},
+  studio:{cls:'scene-studio',label:'Awareness · a 20-second reel',cap:'For a stranger scrolling past: a punchy hook — "Spending your whole first salary? Here\'s the fix." Reel format, built for reach. Same idea, top-of-funnel job.'},
+  life:{cls:'scene-life',label:'Consideration · a saveable carousel',cap:'For a warm follower weighing options: a carousel comparing the 50/30/20 rule to zero-based budgeting. Saveable, shareable — the consideration-stage shape.'},
+  holiday:{cls:'scene-holiday',label:'Decision · a step-by-step guide',cap:'For someone ready to act: a clear guide — "Set up your first budget in 15 minutes." Decision-stage format that turns interest into action. Same idea, different job.'}
+};
+function setScene(k){
+  const c=el('imgCanvas'),d=SCENES[k];
+  c.className='img-canvas '+d.cls;
+  el('imgLabel').textContent=d.label;
+  el('imgCaption').textContent=d.cap;
+  document.querySelectorAll('#sceneOpt button').forEach(b=>b.classList.remove('on'));
+  const idx={plain:0,studio:1,life:2,holiday:3}[k];
+  document.querySelectorAll('#sceneOpt button')[idx].classList.add('on');
+}
+let sceneTimer=null;
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){
+  const seq=['studio','life','holiday','plain'];let i=0;
+  sceneTimer=setInterval(()=>{setScene(seq[i]);i++;if(i>=seq.length)clearInterval(sceneTimer)},1100);
+  o.unobserve(e.target)}}),{threshold:0.4}).observe(el('imgCanvas'));
+
+/* ============ Figure 4 · Personalization ============ */
+const SHOPPERS={
+  new:{hero:"Scared of \"doing money wrong\"? Start here.",sub:"Reassuring, beginner-safe wins for a first salary.",
+    cards:[{n:"50/30/20, explained simply",p:"Reel",c:"#EF7F1A"},{n:"Your first ₹10k safety fund",p:"Guide",c:"#A34E1C"},{n:"5 fees quietly draining you",p:"Carousel",c:"#FECC00"}],
+    why:"For the anxious first-earner, the pain is fear of mistakes — so the plan leads with calm, jargon-free basics and quick wins. AI's ideas are tuned to reassure and simplify, the content most likely to earn a nervous beginner's trust."},
+  gadget:{hero:"First salary sorted? Time to grow it.",sub:"Growth tactics for the ambitious side-hustler.",
+    cards:[{n:"Turn a hobby into ₹5k/mo",p:"Guide",c:"#008DD2"},{n:"SIP vs FD for beginners",p:"Carousel",c:"#412C23"},{n:"Track a side-income budget",p:"Reel",c:"#EF7F1A"}],
+    why:"The side-hustler already covers basics and wants momentum, so the plan drops beginner reassurance and surfaces growth and investing ideas — matching a reader who values getting ahead over just staying safe."},
+  gift:{hero:"No time, still want your money in order?",sub:"Fast, guilt-free habits for a busy parent.",
+    cards:[{n:"Budget a family in 15 min",p:"Guide",c:"#D55222"},{n:"Auto-save so you don't have to",p:"Reel",c:"#C9A227"},{n:"Cut kid costs without guilt",p:"Carousel",c:"#A34E1C"}],
+    why:"The overwhelmed parent's pain is time and guilt, so the plan reframes around speed and permission — quick, automatic, guilt-free habits — not slow deep-dives. Same brand, ideas reshaped for a very different life."}
+};
+const SHOPORDER=['new','gadget','gift'];
+function renderShopper(k){
+  const d=SHOPPERS[k],scr=el('persScreen');
+  el('persHero').textContent=d.hero;
+  el('persSub').textContent=d.sub;
+  let html='';
+  d.cards.forEach(c=>{html+='<div class="pers-card"><div class="pcimg" style="background:linear-gradient(135deg,'+c.c+',#2F1D19)"></div><div class="pcname">'+c.n+'</div><div class="pcprice">'+c.p+'</div></div>'});
+  el('persRow').innerHTML=html;
+  el('persWhy').textContent=d.why;
+  scr.classList.remove('show');void scr.offsetWidth;scr.classList.add('show');
+}
+function setShopper(k,btn){
+  document.querySelectorAll('#persPicker button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderShopper(k);
+}
+let shopIdx=0;
+function cycleShopper(){
+  shopIdx=(shopIdx+1)%SHOPORDER.length;
+  const btn=document.querySelectorAll('#persPicker button')[shopIdx];
+  setShopper(SHOPORDER[shopIdx],btn);
+}
+renderShopper('new');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){renderShopper('new');o.unobserve(e.target)}}),{threshold:0.4}).observe(el('persScreen'));
+
+/* ============ Figure 5 · Trap cards ============ */
+function trapAll(){document.querySelectorAll('.trap-card').forEach(c=>c.classList.add('flipped'))}
+function trapReset(){document.querySelectorAll('.trap-card').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){el('trapGrid').classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(el('trapGrid'));
+
+</script>
+</body>
+</html>
