@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · AI Audiences, Targeting &amp; Campaign Setup — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: ASSEMBLE LISTING (chain) ── */
+.chain-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.chain-grid{grid-template-columns:1fr}}
+.chain-pool{display:flex;flex-direction:column;gap:.6rem}
+.chain-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.84rem;line-height:1.5;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.chain-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.chain-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.chain-chip.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.chain-slots{display:flex;flex-direction:column;gap:.5rem}
+.chain-slot{display:flex;align-items:flex-start;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.65rem .85rem;min-height:46px;font-size:.82rem;line-height:1.5;color:var(--text-muted);transition:all .25s;background:rgba(255,255,255,0.5)}
+.chain-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.chain-slot-num{width:24px;height:24px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.chain-slot.filled .chain-slot-num{background:var(--green)}
+.chain-slot-tag{font-family:var(--mono);font-size:.58rem;font-weight:600;letter-spacing:.05em;color:var(--orange);text-transform:uppercase;display:block;margin-bottom:.15rem}
+.chain-hintbox{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.chain-hintbox.show{display:block;animation:fadeIn .3s ease}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── ACTIVITY 2: KEYWORD-INTENT MATCH ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.88rem;color:var(--text-primary);line-height:1.5;font-weight:600;font-family:var(--mono)}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── COMPARE (anatomy) CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#8E6BC0,#6D4CA0)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card li::before{content:'•';color:var(--orange);font-weight:700;flex-shrink:0}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 3: TAG BUILDER ── */
+.tag-pool{display:flex;flex-wrap:wrap;gap:.55rem;margin-top:1rem}
+.tag-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:50px;padding:.45rem .95rem;font-size:.8rem;font-weight:600;cursor:pointer;transition:all .2s;user-select:none;color:var(--text-primary)}
+.tag-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.tag-chip.picked-good{background:var(--green-light);border-color:var(--green);color:#256B29}
+.tag-chip.picked-bad{background:var(--red-light);border-color:var(--red);color:#933}
+.tag-chip[disabled]{cursor:not-allowed;opacity:.55}
+.tag-slots{margin-top:1.3rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:70px;display:flex;flex-wrap:wrap;gap:.5rem;align-content:flex-start;background:rgba(255,255,255,0.5)}
+.tag-slots .placeholder{font-size:.75rem;color:var(--text-muted);font-style:italic}
+.tag-slot-pill{background:var(--navy);color:#fff;border-radius:50px;padding:.4rem .9rem;font-size:.78rem;font-weight:600;display:flex;align-items:center;gap:.5rem;animation:fadeIn .3s ease}
+.tag-slot-pill button{background:rgba(255,255,255,0.25);border:none;color:#fff;width:16px;height:16px;border-radius:50%;cursor:pointer;font-size:.7rem;line-height:1;display:flex;align-items:center;justify-content:center}
+.tag-counter{margin-top:.8rem;font-size:.8rem;color:var(--text-secondary);font-weight:600}
+.tag-counter span{font-family:var(--mono);color:var(--orange)}
+
+/* ── ACTIVITY 4: SEO QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 2 · AI Ads</div>
+  <h1>AI Audiences, Targeting &amp; Campaign Setup — <em>show the right ad to the right person</em></h1>
+  <p class="hero-sub">Four hands-on activities. Order a clean first-campaign setup step by step, sort audiences by how warm they are toward you, connect the 13 pieces of a tracking-and-targeting foundation, and test the setup judgment calls that decide whether your ad budget finds buyers or gets quietly wasted.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: ASSEMBLE THE LISTING ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Set up a campaign — in the order the platform asks for it</h2>
+    <p class="lesson-intro">A big budget with a sloppy setup just burns money. A clean campaign is built in a proven order: pick the <strong>objective</strong> first, make sure <strong>tracking</strong> is firing, then define the <strong>audience</strong>, choose a <strong>budget</strong>, and build the ad &mdash; ending with a live launch you actually watch. The eight steps below are shuffled. Click them <strong>in the order you'd do them</strong> &mdash; a wrong click shakes red and hints at what comes next.</p>
+
+    <div class="lesson-card">
+      <div class="chain-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Shuffled setup steps &mdash; click the next one</h4>
+          <div class="chain-pool" id="chainPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Your campaign, first step to launch</h4>
+          <div class="chain-slots" id="chainSlots"></div>
+        </div>
+      </div>
+      <div class="chain-hintbox" id="chainHint"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetChain()">&#8635; Reset the campaign</button>
+      </div>
+      <div class="tip-note">&#128161; <strong>Structure, simply:</strong> every platform nests the same three levels &mdash; <em>campaign</em> (the goal), <em>ad set / ad group</em> (who and how much), and <em>ad</em> (what they see). As a beginner, keep it small: one campaign, one or two ad sets, a couple of ads. AI tools (Advantage+, Performance Max) can build most of this for you &mdash; but only if tracking is set up first, because tracking is the fuel the AI learns from.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: KEYWORD-INTENT MATCH ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Sort the audience by how warm it is</h2>
+    <p class="lesson-intro">Not every audience is at the same stage. Someone who has never heard of you is a world apart from someone who added to cart yesterday. Read each audience, then drag it into the right <em>temperature</em> bucket. Matching your message to how <strong>warm</strong> someone already is toward you is the core skill of targeting. Wrong answers carry a hover hint.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">H</div>
+        <h4>Hot audience</h4>
+        <p>Already engaged with you and <strong>close to buying</strong>. Retargeting / custom audiences: cart abandoners, past buyers, recent site visitors.</p>
+        <ul>
+          <li>Visited your page or added to cart</li>
+          <li>Smallest group, but converts best</li>
+          <li>Show them the product and a nudge to finish</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">W</div>
+        <h4>Warm audience</h4>
+        <p>Knows you a little but hasn't bought. <strong>Some prior contact</strong> &mdash; watched a video, follows the page, on your email list.</p>
+        <ul>
+          <li>Engaged with content but no purchase yet</li>
+          <li>Mid-size group, converts moderately</li>
+          <li>Remind them why you're worth it</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">C</div>
+        <h4>Cold audience</h4>
+        <p>Has <strong>never heard of you</strong>. Reached by interest or lookalike/similar targeting &mdash; the top of the funnel.</p>
+        <ul>
+          <li>Interest-based or lookalike targeting</li>
+          <li>Largest group, lowest instant conversion</li>
+          <li>Introduce yourself &mdash; don't hard-sell yet</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-note">&#128161; <strong>Where AI fits now:</strong> tools like Meta&rsquo;s Advantage+ Audience and Google&rsquo;s Performance Max increasingly find warm and hot pockets for you &mdash; you feed them tracking data and a hint of who to target, and the AI expands from there. You still decide the message per temperature: cold gets an intro, warm gets a reminder, hot gets the closing nudge.</div>
+
+    <div class="lesson-card" style="margin-top:1.5rem">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="scenarioList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="buyer">
+            <div class="bucket-title">Hot audience</div>
+            <div class="bucket-sub">Engaged &middot; close to buying</div>
+            <div class="bucket-drop" data-drop="buyer"></div>
+          </div>
+          <div class="bucket" data-bucket="research">
+            <div class="bucket-title">Warm audience</div>
+            <div class="bucket-sub">Some contact &middot; not bought yet</div>
+            <div class="bucket-drop" data-drop="research"></div>
+          </div>
+          <div class="bucket" data-bucket="broad">
+            <div class="bucket-title">Cold audience</div>
+            <div class="bucket-sub">Never heard of you</div>
+            <div class="bucket-drop" data-drop="broad"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity2()">&#8635; Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers2()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: TAG BUILDER ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">3</span>
+    <h2 class="lesson-title">Build the foundation — 13 setup pieces, chosen wisely</h2>
+    <p class="lesson-intro">Before AI targeting can work, you need a real <strong>tracking &amp; targeting foundation</strong>. Below are the pieces of a solid setup mixed with vague junk. Click the ones that actually belong &mdash; concrete, useful pieces turn green; empty buzzwords turn red and don&rsquo;t count. Fill all 13 slots with real pieces to finish.</p>
+
+    <div class="lesson-card">
+      <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem">Available setup pieces &mdash; click the ones that really belong</h4>
+      <p style="font-size:.8rem;color:var(--text-secondary);margin-bottom:.4rem">Aim for concrete, do-able pieces of tracking, targeting, and structure. Vague buzzwords waste a slot.</p>
+      <div class="tag-pool" id="tagPool"></div>
+      <div class="tag-counter">Real pieces added: <span id="tagCount">0</span> / 13</div>
+      <div class="tag-slots" id="tagSlots"><span class="placeholder">Your chosen setup pieces will appear here…</span></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetTags()">&#8635; Clear tags</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: SEO QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">4</span>
+    <h2 class="lesson-title">Campaign setup judgment — the quiz that spends smart</h2>
+    <p class="lesson-intro">Good targeting is half skill, half honesty about what you can control. Five real setup decisions, one best answer each. Every option comes with an explanation &mdash; the wrong ones are the exact habits that waste ad budget and starve the AI of the data it needs.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">&#8635; Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect &mdash; make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Picture your first campaign. Which audience temperature would you target &mdash; cold, warm, or hot &mdash; and what message would you show them, and why?</div>
+        <textarea placeholder="I'd start warm — people who watched my page — with a reminder ad, because they know me a little and convert cheaper than cold..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">In your own words, why is conversion tracking (a Pixel or Conversions API sending events) called &ldquo;the fuel the AI needs&rdquo;?</div>
+        <textarea placeholder="Without tracked events the AI can't see which people actually bought, so it can't learn who to find more of..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 4 &middot; AI Optimization &amp; Scaling</h3>
+      <p>You can pick the objective, set up tracking, and target the right audience. Final lesson: read the numbers a live campaign gives back &mdash; letting the AI learn, killing what wastes money, and scaling the ad sets that actually bring buyers.</p>
+      <a href="04-ai-optimization-scaling.html" class="btn btn-primary">Continue to Lesson 4 &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Assemble the Listing (ordered chain) ─── */
+const CHAIN = [
+  {tag:'Objective', text:'PICK THE OBJECTIVE: tell the platform the goal &mdash; e.g. "Sales / Conversions" so it optimizes toward purchases.', hint:'The objective is the very first choice. It tells the AI what a "win" even is before anything else is set.'},
+  {tag:'Tracking', text:'CONFIRM TRACKING FIRES: your Pixel / Conversions API is installed and the "Purchase" event is being received.', hint:'Right after the goal, make sure events are being tracked. Without data the AI is optimizing blind.'},
+  {tag:'Campaign level', text:'NAME THE CAMPAIGN &amp; SET STRUCTURE: one campaign for this goal, kept simple as a beginner.', hint:'The campaign is the top level &mdash; it holds the goal. Keep it to one clear campaign, not ten.'},
+  {tag:'Audience', text:'DEFINE THE AUDIENCE (ad set): choose cold interest / lookalike, warm engagers, or a hot retargeting audience.', hint:'Inside the campaign, the ad set is where WHO you target lives &mdash; pick the audience temperature here.'},
+  {tag:'Budget', text:'SET THE BUDGET: a daily budget you can afford, or let Advantage/CBO share the budget across ad sets.', hint:'After you know who, decide how much. Daily vs lifetime, and whether the AI splits budget for you.'},
+  {tag:'Ad creative', text:'BUILD THE AD: the actual image/video, headline, and text the person will see, matched to the audience.', hint:'The ad is the bottom level &mdash; the thing people see. Match its message to how warm the audience is.'},
+  {tag:'Review', text:'REVIEW &amp; CHECK CONSENT: confirm targeting, budget, and that tracking/consent settings are compliant.', hint:'Before launch, double-check everything reads right &mdash; and that privacy/consent is respected.'},
+  {tag:'Launch &amp; watch', text:'LAUNCH, THEN LET IT LEARN: publish and give the AI a few days of data before you judge or change it.', hint:'The last step is to go live and watch &mdash; resist tweaking constantly while the AI is still learning.'}
+];
+let chainNext = 0;
+function renderChain(){
+  const pool = $('chainPool');
+  const slots = $('chainSlots');
+  const order = CHAIN.map((_, i) => i).sort(()=>Math.random()-0.5);
+  pool.innerHTML = order.map(i => `<div class="chain-chip" data-step="${i}" onclick="clickChain(${i})">${CHAIN[i].text}</div>`).join('');
+  slots.innerHTML = CHAIN.map((_, i) => `
+    <div class="chain-slot" id="slot${i}">
+      <span class="chain-slot-num">${i+1}</span>
+      <span class="chain-slot-text">Waiting for piece ${i+1}…</span>
+    </div>`).join('');
+}
+function clickChain(i){
+  const chip = document.querySelector(`.chain-chip[data-step="${i}"]`);
+  const hintBox = $('chainHint');
+  if (!chip || chip.classList.contains('used')) return;
+  if (i !== chainNext) {
+    chip.classList.remove('shake');
+    void chip.offsetWidth;
+    chip.classList.add('shake');
+    hintBox.className = 'chain-hintbox show';
+    hintBox.innerHTML = `<strong>Not yet.</strong> That piece comes later. Think about piece ${chainNext+1}: ${CHAIN[chainNext].hint}`;
+    setTimeout(() => chip.classList.remove('shake'), 500);
+    return;
+  }
+  chip.classList.add('used');
+  const slot = $('slot' + i);
+  slot.classList.add('filled');
+  slot.querySelector('.chain-slot-text').innerHTML = `<span class="chain-slot-tag">${CHAIN[i].tag}</span>${CHAIN[i].text}`;
+  hintBox.className = 'chain-hintbox';
+  chainNext++;
+  if (chainNext >= CHAIN.length) {
+    const fb = $('feedback1');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Campaign set up &mdash; all 8 steps in order.</strong> Notice the rhythm: <em>objective &rarr; tracking</em> tell the AI what to aim for and give it data, <em>campaign &rarr; audience &rarr; budget &rarr; ad</em> is the campaign &rarr; ad set &rarr; ad hierarchy every platform uses, and <em>review &rarr; launch</em> ship it responsibly. AI tools can auto-build most of the middle; your value is doing it in this order so tracking exists before you spend.`;
+    $('prog1').classList.add('done');
+  }
+}
+function resetChain(){
+  chainNext = 0;
+  $('feedback1').className = 'activity-feedback';
+  $('chainHint').className = 'chain-hintbox';
+  renderChain();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Keyword-Intent Match ─── */
+const KEYWORDS = [
+  {id:'k1', text:'People who added to cart but didn&rsquo;t buy', hint:'They got as far as the cart — the warmest, most ready group there is.', bucket:'buyer', why:'A retargeting / custom audience already deep in your funnel. Highest intent &mdash; show the product and a nudge to finish checkout.'},
+  {id:'k2', text:'Your past buyers (customer list)', hint:'They already bought once — extremely likely to buy again.', bucket:'buyer', why:'A custom audience built from your customer list. They know and trust you, so they convert cheaply on a new offer or repeat purchase.'},
+  {id:'k3', text:'People who watched your video but never visited the site', hint:'They engaged with content but haven&rsquo;t taken a real step yet.', bucket:'research', why:'Video viewers know you a little but haven&rsquo;t bought. A warm audience worth reminding &mdash; converts moderately, not instantly.'},
+  {id:'k4', text:'Instagram followers who haven&rsquo;t purchased', hint:'Some prior contact, but no purchase yet.', bucket:'research', why:'Followers have chosen to hear from you but haven&rsquo;t committed. Warm &mdash; good for reminder ads, weaker on immediate conversion than a hot audience.'},
+  {id:'k5', text:'A broad interest audience (e.g. "interested in fitness")', hint:'Total strangers grouped only by an interest.', bucket:'broad', why:'An interest-based cold audience that has never heard of you. Largest reach, lowest instant conversion &mdash; introduce yourself, don&rsquo;t hard-sell.'},
+  {id:'k6', text:'A 1% lookalike of your buyers', hint:'Similar to your buyers, but they don&rsquo;t know you yet.', bucket:'broad', why:'A lookalike / similar audience is still cold &mdash; they resemble buyers but have never met your brand. Great top-of-funnel prospecting, not a closing audience.'}
+];
+const BUCKET_NAMES = {buyer:'Hot audience', research:'Warm audience', broad:'Cold audience'};
+let placed2 = {};
+function renderKeywords(){
+  const list = $('scenarioList');
+  const shuffled = [...KEYWORDS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(k => `
+    <div class="scenario-card" draggable="true" data-id="${k.id}">
+      <div class="scenario-text">${k.text}</div>
+      <div class="scenario-hint">${k.hint}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDrop2(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleDrop2(id, bucket){
+  const kw = KEYWORDS.find(k => k.id === id);
+  if (!kw || placed2[id]) return;
+  const correct = kw.bucket === bucket;
+  placed2[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + kw.text;
+  pill.title = correct ? kw.why : `Correct bucket: ${BUCKET_NAMES[kw.bucket]}. ${kw.why}`;
+  document.querySelector(`[data-drop="${bucket}"]`).appendChild(pill);
+  checkActivity2Done();
+}
+function checkActivity2Done(){
+  if (Object.keys(placed2).length === KEYWORDS.length) {
+    const right = Object.values(placed2).filter(p => p.correct).length;
+    const fb = $('feedback2');
+    if (right === KEYWORDS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct.</strong> You&rsquo;ve got the temperature ladder: <em>hot</em> audiences (cart, past buyers) convert cheapest but are small, <em>warm</em> audiences (video viewers, followers) need a reminder, and <em>cold</em> audiences (interests, lookalikes) are for introducing yourself. Match the message to the temperature &mdash; and remember AI tools (Advantage+, Performance Max) expand from these seeds once tracking feeds them.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the reasoning. The tell: the closer someone already is to buying from YOU, the hotter they are. Cart abandoners are hot; a video viewer is warm; a lookalike is still cold no matter how well it&rsquo;s built. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetActivity2(){
+  placed2 = {};
+  $('feedback2').className = 'activity-feedback';
+  document.querySelectorAll('.bucket-drop').forEach(d => d.innerHTML = '');
+  renderKeywords();
+  $('prog2').classList.remove('done');
+}
+function showAnswers2(){
+  KEYWORDS.forEach(k => { if (!placed2[k.id]) handleDrop2(k.id, k.bucket); });
+}
+
+/* ─── ACTIVITY 3: Tag Builder ─── */
+const TAGS = [
+  {id:'t1', text:'Install the Pixel', good:true},
+  {id:'t2', text:'Set up Conversions API', good:true},
+  {id:'t3', text:'Define the "Purchase" event', good:true},
+  {id:'t4', text:'Track "Add to Cart" events', good:true},
+  {id:'t5', text:'Pick the campaign objective', good:true},
+  {id:'t6', text:'Build a retargeting audience', good:true},
+  {id:'t7', text:'Create a 1% lookalike audience', good:true},
+  {id:'t8', text:'Save an interest-based cold audience', good:true},
+  {id:'t9', text:'Set a daily budget', good:true},
+  {id:'t10', text:'Turn on Advantage campaign budget (CBO)', good:true},
+  {id:'t11', text:'Collect a customer email list', good:true},
+  {id:'t12', text:'Add a cookie consent banner', good:true},
+  {id:'t13', text:'Verify your domain', good:true},
+  {id:'t14', text:'go viral', good:false},
+  {id:'t15', text:'synergy', good:false},
+  {id:'t16', text:'growth hacking', good:false},
+  {id:'t17', text:'engagement', good:false},
+  {id:'t18', text:'the algorithm', good:false}
+];
+let usedTags = [];
+function renderTags(){
+  usedTags = [];
+  $('tagPool').innerHTML = TAGS.map(t =>
+    `<button class="tag-chip" id="tag-${t.id}" onclick="pickTag('${t.id}')">${t.text}</button>`
+  ).join('');
+  $('tagSlots').innerHTML = '<span class="placeholder">Your chosen setup pieces will appear here…</span>';
+  $('tagCount').textContent = '0';
+  $('feedback3').className = 'activity-feedback';
+}
+function pickTag(id){
+  const t = TAGS.find(x => x.id === id);
+  const chip = $('tag-' + id);
+  if (!t || chip.hasAttribute('disabled')) return;
+  if (!t.good) {
+    chip.classList.add('picked-bad');
+    chip.setAttribute('disabled','');
+    const fb = $('feedback3');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>"${t.text}" is a buzzword, not a setup piece.</strong> You can&rsquo;t click a button labeled "${t.text}" in Ads Manager. A real foundation is made of concrete, checkable things &mdash; a Pixel installed, an event firing, an audience saved, a budget set. Spend every slot on something you could actually do this week.`;
+    return;
+  }
+  if (usedTags.includes(id)) return;
+  if (usedTags.length >= 13) return;
+  usedTags.push(id);
+  chip.classList.add('picked-good');
+  chip.setAttribute('disabled','');
+  const slots = $('tagSlots');
+  const ph = slots.querySelector('.placeholder');
+  if (ph) ph.remove();
+  const pill = document.createElement('span');
+  pill.className = 'tag-slot-pill';
+  pill.id = 'slotpill-' + id;
+  pill.innerHTML = `${t.text}<button onclick="removeTag('${id}')" title="remove">&times;</button>`;
+  slots.appendChild(pill);
+  $('tagCount').textContent = usedTags.length;
+  if (usedTags.length === 13) finishTags();
+}
+function removeTag(id){
+  usedTags = usedTags.filter(x => x !== id);
+  const chip = $('tag-' + id);
+  chip.classList.remove('picked-good');
+  chip.removeAttribute('disabled');
+  const pill = $('slotpill-' + id);
+  if (pill) pill.remove();
+  $('tagCount').textContent = usedTags.length;
+  const slots = $('tagSlots');
+  if (usedTags.length === 0 && !slots.querySelector('.placeholder')) {
+    slots.innerHTML = '<span class="placeholder">Your chosen setup pieces will appear here…</span>';
+  }
+  const fb = $('feedback3');
+  if (fb.classList.contains('success')) fb.className = 'activity-feedback';
+}
+function finishTags(){
+  const fb = $('feedback3');
+  fb.className = 'activity-feedback show success';
+  fb.innerHTML = `<strong>All 13 slots filled with real setup pieces.</strong> Together they&rsquo;re a working foundation: <em>tracking</em> (Pixel, Conversions API, purchase &amp; add-to-cart events) is the fuel; <em>audiences</em> (retargeting, lookalike, interest, email list) are the seeds; <em>budget &amp; objective</em> steer the spend; and <em>consent + domain verification</em> keep it compliant. AI targeting (Advantage+, Performance Max) only performs once these exist &mdash; buzzwords like "go viral" build nothing.`;
+  $('prog3').classList.add('done');
+}
+function resetTags(){
+  document.querySelectorAll('.tag-chip').forEach(c => { c.classList.remove('picked-good','picked-bad'); c.removeAttribute('disabled'); });
+  renderTags();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: SEO Quiz ─── */
+const QUIZ = [
+  {
+    q:'You&rsquo;re about to launch your first sales campaign, but the Pixel isn&rsquo;t installed and no events are tracked. What&rsquo;s the right move?',
+    opts:[
+      {t:'Launch now &mdash; you can always add tracking later', ok:false, ex:'Launching without tracking means the AI has no idea who actually bought, so it can&rsquo;t optimize toward buyers. You&rsquo;d spend money teaching it nothing. Tracking is the fuel &mdash; set it up first.'},
+      {t:'Install tracking and confirm the "Purchase" event fires before spending a rupee', ok:true, ex:'Right. Conversion tracking (Pixel / Conversions API and real events) is what the AI learns from. With no data it optimizes blind. Get the "Purchase" event confirmed first, then launch.'},
+      {t:'Skip tracking entirely &mdash; modern AI doesn&rsquo;t need it', ok:false, ex:'The opposite is true. AI targeting like Advantage+ and Performance Max is MORE dependent on clean event data, not less. Without tracked conversions it has nothing to optimize toward.'}
+    ]
+  },
+  {
+    q:'For your very first campaign as a beginner, how should you structure it?',
+    opts:[
+      {t:'Twenty ad sets, each with a tiny budget, to "test everything at once"', ok:false, ex:'Splitting a small budget across twenty ad sets means none of them gets enough conversions for the AI to learn from. Over-complicating structure early is a classic beginner mistake.'},
+      {t:'Keep it simple: one campaign, one or two ad sets, a couple of ads', ok:true, ex:'Correct. A small, clean structure lets the AI gather enough data per ad set to actually learn. As a beginner, resist the urge to over-build &mdash; simple and well-tracked beats sprawling.'},
+      {t:'One campaign with fifty different audiences stacked in a single ad set', ok:false, ex:'Cramming fifty audiences into one ad set gives you no idea what&rsquo;s working and muddies the AI&rsquo;s learning. Start narrow and clear, then expand once you see results.'}
+    ]
+  },
+  {
+    q:'You want the platform&rsquo;s AI to share your budget across ad sets automatically. Which setting does that?',
+    opts:[
+      {t:'A fixed lifetime budget locked to one ad set only', ok:false, ex:'A single locked budget doesn&rsquo;t let the AI move money toward the best performer. That&rsquo;s the opposite of letting the campaign-level AI allocate spend.'},
+      {t:'Advantage campaign budget (CBO) &mdash; set the budget at the campaign level and let AI distribute it', ok:true, ex:'Right. Campaign Budget Optimization (Meta&rsquo;s Advantage campaign budget) sets one budget at the campaign level and lets the AI push it toward whichever ad set converts best.'},
+      {t:'There&rsquo;s no such feature &mdash; you must move budget by hand every day', ok:false, ex:'Manual daily juggling is exactly what campaign-level budget optimization removes. The whole point is to let the AI reallocate spend for you in real time.'}
+    ]
+  },
+  {
+    q:'A friend says "just target everyone &mdash; the more people, the more sales." Your first campaign has a small budget. Best call?',
+    opts:[
+      {t:'Target the broadest possible audience so you reach the most people', ok:false, ex:'On a small budget, a huge cold audience spreads your spend so thin the AI never learns and few people convert. Broad-everything is not free reach &mdash; it&rsquo;s diluted data.'},
+      {t:'Start with a warm or hot audience (or a focused lookalike) so limited budget converts efficiently', ok:true, ex:'Correct. Warm and hot audiences convert cheaper, so a small budget goes further and the AI gets conversion signal faster. Broaden to cold prospecting once you have data and room.'},
+      {t:'Target only one single person you know will buy', ok:false, ex:'Audiences that are too tiny can&rsquo;t deliver or learn either. The sweet spot is a focused but deliverable audience &mdash; warm engagers, a customer-list retarget, or a lookalike &mdash; not one individual.'}
+    ]
+  },
+  {
+    q:'Since iOS privacy changes and consent rules, some conversions go unreported. As an honest beginner, you should:',
+    opts:[
+      {t:'Ignore privacy and consent entirely &mdash; it&rsquo;s not your problem', ok:false, ex:'Consent and privacy rules are legally required and shape what you can even track. Ignoring them risks your account and breaks the trust your data depends on.'},
+      {t:'Respect consent, use the Conversions API to recover what you can, and accept tracking is imperfect', ok:true, ex:'Right. Honest setup means adding a consent banner, using server-side tracking (Conversions API) to recover some lost signal, and not pretending your numbers are perfect. Directional data, ethically collected, still guides the AI well.'},
+      {t:'Assume your reported numbers are 100% complete and accurate', ok:false, ex:'They&rsquo;re not &mdash; privacy limits and opt-outs mean some conversions are always missing. Treating the dashboard as flawless truth leads to bad decisions. Read it as directional.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 &mdash; your first campaign will spend smart.</strong> The whole system in one line: <em>set up tracking first (the fuel), keep structure simple, let campaign-level AI allocate budget, start with warmer audiences, and stay honest about privacy&rsquo;s limits.</em> AI targeting (Advantage+, Performance Max) does the heavy lifting &mdash; these judgment calls are what make it work.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations &mdash; the wrong options are the classic mistakes: launching with no tracking, over-complicating structure, hand-juggling budget, targeting broad-everything on a tiny budget, and pretending the data is perfect. The thread: feed the AI clean data, keep it simple, and respect privacy. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderChain();
+  renderKeywords();
+  setupBuckets();
+  renderTags();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

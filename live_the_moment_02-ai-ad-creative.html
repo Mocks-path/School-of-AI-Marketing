@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · AI Ad Creative &amp; Copy — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: PROMPT BUILDER ── */
+.prompt-pool{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.frag-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .9rem;font-size:.8rem;line-height:1.45;cursor:pointer;transition:all .2s;max-width:340px;user-select:none;font-weight:500}
+.frag-chip:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.frag-chip.used{opacity:0;pointer-events:none;position:absolute;visibility:hidden}
+.frag-chip.shake{animation:shake .35s ease;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.prompt-slots{margin-top:1.4rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:90px;background:rgba(255,255,255,0.5)}
+.slot-line{display:flex;align-items:flex-start;gap:.6rem;padding:.45rem .2rem;font-size:.83rem;line-height:1.5;animation:fadeIn .35s ease}
+.slot-tag{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.05em;color:#fff;background:var(--navy);padding:.18rem .5rem;border-radius:4px;flex-shrink:0;margin-top:.1rem;text-transform:uppercase}
+.slot-line.t-subject .slot-tag{background:#5B8FE0}
+.slot-line.t-style .slot-tag{background:var(--orange)}
+.slot-line.t-detail .slot-tag{background:#66BB6A}
+.slot-line.t-technical .slot-tag{background:#8E6BC0}
+.prompt-hint{margin-top:.8rem;padding:.7rem .9rem;background:var(--red-light);border-left:3px solid var(--red);border-radius:4px;font-size:.78rem;color:#7A2A1E;line-height:1.55;display:none}
+.prompt-hint.show{display:block;animation:fadeIn .3s ease}
+.prompt-preview{margin-top:1.2rem;background:#1A1B2E;border-radius:var(--radius-sm);padding:1.2rem 1.4rem;font-family:var(--mono);font-size:.78rem;line-height:1.75;color:#E8E8EC;display:none;border:1px solid var(--navy)}
+.prompt-preview.show{display:block;animation:fadeIn .4s ease}
+.prompt-preview .pp-label{color:var(--orange-light);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.6rem}
+.structure-bar{display:flex;gap:.4rem;margin-top:1rem;flex-wrap:wrap}
+.structure-step{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.3rem .7rem;border-radius:50px;color:#fff}
+.structure-step:nth-child(1){background:#5B8FE0}.structure-step:nth-child(3){background:var(--orange)}
+.structure-step:nth-child(5){background:#66BB6A}.structure-step:nth-child(7){background:#8E6BC0}
+.structure-arrow{color:var(--text-muted);font-weight:700;align-self:center;font-size:.75rem}
+
+/* ── ACTIVITY 2: PRINT-READINESS SORTER ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── COMPARE / CRITIQUE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,#E04E3C,#C43A29)}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card li::before{content:'✗';color:var(--red);font-weight:700;flex-shrink:0}
+.compare-card.warn li::before{content:'⚠';color:var(--orange)}
+.compare-card.good li::before{content:'✓';color:var(--green)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 4: IP QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 2 · AI Ads</div>
+  <h1>AI Ad Creative &amp; Copy — <em>creative is the new targeting</em></h1>
+  <p class="hero-sub">Four hands-on activities. Build a scroll-stopping ad block by block, sort creatives by whether they&rsquo;re brand-safe or breaking ad policy, then make the honest judgment calls that keep your account approved. AI can generate a hundred ads an hour &mdash; your job is to steer it toward creatives people click and away from policy strikes and false claims.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: BUILD-A-PROMPT ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Build the scroll-stopping ad — one part at a time</h2>
+    <p class="lesson-intro">&ldquo;Make a nice ad for my product&rdquo; gets you the same generic scroll-past everyone else gets. A high-performing ad follows an anatomy: <strong>HOOK &rarr; ANGLE &rarr; VISUAL &rarr; COPY &amp; CTA</strong>. The eight parts of a professional ad are scrambled below &mdash; click them in the order they should appear. A wrong click tells you why it doesn&rsquo;t fit yet.</p>
+
+    <div class="structure-bar">
+      <span class="structure-step">1 &middot; Hook</span><span class="structure-arrow">&rarr;</span>
+      <span class="structure-step">2 &middot; Angle</span><span class="structure-arrow">&rarr;</span>
+      <span class="structure-step">3 &middot; Visual</span><span class="structure-arrow">&rarr;</span>
+      <span class="structure-step">4 &middot; Copy &amp; CTA</span>
+    </div>
+
+    <div class="lesson-card">
+      <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy)">Click the next part of the ad</h4>
+      <div class="prompt-pool" id="fragPool"></div>
+      <div class="prompt-hint" id="promptHint"></div>
+      <div class="prompt-slots" id="promptSlots">
+        <div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="slotPlaceholder">Your assembled ad will build up here, part by part…</div>
+      </div>
+      <div class="prompt-preview" id="promptPreview"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">&#8635; Start over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: PRINT-READINESS SORTER ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Brand-safe or breaking policy? — sort the AI creatives</h2>
+    <p class="lesson-intro">A creative that looks great in your feed can get your whole ad account paused. Ad platforms need <strong>honest claims</strong>, <strong>authentic imagery</strong>, and <strong>clear disclosure</strong> when content is AI-made or a testimonial. Study the three verdicts, then drag each real creative into the right bucket. Wrong answers carry a hover hint with the fix.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card good">
+        <div class="compare-icon">OK</div>
+        <h4>Brand-safe</h4>
+        <p>Ready to run as-is. It clears <strong>every</strong> ad-policy bar a platform checks.</p>
+        <ul>
+          <li>Honest, provable claims only</li>
+          <li>Authentic, on-brand imagery</li>
+          <li>Testimonials disclosed and real</li>
+          <li>On-brand voice, no misleading urgency</li>
+        </ul>
+      </div>
+      <div class="compare-card warn">
+        <div class="compare-icon">FIX</div>
+        <h4>Needs a fix</h4>
+        <p>Good idea, one <strong>solvable</strong> flaw. A quick edit &mdash; soften the claim, add a disclosure, swap the visual &mdash; and it&rsquo;s ready.</p>
+        <ul>
+          <li>Overstated claim &mdash; add &ldquo;results vary&rdquo;</li>
+          <li>AI UGC with no disclosure &mdash; label it</li>
+          <li>Generic AI visual &mdash; make it on-brand</li>
+        </ul>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">NO</div>
+        <h4>Reject</h4>
+        <p>Not worth running. A fatal flaw makes it <strong>a policy strike or a lie</strong> no matter what you tweak.</p>
+        <ul>
+          <li>Flat-out false / unprovable claim</li>
+          <li>Fake before/after or invented review</li>
+          <li>Impersonates a real person or brand</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-note">&#128161; <strong>The feed-vs-policy gap:</strong> AI will happily write &ldquo;cures anxiety in 3 days&rdquo; &mdash; great hook, instant account ban. Always check <em>claim honesty</em>, <em>authenticity</em>, and <em>disclosure</em> before you launch. A &ldquo;needs a fix&rdquo; creative is often your best performer once softened and labeled; a true reject just risks your whole account.</div>
+
+    <div class="lesson-card" style="margin-top:1.5rem">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="scenarioList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="ready">
+            <div class="bucket-title">Brand-safe</div>
+            <div class="bucket-sub">Run as-is</div>
+            <div class="bucket-drop" data-drop="ready"></div>
+          </div>
+          <div class="bucket" data-bucket="fix">
+            <div class="bucket-title">Needs a fix</div>
+            <div class="bucket-sub">One quick edit away</div>
+            <div class="bucket-drop" data-drop="fix"></div>
+          </div>
+          <div class="bucket" data-bucket="reject">
+            <div class="bucket-title">Reject</div>
+            <div class="bucket-sub">Fatal flaw &mdash; start over</div>
+            <div class="bucket-drop" data-drop="reject"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity2()">&#8635; Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers2()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: PROMPT CRITIQUE ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Critique the ad copy — spot what's missing</h2>
+    <p class="lesson-intro">Here&rsquo;s a real beginner ad prompt. It&rsquo;s not <em>wrong</em>, it&rsquo;s just <em>vague</em> &mdash; and vague prompts produce generic, forgettable copy. Tick every improvement that would genuinely make it a stronger, on-policy ad (think PAS / AIDA). Then get the verdict and see which fixes matter most.</p>
+
+    <div class="lesson-card">
+      <div class="prompt-preview show" style="margin-top:0">
+        <span class="pp-label">The ad prompt under review</span>
+        &ldquo;write an ad for my meditation app, make it sound really good and exciting&rdquo;
+      </div>
+      <div style="margin-top:1.2rem">
+        <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Which of these would genuinely improve it? Tick all that apply.</h4>
+        <div id="critiqueList"></div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkCritique()">Get verdict</button>
+        <button class="btn btn-ghost" onclick="resetCritique()">&#8635; Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: IP-SAFETY QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Approved or rejected? — the ad-policy judgment quiz</h2>
+    <p class="lesson-intro">This is the activity that keeps your ad account running. AI will happily write &ldquo;guaranteed to double your income&rdquo; or fake a five-star review &mdash; and running it can get your account paused or worse. Five real creative decisions, one honest answer each. The wrong options are exactly the traps that get beginners&rsquo; ads disapproved.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">&#8635; Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect &mdash; make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Rewrite &ldquo;an ad for my meditation app&rdquo; using HOOK &rarr; ANGLE &rarr; VISUAL &rarr; COPY &amp; CTA. What would you change first to make it stop the scroll?</div>
+        <textarea placeholder="Hook: 'Still wired at 1am?' Angle: sleep, not productivity. Visual: dark bedroom, phone glow. Copy (PAS): agitate the 3am scroll, then the calm. CTA: 'Try 7 nights free'..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">In one line, what&rsquo;s your personal rule for staying on the honest, on-policy side when using AI to write ad copy?</div>
+        <textarea placeholder="If a claim isn't provable, an image isn't authentic, or a testimonial isn't real and disclosed, I don't run it — even if AI wrote it for me..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 3 &middot; AI Targeting Setup</h3>
+      <p>You can build a scroll-stopping, brand-safe creative. Next: put it in front of the right people &mdash; how AI-driven targeting, broad audiences, and the platform&rsquo;s own algorithm decide who sees your ad, and how to set it up without wasting spend.</p>
+      <a href="03-ai-targeting-setup.html" class="btn btn-primary">Continue to Lesson 3 &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Build-a-Design-Prompt ─── */
+const FRAGMENTS = [
+  {order:1, tag:'subject',   text:'HOOK: &ldquo;Still scrolling at 1am and wide awake?&rdquo; &mdash; the first line that stops the thumb.'},
+  {order:2, tag:'subject',   text:'It calls out the exact moment and feeling before anyone sees the product.'},
+  {order:3, tag:'style',     text:'ANGLE: sell better sleep, not &ldquo;a meditation app&rdquo; &mdash; the specific reason this person should care.'},
+  {order:4, tag:'style',     text:'One clear promise (fall asleep faster), aimed at burned-out late-night scrollers.'},
+  {order:5, tag:'detail',    text:'VISUAL: a dark bedroom lit only by phone glow, calm face, thumb-stopping in the first frame.'},
+  {order:6, tag:'detail',    text:'On-brand colors and a real-feeling person, not a generic AI stock look.'},
+  {order:7, tag:'technical', text:'COPY (PAS): agitate the 3am scroll, then the calm relief &mdash; honest, no &ldquo;guaranteed cure&rdquo; claims,'},
+  {order:8, tag:'technical', text:'ending on one clear CTA: &ldquo;Try 7 nights free.&rdquo;'}
+];
+const STAGE_HINTS = {
+  subject:'Start with the HOOK &mdash; the first line or frame that stops the scroll before anyone sees the product.',
+  style:'ANGLE comes after the hook: the specific reason this buyer should care (the benefit, not the feature).',
+  detail:'VISUAL comes after the angle &mdash; the on-brand image or video that carries the message in the feed.',
+  technical:'COPY &amp; CTA come last &mdash; the persuasion (PAS/AIDA), honest claims, and one clear call to action.'
+};
+let promptStep = 0, promptMistakes = 0;
+function renderFragments(){
+  const shuffled = [...FRAGMENTS].sort(()=>Math.random()-0.5);
+  $('fragPool').innerHTML = shuffled.map(f =>
+    `<div class="frag-chip" data-order="${f.order}" onclick="pickFragment(${f.order}, this)">${f.text}</div>`
+  ).join('');
+}
+function pickFragment(order, chip){
+  const hint = $('promptHint');
+  if (order !== promptStep + 1) {
+    promptMistakes++;
+    chip.classList.remove('shake'); void chip.offsetWidth;
+    chip.classList.add('shake');
+    const expected = FRAGMENTS.find(f => f.order === promptStep + 1);
+    hint.innerHTML = `<strong>Not yet.</strong> ${STAGE_HINTS[expected.tag]} (Block ${promptStep + 1} of 8 &mdash; you&rsquo;re building the <strong>${expected.tag.toUpperCase()}</strong> section.)`;
+    hint.classList.add('show');
+    return;
+  }
+  hint.classList.remove('show');
+  promptStep++;
+  chip.classList.add('used');
+  const frag = FRAGMENTS.find(f => f.order === order);
+  const ph = $('slotPlaceholder');
+  if (ph) ph.remove();
+  const line = document.createElement('div');
+  line.className = 'slot-line t-' + frag.tag;
+  line.innerHTML = `<span class="slot-tag">${frag.tag}</span><span>${frag.text}</span>`;
+  $('promptSlots').appendChild(line);
+  if (promptStep === FRAGMENTS.length) finishPrompt();
+}
+function finishPrompt(){
+  const preview = $('promptPreview');
+  preview.innerHTML = `<span class="pp-label">Your assembled ad &mdash; reuse this skeleton for any creative</span>` +
+    FRAGMENTS.map(f => f.text).join(' ');
+  preview.classList.add('show');
+  const fb = $('feedback1');
+  const whys = `<ul style="margin:.6rem 0 0 1.1rem;line-height:1.7">
+    <li><strong>Hook</strong> earns the first second &mdash; a specific &ldquo;1am and awake&rdquo; beats &ldquo;a great app&rdquo;.</li>
+    <li><strong>Angle</strong> gives one clear reason to care (sleep) so it isn&rsquo;t generic AI filler.</li>
+    <li><strong>Visual</strong> carries the message in the feed and names who it&rsquo;s for.</li>
+    <li><strong>Copy &amp; CTA</strong> persuade honestly (PAS/AIDA) and ask for one clear action.</li>
+    <li>Skip the hook and the best copy never gets read &mdash; the scroll wins.</li></ul>`;
+  if (promptMistakes === 0) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect assembly &mdash; zero wrong clicks.</strong> You&rsquo;ve internalized the HOOK &rarr; ANGLE &rarr; VISUAL &rarr; COPY &amp; CTA skeleton. Why each part earns its place:${whys}`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Assembled &mdash; with ${promptMistakes} wrong click${promptMistakes > 1 ? 's' : ''} along the way.</strong> That&rsquo;s fine: the order <em>is</em> the lesson &mdash; hook before angle, the call to action last. Why each part matters:${whys} Hit <em>Start over</em> for a clean run.`;
+  }
+  $('prog1').classList.add('done');
+}
+function resetActivity1(){
+  promptStep = 0; promptMistakes = 0;
+  $('promptHint').classList.remove('show');
+  $('promptPreview').className = 'prompt-preview';
+  $('feedback1').className = 'activity-feedback';
+  $('promptSlots').innerHTML = '<div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="slotPlaceholder">Your assembled ad will build up here, part by part…</div>';
+  renderFragments();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Print-readiness Sorter ─── */
+const DESIGNS = [
+  {id:'d1', text:'A clean product video with the honest line &ldquo;most users fall asleep faster within a week&rdquo; and a &ldquo;7 nights free&rdquo; CTA.', hint:'Honest, on-brand, provable — nothing to fix.', bucket:'ready', why:'Ticks every policy box: an honest, hedged claim, authentic imagery, and a clear CTA. Run it as-is.'},
+  {id:'d2', text:'A strong creative that claims &ldquo;fall asleep in 5 minutes&rdquo; with no &ldquo;results vary&rdquo; and no source.', hint:'Great hook, overstated claim — soften and qualify it.', bucket:'fix', why:'The concept is strong; the claim is too absolute. Add &ldquo;results vary&rdquo; (or cite real data) and it&rsquo;s on-policy.'},
+  {id:'d3', text:'An AI-generated &ldquo;customer&rdquo; talking to camera about the app, with no label that it&rsquo;s AI-made.', hint:'AI UGC with no disclosure — label it as AI.', bucket:'fix', why:'A quick disclosure fixes it. Undisclosed AI &ldquo;testimonials&rdquo; can mislead and breach platform authenticity rules.'},
+  {id:'d4', text:'A creative promising it &ldquo;cures anxiety and depression in 3 days, guaranteed&rdquo;.', hint:'A false, unprovable health claim — no edit saves it.', bucket:'reject', why:'A flat-out false, unprovable health claim is an instant reject. You can&rsquo;t &ldquo;soften&rdquo; a lie into policy &mdash; drop the claim entirely.'},
+  {id:'d5', text:'A fabricated before/after and an invented 5-star review from a &ldquo;customer&rdquo; who never existed.', hint:'The testimonial and results are fake — invented, not real.', bucket:'reject', why:'Fake reviews and invented before/afters are deceptive and against ad policy everywhere. Use real, disclosed testimonials instead.'},
+  {id:'d6', text:'A generic AI stock visual that looks like every other app ad and never shows the actual brand.', hint:'Bland sameness: on-brand it — swap in real product/brand cues.', bucket:'fix', why:'A sameness problem, not a policy one. Add real product shots and brand colors and the same idea stands out in the feed.'}
+];
+const BUCKET_NAMES = {ready:'Brand-safe', fix:'Needs a fix', reject:'Reject'};
+let placed2 = {};
+function renderDesigns(){
+  const list = $('scenarioList');
+  const shuffled = [...DESIGNS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(d => `
+    <div class="scenario-card" draggable="true" data-id="${d.id}">
+      <div class="scenario-text">${d.text}</div>
+      <div class="scenario-hint">${d.hint}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDrop2(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleDrop2(id, bucket){
+  const design = DESIGNS.find(d => d.id === id);
+  if (!design || placed2[id]) return;
+  const correct = design.bucket === bucket;
+  placed2[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + design.text.substring(0, 34) + (design.text.length > 34 ? '…' : '');
+  pill.title = correct ? design.why : `Correct bucket: ${BUCKET_NAMES[design.bucket]}. ${design.why}`;
+  document.querySelector(`[data-drop="${bucket}"]`).appendChild(pill);
+  checkActivity2Done();
+}
+function checkActivity2Done(){
+  if (Object.keys(placed2).length === DESIGNS.length) {
+    const right = Object.values(placed2).filter(p => p.correct).length;
+    const fb = $('feedback2');
+    if (right === DESIGNS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct.</strong> You now triage creatives like a pro: <em>brand-safe</em> runs now, <em>needs a fix</em> is a two-minute edit (soften the claim, add a disclosure, make it on-brand), and <em>reject</em> means the flaw is deception itself (a false claim, a fake review). Most beginners get accounts paused running unprovable claims or fake testimonials &mdash; you won&rsquo;t.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the fix. The key line: a problem you can <em>edit</em> (overstated claim, missing disclosure, generic visual) is "needs a fix"; a problem that <em>is</em> the deception (false health claim, invented review) is a "reject". Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetActivity2(){
+  placed2 = {};
+  $('feedback2').className = 'activity-feedback';
+  document.querySelectorAll('.bucket-drop').forEach(d => d.innerHTML = '');
+  renderDesigns();
+  $('prog2').classList.remove('done');
+}
+function showAnswers2(){
+  DESIGNS.forEach(d => { if (!placed2[d.id]) handleDrop2(d.id, d.bucket); });
+}
+
+/* ─── ACTIVITY 3: Prompt Critique ─── */
+const CRITIQUE = [
+  {key:'subject', good:true,  label:'Give it a specific hook and audience (e.g. "open with ‘Still awake at 1am?’ for late-night scrollers") instead of "make it exciting".'},
+  {key:'style',   good:true,  label:'Pick one clear angle and benefit (e.g. "sell better sleep, not features") so the ad has a reason to care.'},
+  {key:'audience',good:true,  label:'Ask for a proven copy framework (e.g. "use PAS: problem, agitate, solution") so the persuasion is structured.'},
+  {key:'tech',    good:true,  label:'Add guardrails: honest, provable claims only, one clear CTA, and a disclosure if it uses a testimonial.'},
+  {key:'longer',  good:false, label:'Just make the copy much longer by piling on hype adjectives like "amazing, incredible, life-changing, epic".'},
+  {key:'brand',   good:false, label:'Tell the AI to add a big claim like "guaranteed to cure your stress in 3 days" so it sounds powerful.'}
+];
+function renderCritique(){
+  $('critiqueList').innerHTML = CRITIQUE.map(c => `
+    <label class="quiz-opt" style="display:flex;align-items:flex-start;gap:.6rem;cursor:pointer" id="crow-${c.key}">
+      <input type="checkbox" data-key="${c.key}" style="margin-top:.15rem;accent-color:var(--orange);width:16px;height:16px;flex-shrink:0">
+      <span>${c.label}</span>
+    </label>`).join('');
+}
+function checkCritique(){
+  let right = 0;
+  CRITIQUE.forEach(c => {
+    const box = document.querySelector(`input[data-key="${c.key}"]`);
+    const row = $('crow-' + c.key);
+    row.classList.remove('right','wrong');
+    const shouldTick = c.good;
+    if (box.checked === shouldTick) { right++; row.classList.add(c.good ? 'right' : 'right'); }
+    else { row.classList.add('wrong'); }
+  });
+  const fb = $('feedback3');
+  if (right === CRITIQUE.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>6/6 &mdash; you know what actually improves an ad prompt.</strong> The four green fixes map straight onto HOOK &rarr; ANGLE &rarr; COPY FRAMEWORK &rarr; POLICY GUARDRAILS. The two traps: piling on hype adjectives ("incredible, life-changing") adds nothing the reader believes, and bolting on a "guaranteed to cure" claim is a fast track to a disapproval &mdash; which is exactly what Activity 4 is about.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>${right}/6 rows matched.</strong> Green rows are real improvements (specific hook + audience, a clear angle, a copy framework like PAS, honest-claim guardrails). The two you shouldn&rsquo;t tick: "just add more hype adjectives" (fluff, not persuasion) and "add a guaranteed-cure claim" (that&rsquo;s a policy strike waiting to happen). Fix your ticks and hit <em>Get verdict</em> again.`;
+  }
+  $('prog3').classList.add('done');
+}
+function resetCritique(){
+  document.querySelectorAll('#critiqueList input').forEach(b => b.checked = false);
+  document.querySelectorAll('#critiqueList .quiz-opt').forEach(r => r.classList.remove('right','wrong'));
+  $('feedback3').className = 'activity-feedback';
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: IP-Safety Quiz ─── */
+const QUIZ = [
+  {
+    q:'AI writes you a killer ad line: &ldquo;guaranteed to double your income in 30 days&rdquo;. Running it is:',
+    opts:[
+      {t:'Fine — the AI wrote it, so it&rsquo;s just persuasive marketing', ok:false, ex:'Who wrote it doesn&rsquo;t matter. An unprovable, guaranteed financial claim is a deceptive claim under ad policy no matter who typed it. Expect disapproval, and repeat offences get the account paused.'},
+      {t:'Against policy — it&rsquo;s an unprovable, guaranteed claim, so I can&rsquo;t run it regardless of who wrote it', ok:true, ex:'Correct. Platforms ban guaranteed income/results claims because they mislead. AI writing it changes nothing &mdash; swap in an honest, hedged line (&ldquo;many users grow their income&rdquo;) that you can actually back up.'},
+      {t:'Fine as long as I add a tiny asterisk somewhere', ok:false, ex:'A tiny asterisk doesn&rsquo;t rescue a fundamentally false promise. &ldquo;I added fine print&rdquo; is one of the most common ways beginners get disapproved. Fix the claim itself, don&rsquo;t hide it.'}
+    ]
+  },
+  {
+    q:'You want to advertise your product using a hugely trending topic. The safest approach is:',
+    opts:[
+      {t:'Impersonate a famous brand or celebrity endorsing you — it&rsquo;ll grab attention fast', ok:false, ex:'Faking an endorsement or impersonating a real brand/person is deceptive and often illegal. It might grab attention for a day &mdash; right before the disapproval, the strike, and possibly a legal complaint.'},
+      {t:'Tap the theme, not the identity — your own original hook and creative riffing on the trend', ok:true, ex:'Right. You can ride the <em>vibe</em> of a trend with entirely original copy and visuals. The theme isn&rsquo;t protected; a specific person&rsquo;s likeness or a brand&rsquo;s identity is. On-trend but original is the sweet spot.'},
+      {t:'Use the celebrity&rsquo;s face but add &ldquo;not affiliated&rdquo; in tiny text to stay legal', ok:false, ex:'A &ldquo;not affiliated&rdquo; label doesn&rsquo;t grant permission to use someone&rsquo;s likeness to sell. It&rsquo;s still deceptive &mdash; the disclaimer just proves you knew.'}
+    ]
+  },
+  {
+    q:'Your AI creative shows a dramatic before/after that never actually happened. That is:',
+    opts:[
+      {t:'Fine — it&rsquo;s just an illustration of what could happen', ok:false, ex:'A fabricated before/after presented as real is a deceptive claim. &ldquo;It&rsquo;s just illustrative&rdquo; is exactly the assumption that gets health, beauty, and finance ads pulled and accounts flagged.'},
+      {t:'Risky &mdash; fake results are deceptive, so running them without real proof can trigger a strike', ok:true, ex:'Correct. Invented results mislead buyers and breach ad policy. Use a real, documented before/after (with disclosure), or show the product honestly instead of faking an outcome.'},
+      {t:'Fine if the results are &ldquo;typical&rdquo;, since most products work eventually', ok:false, ex:'There&rsquo;s no safe &ldquo;it&rsquo;s probably typical&rdquo; rule for invented results. If the before/after didn&rsquo;t actually happen, showing it is deceptive. When in doubt, show only what&rsquo;s real.'}
+    ]
+  },
+  {
+    q:'You generate an ad with an honest hook, your real product, and a clear &ldquo;shop now&rdquo; CTA &mdash; no fake claims or people. Running it is:',
+    opts:[
+      {t:'Risky — any AI-made ad could accidentally break policy', ok:false, ex:'An honest ad with real claims, your own product, and no fake people isn&rsquo;t a policy problem. Being needlessly scared of your own compliant creative is the opposite problem &mdash; this is exactly the safe zone you want to work in.'},
+      {t:'Safe — honest claims, authentic product, clear CTA, no deception or impersonation', ok:true, ex:'Right. Honest, provable claims on your real product are the heart of a healthy ad account. AI just helped you make it faster &mdash; you&rsquo;re free and clear.'},
+      {t:'Only safe if I first get every line approved by a lawyer', ok:false, ex:'You don&rsquo;t need legal sign-off on every honest ad. Straightforward, provable claims about your own product are the normal, low-risk case &mdash; save the caution for health, finance, and testimonial claims.'}
+    ]
+  },
+  {
+    q:'You use AI to generate a &ldquo;real customer&rdquo; UGC-style video testimonial for the ad. The concern is:',
+    opts:[
+      {t:'No concern — it&rsquo;s just marketing, testimonials are always allowed', ok:false, ex:'AI-generated content is allowed, but presenting a fake person as a <em>real customer</em> without disclosure is deceptive &mdash; and platforms increasingly require you to label synthetic or AI-generated people in ads.'},
+      {t:'Passing off an AI person as a real customer is the real risk &mdash; disclose it or use a genuine review', ok:true, ex:'Correct. You can use AI-made creative, but don&rsquo;t imply an invented person is a genuine happy customer. Disclose that it&rsquo;s AI, or use a real, permissioned testimonial &mdash; authenticity is the line.'},
+      {t:'It&rsquo;s totally fine as long as the script sounds believable', ok:false, ex:'Making a fake testimonial <em>more</em> believable makes it more deceptive, not less. Believability isn&rsquo;t permission &mdash; the issue is that the customer isn&rsquo;t real and it isn&rsquo;t disclosed.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 &mdash; your ad account is going to stay approved.</strong> The one rule under all five: <em>who or what created the ad doesn&rsquo;t matter &mdash; what matters is whether the claim is honest, the imagery authentic, and any testimonial real and disclosed.</em> Work from honest, original creative and you get all of AI&rsquo;s speed with none of the disapproval risk.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations &mdash; every wrong option is a real reason ads get disapproved ("the AI wrote it, so it&rsquo;s fine", "I added tiny fine print", "I added a not-affiliated label"). None of those make a false or deceptive claim okay. The safe habit: if a claim isn&rsquo;t provable, an image isn&rsquo;t authentic, or a testimonial isn&rsquo;t real and disclosed, don&rsquo;t run it &mdash; make something honest in the same spirit instead. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderFragments();
+  renderDesigns();
+  setupBuckets();
+  renderCritique();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

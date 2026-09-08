@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 · Paid Ads in the AI Era — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: CLASSIFIER ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-pros{margin-top:.6rem;font-size:.75rem;line-height:1.6;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-pros .pro{color:#2E6B30;display:block}
+.compare-pros .con{color:#A03A2C;display:block}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 2: AD AUCTION ── */
+.chain-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.chain-grid{grid-template-columns:1fr}}
+.chain-pool{display:flex;flex-direction:column;gap:.6rem}
+.chain-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.84rem;line-height:1.5;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.chain-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.chain-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.chain-chip.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.chain-slots{display:flex;flex-direction:column;gap:.5rem}
+.chain-slot{display:flex;align-items:flex-start;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.65rem .85rem;min-height:46px;font-size:.82rem;line-height:1.5;color:var(--text-muted);transition:all .25s;background:rgba(255,255,255,0.5)}
+.chain-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.chain-slot-num{width:24px;height:24px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.chain-slot.filled .chain-slot-num{background:var(--green)}
+.chain-hintbox{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.chain-hintbox.show{display:block;animation:fadeIn .3s ease}
+
+/* ── ACTIVITY 3: MYTH VS FACT ── */
+.mf-grid{display:grid;gap:.8rem;margin-top:.5rem}
+.mf-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem;transition:all .25s}
+.mf-card.right{border-color:var(--green);background:var(--green-light)}
+.mf-card.miss{border-color:var(--red);background:var(--red-light)}
+.mf-statement{font-size:.88rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.7rem}
+.mf-buttons{display:flex;gap:.5rem}
+.mf-btn{padding:.4rem 1.1rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.78rem;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.mf-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mf-btn:disabled{cursor:not-allowed;opacity:.55}
+.mf-btn.picked-right{background:var(--green);border-color:var(--green);color:#fff;opacity:1}
+.mf-btn.picked-wrong{background:var(--red);border-color:var(--red);color:#fff;opacity:1}
+.mf-explain{display:none;margin-top:.7rem;font-size:.8rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.6rem}
+.mf-explain.show{display:block;animation:fadeIn .3s ease}
+.mf-verdict{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+.mf-verdict.v-right{color:#256B29}
+.mf-verdict.v-miss{color:#A03A2C}
+
+/* ── ACTIVITY 4: PROFIT MATH ── */
+.math-scenario{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1rem 0 1.4rem}
+@media (max-width:760px){.math-scenario{grid-template-columns:1fr 1fr}}
+.math-stat{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.8rem .9rem}
+.math-stat-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.25rem}
+.math-stat-value{font-family:var(--mono);font-size:1.05rem;font-weight:600;color:var(--navy)}
+.math-options{display:grid;gap:.6rem}
+.math-option{display:flex;align-items:flex-start;gap:.7rem;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;cursor:pointer;transition:all .2s;font-size:.86rem;line-height:1.5}
+.math-option:hover{border-color:var(--orange)}
+.math-option input{margin-top:.25rem;accent-color:var(--orange)}
+.math-option .opt-amount{font-family:var(--mono);font-weight:600;color:var(--navy)}
+.math-option.reveal-right{border-color:var(--green);background:var(--green-light)}
+.math-option.reveal-wrong{border-color:var(--red);background:var(--red-light)}
+.breakdown{display:none;margin-top:1.2rem}
+.breakdown.show{display:block;animation:fadeIn .4s ease}
+.breakdown table{width:100%;border-collapse:collapse;font-size:.84rem}
+.breakdown th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);padding:.45rem .6rem;border-bottom:1px solid var(--border)}
+.breakdown td{padding:.5rem .6rem;border-bottom:1px dashed var(--border);color:var(--text-secondary)}
+.breakdown td.num{font-family:var(--mono);text-align:right;color:var(--navy);font-weight:600}
+.breakdown tr.total td{border-bottom:none;font-weight:700;color:var(--navy);border-top:2px solid var(--navy)}
+.bar-row{display:flex;align-items:center;gap:.6rem;margin-top:.35rem}
+.bar-label{font-size:.72rem;color:var(--text-secondary);width:130px;flex-shrink:0}
+.bar-track{flex:1;height:14px;background:var(--bg-light);border-radius:7px;overflow:hidden;border:1px solid var(--border)}
+.bar-fill{height:100%;border-radius:7px}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 1 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 2 · AI Ads</div>
+  <h1>Paid Ads in the AI Era — <em>rent attention, on purpose</em></h1>
+  <p class="hero-sub">Four hands-on activities. Sort real audiences by how ready they are to buy, click the ad auction through the exact order it fires, bust six "AI ads" myths, then do the ad math that separates a profitable campaign from a quiet money leak. No jargon, no coding — just how paid ads actually work, made honest.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: PLATFORM / MODEL MATCH ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Sort the audience by temperature</h2>
+    <p class="lesson-intro">Paid ads aren't one audience — they're three, sorted by how ready someone is to buy. A <strong>cold</strong> audience has never heard of you. A <strong>warm</strong> audience has engaged but hasn't bought. A <strong>hot</strong> audience has visited your page or cart and is ready for a nudge. Study the three temperatures, then drag each real audience into the right bucket. Guess freely — every card carries a hover hint with the answer.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">CO</div>
+        <h4>Cold — never met you</h4>
+        <p>People who have <strong>no idea who you are</strong>. You reach them by <strong>interest and lookalike targeting</strong>. The goal is a first impression, not an instant sale.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Huge reach &mdash; where new customers come from</span>
+          <span class="pro">+ AI (Advantage+, Performance Max) finds them for you</span>
+          <span class="con">&minus; Lowest conversion &mdash; they don&rsquo;t trust you yet</span>
+          <span class="con">&minus; Cheapest clicks, but most are just browsing</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">WA</div>
+        <h4>Warm — engaged, no purchase</h4>
+        <p>People who <strong>watched your video, followed, or liked a post</strong> but never bought. You remind them you exist and give a reason to act.</p>
+        <div class="compare-pros">
+          <span class="pro">+ They already recognise your brand</span>
+          <span class="pro">+ Cheaper to convert than a cold stranger</span>
+          <span class="con">&minus; Smaller audience than cold</span>
+          <span class="con">&minus; Needs a clear offer to move them forward</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">HO</div>
+        <h4>Hot — ready to buy</h4>
+        <p>People who <strong>visited your product page or abandoned a cart</strong>. A retargeting ad and a small nudge often closes the sale.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Highest conversion &mdash; they already wanted it</span>
+          <span class="pro">+ Best return on ad spend of any audience</span>
+          <span class="con">&minus; Smallest audience &mdash; runs out fast</span>
+          <span class="con">&minus; Only exists if traffic came in first</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip-note">&#128161; <strong>The core question for every audience:</strong> "How much does this person already know me?" Cold = strangers you introduce yourself to. Warm = people who engaged but didn&rsquo;t buy. Hot = people who almost bought. Match the message to the temperature and you stop wasting a "buy now" ad on someone who&rsquo;s never heard your name.</div>
+
+    <div class="lesson-card" style="margin-top:1.5rem">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="scenarioList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="marketplace">
+            <div class="bucket-title">Cold audience</div>
+            <div class="bucket-sub">Never met you &middot; interest / lookalike</div>
+            <div class="bucket-drop" data-drop="marketplace"></div>
+          </div>
+          <div class="bucket" data-bucket="partner">
+            <div class="bucket-title">Warm audience</div>
+            <div class="bucket-sub">Engaged &middot; no purchase yet</div>
+            <div class="bucket-drop" data-drop="partner"></div>
+          </div>
+          <div class="bucket" data-bucket="hybrid">
+            <div class="bucket-title">Hot audience</div>
+            <div class="bucket-sub">Visited page / cart &middot; retargeting</div>
+            <div class="bucket-drop" data-drop="hybrid"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">&#8635; Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers1()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: AD AUCTION ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Follow the order — how the ad auction fires</h2>
+    <p class="lesson-intro">Every time a phone opens a feed, a silent auction runs in milliseconds to decide which ad shows. Nobody bids the highest and simply wins &mdash; the platform ranks each ad by <strong>bid &times; relevance</strong>, then charges only what it needs to. The eight steps below are shuffled. Click them <strong>in the order they actually happen</strong> &mdash; a wrong click shakes red and hints at what comes next.</p>
+
+    <div class="lesson-card">
+      <div class="chain-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Shuffled steps &mdash; click the next one</h4>
+          <div class="chain-pool" id="chainPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">The chain, in order</h4>
+          <div class="chain-slots" id="chainSlots"></div>
+        </div>
+      </div>
+      <div class="chain-hintbox" id="chainHint"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetChain()">&#8635; Reset the chain</button>
+      </div>
+      <div class="tip-note">&#128161; <strong>Notice what actually wins:</strong> the highest bid does <em>not</em> automatically win. A cheaper bid on a <em>more relevant, better-performing</em> ad can beat a big spender. That&rsquo;s why your creative and targeting matter more than your budget &mdash; the auction rewards ads people actually want to see with lower costs.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: MYTH VS FACT ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Myth or Fact? — the honest AI-ads reality check</h2>
+    <p class="lesson-intro">"Turn on AI and the ads run themselves" makes great thumbnails and terrible campaigns. Click <strong>Myth</strong> or <strong>Fact</strong> on each statement for instant feedback and a plain-English reality check. Answer all six to see your score.</p>
+
+    <div class="lesson-card">
+      <div class="mf-grid" id="mfGrid"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMF()">&#8635; Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: MARGIN MATH ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">4</span>
+    <h2 class="lesson-title">The ad-math challenge — what do you keep after ads?</h2>
+    <p class="lesson-intro">Maya runs a paid ad for a $49.00 MokshPath course and just made one sale. Below are <strong>all the numbers</strong> behind it &mdash; including what she spent on ads to get that single buyer. Ad math is where beginners fool themselves, because a sale can still lose money. Which option is Maya&rsquo;s <strong>real profit on this sale</strong>?</p>
+
+    <div class="lesson-card">
+      <div class="math-scenario">
+        <div class="math-stat"><div class="math-stat-label">Sale price (customer pays)</div><div class="math-stat-value">$49.00</div></div>
+        <div class="math-stat"><div class="math-stat-label">Cost to deliver (course + support)</div><div class="math-stat-value">$9.00</div></div>
+        <div class="math-stat"><div class="math-stat-label">Payment processing (2.9% + 30&cent;)</div><div class="math-stat-value">$1.72</div></div>
+        <div class="math-stat"><div class="math-stat-label">Clicks to get 1 sale</div><div class="math-stat-value">40 &times; CPC $0.60</div></div>
+        <div class="math-stat"><div class="math-stat-label">Ad spend for this sale</div><div class="math-stat-value">$24.00</div></div>
+        <div class="math-stat"><div class="math-stat-label">Landing-page / tool fee</div><div class="math-stat-value">$1.28</div></div>
+      </div>
+
+      <div class="math-options" id="mathOptions">
+        <label class="math-option" data-opt="a"><input type="radio" name="mathQ" value="a"><span><span class="opt-amount">$40.00</span> &mdash; sale price minus the cost to deliver the course. The rest is profit, right?</span></label>
+        <label class="math-option" data-opt="b"><input type="radio" name="mathQ" value="b"><span><span class="opt-amount">$38.28</span> &mdash; price minus delivery cost minus the payment fee.</span></label>
+        <label class="math-option" data-opt="c"><input type="radio" name="mathQ" value="c"><span><span class="opt-amount">$37.00</span> &mdash; price minus delivery, payment fee, and the tool fee &mdash; but ignoring the ad spend.</span></label>
+        <label class="math-option" data-opt="d"><input type="radio" name="mathQ" value="d"><span><span class="opt-amount">$13.00</span> &mdash; price minus every single cost on that card, including the $24 of ads.</span></label>
+      </div>
+
+      <div class="activity-feedback" id="feedback4"></div>
+
+      <div class="breakdown" id="mathBreakdown">
+        <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin:.4rem 0 .6rem">Where the $49.00 goes</h4>
+        <table>
+          <tr><th>Line item</th><th style="text-align:right">Amount</th></tr>
+          <tr><td>Revenue &mdash; customer pays</td><td class="num">$49.00</td></tr>
+          <tr><td>Cost to deliver (course + support)</td><td class="num">&minus; $9.00</td></tr>
+          <tr><td>Payment processing (2.9% + 30&cent;)</td><td class="num">&minus; $1.72</td></tr>
+          <tr><td>Landing-page / tool fee</td><td class="num">&minus; $1.28</td></tr>
+          <tr><td>Ad spend to acquire this sale (40 &times; $0.60)</td><td class="num">&minus; $24.00</td></tr>
+          <tr class="total"><td>Real net profit per sale</td><td class="num">$13.00&nbsp;&nbsp;(&asymp; 26.5% margin)</td></tr>
+        </table>
+        <div style="margin-top:1rem">
+          <div class="bar-row"><span class="bar-label">Ad spend (49%)</span><div class="bar-track"><div class="bar-fill" style="width:49%;background:#E04E3C"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Delivery cost (18%)</span><div class="bar-track"><div class="bar-fill" style="width:18%;background:#5B8FE0"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Fees (6%)</span><div class="bar-track"><div class="bar-fill" style="width:6%;background:#9597A6"></div></div></div>
+          <div class="bar-row"><span class="bar-label">You keep (27%)</span><div class="bar-track"><div class="bar-fill" style="width:27%;background:#4CAF50"></div></div></div>
+        </div>
+        <div class="tip-note">&#128161; <strong>The honest takeaway:</strong> in paid ads, the biggest cost is usually the <strong>ads themselves</strong> &mdash; nearly half the sale here. Watch what happens if the CPC rises or it takes 60 clicks instead of 40: the profit vanishes fast. That&rsquo;s why a higher <em>conversion rate</em> (better creative + tighter targeting) beats a bigger budget every time. The next lessons focus on exactly that: creative that converts and smarter setup.</div>
+      </div>
+
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkMath()">Check my answer</button>
+        <button class="btn btn-ghost" onclick="resetMath()">&#8635; Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect &mdash; make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">Type a sentence each. The act of writing helps the concept settle. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">What&rsquo;s the difference between a cold, warm, and hot audience &mdash; and why would you never show the same "buy now" ad to all three?</div>
+        <textarea placeholder="Cold people have never met me, so a hard sell scares them off. I'd introduce myself first, then..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Maya keeps $13 of $49, and ads were her biggest cost. Which lever would you pull first &mdash; and why does a better conversion rate beat a bigger budget?</div>
+        <textarea placeholder="Ads are the biggest slice, so getting more sales from the same clicks &mdash; a higher conversion rate &mdash; would..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 2 &middot; Ad Creative That Converts</h3>
+      <p>You know the audiences, the auction, and the math. Next: build ad creative people actually stop for &mdash; the hook, the offer, the call to action, and how AI helps you test ten versions in the time you&rsquo;d write one.</p>
+      <a href="02-ad-creative-that-converts.html" class="btn btn-primary">Continue to Lesson 2 &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Audience Temperature Match ─── */
+const SCENARIOS = [
+  {id:'s1', text:'People who match a broad "interested in online learning" targeting on Meta and have never heard of MokshPath.', hint:'A stranger reached by interest targeting — no prior contact at all.', bucket:'marketplace', why:'A cold audience: reached by interest targeting, never met you. The job is a first impression, not an instant sale.'},
+  {id:'s2', text:'A Meta "lookalike" audience built to resemble your existing buyers, but who have never engaged with you before.', hint:'Similar to your customers, but has never interacted with you yet.', bucket:'marketplace', why:'Cold: lookalike targeting finds new strangers who resemble buyers — high reach, but they still don’t know or trust you.'},
+  {id:'s3', text:'Viewers who watched 50% of your recent Instagram reel but never clicked through or bought anything.', hint:'They engaged with your content — but haven’t visited your site.', bucket:'partner', why:'A warm audience: they engaged with your content and recognise you, but haven’t bought. Remind them and give a reason to act.'},
+  {id:'s4', text:'People who follow your page and liked a few posts, yet have never visited a product page.', hint:'They know your brand from engaging, but haven’t shopped.', bucket:'partner', why:'Warm: followers and likers know your brand but haven’t shopped. Cheaper to convert than a cold stranger, but they need an offer.'},
+  {id:'s5', text:'Visitors who opened your course page, then left without enrolling — reached again with a retargeting ad.', hint:'They visited a product page — almost bought.', bucket:'hybrid', why:'A hot audience: they visited your page and almost bought. A retargeting nudge closes many of these — your best return on ad spend.'},
+  {id:'s6', text:'Shoppers who added a course to the cart but didn’t check out, now shown a "still thinking?" ad.', hint:'Cart abandoners — the hottest, most ready-to-buy group.', bucket:'hybrid', why:'Hot: cart abandoners are the most ready-to-buy audience. A small nudge or reminder recovers a large share of them.'}
+];
+const BUCKET_NAMES = {marketplace:'Cold audience', partner:'Warm audience', hybrid:'Hot audience'};
+
+let placed = {};
+function renderScenarios(){
+  const list = $('scenarioList');
+  const shuffled = [...SCENARIOS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+      <div class="scenario-hint">${s.hint}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDrop(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleDrop(id, bucket){
+  const scenario = SCENARIOS.find(s => s.id === id);
+  if (!scenario || placed[id]) return;
+  const correct = scenario.bucket === bucket;
+  placed[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + scenario.text.substring(0, 34) + (scenario.text.length > 34 ? '…' : '');
+  pill.title = correct ? scenario.why : `Correct bucket: ${BUCKET_NAMES[scenario.bucket]}. ${scenario.why}`;
+  document.querySelector(`[data-drop="${bucket}"]`).appendChild(pill);
+  checkActivity1Done();
+}
+function checkActivity1Done(){
+  if (Object.keys(placed).length === SCENARIOS.length) {
+    const right = Object.values(placed).filter(p => p.correct).length;
+    const fb = $('feedback1');
+    if (right === SCENARIOS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct.</strong> You can now read any audience by one question: how much do they already know you? Cold = strangers (interest, lookalike); warm = people who engaged but didn&rsquo;t buy; hot = people who almost bought (retargeting). Winning campaigns run <em>all three</em> in sequence &mdash; introduce cold, remind warm, close hot &mdash; instead of blasting one "buy now" ad at everyone.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the right bucket and why. The clue is always familiarity: if they&rsquo;ve never met you (interest or lookalike), it&rsquo;s cold. If they engaged &mdash; watched, followed, liked &mdash; but never visited a product page, it&rsquo;s warm. If they visited the page or abandoned a cart, it&rsquo;s hot. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog1').classList.add('done');
+  }
+}
+function resetActivity1(){
+  placed = {};
+  $('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('.bucket-drop').forEach(d => d.innerHTML = '');
+  renderScenarios();
+  $('prog1').classList.remove('done');
+}
+function showAnswers1(){
+  SCENARIOS.forEach(s => { if (!placed[s.id]) handleDrop(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 2: How the Ad Auction Fires ─── */
+const CHAIN = [
+  {text:'A user opens their feed, and an ad slot needs filling. The platform triggers an instant auction for that spot.', hint:'Everything starts when a person opens the app and a slot opens up. No user, no auction.'},
+  {text:'The platform gathers every advertiser whose targeting matches this exact user.', hint:'Before ranking anything, it finds which ads are even eligible to be shown to this person.'},
+  {text:'Each eligible ad brings its bid — the most the advertiser is willing to pay for the result.', hint:'Once the ads are gathered, each one has a bid attached. The bid alone does not decide the winner.'},
+  {text:'The platform estimates each ad’s relevance — how likely this user is to click or buy.', hint:'After the bids, the system scores how relevant and engaging each ad is for this specific user.'},
+  {text:'It ranks ads by bid × relevance, so a cheaper but more relevant ad can beat a big spender.', hint:'Bid and relevance combine into one score. This ranking, not the raw bid, decides who wins.'},
+  {text:'The highest-ranked ad wins the slot and is shown to the user.', hint:'Only after ranking is done does a single winner get chosen and displayed in the feed.'},
+  {text:'The winner is charged only what it needed to beat the next ad — often less than its full bid.', hint:'The winner pays just enough to have won, not the whole bid. Charging happens after the ad is placed.'},
+  {text:'The user reacts (scroll, click, buy), and that result feeds back to sharpen future targeting.', hint:'The very last thing: the outcome is measured and fed back so the AI improves the next auction.'}
+];
+let chainNext = 0;
+function renderChain(){
+  const pool = $('chainPool');
+  const slots = $('chainSlots');
+  const order = CHAIN.map((_, i) => i).sort(()=>Math.random()-0.5);
+  pool.innerHTML = order.map(i => `<div class="chain-chip" data-step="${i}" onclick="clickChain(${i})">${CHAIN[i].text}</div>`).join('');
+  slots.innerHTML = CHAIN.map((_, i) => `
+    <div class="chain-slot" id="slot${i}">
+      <span class="chain-slot-num">${i+1}</span>
+      <span class="chain-slot-text">Waiting for step ${i+1}…</span>
+    </div>`).join('');
+}
+function clickChain(i){
+  const chip = document.querySelector(`.chain-chip[data-step="${i}"]`);
+  const hintBox = $('chainHint');
+  if (!chip || chip.classList.contains('used')) return;
+  if (i !== chainNext) {
+    chip.classList.remove('shake');
+    void chip.offsetWidth;
+    chip.classList.add('shake');
+    hintBox.className = 'chain-hintbox show';
+    hintBox.innerHTML = `<strong>Not yet.</strong> That step happens later. Think about step ${chainNext+1}: ${CHAIN[chainNext].hint}`;
+    setTimeout(() => chip.classList.remove('shake'), 500);
+    return;
+  }
+  chip.classList.add('used');
+  const slot = $('slot' + i);
+  slot.classList.add('filled');
+  slot.querySelector('.chain-slot-text').textContent = CHAIN[i].text;
+  hintBox.className = 'chain-hintbox';
+  chainNext++;
+  if (chainNext >= CHAIN.length) {
+    const fb = $('feedback2');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Auction complete &mdash; all 8 steps in order.</strong> Look at the key moment: at step 5 the winner is decided by <em>bid &times; relevance</em>, not bid alone &mdash; so a cheaper, more relevant ad can beat a big spender. And at step 7 the winner pays only enough to have won. That&rsquo;s the whole reason great creative and tight targeting lower your costs: the auction quietly rewards ads people actually want to see.`;
+    $('prog2').classList.add('done');
+  }
+}
+function resetChain(){
+  chainNext = 0;
+  $('feedback2').className = 'activity-feedback';
+  $('chainHint').className = 'chain-hintbox';
+  renderChain();
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Myth vs Fact ─── */
+const MF = [
+  {s:'Paid ads cost real money the moment they run — unlike organic posts, every impression can bill you.', a:'fact',
+   e:'True &mdash; and it’s the honest heart of paid ads. Organic reach is free but slow and unpredictable; paid ads buy attention instantly, but the meter is running. Budget discipline is the whole game: know your cost per sale before you scale.'},
+  {s:'Turn on Meta Advantage+ or Google Performance Max and AI runs a profitable campaign for you automatically.', a:'myth',
+   e:'AI is leverage, not magic. Advantage+ and Performance Max optimise <em>delivery and targeting</em> brilliantly &mdash; but only toward the goal, budget, and creative <em>you</em> give them. Feed weak creative or a broken offer and AI will efficiently lose your money.'},
+  {s:'The ad auction rewards relevance — a cheaper, more relevant ad can beat a higher bid.', a:'fact',
+   e:'Correct. Platforms rank by roughly <em>bid × relevance</em>, so ads people engage with win cheaper placements. That’s why better creative and tighter targeting lower your CPM and CPC &mdash; you literally pay less for being more relevant.'},
+  {s:'A high number of clicks (CTR) always means the campaign is making money.', a:'myth',
+   e:'Clicks are not sales. A great CTR with zero purchases just means you paid for curiosity. What matters is the full funnel: clicks → conversions → cost per sale versus your margin. Watch the sale, not just the click.'},
+  {s:'Retargeting people who already visited your page usually gives the best return on ad spend.', a:'fact',
+   e:'True. Warm and hot audiences already know you, so they convert far more cheaply than cold strangers. Retargeting page visitors and cart abandoners is often the single most profitable ad you run &mdash; it just runs out fast.'},
+  {s:'The platform with the biggest audience (say TikTok) is always the best place to spend your budget.', a:'myth',
+   e:'Size isn’t the point &mdash; fit is. Match the platform to the goal: Google Search catches people already looking for you; Meta and TikTok create demand and reach cold audiences; Display builds awareness. The best platform is where <em>your</em> customer is ready to act.'}
+];
+let mfAnswered = {};
+function renderMF(){
+  const grid = $('mfGrid');
+  grid.innerHTML = MF.map((m, i) => `
+    <div class="mf-card" id="mfCard${i}">
+      <div class="mf-statement">${i+1}. ${m.s}</div>
+      <div class="mf-buttons">
+        <button class="mf-btn" id="mfM${i}" onclick="answerMF(${i},'myth')">MYTH</button>
+        <button class="mf-btn" id="mfF${i}" onclick="answerMF(${i},'fact')">FACT</button>
+      </div>
+      <div class="mf-explain" id="mfEx${i}"></div>
+    </div>`).join('');
+}
+function answerMF(i, choice){
+  if (mfAnswered[i] !== undefined) return;
+  const m = MF[i];
+  const right = choice === m.a;
+  mfAnswered[i] = right;
+  const card = $('mfCard' + i);
+  const pickedBtn = $(choice === 'myth' ? 'mfM'+i : 'mfF'+i);
+  const otherBtn = $(choice === 'myth' ? 'mfF'+i : 'mfM'+i);
+  card.classList.add(right ? 'right' : 'miss');
+  pickedBtn.classList.add(right ? 'picked-right' : 'picked-wrong');
+  pickedBtn.disabled = true; otherBtn.disabled = true;
+  const ex = $('mfEx' + i);
+  ex.className = 'mf-explain show';
+  ex.innerHTML = `<span class="mf-verdict ${right ? 'v-right' : 'v-miss'}">${right ? '✓ Correct' : '✗ Not quite'} — this is a ${m.a.toUpperCase()}.</span><br>${m.e}`;
+  if (Object.keys(mfAnswered).length === MF.length) {
+    const score = Object.values(mfAnswered).filter(Boolean).length;
+    const fb = $('feedback3');
+    if (score === MF.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>6 of 6 &mdash; you see paid ads clearly.</strong> Hold both truths at once: AI genuinely gives a small team huge leverage on targeting and delivery &mdash; and ads are still real money where relevance, the right platform, cost per sale, and budget discipline decide who profits. That honest mindset is your edge over everyone who thinks AI runs the whole thing for them.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You scored ${score} of 6.</strong> Re-read the red cards. Every myth makes ads sound effortless (AI on autopilot, clicks = money, biggest platform wins), and every fact comes with a caveat that keeps you honest (ads cost real money, the auction rewards relevance, retargeting wins cheapest). Realistic expectations are your first advantage. Hit <em>Try again</em> to retake it.`;
+    }
+    $('prog3').classList.add('done');
+  }
+}
+function resetMF(){
+  mfAnswered = {};
+  $('feedback3').className = 'activity-feedback';
+  renderMF();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Margin Math ─── */
+const MATH_FEEDBACK = {
+  a:`<strong>$40.00 is the beginner trap.</strong> You subtracted only the delivery cost &mdash; forgetting the <em>payment fee</em> ($1.72), the <em>tool fee</em> ($1.28), and above all the <em>$24 of ad spend</em> that bought this buyer. "Ignore the ads" math is exactly how advertisers convince themselves a losing campaign is a winner. Try again.`,
+  b:`<strong>$38.28 still ignores the ads.</strong> Good &mdash; you took out the payment fee. But you skipped the $1.28 tool fee and, far bigger, the $24.00 in ad spend it took to land this sale. In paid ads, the ad spend is usually the biggest cost of all. Subtract it and try again.`,
+  c:`<strong>$37.00 forgets the ads entirely.</strong> You counted delivery, payment fee, and tool fee &mdash; better than most beginners. But this sale cost $24.00 in ad spend (40 clicks × $0.60) to acquire. That is the whole point of paid ads: the traffic is never free. Subtract it and try again.`,
+  d:`<strong>Correct: $13.00.</strong> $49.00 &minus; $9.00 (delivery) &minus; $1.72 (payment fee) &minus; $1.28 (tool fee) &minus; $24.00 (ads) = <strong>$13.00</strong>, roughly a 27% net margin. Scroll the breakdown &mdash; and notice which bar is longest.`
+};
+function checkMath(){
+  const picked = document.querySelector('input[name="mathQ"]:checked');
+  const fb = $('feedback4');
+  if (!picked) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Pick one of the four options first</strong> &mdash; then hit "Check my answer".`;
+    return;
+  }
+  const val = picked.value;
+  document.querySelectorAll('.math-option').forEach(o => o.classList.remove('reveal-right','reveal-wrong'));
+  if (val === 'd') {
+    document.querySelector('.math-option[data-opt="d"]').classList.add('reveal-right');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = MATH_FEEDBACK.d;
+    $('mathBreakdown').className = 'breakdown show';
+    $('prog4').classList.add('done');
+  } else {
+    document.querySelector(`.math-option[data-opt="${val}"]`).classList.add('reveal-wrong');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = MATH_FEEDBACK[val];
+  }
+}
+function resetMath(){
+  document.querySelectorAll('input[name="mathQ"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.math-option').forEach(o => o.classList.remove('reveal-right','reveal-wrong'));
+  $('feedback4').className = 'activity-feedback';
+  $('mathBreakdown').className = 'breakdown';
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderScenarios();
+  setupBuckets();
+  renderChain();
+  renderMF();
+});
+</script>
+</body>
+</html>

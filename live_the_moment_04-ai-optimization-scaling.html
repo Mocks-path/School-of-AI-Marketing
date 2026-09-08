@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 4 · AI Optimization, Scaling &amp; Measurement — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── SHARED FEEDBACK / BUTTONS ── */
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+/* ── ACTIVITY 1: PORTFOLIO PRIORITIZER (drag into ranked slots) ── */
+.priority-grid{display:grid;grid-template-columns:1fr 1.05fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.priority-grid{grid-template-columns:1fr}}
+.priority-pool{display:flex;flex-direction:column;gap:.6rem}
+.priority-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.9rem 1rem;cursor:grab;transition:all .25s;user-select:none}
+.priority-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.priority-card.dragging{opacity:.4}
+.priority-card.placed{opacity:.35;pointer-events:none}
+.priority-card-title{font-size:.85rem;font-weight:700;color:var(--navy);margin-bottom:.25rem}
+.priority-card-meta{font-size:.74rem;color:var(--text-secondary);line-height:1.45}
+.priority-slots{display:flex;flex-direction:column;gap:.6rem}
+.priority-slot{display:flex;align-items:center;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.7rem .85rem;min-height:56px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.priority-slot.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.priority-slot.filled{border-style:solid;background:var(--bg-card)}
+.priority-slot.filled.correct{border-color:var(--green);background:var(--green-light)}
+.priority-slot.filled.wrong{border-color:var(--red);background:var(--red-light)}
+.priority-rank{width:30px;height:30px;border-radius:50%;background:var(--navy);color:#fff;display:flex;align-items:center;justify-content:center;font-family:'DM Serif Display',serif;font-size:.95rem;flex-shrink:0}
+.priority-slot-label{font-size:.66rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:.05em;font-weight:700;margin-bottom:.15rem}
+.priority-drop-text{font-size:.82rem;color:var(--text-muted);font-style:italic}
+.priority-drop-text.set{font-style:normal;color:var(--text-primary);font-weight:600}
+
+/* ── ACTIVITY 2: SEASONAL CALENDAR (match drop to month) ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:600}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:84px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:30px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+
+/* ── ACTIVITY 3: ANALYTICS TABLE ── */
+.analytics-wrap{overflow-x:auto;margin-top:1rem}
+.analytics-table{width:100%;border-collapse:collapse;font-size:.82rem;min-width:560px}
+.analytics-table th{text-align:left;font-size:.66rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);padding:.6rem .7rem;border-bottom:2px solid var(--border);font-weight:700}
+.analytics-table th.num,.analytics-table td.num{text-align:right;font-family:var(--mono)}
+.analytics-table td{padding:.7rem;border-bottom:1px dashed var(--border);color:var(--text-secondary)}
+.analytics-table tr.pickrow{cursor:pointer;transition:background .2s}
+.analytics-table tr.pickrow:hover{background:var(--bg-light)}
+.analytics-table tr.pickrow.reveal-right td{background:var(--green-light);color:#1F5723}
+.analytics-table tr.pickrow.reveal-wrong td{background:var(--red-light);color:#7A2A1E}
+.analytics-table .prod-name{font-weight:700;color:var(--navy)}
+.pick-btn{background:var(--bg-light);border:1.5px solid var(--border);border-radius:6px;padding:.35rem .8rem;font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;color:var(--text-secondary);transition:all .2s}
+.pick-btn:hover{border-color:var(--orange);color:var(--orange)}
+.analytics-hint{font-size:.78rem;color:var(--text-secondary);margin-top:1rem;line-height:1.6;background:var(--bg-light);border-radius:var(--radius-sm);padding:.8rem 1rem}
+.analytics-hint code{font-family:var(--mono);color:var(--orange);font-weight:600}
+
+/* ── ACTIVITY 4: SCALING QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 4 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 2 · AI Ads</div>
+  <h1>AI Optimization, Scaling &amp; Measurement — <em>read the numbers, then kill or scale</em></h1>
+  <p class="hero-sub">Four hands-on activities. Rank live campaigns by kill-or-scale priority, diagnose whether a weak campaign is a creative, audience, or offer problem, and read an ad dashboard (CPM, CTR, CPC, CPA, ROAS) to find the quiet winner behind the flashy one. Honest truth: most first campaigns lose money &mdash; the skill is reading what the data is telling you. All figures illustrative.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: PORTFOLIO PRIORITIZER ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Kill or scale — where does your budget go?</h2>
+    <p class="lesson-intro">You&rsquo;re running four campaigns and one budget. The smart move isn&rsquo;t "spend more everywhere" &mdash; it&rsquo;s to <strong>scale proven winners</strong>, give promising tests more time, tweak the fixable, and kill the losers. Drag each campaign into its priority slot, from <strong>1 (scale it now)</strong> to <strong>4 (kill it)</strong>. Get the ranking right to finish. (All figures illustrative.)</p>
+
+    <div class="lesson-card">
+      <div class="priority-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Your four campaigns</h4>
+          <div class="priority-pool" id="priorityPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Kill-or-scale ranking &mdash; drag each here</h4>
+          <div class="priority-slots" id="prioritySlots"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetPriority()">&#8635; Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers1()">Show me the answers</button>
+      </div>
+      <div class="tip-note">&#128161; <strong>The kill-or-scale rule:</strong> put budget behind campaigns that hit or beat your <em>break-even ROAS</em>, give under-tested ones enough spend to judge fairly, tweak the one metric that&rsquo;s broken, and kill campaigns that stay above your target CPA after a real test. Scaling a loser just loses money faster &mdash; break-even ROAS = 1 &divide; profit margin (illustrative).</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: SEASONAL DROP CALENDAR ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Diagnose the campaign — creative, audience, or offer?</h2>
+    <p class="lesson-intro">When a campaign underperforms, the metric that&rsquo;s broken tells you <em>where</em> the problem is. Low CTR usually means a weak <strong>creative</strong>; the wrong people seeing it points to <strong>audience/targeting</strong>; clicks that never convert usually mean a weak <strong>offer or landing page</strong>. Drag each symptom into the layer you&rsquo;d fix first. Wrong answers carry a hover hint. (Figures illustrative.)</p>
+
+    <div class="classify-grid">
+      <div class="classify-scenarios" id="scenarioList"></div>
+      <div class="bucket-stack">
+        <div class="bucket" data-bucket="early">
+          <div class="bucket-title">Creative problem</div>
+          <div class="bucket-sub">Low CTR &middot; the ad itself isn&rsquo;t stopping the scroll</div>
+          <div class="bucket-drop" data-drop="early"></div>
+        </div>
+        <div class="bucket" data-bucket="spring">
+          <div class="bucket-title">Audience / targeting problem</div>
+          <div class="bucket-sub">Wrong people &middot; high CPM or irrelevant clicks</div>
+          <div class="bucket-drop" data-drop="spring"></div>
+        </div>
+        <div class="bucket" data-bucket="evergreen">
+          <div class="bucket-title">Offer / landing problem</div>
+          <div class="bucket-sub">Clicks come, but they don&rsquo;t convert</div>
+          <div class="bucket-drop" data-drop="evergreen"></div>
+        </div>
+      </div>
+    </div>
+    <div class="activity-feedback" id="feedback2"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetActivity2()">&#8635; Try again</button>
+      <button class="btn btn-primary" onclick="showAnswers2()">Show me the answers</button>
+    </div>
+    <div class="tip-note" style="max-width:none">&#128161; <strong>Read the funnel top to bottom:</strong> low CTR &rarr; fix the <em>creative</em> (hook, hero image, first 3 seconds); good CTR but high CPM or junk clicks &rarr; fix the <em>audience/targeting</em>; strong clicks that never convert &rarr; fix the <em>offer or landing page</em>. Change one thing at a time so you know what moved the number.</div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: READ THE ANALYTICS ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Read the dashboard — which campaign deserves more budget?</h2>
+    <p class="lesson-intro">Here&rsquo;s last week&rsquo;s data for four ad campaigns. The flashy one with the most <em>clicks</em> isn&rsquo;t always the winner &mdash; what matters is what each conversion <strong>costs</strong> (CPA) and how much revenue each ad dollar returns (<strong>ROAS</strong>). Study the table, then click the campaign you&rsquo;d put more budget into. (All figures illustrative.)</p>
+
+    <div class="lesson-card">
+      <div class="analytics-wrap">
+        <table class="analytics-table">
+          <thead>
+            <tr>
+              <th>Campaign</th>
+              <th class="num">Clicks</th>
+              <th class="num">Conversions</th>
+              <th class="num">CPA</th>
+              <th class="num">ROAS</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="analyticsBody"></tbody>
+        </table>
+      </div>
+      <div class="analytics-hint">
+        <strong>How to read it:</strong> <code>ROAS = revenue &divide; ad spend</code> and <code>CPA = spend &divide; conversions</code>. A campaign with fewer clicks but a low CPA and a ROAS above your break-even is the real winner &mdash; more budget multiplies a profitable campaign, but can&rsquo;t rescue one that loses money on every conversion. Break-even ROAS = 1 &divide; your profit margin (illustrative).
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetAnalytics()">&#8635; Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: SCALING QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Scaling judgment — the quiz that grows an account</h2>
+    <p class="lesson-intro">You&rsquo;ve found a profitable campaign &mdash; now what? Five real growth decisions, one best answer each. Every option comes with an explanation, and the wrong ones are the exact detours that quietly burn ad budgets. (Figures illustrative; no ROAS is ever guaranteed.)</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">&#8635; Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect &mdash; make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Campaign A: 900 clicks, ROAS 0.8. Campaign B: 200 clicks, ROAS 3.1. Your product margin is 40% (break-even ROAS = 2.5). Which do you scale, and what&rsquo;s the first thing you&rsquo;d do?</div>
+        <textarea placeholder="Campaign B is above break-even (3.1 > 2.5) so it makes money; A loses on every sale. I'd scale B with a ~20% budget increase and watch CPA, because..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">A campaign has a great CTR but almost no conversions after the click. Which layer is broken &mdash; creative, audience, or offer &mdash; and why?</div>
+        <textarea placeholder="Good CTR means the creative and audience are working, so the problem is the offer or landing page, because the drop-off happens after the click..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP / WRAP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Week 2 complete &mdash; you can run AI ad campaigns</h3>
+      <p>You understand how paid ads and AI targeting work, brief AI to make scroll-stopping creative, structure and launch a campaign, and now read the dashboard to diagnose, kill, and scale by the numbers. That&rsquo;s a complete AI-ads skill set. Remember: most first campaigns lose money &mdash; treat early spend as a learning budget, and no ROAS is ever guaranteed. Next week: turning these skills into consistent, measurable results.</p>
+      <a href="../week_3_live_the_moment/01-intro.html" class="btn btn-primary">On to Week 3 &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Portfolio Prioritizer ─── */
+const DESIGNS = [
+  {id:'d1', title:'"Retargeting — Cart Abandoners"', meta:'2 weeks live · ROAS 4.2 · CPA $9 · steady · break-even ROAS 2.5', rank:1,
+   why:'A proven winner: ROAS well above break-even and a low CPA. Scale it now — raise budget ~20% at a time and watch CPA hold. (Illustrative.)'},
+  {id:'d2', title:'"Advantage+ — Broad Prospecting"', meta:'4 days live · ROAS 2.7 · CPA $18 · still learning · early data', rank:2,
+   why:'Promising but under-tested: just above break-even and still in the learning phase. Give it more time and spend before judging — don&rsquo;t touch it mid-learning.'},
+  {id:'d3', title:'"Interest Targeting — Cold Video"', meta:'10 days live · CTR 0.6% · ROAS 1.4 · lots of impressions, few clicks', rank:3,
+   why:'Fixable: low CTR is dragging ROAS below break-even. Worth one honest creative test before cutting — but well below the winners. (Illustrative.)'},
+  {id:'d4', title:'"Untargeted Boost — Everyone"', meta:'10 days live · ROAS 0.5 · CPA $60 · high CPM · vague, no angle', rank:4,
+   why:'A loser: spends a lot, converts little, ROAS far below break-even after a fair test. Kill it and reallocate the budget. Scaling a loser just loses money faster.'}
+];
+const RANK_LABELS = {1:'Scale it now', 2:'Keep testing — give it time', 3:'Tweak or watch', 4:'Kill it'};
+let ranking = {};
+function renderPriority(){
+  ranking = {};
+  const pool = $('priorityPool');
+  const shuffled = [...DESIGNS].sort(()=>Math.random()-0.5);
+  pool.innerHTML = shuffled.map(d => `
+    <div class="priority-card" draggable="true" data-id="${d.id}">
+      <div class="priority-card-title">${d.title}</div>
+      <div class="priority-card-meta">${d.meta}</div>
+    </div>`).join('');
+  const slots = $('prioritySlots');
+  slots.innerHTML = [1,2,3,4].map(r => `
+    <div class="priority-slot" data-rank="${r}">
+      <span class="priority-rank">${r}</span>
+      <div>
+        <span class="priority-slot-label">${RANK_LABELS[r]}</span>
+        <span class="priority-drop-text" data-text="${r}">Drag a campaign here</span>
+      </div>
+    </div>`).join('');
+  bindPriorityDnd();
+  $('feedback1').className = 'activity-feedback';
+}
+function bindPriorityDnd(){
+  document.querySelectorAll('.priority-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+  document.querySelectorAll('.priority-slot').forEach(slot => {
+    slot.addEventListener('dragover', e => { e.preventDefault(); slot.classList.add('drag-over'); });
+    slot.addEventListener('dragleave', () => slot.classList.remove('drag-over'));
+    slot.addEventListener('drop', e => {
+      e.preventDefault();
+      slot.classList.remove('drag-over');
+      placeRank(e.dataTransfer.getData('id'), parseInt(slot.dataset.rank));
+    });
+  });
+}
+function placeRank(id, rank){
+  const design = DESIGNS.find(d => d.id === id);
+  if (!design || ranking[rank]) return;
+  if (Object.values(ranking).includes(id)) return;
+  ranking[rank] = id;
+  const card = document.querySelector(`.priority-card[data-id="${id}"]`);
+  card.classList.add('placed');
+  const txt = document.querySelector(`.priority-drop-text[data-text="${rank}"]`);
+  txt.textContent = design.title;
+  txt.classList.add('set');
+  if (Object.keys(ranking).length === DESIGNS.length) checkPriority();
+}
+function checkPriority(){
+  let right = 0;
+  [1,2,3,4].forEach(r => {
+    const slot = document.querySelector(`.priority-slot[data-rank="${r}"]`);
+    slot.classList.add('filled');
+    const design = DESIGNS.find(d => d.id === ranking[r]);
+    const correct = design && design.rank === r;
+    slot.classList.add(correct ? 'correct' : 'wrong');
+    if (correct) right++;
+    const txt = document.querySelector(`.priority-drop-text[data-text="${r}"]`);
+    if (design) txt.title = design.why;
+  });
+  const fb = $('feedback1');
+  if (right === 4) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect ranking.</strong> Proven winner first (scale it), promising test second (keep testing), fixable-but-underperforming third (tweak or watch), clear loser last (kill it). Optimization is mostly this triage repeated weekly &mdash; feed winners, let tests mature, and cut what burns budget. Hover any slot to see the reasoning.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You matched ${right} of 4.</strong> Green slots are right; hover any slot for the reasoning. The order of priority: <em>above break-even ROAS &gt; promising but still learning &gt; fixable creative issue &gt; clear loser</em>. The classic trap is scaling a campaign with lots of <em>clicks</em> but a ROAS below break-even &mdash; clicks aren&rsquo;t profit. Hit <em>Try again</em> to re-rank.`;
+  }
+  $('prog1').classList.add('done');
+}
+function resetPriority(){
+  document.querySelectorAll('.priority-card').forEach(c => c.classList.remove('placed'));
+  renderPriority();
+  $('prog1').classList.remove('done');
+}
+function showAnswers1(){
+  renderPriority();
+  DESIGNS.forEach(d => { if (!Object.values(ranking).includes(d.id)) placeRank(d.id, d.rank); });
+}
+
+/* ─── ACTIVITY 2: Seasonal Drop Calendar ─── */
+const SEASONAL = [
+  {id:'s1', text:'Lots of impressions but a very low CTR (0.4%)', hint:'People are seeing the ad and scrolling past — the ad itself isn&rsquo;t landing.', bucket:'early', why:'Low CTR at high impressions means the ad isn&rsquo;t stopping the scroll. That&rsquo;s a creative problem &mdash; test a stronger hook, hero image, or first 3 seconds of video.'},
+  {id:'s2', text:'The ad feels generic and no one comments, saves, or shares', hint:'Weak hook and message — that lives in the creative.', bucket:'early', why:'No engagement and a bland message point straight at the creative. Rewrite the hook, sharpen the angle, and make the first frame stop the thumb.'},
+  {id:'s3', text:'Sky-high CPM and clicks come from people who never fit your product', hint:'The wrong people are being shown the ad — that&rsquo;s targeting.', bucket:'spring', why:'A high CPM plus irrelevant clicks means you&rsquo;re reaching the wrong crowd. Fix the audience/targeting &mdash; narrow it, try a lookalike, or let Advantage+/PMax find better matches.'},
+  {id:'s4', text:'Great engagement, but the buyers don&rsquo;t match who you want', hint:'Ad works; it&rsquo;s reaching the wrong segment.', bucket:'spring', why:'The creative clearly works, but it&rsquo;s pulling the wrong segment. That&rsquo;s an audience problem &mdash; adjust targeting, exclusions, or the signals you feed automated bidding.'},
+  {id:'s5', text:'Strong CTR and cheap clicks, but almost nobody buys after clicking', hint:'The drop-off is after the click — check the offer/page.', bucket:'evergreen', why:'Good CTR and cheap clicks mean creative and audience are fine; the loss happens after the click. Fix the offer or landing page &mdash; price, page speed, trust, or a clearer call to action.'},
+  {id:'s6', text:'People add to cart, then abandon before paying', hint:'Interest is real; the offer or checkout is losing them.', bucket:'evergreen', why:'Add-to-cart then abandon is a classic offer/landing signal. Sweeten the offer, simplify checkout, add trust badges, or retarget cart abandoners &mdash; the ad already did its job.'}
+];
+const BUCKET_NAMES = {early:'Creative problem', spring:'Audience / targeting problem', evergreen:'Offer / landing problem'};
+let placed2 = {};
+function renderSeasonal(){
+  const list = $('scenarioList');
+  const shuffled = [...SEASONAL].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+      <div class="scenario-hint">${s.hint}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDrop2(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleDrop2(id, bucket){
+  const s = SEASONAL.find(x => x.id === id);
+  if (!s || placed2[id]) return;
+  const correct = s.bucket === bucket;
+  placed2[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + s.text.substring(0, 30) + (s.text.length > 30 ? '…' : '');
+  pill.title = correct ? s.why : `Correct window: ${BUCKET_NAMES[s.bucket]}. ${s.why}`;
+  document.querySelector(`[data-drop="${bucket}"]`).appendChild(pill);
+  checkActivity2Done();
+}
+function checkActivity2Done(){
+  if (Object.keys(placed2).length === SEASONAL.length) {
+    const right = Object.values(placed2).filter(p => p.correct).length;
+    const fb = $('feedback2');
+    if (right === SEASONAL.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct.</strong> You&rsquo;ve internalized the funnel diagnosis: low CTR is a <em>creative</em> problem, high CPM or wrong-fit clicks is an <em>audience/targeting</em> problem, and clicks that never convert is an <em>offer/landing</em> problem. Read the metric that&rsquo;s broken and you know exactly which layer to fix &mdash; and you change one thing at a time.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the right layer. The rule: follow the funnel &mdash; the ad doesn&rsquo;t get clicks (creative), the wrong people click (audience), or clicks don&rsquo;t convert (offer/landing). Match the symptom to the layer, then fix one thing at a time. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetActivity2(){
+  placed2 = {};
+  $('feedback2').className = 'activity-feedback';
+  document.querySelectorAll('.bucket-drop').forEach(d => d.innerHTML = '');
+  renderSeasonal();
+  $('prog2').classList.remove('done');
+}
+function showAnswers2(){
+  SEASONAL.forEach(s => { if (!placed2[s.id]) handleDrop2(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 3: Read the Analytics ─── */
+const ANALYTICS = [
+  {id:'a1', name:'"Cold Video — Broad"', views:1800, sales:9, conv:'$55', profit:'0.9', winner:false,
+   note:'The flashy trap: lots of clicks but a high $55 CPA and a ROAS of 0.9 &mdash; below break-even, so it loses money on every conversion. Big traffic can&rsquo;t rescue a campaign that doesn&rsquo;t pay back. (Illustrative.)'},
+  {id:'a2', name:'"Retargeting — Cart Abandoners"', views:520, sales:31, conv:'$11', profit:'4.3', winner:true,
+   note:'The quiet winner: fewer clicks but the lowest CPA ($11) AND the highest ROAS (4.3), well above break-even. It already pays back &mdash; add budget (~20% steps) and you multiply a profitable campaign. This is where the money goes. (Illustrative.)'},
+  {id:'a3', name:'"Interest — Lookalike 1%"', views:640, sales:14, conv:'$26', profit:'2.6', winner:false,
+   note:'Solid but not the standout: ROAS 2.6 is just above a 2.5 break-even and CPA is middling. Worth keeping and watching, yet the retargeting campaign both costs less per conversion and returns far more.'},
+  {id:'a4', name:'"New Test — Advantage+"', views:95, sales:1, conv:'$30', profit:'2.8', winner:false,
+   note:'Too little data to call: only 95 clicks and 1 conversion, and still in the learning phase. The ROAS looks fine, but you can&rsquo;t scale on a sample this small &mdash; give it more spend and time first, then judge.'}
+];
+let analyticsDone = false;
+function renderAnalytics(){
+  analyticsDone = false;
+  $('analyticsBody').innerHTML = ANALYTICS.map(a => `
+    <tr class="pickrow" id="arow-${a.id}">
+      <td class="prod-name">${a.name}</td>
+      <td class="num">${a.views.toLocaleString()}</td>
+      <td class="num">${a.sales}</td>
+      <td class="num">${a.conv}</td>
+      <td class="num">${a.profit}</td>
+      <td><button class="pick-btn" onclick="pickAnalytics('${a.id}')">Invest here</button></td>
+    </tr>`).join('');
+  $('feedback3').className = 'activity-feedback';
+}
+function pickAnalytics(id){
+  if (analyticsDone) return;
+  analyticsDone = true;
+  const chosen = ANALYTICS.find(a => a.id === id);
+  ANALYTICS.forEach(a => {
+    const row = $('arow-' + a.id);
+    row.querySelector('.pick-btn').disabled = true;
+    if (a.winner) row.classList.add('reveal-right');
+    else if (a.id === id) row.classList.add('reveal-wrong');
+  });
+  const fb = $('feedback3');
+  if (chosen.winner) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Correct &mdash; the "Retargeting — Cart Abandoners" campaign is the winner.</strong> It has the fewest clicks of the top three, but the lowest CPA ($11) AND the highest ROAS (4.3), well above break-even. It already pays back &mdash; adding budget multiplies a profitable campaign. ${ANALYTICS.find(a=>a.id==='a1').note}`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Not the strongest pick.</strong> ${chosen.note} <br><br>The real winner is the <strong>"Retargeting — Cart Abandoners" campaign</strong>: fewest clicks of the leaders, but an $11 CPA and a 4.3 ROAS. Low CPA and high ROAS beat raw clicks every time &mdash; you scale what already <em>pays back</em>, not what merely gets <em>seen</em>. (Illustrative.)`;
+  }
+  $('prog3').classList.add('done');
+}
+function resetAnalytics(){
+  renderAnalytics();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Scaling Quiz ─── */
+const QUIZ = [
+  {
+    q:'A campaign is running at ROAS 4.0 with your break-even at 2.5. What&rsquo;s the best way to scale it?',
+    opts:[
+      {t:'Triple the daily budget overnight to grab all the volume at once', ok:false, ex:'Big overnight jumps throw the campaign back into the learning phase and often spike CPA. Scaling too fast is the #1 way a winner suddenly stops working. Raise budget gradually instead.'},
+      {t:'Raise the budget in small steps (~20% every few days) and watch that CPA/ROAS hold', ok:true, ex:'Right. Vertical scaling means nudging budget up ~20% at a time so the algorithm re-stabilizes and you can confirm the numbers hold. Scale in steps, verify, repeat &mdash; that&rsquo;s how you grow without breaking it.'},
+      {t:'Leave the budget flat forever &mdash; never touch a winner', ok:false, ex:'Never scaling means leaving money on the table. A profitable campaign should grow &mdash; just carefully, in small increments, watching the metrics after each step.'}
+    ]
+  },
+  {
+    q:'Your best campaign is capped out &mdash; more budget just raises CPA. How do you scale <em>horizontally</em>?',
+    opts:[
+      {t:'Duplicate the winning ad set into new audiences/lookalikes and test fresh creative', ok:true, ex:'Correct. Horizontal scaling means widening: duplicate the winner into new audiences, geos, or lookalikes, and refresh creative to fight fatigue. You add new pockets of demand instead of overheating one ad set.'},
+      {t:'Keep forcing budget into the same saturated ad set', ok:false, ex:'Once an audience is saturated, extra budget just buys worse impressions and drives CPA up. That&rsquo;s exactly the ceiling horizontal scaling is meant to break through.'},
+      {t:'Delete the winner and start over from scratch', ok:false, ex:'Throwing away a proven winner is the opposite of scaling. You want more reach from what works &mdash; duplicate and expand, don&rsquo;t destroy.'}
+    ]
+  },
+  {
+    q:'You&rsquo;re using automated bidding / Advantage+ (or PMax). What&rsquo;s the right way to work with it?',
+    opts:[
+      {t:'Edit the budget and audiences every few hours to "help" the AI', ok:false, ex:'Constant edits reset the learning phase and starve the system of stable data. Automated bidding needs a steady setup and enough conversions to learn &mdash; tinkering hourly makes results worse, not better.'},
+      {t:'Give it a clean conversion goal and good signals, then leave it to learn before judging', ok:true, ex:'Right. AI bidding optimizes toward the goal and signals you feed it &mdash; a clear objective, quality creative, and accurate conversion tracking. Let it exit the learning phase (enough conversions) before you evaluate or adjust.'},
+      {t:'Assume the AI guarantees a profitable ROAS no matter what you feed it', ok:false, ex:'No tool guarantees ROAS. Automated bidding only optimizes within the offer, creative, and tracking you give it &mdash; garbage in, garbage out. Your inputs and judgment still decide the outcome.'}
+    ]
+  },
+  {
+    q:'It&rsquo;s your first month running ads and you&rsquo;re losing money overall. The healthiest way to read that is:',
+    opts:[
+      {t:'Ads clearly don&rsquo;t work &mdash; quit and demand a refund', ok:false, ex:'Most first campaigns lose money &mdash; that&rsquo;s normal, not proof ads fail. The early spend buys data: which creative, audience, and offer work. Quitting at the learning stage throws away what you just paid to learn.'},
+      {t:'Treat early spend as a learning budget &mdash; the data shows what to fix and scale next', ok:true, ex:'Correct. Early losses are tuition. The point of the first campaigns is to find the winning creative/audience/offer combination. Read the data, kill the losers, scale the one that&rsquo;s closest to break-even, and iterate.'},
+      {t:'Assume the next campaign will magically hit a 5x ROAS with no changes', ok:false, ex:'Hope isn&rsquo;t a strategy and no ROAS is guaranteed. Improvement comes from acting on the data &mdash; better creative, tighter targeting, a stronger offer &mdash; not from waiting for luck.'}
+    ]
+  },
+  {
+    q:'A campaign gets 1,000 clicks a month but almost no conversions, even after two honest fixes. The mature move is:',
+    opts:[
+      {t:'Keep pouring budget in &mdash; the clicks prove people want it', ok:false, ex:'Clicks are attention, not demand. If a well-trafficked campaign still won&rsquo;t convert after real fixes, more spend just loses money faster. Attention that never buys isn&rsquo;t a winner in disguise.'},
+      {t:'Kill it (or pause it) and move that budget to winners and new tests', ok:true, ex:'Right. Knowing when to stop is a core optimization skill. A campaign with clicks but no conversions after genuine fixes is telling you something &mdash; redirect that budget to campaigns that already pay back or to fresh tests.'},
+      {t:'Blame the algorithm and change nothing', ok:false, ex:'Blaming the platform avoids the lesson. When the data is clear (traffic, no conversions, fixes tried), the professional move is to act on it, not to wait for luck.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 &mdash; you think like a media buyer, not a button-masher.</strong> The whole of scaling in one line: <em>scale winners in small steps (vertical), widen into new audiences when saturated (horizontal), let automated bidding learn, and kill what won&rsquo;t convert.</em> Most first campaigns lose money &mdash; the data you buy is the point, and your judgment is what grows the account. No ROAS is ever guaranteed. That&rsquo;s a wrap on Week 2. Well done.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations &mdash; the wrong options are the exact detours that burn budgets: scaling too fast, forcing budget into a saturated ad set, tinkering with automated bidding mid-learning, expecting guaranteed ROAS, and refusing to kill dead campaigns. The professional habit under all of them: let the data decide, then scale winners and cut losers. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderPriority();
+  renderSeasonal();
+  setupBuckets();
+  renderAnalytics();
+  renderQuiz();
+});
+</script>
+</body>
+</html>
