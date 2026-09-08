@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 · SEO in the AI Era — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: CLASSIFIER ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-pros{margin-top:.6rem;font-size:.75rem;line-height:1.6;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-pros .pro{color:#2E6B30;display:block}
+.compare-pros .con{color:#A03A2C;display:block}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 2: FULFILLMENT CHAIN ── */
+.chain-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.chain-grid{grid-template-columns:1fr}}
+.chain-pool{display:flex;flex-direction:column;gap:.6rem}
+.chain-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.84rem;line-height:1.5;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.chain-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.chain-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.chain-chip.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.chain-slots{display:flex;flex-direction:column;gap:.5rem}
+.chain-slot{display:flex;align-items:flex-start;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.65rem .85rem;min-height:46px;font-size:.82rem;line-height:1.5;color:var(--text-muted);transition:all .25s;background:rgba(255,255,255,0.5)}
+.chain-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.chain-slot-num{width:24px;height:24px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.chain-slot.filled .chain-slot-num{background:var(--green)}
+.chain-hintbox{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.chain-hintbox.show{display:block;animation:fadeIn .3s ease}
+
+/* ── ACTIVITY 3: MYTH VS FACT ── */
+.mf-grid{display:grid;gap:.8rem;margin-top:.5rem}
+.mf-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem;transition:all .25s}
+.mf-card.right{border-color:var(--green);background:var(--green-light)}
+.mf-card.miss{border-color:var(--red);background:var(--red-light)}
+.mf-statement{font-size:.88rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.7rem}
+.mf-buttons{display:flex;gap:.5rem}
+.mf-btn{padding:.4rem 1.1rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.78rem;font-weight:700;letter-spacing:.04em;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.mf-btn:hover{border-color:var(--orange);color:var(--orange)}
+.mf-btn:disabled{cursor:not-allowed;opacity:.55}
+.mf-btn.picked-right{background:var(--green);border-color:var(--green);color:#fff;opacity:1}
+.mf-btn.picked-wrong{background:var(--red);border-color:var(--red);color:#fff;opacity:1}
+.mf-explain{display:none;margin-top:.7rem;font-size:.8rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.6rem}
+.mf-explain.show{display:block;animation:fadeIn .3s ease}
+.mf-verdict{font-weight:700;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase}
+.mf-verdict.v-right{color:#256B29}
+.mf-verdict.v-miss{color:#A03A2C}
+
+/* ── ACTIVITY 4: PROFIT MATH ── */
+.math-scenario{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem;margin:1rem 0 1.4rem}
+@media (max-width:760px){.math-scenario{grid-template-columns:1fr 1fr}}
+.math-stat{background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm);padding:.8rem .9rem}
+.math-stat-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.25rem}
+.math-stat-value{font-family:var(--mono);font-size:1.05rem;font-weight:600;color:var(--navy)}
+.math-options{display:grid;gap:.6rem}
+.math-option{display:flex;align-items:flex-start;gap:.7rem;background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.85rem 1rem;cursor:pointer;transition:all .2s;font-size:.86rem;line-height:1.5}
+.math-option:hover{border-color:var(--orange)}
+.math-option input{margin-top:.25rem;accent-color:var(--orange)}
+.math-option .opt-amount{font-family:var(--mono);font-weight:600;color:var(--navy)}
+.math-option.reveal-right{border-color:var(--green);background:var(--green-light)}
+.math-option.reveal-wrong{border-color:var(--red);background:var(--red-light)}
+.breakdown{display:none;margin-top:1.2rem}
+.breakdown.show{display:block;animation:fadeIn .4s ease}
+.breakdown table{width:100%;border-collapse:collapse;font-size:.84rem}
+.breakdown th{text-align:left;font-size:.68rem;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);padding:.45rem .6rem;border-bottom:1px solid var(--border)}
+.breakdown td{padding:.5rem .6rem;border-bottom:1px dashed var(--border);color:var(--text-secondary)}
+.breakdown td.num{font-family:var(--mono);text-align:right;color:var(--navy);font-weight:600}
+.breakdown tr.total td{border-bottom:none;font-weight:700;color:var(--navy);border-top:2px solid var(--navy)}
+.bar-row{display:flex;align-items:center;gap:.6rem;margin-top:.35rem}
+.bar-label{font-size:.72rem;color:var(--text-secondary);width:130px;flex-shrink:0}
+.bar-track{flex:1;height:14px;background:var(--bg-light);border-radius:7px;overflow:hidden;border:1px solid var(--border)}
+.bar-fill{height:100%;border-radius:7px}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 1 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 1 · AI SEO</div>
+  <h1>SEO in the AI Era — <em>learn how search actually decides who wins</em></h1>
+  <p class="hero-sub">Four hands-on activities. Sort real searches by the intent behind them, click a page through how engines crawl, index, and rank it, bust six SEO myths, then do the math that separates ranking from real traffic.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: BUSINESS MODEL CLASSIFIER ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Sort the search — Informational, Commercial, or Navigational?</h2>
+    <p class="lesson-intro">A keyword is not just words — it's a <strong>job the searcher wants done</strong>. The question that separates every query: <strong>what does this person actually want right now?</strong> Study the three cards, then drag each real search into the right intent bucket. Guess freely — wrong pills carry a hover hint with the answer.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">IN</div>
+        <h4>Informational</h4>
+        <p>The searcher wants to <strong>learn something</strong>, not buy yet. "How", "what", "why", "guide", "meaning". Answer it well and you earn trust — and often an AI Overview citation.</p>
+        <div class="compare-pros">
+          <span class="pro">+ Huge volume, builds topical authority</span>
+          <span class="pro">+ Perfect for blog posts &amp; guides</span>
+          <span class="con">− Rarely converts to a sale on the spot</span>
+          <span class="con">− Increasingly answered by AI, zero-click</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">CO</div>
+        <h4>Commercial / Transactional</h4>
+        <p>The searcher is <strong>ready to act or buy</strong> — comparing, pricing, or looking for "best", "buy", "near me", "coupon". These pages carry the money.</p>
+        <div class="compare-pros">
+          <span class="pro">+ High conversion, real revenue intent</span>
+          <span class="pro">+ Worth targeting with product pages</span>
+          <span class="con">− Fierce competition, lower volume</span>
+          <span class="con">− Needs strong authority to rank</span>
+        </div>
+      </div>
+      <div class="compare-card">
+        <div class="compare-icon">NA</div>
+        <h4>Navigational</h4>
+        <p>The searcher already <strong>knows where they want to go</strong> — a specific brand, login, or site. "MokshPath login", "YouTube", "Semrush pricing".</p>
+        <div class="compare-pros">
+          <span class="pro">+ Easy wins if it's your own brand</span>
+          <span class="pro">+ Signals real brand demand</span>
+          <span class="con">− Almost impossible to steal a rival's brand</span>
+          <span class="con">− Little value unless the brand is yours</span>
+        </div>
+      </div>
+    </div>
+    <div class="tip-note">💡 <strong>Why this matters in the AI era:</strong> AI can draft content and cluster keywords in seconds — but matching a page to the <em>true intent</em> behind a query is still human judgment. Google and AI Overviews reward pages that answer the real question. Name the intent first; add AI second.</div>
+
+    <div class="lesson-card" style="margin-top:1.5rem">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="scenarioList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="ds">
+            <div class="bucket-title">Informational</div>
+            <div class="bucket-sub">Wants to learn · how / what / why</div>
+            <div class="bucket-drop" data-drop="ds"></div>
+          </div>
+          <div class="bucket" data-bucket="stock">
+            <div class="bucket-title">Commercial / Transactional</div>
+            <div class="bucket-sub">Ready to buy · best / buy / near me</div>
+            <div class="bucket-drop" data-drop="stock"></div>
+          </div>
+          <div class="bucket" data-bucket="pod">
+            <div class="bucket-title">Navigational</div>
+            <div class="bucket-sub">Wants a specific brand or site</div>
+            <div class="bucket-drop" data-drop="pod"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers1()">Show me the intents</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: FULFILLMENT CHAIN ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Follow the page — click how a search engine crawls, indexes, and ranks it</h2>
+    <p class="lesson-intro">Before your page can win a search, it travels through a pipeline: get discovered, get crawled, get stored, then get judged against everyone else. The seven steps below are shuffled. Click them <strong>in the order they actually happen</strong> — a wrong click shakes red and hints at what comes next.</p>
+
+    <div class="lesson-card">
+      <div class="chain-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Shuffled steps — click the next one</h4>
+          <div class="chain-pool" id="chainPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">The pipeline, in order</h4>
+          <div class="chain-slots" id="chainSlots"></div>
+        </div>
+      </div>
+      <div class="chain-hintbox" id="chainHint"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetChain()">↻ Reset the pipeline</button>
+      </div>
+      <div class="tip-note">💡 <strong>Notice the three big gates:</strong> a page can be discovered but not crawled, crawled but not indexed, indexed but not ranked. Most beginner "why am I invisible on Google?" problems live at one of these gates — not at the final ranking step. Activity 4 shows why ranking alone still isn't traffic.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: MYTH VS FACT ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Myth or Fact? — the honest SEO quiz</h2>
+    <p class="lesson-intro">"Rank #1 in 7 days" ads promise magic; real search data tells a quieter story. Click <strong>Myth</strong> or <strong>Fact</strong> on each statement for instant feedback and an honest reality check. Answer all six to see your score.</p>
+
+    <div class="lesson-card">
+      <div class="mf-grid" id="mfGrid"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMF()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: PROFIT MATH ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">4</span>
+    <h2 class="lesson-title">The traffic-math challenge — does ranking equal visitors?</h2>
+    <p class="lesson-intro">Sana's guide finally ranks #3 for a keyword with <strong>10,000 monthly searches</strong>. Below are <strong>all the numbers</strong> that stand between a ranking and a real visitor. Most beginners assume "ranking = traffic" — that's how "I'm on page one!" turns into almost no clicks. How many visitors does Sana <strong>actually</strong> earn per month?</p>
+
+    <div class="lesson-card">
+      <div class="math-scenario">
+        <div class="math-stat"><div class="math-stat-label">Monthly searches for the keyword</div><div class="math-stat-value">10,000</div></div>
+        <div class="math-stat"><div class="math-stat-label">Sana's ranking position</div><div class="math-stat-value">#3</div></div>
+        <div class="math-stat"><div class="math-stat-label">Click-through rate at #3</div><div class="math-stat-value">~10%</div></div>
+        <div class="math-stat"><div class="math-stat-label">Searches ending zero-click (AI Overview / snippet)</div><div class="math-stat-value">40%</div></div>
+        <div class="math-stat"><div class="math-stat-label">Clicks lost to that zero-click share</div><div class="math-stat-value">−40%</div></div>
+        <div class="math-stat"><div class="math-stat-label">Wrong-country / bot traffic filtered</div><div class="math-stat-value">−10%</div></div>
+      </div>
+
+      <div class="math-options" id="mathOptions">
+        <label class="math-option" data-opt="a"><input type="radio" name="mathQ" value="a"><span><span class="opt-amount">10,000</span> — she ranks on page one, so every searcher sees her. That's the traffic, right?</span></label>
+        <label class="math-option" data-opt="b"><input type="radio" name="mathQ" value="b"><span><span class="opt-amount">1,000</span> — 10% of searches click position #3. Ranking times CTR, done.</span></label>
+        <label class="math-option" data-opt="c"><input type="radio" name="mathQ" value="c"><span><span class="opt-amount">600</span> — the 1,000 clicks minus the 40% of searches that never leave Google.</span></label>
+        <label class="math-option" data-opt="d"><input type="radio" name="mathQ" value="d"><span><span class="opt-amount">540</span> — clicks after zero-click AND after filtering out bot / wrong-country visits.</span></label>
+      </div>
+
+      <div class="activity-feedback" id="feedback4"></div>
+
+      <div class="breakdown" id="mathBreakdown">
+        <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin:.4rem 0 .6rem">Where the 10,000 searches go</h4>
+        <table>
+          <tr><th>Line item</th><th style="text-align:right">Amount</th></tr>
+          <tr><td>Monthly searches for the keyword</td><td class="num">10,000</td></tr>
+          <tr><td>× CTR at position #3 (~10%)</td><td class="num">= 1,000 clicks</td></tr>
+          <tr><td>− Zero-click / AI Overview share (40%)</td><td class="num">− 400</td></tr>
+          <tr><td>Clicks that survive</td><td class="num">= 600</td></tr>
+          <tr><td>− Bot / wrong-country filtered (10%)</td><td class="num">− 60</td></tr>
+          <tr class="total"><td>Real useful visitors per month</td><td class="num">540&nbsp;&nbsp;(≈ 5.4% of searches)</td></tr>
+        </table>
+        <div style="margin-top:1rem">
+          <div class="bar-row"><span class="bar-label">Skip past #3 (90%)</span><div class="bar-track"><div class="bar-fill" style="width:90%;background:#E04E3C"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Zero-click loss (4%)</span><div class="bar-track"><div class="bar-fill" style="width:4%;background:#5B8FE0"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Bot / geo filtered (0.6%)</span><div class="bar-track"><div class="bar-fill" style="width:6%;background:#9597A6"></div></div></div>
+          <div class="bar-row"><span class="bar-label">Real visitors (5.4%)</span><div class="bar-track"><div class="bar-fill" style="width:5.4%;background:#4CAF50"></div></div></div>
+        </div>
+        <div class="tip-note">💡 <strong>The honest takeaway:</strong> ranking is not traffic. Position, CTR, and the growing zero-click share (AI Overviews answering right on the page) each shrink the funnel — so the biggest levers are climbing from #3 toward #1 and targeting keywords AI <em>can't</em> fully answer. That's why the next lessons obsess over intent, content quality, and Search Console data, not chasing a single "#1 ranking".</div>
+      </div>
+
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkMath()">Check my answer</button>
+        <button class="btn btn-ghost" onclick="resetMath()">↻ Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">Type a sentence each. The act of writing helps the concept settle. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">A page can be crawled, indexed, but still not rank. In your own words, what's the difference between being <em>found</em> by Google and being <em>chosen</em> by it?</div>
+        <textarea placeholder="Being found means the engine has my page in its index. Being chosen means..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Sana ranks #3 but only earns ~540 visitors of 10,000 searches. Which gap would you attack first, and how might AI tools help you do it?</div>
+        <textarea placeholder="The zero-click share is huge, so I'd start by..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 2 · AI Keyword Research</h3>
+      <p>You know how search works and why ranking isn't traffic. Next: use AI tools plus Google Trends, Ahrefs, and Semrush to find keywords with real demand — reading intent, spotting low-competition wins, skipping terms AI already answers.</p>
+      <a href="02-ai-keyword-research.html" class="btn btn-primary">Continue to Lesson 2 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ─── ACTIVITY 1: Drag & Drop Business Model Classifier ─── */
+const SCENARIOS = [
+  {id:'s1', text:'Someone searches "how does SEO work for beginners" — they want to understand, not buy anything yet.', bucket:'ds', hint:'"How does…" is a learning question. Informational intent.'},
+  {id:'s2', text:'Someone searches "best SEO tools for small business 2026" — comparing options with a purchase in mind.', bucket:'stock', hint:'"Best… for…" signals someone comparing before buying. Commercial intent.'},
+  {id:'s3', text:'Someone searches "Semrush login" — they already have an account and just want that exact page.', bucket:'pod', hint:'They know the brand and want a specific site. Navigational intent.'},
+  {id:'s4', text:'Someone searches "what is a zero-click search" — pure curiosity about a concept.', bucket:'ds', hint:'"What is…" is a definition/learning query. Informational intent.'},
+  {id:'s5', text:'Someone searches "buy Ahrefs subscription discount code" — ready to purchase, hunting a deal.', bucket:'stock', hint:'"Buy… discount code" is action-ready. Commercial / transactional intent.'},
+  {id:'s6', text:'Someone searches "MokshPath AI marketing course" — they want that specific brand and site.', bucket:'pod', hint:'A branded search aimed at one destination. Navigational intent.'}
+];
+const BUCKET_NAMES = {ds:'Informational', stock:'Commercial / Transactional', pod:'Navigational'};
+
+let placed = {};
+function renderScenarios(){
+  const list = document.getElementById('scenarioList');
+  const shuffled = [...SCENARIOS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', (e) => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('id');
+      handleDrop(id, b.dataset.bucket);
+    });
+  });
+}
+function handleDrop(id, bucket){
+  const scenario = SCENARIOS.find(s => s.id === id);
+  if (!scenario || placed[id]) return;
+  const correct = scenario.bucket === bucket;
+  placed[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const dropZone = document.querySelector(`[data-drop="${bucket}"]`);
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + scenario.text.substring(0, 42) + (scenario.text.length > 42 ? '…' : '');
+  pill.title = correct ? scenario.hint : `Correct bucket: ${BUCKET_NAMES[scenario.bucket]}. ${scenario.hint}`;
+  dropZone.appendChild(pill);
+  checkActivity1Done();
+}
+function checkActivity1Done(){
+  if (Object.keys(placed).length === SCENARIOS.length) {
+    const right = Object.values(placed).filter(p => p.correct).length;
+    const fb = document.getElementById('feedback1');
+    if (right === SCENARIOS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct.</strong> Every keyword carries an intent: informational earns trust and topical authority, commercial carries the revenue, navigational is mostly your own brand. Matching a page to the right intent is the single biggest SEO skill — and the one AI still can't fully judge for you.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill for the right intent and why. Ask: <em>what does this person want right now?</em> To learn = informational. To buy or compare = commercial. To reach one specific site = navigational. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    document.getElementById('prog1').classList.add('done');
+  }
+}
+function resetActivity1(){
+  placed = {};
+  document.getElementById('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('.bucket-drop').forEach(d => d.innerHTML = '');
+  renderScenarios();
+  document.getElementById('prog1').classList.remove('done');
+}
+function showAnswers1(){
+  SCENARIOS.forEach(s => { if (!placed[s.id]) handleDrop(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 2: Click-to-Order Fulfillment Chain ─── */
+const CHAIN = [
+  {text:'You publish a page and it gets discovered — via a link, your sitemap, or an internal link from another page.', hint:'Nothing happens until Google knows the page exists. Discovery comes first.'},
+  {text:'Googlebot crawls the page — it visits the URL and reads the HTML, text, and links.', hint:'Once a URL is discovered, the crawler has to actually fetch and read it before anything else.'},
+  {text:'The page is rendered and indexed — Google stores it and understands what it is about.', hint:'A crawled page must be processed and stored in the index, or it can never appear in results.'},
+  {text:'A searcher types a query — the engine looks in its index for pages that match.', hint:'Ranking only begins when someone actually searches. Index first, then a query.'},
+  {text:'The engine scores candidates on relevance, authority, and experience, then ranks them.', hint:'From matching pages, the engine has to judge and order them — relevance, authority, page experience.'},
+  {text:'Results appear — often with an AI Overview or featured snippet answering above the links.', hint:'After ranking, the page is served on the results page, increasingly alongside an AI-generated answer.'},
+  {text:'You measure clicks and positions in Google Search Console and improve the page.', hint:'The loop closes at the very end: measure real performance, then optimize and start again.'}
+];
+let chainNext = 0;
+function renderChain(){
+  const pool = document.getElementById('chainPool');
+  const slots = document.getElementById('chainSlots');
+  const order = CHAIN.map((_, i) => i).sort(()=>Math.random()-0.5);
+  pool.innerHTML = order.map(i => `<div class="chain-chip" data-step="${i}" onclick="clickChain(${i})">${CHAIN[i].text}</div>`).join('');
+  slots.innerHTML = CHAIN.map((_, i) => `
+    <div class="chain-slot" id="slot${i}">
+      <span class="chain-slot-num">${i+1}</span>
+      <span class="chain-slot-text">Waiting for step ${i+1}…</span>
+    </div>`).join('');
+}
+function clickChain(i){
+  const chip = document.querySelector(`.chain-chip[data-step="${i}"]`);
+  const hintBox = document.getElementById('chainHint');
+  if (!chip || chip.classList.contains('used')) return;
+  if (i !== chainNext) {
+    chip.classList.remove('shake');
+    void chip.offsetWidth; /* restart animation */
+    chip.classList.add('shake');
+    hintBox.className = 'chain-hintbox show';
+    hintBox.innerHTML = `<strong>Not yet.</strong> That step happens later. Think about step ${chainNext+1}: ${CHAIN[chainNext].hint}`;
+    setTimeout(() => chip.classList.remove('shake'), 500);
+    return;
+  }
+  chip.classList.add('used');
+  const slot = document.getElementById('slot' + i);
+  slot.classList.add('filled');
+  slot.querySelector('.chain-slot-text').textContent = CHAIN[i].text;
+  hintBox.className = 'chain-hintbox';
+  chainNext++;
+  if (chainNext >= CHAIN.length) {
+    const fb = document.getElementById('feedback2');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Pipeline complete — all 7 steps in order.</strong> Notice the useful part: crawl, index, and rank are three separate gates, and the whole thing is a loop that ends in measurement. When a page "isn't on Google", the fix depends on which gate failed — not discovered, not crawled, not indexed, or simply out-ranked. Naming the gate is half the job.`;
+    document.getElementById('prog2').classList.add('done');
+  }
+}
+function resetChain(){
+  chainNext = 0;
+  document.getElementById('feedback2').className = 'activity-feedback';
+  document.getElementById('chainHint').className = 'chain-hintbox';
+  renderChain();
+  document.getElementById('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Myth vs Fact ─── */
+const MF = [
+  {s:'SEO is dead now that ChatGPT and AI Overviews answer questions directly.', a:'myth',
+   e:'It changed, it didn’t die. AI tools are <em>trained on</em> and <em>cite</em> web content, and Google still sends billions of clicks. The work shifts toward being the source AI quotes — that’s exactly what GEO/AEO (generative / answer engine optimization) is about.'},
+  {s:'You can rank a brand-new site #1 in a week if you just use the right keywords.', a:'myth',
+   e:'SEO is a long game. New pages take weeks to months to earn crawling, indexing, and enough authority to rank for competitive terms. Anyone promising "#1 in 7 days" is selling a shortcut that usually gets penalized.'},
+  {s:'Search intent — matching your page to what the searcher actually wants — is now more important than keyword density.', a:'fact',
+   e:'True. Modern engines and AI models judge whether a page truly satisfies the query, not how many times you repeat a phrase. Stuffing keywords hurts more than it helps; answering the real question wins.'},
+  {s:'AI tools can dramatically speed up keyword research, drafting, and content briefs.', a:'fact',
+   e:'Genuinely true — clustering keywords or drafting an outline that took a day now takes minutes with ChatGPT plus Ahrefs or Semrush. But AI compresses the <em>work</em>, not the <em>judgment</em>: it drafts fast; you still verify facts, edit for intent, and check what actually ranks.'},
+  {s:'Backlinks and site authority no longer matter because AI reads content directly.', a:'myth',
+   e:'Authority still matters. Links and trust signals help both classic ranking and whether AI systems treat you as a reliable source. Great content on a no-authority site struggles to rank — and struggles to get cited.'},
+  {s:'A growing share of searches now end without a click, thanks to AI Overviews and snippets.', a:'fact',
+   e:'This "zero-click" trend is real and rising. It’s why you optimize for being the answer (structured, quotable content) and why you should track impressions and position in Search Console, not just raw clicks.'}
+];
+let mfAnswered = {};
+function renderMF(){
+  const grid = document.getElementById('mfGrid');
+  grid.innerHTML = MF.map((m, i) => `
+    <div class="mf-card" id="mfCard${i}">
+      <div class="mf-statement">${i+1}. ${m.s}</div>
+      <div class="mf-buttons">
+        <button class="mf-btn" id="mfM${i}" onclick="answerMF(${i},'myth')">MYTH</button>
+        <button class="mf-btn" id="mfF${i}" onclick="answerMF(${i},'fact')">FACT</button>
+      </div>
+      <div class="mf-explain" id="mfEx${i}"></div>
+    </div>`).join('');
+}
+function answerMF(i, choice){
+  if (mfAnswered[i] !== undefined) return;
+  const m = MF[i];
+  const right = choice === m.a;
+  mfAnswered[i] = right;
+  const card = document.getElementById('mfCard' + i);
+  const pickedBtn = document.getElementById(choice === 'myth' ? 'mfM'+i : 'mfF'+i);
+  const otherBtn = document.getElementById(choice === 'myth' ? 'mfF'+i : 'mfM'+i);
+  card.classList.add(right ? 'right' : 'miss');
+  pickedBtn.classList.add(right ? 'picked-right' : 'picked-wrong');
+  pickedBtn.disabled = true; otherBtn.disabled = true;
+  const ex = document.getElementById('mfEx' + i);
+  ex.className = 'mf-explain show';
+  ex.innerHTML = `<span class="mf-verdict ${right ? 'v-right' : 'v-miss'}">${right ? '✓ Correct' : '✗ Not quite'} — this is a ${m.a.toUpperCase()}.</span><br>${m.e}`;
+  if (Object.keys(mfAnswered).length === MF.length) {
+    const score = Object.values(mfAnswered).filter(Boolean).length;
+    const fb = document.getElementById('feedback3');
+    if (score === MF.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>6 of 6 — you see through the hype.</strong> Keep this instinct: SEO is a legitimate, low-cost way to earn traffic — and a long game where intent, content quality, and authority are the actual job. AI is leverage, not magic. Both are true at once.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You scored ${score} of 6.</strong> Re-read the red cards — every SEO myth promises a shortcut (instant #1, "SEO is dead", stuff keywords) while every fact comes with an honest caveat about time, judgment, and authority. Realistic expectations are your first competitive advantage. Hit <em>Try again</em> to retake it.`;
+    }
+    document.getElementById('prog3').classList.add('done');
+  }
+}
+function resetMF(){
+  mfAnswered = {};
+  document.getElementById('feedback3').className = 'activity-feedback';
+  renderMF();
+  document.getElementById('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Profit Math ─── */
+const MATH_FEEDBACK = {
+  a:`<strong>10,000 is the beginner trap.</strong> Ranking on page one does not mean every searcher visits you. At position #3 only about 10% click, and a big share of searches never leave Google at all. "Ranking = traffic" is how new SEOs celebrate a #1 that sends almost no visitors. Try again.`,
+  b:`<strong>1,000 forgets the AI era.</strong> Good — 10% CTR at #3 gives 1,000 clicks. But a growing 40% of searches now end zero-click (AI Overviews and snippets answer on the page), and some traffic is bots or the wrong country. Keep subtracting. Try again.`,
+  c:`<strong>600 is close — you handled zero-click.</strong> You took 1,000 clicks and removed the 40% zero-click share to get 600. But roughly 10% of that is bot or wrong-country traffic that never becomes a real reader. Filter it out and try again.`,
+  d:`<strong>Correct: 540.</strong> 10,000 searches × ~10% CTR at #3 = 1,000 clicks; − 40% zero-click = 600; − 10% bot/geo = <strong>540</strong> useful visitors, about 5.4% of the searches. Scroll the breakdown below — and notice how much the funnel shrinks before a single visitor arrives.`
+};
+function checkMath(){
+  const picked = document.querySelector('input[name="mathQ"]:checked');
+  const fb = document.getElementById('feedback4');
+  if (!picked) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Pick one of the four options first</strong> — then hit "Check my answer".`;
+    return;
+  }
+  const val = picked.value;
+  document.querySelectorAll('.math-option').forEach(o => o.classList.remove('reveal-right','reveal-wrong'));
+  if (val === 'd') {
+    document.querySelector('.math-option[data-opt="d"]').classList.add('reveal-right');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = MATH_FEEDBACK.d;
+    document.getElementById('mathBreakdown').className = 'breakdown show';
+    document.getElementById('prog4').classList.add('done');
+  } else {
+    document.querySelector(`.math-option[data-opt="${val}"]`).classList.add('reveal-wrong');
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = MATH_FEEDBACK[val];
+  }
+}
+function resetMath(){
+  document.querySelectorAll('input[name="mathQ"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.math-option').forEach(o => o.classList.remove('reveal-right','reveal-wrong'));
+  document.getElementById('feedback4').className = 'activity-feedback';
+  document.getElementById('mathBreakdown').className = 'breakdown';
+  document.getElementById('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderScenarios();
+  setupBuckets();
+  renderChain();
+  renderMF();
+});
+</script>
+</body>
+</html>

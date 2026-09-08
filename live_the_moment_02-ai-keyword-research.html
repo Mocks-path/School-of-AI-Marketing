@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · AI Keyword &amp; Topic Research — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── ACTIVITY 1: PRODUCT SORTER ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#E04E3C,#C43A29)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.compare-card.warn li::before{content:'⚠';color:var(--orange)}
+.compare-card.danger li::before{content:'✗';color:var(--red)}
+
+/* ── ACTIVITY 2: PROMPT BUILDER ── */
+.prompt-pool{display:flex;flex-wrap:wrap;gap:.6rem;margin-top:1rem}
+.frag-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .9rem;font-size:.8rem;line-height:1.45;cursor:pointer;transition:all .2s;max-width:340px;user-select:none;font-weight:500}
+.frag-chip:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.frag-chip.used{opacity:0;pointer-events:none;position:absolute;visibility:hidden}
+.frag-chip.shake{animation:shake .35s ease;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.prompt-slots{margin-top:1.4rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:90px;background:rgba(255,255,255,0.5)}
+.slot-line{display:flex;align-items:flex-start;gap:.6rem;padding:.45rem .2rem;font-size:.83rem;line-height:1.5;animation:fadeIn .35s ease}
+.slot-tag{font-family:var(--mono);font-size:.62rem;font-weight:600;letter-spacing:.05em;color:#fff;background:var(--navy);padding:.18rem .5rem;border-radius:4px;flex-shrink:0;margin-top:.1rem;text-transform:uppercase}
+.slot-line.t-role .slot-tag{background:#5B8FE0}
+.slot-line.t-task .slot-tag{background:var(--orange)}
+.slot-line.t-criteria .slot-tag{background:#66BB6A}
+.slot-line.t-format .slot-tag{background:#8E6BC0}
+.prompt-hint{margin-top:.8rem;padding:.7rem .9rem;background:var(--red-light);border-left:3px solid var(--red);border-radius:4px;font-size:.78rem;color:#7A2A1E;line-height:1.55;display:none}
+.prompt-hint.show{display:block;animation:fadeIn .3s ease}
+.prompt-preview{margin-top:1.2rem;background:#1A1B2E;border-radius:var(--radius-sm);padding:1.2rem 1.4rem;font-family:var(--mono);font-size:.78rem;line-height:1.75;color:#E8E8EC;display:none;border:1px solid var(--navy)}
+.prompt-preview.show{display:block;animation:fadeIn .4s ease}
+.prompt-preview .pp-label{color:var(--orange-light);font-weight:600;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;display:block;margin-bottom:.6rem}
+.structure-bar{display:flex;gap:.4rem;margin-top:1rem;flex-wrap:wrap}
+.structure-step{font-size:.68rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;padding:.3rem .7rem;border-radius:50px;color:#fff}
+.structure-step:nth-child(1){background:#5B8FE0}.structure-step:nth-child(3){background:var(--orange)}
+.structure-step:nth-child(5){background:#66BB6A}.structure-step:nth-child(7){background:#8E6BC0}
+.structure-arrow{color:var(--text-muted);font-weight:700;align-self:center;font-size:.75rem}
+
+/* ── ACTIVITY 3: VALIDATION LAB ── */
+.validate-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.validate-grid{grid-template-columns:1fr}}
+.product-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow-sm)}
+.product-card h4{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);margin-bottom:.2rem}
+.product-tag{font-size:.68rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--orange);margin-bottom:.8rem;display:block}
+.stat-row{display:flex;justify-content:space-between;padding:.42rem 0;border-bottom:1px dashed var(--border);font-size:.8rem}
+.stat-row:last-of-type{border-bottom:none}
+.stat-label{color:var(--text-secondary)}
+.stat-value{font-family:var(--mono);font-weight:600;color:var(--navy);text-align:right}
+.check-block{margin-top:1rem;padding-top:.9rem;border-top:2px solid var(--border)}
+.check-block h5{font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-muted);margin-bottom:.6rem}
+.check-item{display:flex;align-items:flex-start;gap:.6rem;padding:.4rem .5rem;border-radius:6px;font-size:.8rem;line-height:1.45;cursor:pointer;transition:background .2s}
+.check-item:hover{background:var(--bg-light)}
+.check-item input{margin-top:.2rem;accent-color:var(--orange);width:15px;height:15px;cursor:pointer;flex-shrink:0}
+.check-item.row-right{background:var(--green-light)}
+.check-item.row-wrong{background:var(--red-light)}
+.row-note{font-size:.7rem;color:#933;margin:.1rem 0 .3rem 2.1rem;line-height:1.5;display:none}
+.row-note.show{display:block;animation:fadeIn .3s ease}
+.verdict-pill{display:none;margin-top:.9rem;padding:.6rem .9rem;border-radius:var(--radius-sm);font-size:.8rem;font-weight:600;line-height:1.5}
+.verdict-pill.show{display:block;animation:fadeIn .4s ease}
+.verdict-pill.go{background:var(--green-light);color:#1F5723;border:1px solid var(--green)}
+.verdict-pill.stop{background:var(--red-light);color:#7A2A1E;border:1px solid var(--red)}
+
+/* ── ACTIVITY 4: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 1 · AI SEO</div>
+  <h1>AI Keyword &amp; Topic Research — <em>find the searches worth ranking for</em></h1>
+  <p class="hero-sub">Four hands-on activities. Sort keywords by search intent, assemble a topic-cluster research prompt block by block, run two keyword candidates through an honest validation checklist, and test your keyword-math instincts. Most content dies because nobody was searching for it — this hour is your insurance. Remember: AI suggests keywords, but the SERP decides who ranks.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: KEYWORD INTENT SORTER ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Sort the keyword — what does the searcher actually want?</h2>
+    <p class="lesson-intro">Every keyword carries an intent — the reason someone typed it. Match your content to that intent and you rank; ignore it and Google shows a different kind of page instead. Study the intent cards, then drag each keyword into its bucket. Guess freely — wrong answers come with an explanation you can hover to read.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">I</div>
+        <h4>Informational</h4>
+        <p>The searcher wants to <strong>learn</strong> something. They're not ready to buy — they have a question.</p>
+        <ul>
+          <li>Starts with how, what, why, guide, tips</li>
+          <li>Best served by blog posts &amp; tutorials</li>
+          <li>Builds trust early in the journey</li>
+          <li>High volume, often lower difficulty</li>
+          <li>Feeds email lists and future sales</li>
+        </ul>
+      </div>
+      <div class="compare-card warn">
+        <div class="compare-icon">C</div>
+        <h4>Commercial</h4>
+        <p>The searcher is <strong>comparing options</strong> — close to buying, but weighing the choices.</p>
+        <ul>
+          <li>best, review, vs, top, alternative</li>
+          <li>Served by comparisons &amp; roundups</li>
+          <li>High buyer value, moderate volume</li>
+        </ul>
+      </div>
+      <div class="compare-card danger">
+        <div class="compare-icon">T</div>
+        <h4>Transactional / Navigational</h4>
+        <p>Ready to <strong>act now</strong> — buy, sign up, or reach a specific brand or page.</p>
+        <ul>
+          <li>buy, price, coupon, near me, sign up</li>
+          <li>Navigational: a brand or site name</li>
+          <li>Highest value, lowest volume, hardest to win</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="lesson-card" style="margin-top:1.5rem">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="scenarioList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="winner">
+            <div class="bucket-title">Informational</div>
+            <div class="bucket-sub">Wants to learn, not buy yet</div>
+            <div class="bucket-drop" data-drop="winner"></div>
+          </div>
+          <div class="bucket" data-bucket="saturated">
+            <div class="bucket-title">Commercial</div>
+            <div class="bucket-sub">Comparing options, close to buying</div>
+            <div class="bucket-drop" data-drop="saturated"></div>
+          </div>
+          <div class="bucket" data-bucket="redflag">
+            <div class="bucket-title">Transactional / Navigational</div>
+            <div class="bucket-sub">Ready to act, or after one brand</div>
+            <div class="bucket-drop" data-drop="redflag"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers1()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: BUILD-A-PROMPT ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Build the topic-cluster prompt — one block at a time</h2>
+    <p class="lesson-intro">"Give me keywords" gets you the same generic list ChatGPT gives everyone else. A strong research prompt follows a structure: <strong>ROLE → TASK → CRITERIA → FORMAT</strong>. The eight blocks of a professional topic-cluster prompt are scrambled below — click them in the order they should appear. A wrong click tells you why it doesn't fit yet.</p>
+
+    <div class="structure-bar">
+      <span class="structure-step">1 · Role</span><span class="structure-arrow">→</span>
+      <span class="structure-step">2 · Task</span><span class="structure-arrow">→</span>
+      <span class="structure-step">3 · Criteria</span><span class="structure-arrow">→</span>
+      <span class="structure-step">4 · Format</span>
+    </div>
+
+    <div class="lesson-card">
+      <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy)">Click the next block of the prompt</h4>
+      <div class="prompt-pool" id="fragPool"></div>
+      <div class="prompt-hint" id="promptHint"></div>
+      <div class="prompt-slots" id="promptSlots">
+        <div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="slotPlaceholder">Your assembled prompt will build up here, block by block…</div>
+      </div>
+      <div class="prompt-preview" id="promptPreview"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity2()">↻ Start over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: VALIDATION LAB ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">3</span>
+    <h2 class="lesson-title">The validation lab — score two keyword candidates</h2>
+    <p class="lesson-intro">AI can suggest keywords all day; <strong>validation</strong> separates hope from evidence. Two candidates, with illustrative research numbers. For each keyword, tick a checklist item only if you believe it <em>genuinely passes</em> that test. Then get the verdict and compare your judgement to the data. (All volume, difficulty and CPC figures below are illustrative.)</p>
+
+    <div class="lesson-card">
+      <div class="validate-grid">
+        <div class="product-card" id="cardA">
+          <span class="product-tag">Keyword A</span>
+          <h4>"how to clean a coffee grinder"</h4>
+          <div class="stat-row"><span class="stat-label">Monthly volume (illustrative)</span><span class="stat-value">2,400 / mo</span></div>
+          <div class="stat-row"><span class="stat-label">Keyword difficulty (illustrative)</span><span class="stat-value">18 / 100</span></div>
+          <div class="stat-row"><span class="stat-label">Dominant intent</span><span class="stat-value">Informational</span></div>
+          <div class="stat-row"><span class="stat-label">Our fit</span><span class="stat-value">We sell grinders + guides</span></div>
+          <div class="stat-row"><span class="stat-label">Trend</span><span class="stat-value">Steady for 5 years</span></div>
+          <div class="check-block">
+            <h5>Does it pass? Tick only what's true</h5>
+            <div id="checksA"></div>
+          </div>
+          <div class="verdict-pill" id="verdictA"></div>
+        </div>
+        <div class="product-card" id="cardB">
+          <span class="product-tag">Keyword B</span>
+          <h4>"best coffee maker"</h4>
+          <div class="stat-row"><span class="stat-label">Monthly volume (illustrative)</span><span class="stat-value">90,000 / mo</span></div>
+          <div class="stat-row"><span class="stat-label">Keyword difficulty (illustrative)</span><span class="stat-value">88 / 100</span></div>
+          <div class="stat-row"><span class="stat-label">Dominant intent</span><span class="stat-value">Commercial</span></div>
+          <div class="stat-row"><span class="stat-label">Our fit</span><span class="stat-value">Brand-new site, no authority</span></div>
+          <div class="stat-row"><span class="stat-label">Trend</span><span class="stat-value">Steady, but dominated by giants</span></div>
+          <div class="check-block">
+            <h5>Does it pass? Tick only what's true</h5>
+            <div id="checksB"></div>
+          </div>
+          <div class="verdict-pill" id="verdictB"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="getVerdict()">Get verdict</button>
+        <button class="btn btn-ghost" onclick="resetActivity3()">↻ Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: KEYWORD MATH QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Keyword math — the quiz that saves wasted content</h2>
+    <p class="lesson-intro">Chasing the wrong keyword wastes months just as fast as writing bad content. Five situations, one honest answer each. Every option comes with an explanation — the misconceptions are where the real learning is. (Numbers are illustrative.)</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">↻ Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">A friend shows you a keyword with 50,000 monthly searches, difficulty 85, on a brand-new site. What would today's checklist say — and what's the only real way to find out if you can rank?</div>
+        <textarea placeholder="High difficulty on a new site usually means... and the only real proof is watching the live SERP and Search Console after you publish..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Rewrite this weak prompt using ROLE → TASK → CRITERIA → FORMAT: "give me good SEO keywords". Which blocks would you add first?</div>
+        <textarea placeholder="First a role, like 'Act as an experienced SEO strategist...', then narrow the task to a pillar topic, then add criteria like intent match and difficulty..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 3 · AI Content Writing for SEO</h3>
+      <p>You can find and validate the keywords worth ranking for. Next: let AI help you write the content that earns those rankings — briefs, outlines, drafts, and on-page optimization — in an afternoon instead of a week.</p>
+      <a href="03-ai-content-writing.html" class="btn btn-primary">Continue to Lesson 3 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Keyword Intent Sorter ─── */
+const PRODUCTS = [
+  {id:'p1', text:'"how to descale a coffee machine"', hint:'A question — the searcher wants steps, not a checkout page.', bucket:'winner', why:'Informational: the "how to" signals a searcher who wants to learn. The right page is a step-by-step guide, not a product listing.'},
+  {id:'p2', text:'"what is cold brew coffee"', hint:'Someone is trying to understand a concept before anything else.', bucket:'winner', why:'Informational: "what is" is pure learning intent. Serve a clear explainer, build trust, and capture the reader early in their journey.'},
+  {id:'p3', text:'"best espresso machine under $500"', hint:'They\'ve decided to buy — now they\'re comparing which one.', bucket:'saturated', why:'Commercial: "best … under $500" is comparison intent. The winning page is a curated roundup or comparison, not a single how-to article.'},
+  {id:'p4', text:'"Breville vs De\'Longhi espresso"', hint:'A head-to-head — the classic sign of comparison shopping.', bucket:'saturated', why:'Commercial: "X vs Y" means the searcher is weighing two options. A comparison page that names a winner matches this intent perfectly.'},
+  {id:'p5', text:'"buy burr coffee grinder online"', hint:'The word before the product tells you they\'re ready to act.', bucket:'redflag', why:'Transactional: "buy … online" is ready-to-purchase intent. Send them to a product or category page, not a blog post.'},
+  {id:'p6', text:'"MokshPath coffee blog"', hint:'They already know exactly which site they want.', bucket:'redflag', why:'Navigational: the searcher named a specific brand/site. They want that exact destination — ranking anything else here is nearly impossible.'}
+];
+const BUCKET_NAMES = {winner:'Informational', saturated:'Commercial', redflag:'Transactional / Navigational'};
+
+let placed = {};
+function renderScenarios(){
+  const list = $('scenarioList');
+  const shuffled = [...PRODUCTS].sort(()=>Math.random()-0.5);
+  list.innerHTML = shuffled.map(p => `
+    <div class="scenario-card" draggable="true" data-id="${p.id}">
+      <div class="scenario-text">${p.text}</div>
+      <div class="scenario-hint">${p.hint}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(){
+  document.querySelectorAll('.bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      handleDrop(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function handleDrop(id, bucket){
+  const product = PRODUCTS.find(p => p.id === id);
+  if (!product || placed[id]) return;
+  const correct = product.bucket === bucket;
+  placed[id] = {bucket, correct};
+  const card = document.querySelector(`.scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + product.text.substring(0, 38) + (product.text.length > 38 ? '…' : '');
+  pill.title = correct ? product.why : `Correct bucket: ${BUCKET_NAMES[product.bucket]}. ${product.why}`;
+  document.querySelector(`[data-drop="${bucket}"]`).appendChild(pill);
+  checkActivity1Done();
+}
+function checkActivity1Done(){
+  if (Object.keys(placed).length === PRODUCTS.length) {
+    const right = Object.values(placed).filter(p => p.correct).length;
+    const fb = $('feedback1');
+    if (right === PRODUCTS.length) {
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six correct — you already read intent like an SEO.</strong> Informational keywords want a guide; commercial keywords want a comparison; transactional and navigational keywords want a page that lets them act right now. When AI hands you 30 keywords next week, tag every one by intent <em>first</em> — it decides what kind of page you'll build.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover any red pill to see the right bucket and the reasoning. The classic mix-up: "best X" feels transactional but is <em>commercial</em> — the searcher is still comparing, not checking out. And a branded search ("MokshPath …") is navigational: that person wants one specific site, so ranking against it is nearly hopeless. Click <em>Try again</em> for a fresh shuffle.`;
+    }
+    $('prog1').classList.add('done');
+  }
+}
+function resetActivity1(){
+  placed = {};
+  $('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('.bucket-drop').forEach(d => d.innerHTML = '');
+  renderScenarios();
+  $('prog1').classList.remove('done');
+}
+function showAnswers1(){
+  PRODUCTS.forEach(p => { if (!placed[p.id]) handleDrop(p.id, p.bucket); });
+}
+
+/* ─── ACTIVITY 2: Build-a-Prompt ─── */
+const FRAGMENTS = [
+  {order:1, tag:'role',     text:'Act as an experienced SEO content strategist'},
+  {order:2, tag:'role',     text:'who builds topic clusters for small brands new to SEO.'},
+  {order:3, tag:'task',     text:'Design a topic cluster around the pillar "home coffee brewing"'},
+  {order:4, tag:'task',     text:'with one pillar page and 8–10 supporting article ideas.'},
+  {order:5, tag:'criteria', text:'For each idea give: the target keyword, its search intent (informational / commercial / transactional), and why a beginner site could realistically rank for it.'},
+  {order:6, tag:'criteria', text:'Prefer lower-difficulty, long-tail keywords with clear intent; avoid ultra-competitive head terms a new site can\'t win.'},
+  {order:7, tag:'format',   text:'Present results as a table with columns: article title, target keyword, intent, why-we-can-rank, and which cluster it links to.'},
+  {order:8, tag:'format',   text:'Then flag any keywords I should validate in a real tool before writing.'}
+];
+const STAGE_HINTS = {
+  role:'Start with the ROLE — tell the model who to be before what to do.',
+  task:'The TASK comes after the role: what exactly do you want, on which pillar, at what scope?',
+  criteria:'CRITERIA come after the task — the must-haves and the exclusions that filter the list.',
+  format:'FORMAT comes last — how the answer should be laid out so you can actually use it.'
+};
+let promptStep = 0, promptMistakes = 0;
+function renderFragments(){
+  const shuffled = [...FRAGMENTS].sort(()=>Math.random()-0.5);
+  $('fragPool').innerHTML = shuffled.map(f =>
+    `<div class="frag-chip" data-order="${f.order}" onclick="pickFragment(${f.order}, this)">${f.text}</div>`
+  ).join('');
+}
+function pickFragment(order, chip){
+  const hint = $('promptHint');
+  if (order !== promptStep + 1) {
+    promptMistakes++;
+    chip.classList.remove('shake'); void chip.offsetWidth;
+    chip.classList.add('shake');
+    const expected = FRAGMENTS.find(f => f.order === promptStep + 1);
+    hint.innerHTML = `<strong>Not yet.</strong> ${STAGE_HINTS[expected.tag]} (Block ${promptStep + 1} of 8 — you're building the <strong>${expected.tag.toUpperCase()}</strong> section.)`;
+    hint.classList.add('show');
+    return;
+  }
+  hint.classList.remove('show');
+  promptStep++;
+  chip.classList.add('used');
+  const frag = FRAGMENTS.find(f => f.order === order);
+  const ph = $('slotPlaceholder');
+  if (ph) ph.remove();
+  const line = document.createElement('div');
+  line.className = 'slot-line t-' + frag.tag;
+  line.innerHTML = `<span class="slot-tag">${frag.tag}</span><span>${frag.text}</span>`;
+  $('promptSlots').appendChild(line);
+  if (promptStep === FRAGMENTS.length) finishPrompt();
+}
+function finishPrompt(){
+  const preview = $('promptPreview');
+  preview.innerHTML = `<span class="pp-label">Your assembled prompt — copy this pattern for any pillar</span>` +
+    FRAGMENTS.map(f => f.text).join(' ');
+  preview.classList.add('show');
+  const fb = $('feedback2');
+  const whys = `<ul style="margin:.6rem 0 0 1.1rem;line-height:1.7">
+    <li><strong>Role</strong> primes expertise — "strategist for new brands" beats a blank slate.</li>
+    <li><strong>Task</strong> with a pillar and scope stops the model listing the same generic keywords it tells everyone.</li>
+    <li><strong>Criteria</strong> (intent tags, difficulty cap, long-tail) turn a brainstorm into a filtered, rankable shortlist.</li>
+    <li><strong>Exclusions</strong> keep you off head terms a new site can't win — the classic beginner time-sink.</li>
+    <li><strong>Format</strong> as a table with intent and cluster links lets you build the cluster row by row instead of decoding paragraphs.</li></ul>`;
+  if (promptMistakes === 0) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect assembly — zero wrong clicks.</strong> You've internalized the ROLE → TASK → CRITERIA → FORMAT skeleton. Why each block earns its place:${whys} One honest caveat: AI's difficulty guesses are estimates — always sanity-check the shortlist in a real tool before you commit.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>Assembled — with ${promptMistakes} wrong click${promptMistakes > 1 ? 's' : ''} on the way.</strong> That's fine: the order <em>is</em> the lesson — role before task, constraints before format. Why each block matters:${whys} Hit <em>Start over</em> and try for a clean run.`;
+  }
+  $('prog2').classList.add('done');
+}
+function resetActivity2(){
+  promptStep = 0; promptMistakes = 0;
+  $('promptHint').classList.remove('show');
+  $('promptPreview').className = 'prompt-preview';
+  $('feedback2').className = 'activity-feedback';
+  $('promptSlots').innerHTML = '<div style="font-size:.75rem;color:var(--text-muted);font-style:italic" id="slotPlaceholder">Your assembled prompt will build up here, block by block…</div>';
+  renderFragments();
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Validation Lab ─── */
+const CHECK_ITEMS = [
+  {key:'margin',  label:'Rankable difficulty: keyword difficulty is low enough for our site\'s current authority'},
+  {key:'quality', label:'Real demand: search volume is high enough to be worth the effort (not near-zero)'},
+  {key:'demand',  label:'Intent match: the keyword\'s intent fits the kind of page we can actually make'},
+  {key:'compete', label:'Business value: ranking for it plausibly leads to a subscriber, lead, or sale'},
+  {key:'trend',   label:'Trend stable or rising — not a fad that already faded, and not owned by giants only'}
+];
+const CORRECT_EVAL = {
+  A: {margin:true, quality:true, demand:true, compete:true, trend:true},
+  B: {margin:false, quality:true, demand:false, compete:false, trend:false}
+};
+const EVAL_NOTES = {
+  A: {
+    margin:'Difficulty 18 is well within reach for a young site — this is exactly the kind of term a new blog can rank for.',
+    quality:'2,400 searches a month (illustrative) is a healthy, meaningful audience for a niche how-to.',
+    demand:'Informational intent matches a step-by-step guide perfectly — we can build the right page.',
+    compete:'We sell grinders and guides, so this reader is a genuine future customer, not idle traffic.',
+    trend:'A flat steady line for 5 years is evergreen demand — the safest trend shape to invest content in.'
+  },
+  B: {
+    margin:'Difficulty 88 on a brand-new site is effectively unrankable — page one is owned by high-authority giants.',
+    quality:'90,000 searches (illustrative) is real demand — this row genuinely passes. Volume isn\'t the problem here.',
+    demand:'Commercial "best coffee maker" needs a heavyweight comparison page with reviews and authority we don\'t have yet.',
+    compete:'There is value in ranking — but only if you can rank. Chasing an unwinnable term returns zero, so effectively no business value now.',
+    trend:'Steady demand, but permanently dominated by giants — for a new site that\'s a wall, not an opportunity.'
+  }
+};
+function renderChecks(){
+  ['A','B'].forEach(prod => {
+    $('checks' + prod).innerHTML = CHECK_ITEMS.map(c => `
+      <label class="check-item" id="row-${prod}-${c.key}">
+        <input type="checkbox" data-prod="${prod}" data-key="${c.key}">
+        <span>${c.label}</span>
+      </label>
+      <div class="row-note" id="note-${prod}-${c.key}"></div>`).join('');
+  });
+}
+function getVerdict(){
+  let right = 0;
+  ['A','B'].forEach(prod => {
+    CHECK_ITEMS.forEach(c => {
+      const box = document.querySelector(`input[data-prod="${prod}"][data-key="${c.key}"]`);
+      const row = $(`row-${prod}-${c.key}`);
+      const note = $(`note-${prod}-${c.key}`);
+      const correct = CORRECT_EVAL[prod][c.key];
+      row.classList.remove('row-right','row-wrong');
+      note.classList.remove('show');
+      if (box.checked === correct) {
+        right++;
+        row.classList.add('row-right');
+      } else {
+        row.classList.add('row-wrong');
+        note.textContent = (correct ? 'This one actually passes: ' : 'This one actually fails: ') + EVAL_NOTES[prod][c.key];
+        note.classList.add('show');
+      }
+    });
+  });
+  const vA = $('verdictA'), vB = $('verdictB');
+  vA.className = 'verdict-pill show go';
+  vA.innerHTML = '✓ Verdict: <strong>write this one</strong> — passes 5/5. Low difficulty, real demand, intent we can serve, genuine business fit, evergreen trend.';
+  vB.className = 'verdict-pill show stop';
+  vB.innerHTML = '✗ Verdict: <strong>skip it for now</strong> — passes 1/5. Big volume is tempting, but difficulty 88 on a new site is unrankable, the intent needs authority you don\'t have, and unrankable traffic is zero business value.';
+  const fb = $('feedback3');
+  if (right === 10) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>10/10 — your evaluation matches the data exactly.</strong> Now the honest part: <em>validation reduces risk, it never guarantees rankings.</em> Keyword A can still get outranked — the checklist filters out obvious losers so your writing time goes to real chances. The only thing that proves you can rank is publishing and watching the live SERP and Search Console. AI suggests; the SERP decides.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>${right}/10 rows matched the evidence.</strong> Every mis-scored row now shows its reasoning in red — those are the exact traps beginners fall into. The two most common: chasing huge volume while ignoring difficulty (a new site can't rank for KD 88), and forgetting that volume alone isn't the same as value if you can't rank. Remember: even 5/5 isn't a guarantee — validation shrinks risk, only the live SERP proves rankings. Fix your ticks and click <em>Get verdict</em> again.`;
+  }
+  $('prog3').classList.add('done');
+}
+function resetActivity3(){
+  document.querySelectorAll('#checksA input, #checksB input').forEach(b => b.checked = false);
+  document.querySelectorAll('.check-item').forEach(r => r.classList.remove('row-right','row-wrong'));
+  document.querySelectorAll('.row-note').forEach(n => n.classList.remove('show'));
+  $('verdictA').className = 'verdict-pill';
+  $('verdictB').className = 'verdict-pill';
+  $('feedback3').className = 'activity-feedback';
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Keyword Math Quiz ─── */
+const QUIZ = [
+  {
+    q:'Two keywords (illustrative numbers): one has 40,000 searches/mo at difficulty 82; the other 1,500 searches/mo at difficulty 15. Your site is three months old. Which should you write first?',
+    opts:[
+      {t:'The 40,000-search term — go where the traffic is', ok:false, ex:'Volume you can\'t rank for is zero traffic. At difficulty 82 a three-month-old site won\'t reach page one, so that "40,000" never becomes a single visit. Difficulty gates access to the volume.'},
+      {t:'The 1,500-search, difficulty-15 term — winnable now', ok:true, ex:'A low-difficulty long-tail keyword is one a young site can realistically rank for. 1,500 real monthly visitors beat 40,000 imaginary ones. Win the small terms first, build authority, then climb.'},
+      {t:'Neither — volume and difficulty don\'t really matter if the content is good', ok:false, ex:'Great content still needs a winnable target. Publishing a brilliant article on a KD-82 term as a new site means it sits on page 5 where nobody sees it. Keyword selection is half the battle.'}
+    ]
+  },
+  {
+    q:'You want to build authority efficiently. What is a "topic cluster" (pillar page + supporting articles) actually doing for your SEO?',
+    opts:[
+      {t:'Stuffing one page with every keyword so it ranks for all of them', ok:false, ex:'That\'s old-school keyword stuffing, and it fails. A cluster is many focused pages, each targeting one keyword/intent — not one page trying to be everything.'},
+      {t:'Covering a topic in depth across linked pages, signalling expertise to Google', ok:true, ex:'A pillar page covers the broad topic and links to supporting articles that each go deep on a subtopic. The internal links and thorough coverage signal topical authority — Google rewards sites that clearly own a subject.'},
+      {t:'Publishing as many unrelated articles as possible for sheer volume', ok:false, ex:'Volume without focus dilutes authority. A cluster is deliberately interlinked around one theme — that structure, not raw count, is what builds topical strength.'}
+    ]
+  },
+  {
+    q:'An AI tool lists "coffee" (huge volume) as a keyword suggestion for your new blog. Why is that usually a poor pick?',
+    opts:[
+      {t:'Great pick — the bigger the volume, the more traffic you\'ll get', ok:false, ex:'A single broad head term like "coffee" has enormous volume but sky-high difficulty and murky intent — you\'d compete with global giants and it\'s unclear what page the searcher even wants.'},
+      {t:'Poor pick — it\'s a broad head term: brutal difficulty and unclear intent', ok:true, ex:'One-word head terms are the hardest to rank and the vaguest in intent. Long-tail phrases ("how to store coffee beans") are lower difficulty and tell you exactly what page to build. Specific beats broad for a new site.'},
+      {t:'It doesn\'t matter — AI only suggests keywords you can definitely rank for', ok:false, ex:'AI suggests based on patterns, not your site\'s real authority. It has no live view of the SERP or your backlinks — its picks are a starting point to validate, never a guarantee.'}
+    ]
+  },
+  {
+    q:'Keyword "buy coffee grinder" is transactional; your page is a 2,000-word how-to guide. Google keeps ranking product listings instead of guides for it. What is that telling you?',
+    opts:[
+      {t:'Google is broken — resubmit the page and wait', ok:false, ex:'Google isn\'t broken; it\'s showing what searchers click. If listings dominate the results, that\'s the SERP telling you the intent is to buy, not to read.'},
+      {t:'Intent mismatch — the SERP wants product pages, not a guide', ok:true, ex:'The live SERP is the ground truth on intent. If it\'s full of product/listing pages, a how-to guide won\'t rank there no matter how good it is. Match your page type to what already ranks — the SERP decides, not the tool\'s intent label.'},
+      {t:'Add more keywords to the guide until it outranks the shops', ok:false, ex:'Cramming keywords can\'t override intent. For a transactional query Google wants a page that lets people buy; the fix is a different page type, not more keywords on the wrong one.'}
+    ]
+  },
+  {
+    q:'Your validation checklist flags a keyword with warning signs: near-zero volume, an intent your site can\'t serve, and it\'s already owned by mega-brands. It\'s a classic red flag when…',
+    opts:[
+      {t:'…the difficulty number is high, so you should just write more words', ok:false, ex:'Word count doesn\'t beat difficulty. A high-difficulty term owned by authorities won\'t yield to a longer article from a new site — that\'s effort spent on an unwinnable race.'},
+      {t:'…demand is essentially zero — even a #1 ranking would bring almost no visitors', ok:true, ex:'A red flag is a keyword that can\'t pay off: near-zero volume means ranking #1 still sends almost nobody, mismatched intent means you can\'t build the right page, and giant-owned SERPs mean you can\'t rank anyway. Walk away — that\'s a smart decision, not defeat.'},
+      {t:'…it has commercial intent, which always means it\'s too competitive to try', ok:false, ex:'Commercial intent isn\'t automatically off-limits — plenty of low-difficulty "best X for Y" long-tails are winnable. The red flag is the combination of no demand, wrong intent, and giant-dominated results, not commercial intent by itself.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 — your keyword judgement is sharp.</strong> You now read the signals that matter: difficulty vs your site's authority, long-tail over head terms, topic clusters that build expertise, and intent read straight off the live SERP. Combine these with Activity 3's checklist and you have a complete keyword-vetting system. Never forget the honest rule: AI suggests, the SERP decides.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations — the wrong options are the exact reasoning that wastes beginner content budgets ("go where the volume is", "one page for every keyword", "more words beats difficulty"). The thread through all five: you're not just picking a phrase, you're picking a target your site can realistically win, with intent you can serve. Retake the quiz for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderScenarios();
+  setupBuckets();
+  renderFragments();
+  renderChecks();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

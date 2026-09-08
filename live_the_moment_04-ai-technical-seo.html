@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 4 · AI Technical SEO, Links &amp; Measurement — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.55;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.btn:disabled{opacity:.45;cursor:not-allowed;transform:none}
+
+/* ── ACTIVITY 1: HOOK MATCH ── */
+.aud-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:760px){.aud-grid{grid-template-columns:1fr}}
+.aud-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;transition:border-color .25s}
+.aud-card.correct{border-color:var(--green);background:var(--green-light)}
+.aud-card.wrong{border-color:var(--red);background:var(--red-light)}
+.aud-name{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy)}
+.aud-pain{font-size:.74rem;color:var(--text-muted);margin:.2rem 0 .6rem;font-style:italic}
+.aud-select{width:100%;padding:.55rem .7rem;border:1.5px solid var(--border);border-radius:6px;font-family:inherit;font-size:.8rem;color:var(--text-primary);background:var(--bg-light);cursor:pointer}
+.aud-select:focus{outline:none;border-color:var(--orange)}
+.aud-why{font-size:.74rem;line-height:1.5;margin-top:.55rem;display:none}
+.aud-why.show{display:block}
+.aud-why.good{color:#1F5723}.aud-why.bad{color:#8B2E22}
+
+/* ── ACTIVITY 2: SCRIPT BUILDER ── */
+.seq-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem}
+@media (max-width:760px){.seq-wrap{grid-template-columns:1fr}}
+.seq-pool{display:flex;flex-direction:column;gap:.6rem}
+.seq-block{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;cursor:pointer;transition:all .2s;user-select:none}
+.seq-block:hover{border-color:var(--orange);transform:translateX(3px)}
+.seq-block.used{opacity:.3;pointer-events:none}
+.seq-block.shake{animation:shake .35s ease;border-color:var(--red);background:var(--red-light)}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.seq-block-text{font-size:.84rem;font-weight:500;line-height:1.45}
+.seq-slots{display:flex;flex-direction:column;gap:.5rem}
+.seq-slot{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;min-height:52px;font-size:.8rem;color:var(--text-muted);transition:all .3s;background:rgba(255,255,255,.5)}
+.seq-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.seq-tag{display:inline-block;font-family:var(--mono);font-size:.64rem;font-weight:600;letter-spacing:.06em;color:var(--orange);background:var(--orange-glow);padding:.1rem .45rem;border-radius:4px;margin-bottom:.3rem}
+.seq-hint{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.78rem;color:#7A4A0A;line-height:1.5;display:none}
+.seq-hint.show{display:block;animation:fadeIn .3s ease}
+.phone{max-width:300px;margin:1.4rem auto 0;background:var(--navy-dark);border-radius:26px;padding:1.1rem .9rem;border:5px solid var(--navy);box-shadow:var(--shadow-lg);display:none}
+.phone.show{display:block;animation:fadeIn .5s ease}
+.phone-notch{width:80px;height:5px;background:rgba(255,255,255,.25);border-radius:3px;margin:0 auto .8rem}
+.phone-line{margin-bottom:.6rem;padding:.55rem .7rem;background:rgba(255,255,255,.07);border-radius:8px}
+.phone-line .seq-tag{background:rgba(232,122,46,.22)}
+.phone-line p{font-size:.76rem;color:#E8E8EC;line-height:1.5}
+
+/* ── ACTIVITY 3: KILL OR SCALE ── */
+.kos-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+@media (max-width:760px){.kos-grid{grid-template-columns:1fr}}
+.kos-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.2rem}
+.kos-title{font-family:'DM Serif Display',serif;font-size:.98rem;color:var(--navy);margin-bottom:.6rem}
+.kos-metrics{display:grid;grid-template-columns:1fr 1fr;gap:.35rem .8rem;margin-bottom:.8rem}
+.kos-metric{font-size:.74rem;color:var(--text-secondary)}
+.kos-metric b{font-family:var(--mono);color:var(--navy);font-weight:600}
+.kos-btns{display:flex;gap:.45rem;flex-wrap:wrap}
+.kos-btn{flex:1;padding:.5rem .4rem;border-radius:6px;border:1.5px solid var(--border);background:var(--bg-light);font-family:inherit;font-size:.74rem;font-weight:700;cursor:pointer;transition:all .2s;color:var(--text-secondary)}
+.kos-btn:hover{border-color:var(--orange);color:var(--orange)}
+.kos-btn.picked-right{background:var(--green-light);border-color:var(--green);color:#1F5723}
+.kos-btn.picked-wrong{background:var(--red-light);border-color:var(--red);color:#8B2E22}
+.kos-btn.reveal-right{border-color:var(--green);color:#1F5723}
+.kos-btn:disabled{cursor:not-allowed;opacity:.75}
+.kos-verdict{font-size:.74rem;line-height:1.55;margin-top:.7rem;padding:.6rem .75rem;border-radius:6px;display:none}
+.kos-verdict.show{display:block;animation:fadeIn .3s ease}
+.kos-verdict.good{background:var(--green-light);color:#1F5723}
+.kos-verdict.bad{background:#FFF4E5;color:#7A4A0A}
+
+/* ── ACTIVITY 4: BUDGET SLIDERS ── */
+.budget-row{display:grid;grid-template-columns:1fr auto;gap:1rem;align-items:center;margin-bottom:.3rem;margin-top:1.1rem}
+.budget-name{font-size:.86rem;font-weight:700;color:var(--navy)}
+.budget-desc{font-size:.74rem;color:var(--text-muted);margin-top:.1rem}
+.budget-val{font-family:var(--mono);font-size:1.05rem;color:var(--orange);font-weight:600;min-width:52px;text-align:right}
+input[type="range"].budget-slider{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--border),var(--orange-light));outline:none;cursor:pointer;margin-top:.35rem}
+input[type="range"].budget-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--orange);cursor:grab;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+input[type="range"].budget-slider::-moz-range-thumb{width:20px;height:20px;border-radius:50%;background:#fff;border:3px solid var(--orange);cursor:grab}
+.budget-total{margin-top:1.4rem;padding:.9rem 1.1rem;border-radius:var(--radius-sm);background:var(--bg-light);border:1.5px solid var(--border);display:flex;justify-content:space-between;align-items:center;font-size:.9rem;font-weight:700;color:var(--navy)}
+.budget-total .tv{font-family:var(--mono);font-size:1.15rem}
+.budget-total.ok{border-color:var(--green);background:var(--green-light)}
+.budget-total.over{border-color:var(--red);background:var(--red-light)}
+.budget-note{font-size:.74rem;color:var(--text-muted);margin-top:.4rem}
+
+/* ── ACTIVITY 5: QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1.1rem 1.3rem;margin-bottom:.9rem;transition:border-color .3s}
+.quiz-q.right{border-color:var(--green)}
+.quiz-q.miss{border-color:var(--red)}
+.quiz-q-head{display:flex;gap:.7rem;align-items:baseline;margin-bottom:.7rem}
+.quiz-q-num{font-family:var(--mono);font-size:.7rem;font-weight:600;color:var(--orange);background:var(--orange-glow);padding:.15rem .5rem;border-radius:4px;flex-shrink:0}
+.quiz-q-text{font-size:.9rem;font-weight:600;color:var(--navy);line-height:1.5}
+.quiz-opt{display:flex;align-items:flex-start;gap:.55rem;padding:.5rem .6rem;border-radius:6px;cursor:pointer;font-size:.83rem;color:var(--text-secondary);line-height:1.45;transition:background .15s}
+.quiz-opt:hover{background:var(--bg-light)}
+.quiz-opt input{margin-top:.25rem;accent-color:var(--orange);cursor:pointer}
+.quiz-review{font-size:.76rem;line-height:1.55;margin-top:.6rem;padding:.6rem .8rem;border-radius:6px;display:none}
+.quiz-review.show{display:block;animation:fadeIn .3s ease}
+.quiz-review.good{background:var(--green-light);color:#1F5723}
+.quiz-review.bad{background:#FFF4E5;color:#7A4A0A}
+.quiz-lesson{display:inline-block;font-family:var(--mono);font-size:.64rem;color:var(--text-muted);margin-left:.4rem}
+
+/* ── REFLECT / FOOTER ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 4 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 1 · AI SEO</div>
+  <h1>AI Technical SEO, Links &amp; Measurement — <em>make it crawlable, earn authority, read the data</em></h1>
+  <p class="hero-sub">Your content exists. Now the plumbing that lets it rank: help Google crawl and index the site, earn links the honest way, and read Search Console like a pro. Classify technical issues, sort good vs. bad link building, make refresh-or-scale calls on real-shaped SEO data, plan a monthly reporting split — then prove the whole week with an 8-question knowledge check.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+    <div class="progress-dot" id="prog5"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: HOOK MATCH ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Match the technical issue to its fix</h2>
+    <p class="lesson-intro">Technical SEO is the plumbing: if Google cannot crawl, index, or load your pages fast, great content never ranks. Each problem has one core fix — name it and you can brief a developer or an AI audit tool precisely. Below: five common technical symptoms, five fixes. Assign each fix to the issue it solves, then check.</p>
+
+    <div class="lesson-card">
+      <div class="aud-grid" id="audGrid"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="checkHooks()">Check my matches</button>
+        <button class="btn btn-ghost" onclick="resetHooks()">↻ Reset</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: UGC SCRIPT BUILDER ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">2</span>
+    <h2 class="lesson-title">Run a technical SEO audit — in the order that finds problems</h2>
+    <p class="lesson-intro">An AI-assisted audit is only useful if you check things in the right <strong>order</strong> — crawlability before content, because an uncrawlable page can't rank no matter how good it reads. Click the five audit steps in the sequence a pro follows — a wrong click gets you a nudge. Site: a new MokshPath course-guide blog.</p>
+
+    <div class="lesson-card">
+      <div class="seq-wrap">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Audit steps (shuffled)</h4>
+          <div class="seq-pool" id="seqPool"></div>
+          <div class="seq-hint" id="seqHint"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Your audit, in order</h4>
+          <div class="seq-slots" id="seqSlots"></div>
+        </div>
+      </div>
+      <div class="phone" id="phonePreview"><div class="phone-notch"></div><div id="phoneLines"></div></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetSeq()">↻ Start over</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: KILL OR SCALE ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">3</span>
+    <h2 class="lesson-title">Refresh, keep watching, or scale?</h2>
+    <p class="lesson-intro">The skill that separates people who churn out dead content from people who own page one: reading Search Console data without emotion. SEO is slow — pages often need <strong>3–6 months</strong> to settle, and there are no guaranteed rankings. All numbers below are <strong>illustrative</strong>. Using impressions, clicks, CTR and average position, make the expert call on each page.</p>
+
+    <div class="lesson-card">
+      <div class="kos-grid" id="kosGrid"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetKos()">↻ Reset all four</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: BUDGET SPLIT ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">4</span>
+    <h2 class="lesson-title">Split your 30 hours/month of SEO work</h2>
+    <p class="lesson-intro">You have <strong>30 hours a month</strong> for SEO. Where those hours go decides whether the site compounds or spins. At this stage, the highest-return work is technical health and existing-content refreshes — not chasing shortcuts. Set the sliders to total exactly 30 hours, then check your split against how experienced SEOs allocate a month.</p>
+
+    <div class="lesson-card">
+      <div class="budget-row">
+        <div><div class="budget-name">Technical fixes + refreshing existing content</div><div class="budget-desc">Fixing crawl/speed/mobile issues and updating pages that already rank. The highest-return, compounding work — cheap wins Google already trusts.</div></div>
+        <div class="budget-val" id="valA">10h</div>
+      </div>
+      <input type="range" class="budget-slider" id="sliderA" min="0" max="30" step="1" value="10">
+      <div class="budget-row">
+        <div><div class="budget-name">Ethical link building + digital PR</div><div class="budget-desc">Earning backlinks through outreach, guest posts, and genuinely useful assets. Slow but builds real authority.</div></div>
+        <div class="budget-val" id="valB">10h</div>
+      </div>
+      <input type="range" class="budget-slider" id="sliderB" min="0" max="30" step="1" value="10">
+      <div class="budget-row">
+        <div><div class="budget-name">Buying links + shortcut "SEO packages"</div><div class="budget-desc">The tempting "get 500 backlinks for $50" offers and paid link networks.</div></div>
+        <div class="budget-val" id="valC">10h</div>
+      </div>
+      <input type="range" class="budget-slider" id="sliderC" min="0" max="30" step="1" value="10">
+
+      <div class="budget-total" id="budgetTotal"><span>Monthly total (must equal 30 hours)</span><span class="tv" id="totalVal">30h</span></div>
+      <div class="budget-note">Honest math: SEO compounds over <em>months</em>, not weeks — expect 3–6 months before rankings move, and no one can guarantee a position. Buying links violates Google's guidelines and can get the whole site penalized. Plan for a slow, steady climb, not an overnight jump.</div>
+
+      <div class="activity-feedback" id="feedback4"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" id="checkBudgetBtn" onclick="checkBudget()">Check my split</button>
+        <button class="btn btn-ghost" onclick="resetBudget()">↻ Reset sliders</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 5: WEEK 1 KNOWLEDGE CHECK ── -->
+<section class="lesson" id="activity-5">
+  <div class="container">
+    <span class="lesson-num" style="background:var(--navy)">5</span>
+    <h2 class="lesson-title">Week 1 knowledge check — 8 questions, whole week</h2>
+    <p class="lesson-intro">The final gate of Week 1, spanning all four lessons: SEO foundations, AI keyword research, on-page &amp; AI content, and technical SEO, links &amp; measurement. Answer all eight, then submit for a per-question review — and if you miss any, you'll see exactly which lesson to revisit.</p>
+
+    <div class="lesson-card">
+      <div id="quizWrap"></div>
+      <div class="activity-feedback" id="feedback5"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-primary" onclick="submitQuiz()">Submit answers</button>
+        <button class="btn btn-ghost" onclick="resetQuiz()">↻ Reset quiz</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="background:var(--bg-light);padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words moves it from "seen" to "known". (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">A page in Search Console has 4,000 impressions, only 40 clicks (1% CTR), and sits at average position 8. What is the data telling you, and what would you do next?</div>
+        <textarea placeholder="Position 8 means it's on page one's edge but the title/meta isn't earning clicks, so..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Why is earning one editorial link from a respected site worth more than buying 500 cheap backlinks — and what's the risk of the cheap route?</div>
+        <textarea placeholder="Because Google weighs authority and trust, not raw count — and bought links can trigger a penalty that..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Week 1 complete — Week 2 · AI Content &amp; Social Media Marketing</h3>
+      <p>You can research keywords with AI, write on-page-optimized content, fix the technical plumbing, earn links honestly, and read Search Console without flinching. Next: scaling content and turning search visibility into an audience — content calendars, social distribution, and AI-assisted repurposing.</p>
+      <a href="#" class="btn btn-primary">Coming next week →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ═══ ACTIVITY 1: Hook ↔ Audience match ═══ */
+const AUDIENCES = [
+  {id:'a1', name:'Pages missing from Google entirely', pain:'You search site:yourdomain and key pages simply are not indexed.'},
+  {id:'a2', name:'Site loads slowly on mobile', pain:'PageSpeed Insights flags poor Core Web Vitals; visitors bounce before it renders.'},
+  {id:'a3', name:'Googlebot is wasting crawl budget', pain:'It keeps crawling junk URLs, filters, and admin pages instead of real content.'},
+  {id:'a4', name:'Orphan pages nobody can reach', pain:'Good articles with no links pointing to them from anywhere on the site.'},
+  {id:'a5', name:'"Not secure" warning in the browser', pain:'The site still serves over http; browsers flag it and rankings suffer.'}
+];
+const HOOKS = [
+  {id:'h1', text:'Submit an XML sitemap in Search Console', aud:'a1', signal:'a sitemap lists every URL you want found, so Google can discover and index pages it missed.'},
+  {id:'h2', text:'Optimize images and reduce render-blocking code (Core Web Vitals)', aud:'a2', signal:'compressing images and trimming heavy JS/CSS is what fixes slow mobile loads and poor Core Web Vitals.'},
+  {id:'h3', text:'Block low-value URLs with robots.txt / noindex', aud:'a3', signal:'robots.txt and noindex tell Googlebot to skip junk URLs so crawl budget goes to pages that matter.'},
+  {id:'h4', text:'Add internal links from relevant, indexed pages', aud:'a4', signal:'internal links give orphan pages a path for both users and crawlers to reach them.'},
+  {id:'h5', text:'Install an SSL certificate and force HTTPS', aud:'a5', signal:'moving to HTTPS removes the "not secure" warning and is a confirmed ranking signal.'}
+];
+const AUD_BY_ID = Object.fromEntries(AUDIENCES.map(a=>[a.id,a]));
+function shuffle(arr){return [...arr].sort(()=>Math.random()-0.5);}
+
+function renderHooks(){
+  const shuffledHooks = shuffle(HOOKS);
+  document.getElementById('audGrid').innerHTML = AUDIENCES.map(a=>`
+    <div class="aud-card" data-aud="${a.id}">
+      <div class="aud-name">${a.name}</div>
+      <div class="aud-pain">${a.pain}</div>
+      <select class="aud-select" data-aud="${a.id}">
+        <option value="">— choose the fix for this issue —</option>
+        ${shuffledHooks.map(h=>`<option value="${h.id}">${h.text}</option>`).join('')}
+      </select>
+      <div class="aud-why" data-why="${a.id}"></div>
+    </div>`).join('');
+}
+function checkHooks(){
+  let right = 0, unanswered = 0;
+  AUDIENCES.forEach(a=>{
+    const sel = document.querySelector(`.aud-select[data-aud="${a.id}"]`);
+    const card = document.querySelector(`.aud-card[data-aud="${a.id}"]`);
+    const why = document.querySelector(`.aud-why[data-why="${a.id}"]`);
+    card.classList.remove('correct','wrong');
+    why.className = 'aud-why';
+    if(!sel.value){ unanswered++; return; }
+    const chosen = HOOKS.find(h=>h.id===sel.value);
+    if(chosen.aud===a.id){
+      right++;
+      card.classList.add('correct');
+      why.className='aud-why show good';
+      why.textContent='✓ Right — '+chosen.signal;
+    } else {
+      card.classList.add('wrong');
+      const owner = AUD_BY_ID[chosen.aud];
+      const theirHook = HOOKS.find(h=>h.aud===a.id);
+      why.className='aud-why show bad';
+      why.textContent=`✗ That fix belongs to "${owner.name.toLowerCase()}" — ${chosen.signal} This issue's fix is: ${theirHook.text}.`;
+    }
+  });
+  const fb = document.getElementById('feedback1');
+  if(unanswered>0){
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>${unanswered} issue${unanswered>1?'s':''} still without a fix.</strong> Pick a fix for every card, then check again.`;
+    return;
+  }
+  if(right===5){
+    fb.className='activity-feedback show success';
+    fb.innerHTML='<strong>5 of 5 — every technical issue matched to its fix.</strong> Notice the pattern: each symptom points to one part of the crawl-index-serve pipeline — discovery (sitemap), crawl efficiency (robots.txt/noindex), reachability (internal links), speed (Core Web Vitals), and trust (HTTPS). Tools like Screaming Frog, PageSpeed Insights, and Search Console surface these; an AI audit helps you triage them fast. Fix the plumbing first — content can only rank on pages Google can actually reach and load.';
+  } else {
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>You matched ${right} of 5.</strong> Read the red notes — each wrong match is a lesson in the crawl-index-serve pipeline. The test for any technical fix: which stage is broken — discovery, crawl, reachability, speed, or trust? Match the symptom to the stage and the fix is obvious. Fix the reds and check again.`;
+  }
+  document.getElementById('prog1').classList.add('done');
+}
+function resetHooks(){
+  renderHooks();
+  document.getElementById('feedback1').className='activity-feedback';
+  document.getElementById('prog1').classList.remove('done');
+}
+
+/* ═══ ACTIVITY 2: UGC script sequence builder ═══ */
+const SCRIPT = [
+  {tag:'CRAWL', text:'Run a full site crawl (Screaming Frog) and check what Google can and cannot reach.', note:'You can\'t fix what you can\'t see — map the site first.', hint:'A technical audit starts with CRAWL — you inventory every URL and find broken links, redirects, and blocked pages before anything else.'},
+  {tag:'INDEXING', text:'Check Search Console coverage: which pages are indexed, which are excluded, and why.', note:'Confirm the pages you care about are actually in Google.', hint:'After crawling, check INDEXING. A page can be crawlable but still excluded — verify it\'s actually in Google\'s index.'},
+  {tag:'SPEED & MOBILE', text:'Test Core Web Vitals and mobile usability in PageSpeed Insights.', note:'Slow, clunky pages lose both rankings and visitors.', hint:'Indexing confirmed — now SPEED & MOBILE. Measure load performance and mobile experience, which are direct ranking factors.'},
+  {tag:'ARCHITECTURE', text:'Review site structure and internal linking so important pages get link equity.', note:'A flat, well-linked structure helps crawlers and users.', hint:'Performance checked — next ARCHITECTURE. Make sure your most important pages are reachable in a few clicks and well linked.'},
+  {tag:'PRIORITIZE & FIX', text:'Rank issues by impact vs. effort and ship the fixes, tracking them over time.', note:'An audit only pays off when the fixes actually ship.', hint:'Everything is mapped — finish with PRIORITIZE & FIX. Turn findings into a ranked action list. This always comes last.'}
+];
+let seqNext = 0;
+function renderSeq(){
+  seqNext = 0;
+  const order = shuffle(SCRIPT.map((_,i)=>i));
+  document.getElementById('seqPool').innerHTML = order.map(i=>`
+    <div class="seq-block" data-idx="${i}" onclick="pickBlock(${i},this)">
+      <div class="seq-block-text">${SCRIPT[i].text}</div>
+    </div>`).join('');
+  document.getElementById('seqSlots').innerHTML = SCRIPT.map((s,i)=>`
+    <div class="seq-slot" id="slot${i}">Step ${i+1} — waiting…</div>`).join('');
+  document.getElementById('seqHint').className='seq-hint';
+  document.getElementById('phonePreview').className='phone';
+  document.getElementById('feedback2').className='activity-feedback';
+}
+function pickBlock(idx, el){
+  const hint = document.getElementById('seqHint');
+  if(idx!==seqNext){
+    el.classList.add('shake');
+    setTimeout(()=>el.classList.remove('shake'),380);
+    hint.className='seq-hint show';
+    hint.textContent='Not that one yet. '+SCRIPT[seqNext].hint;
+    return;
+  }
+  el.classList.add('used');
+  hint.className='seq-hint';
+  const slot = document.getElementById('slot'+idx);
+  slot.classList.add('filled');
+  slot.innerHTML = `<span class="seq-tag">${SCRIPT[idx].tag}</span><div>${SCRIPT[idx].text}</div><div style="font-size:.7rem;color:var(--text-muted);margin-top:.25rem;font-style:italic">${SCRIPT[idx].note}</div>`;
+  seqNext++;
+  if(seqNext===SCRIPT.length) finishSeq();
+}
+function finishSeq(){
+  document.getElementById('phoneLines').innerHTML = SCRIPT.map(s=>`
+    <div class="phone-line"><span class="seq-tag">${s.tag}</span><p>${s.text}</p></div>`).join('');
+  document.getElementById('phonePreview').className='phone show';
+  const fb=document.getElementById('feedback2');
+  fb.className='activity-feedback show success';
+  fb.innerHTML='<strong>Audit assembled — CRAWL → INDEXING → SPEED &amp; MOBILE → ARCHITECTURE → PRIORITIZE &amp; FIX.</strong> Why this order: you must <em>crawl</em> first, because you cannot diagnose pages you have not mapped. Then confirm <em>indexing</em> — a crawlable page can still be excluded from Google. Only then does <em>speed &amp; mobile</em> matter, since Core Web Vitals are direct ranking factors. <em>Architecture</em> and internal linking spread authority to the pages that matter. And <em>prioritize &amp; fix</em> comes last: an audit that never ships fixes changes nothing. AI tools can speed up the triage, but the order is what keeps you from optimizing pages Google never sees.';
+  document.getElementById('prog2').classList.add('done');
+}
+function resetSeq(){
+  renderSeq();
+  document.getElementById('prog2').classList.remove('done');
+}
+
+/* ═══ ACTIVITY 3: Kill or scale ═══ */
+const KOS = [
+  {title:'Page A — the dead post (illustrative)', metrics:['Age: <b>10 months</b>','Impressions: <b>60/mo</b>','Clicks: <b>1/mo</b> · CTR: <b>1.7%</b>','Avg position: <b>68</b>'], answer:'kill',
+   why:'<strong>Kill / consolidate.</strong> After ten months, 60 impressions and position 68 mean Google has decided this page barely matches any query. There is no demand and no ranking foothold to build on. Delete it, or merge its useful bits into a stronger related page and redirect. Pruning thin content is normal — it concentrates authority on pages that can actually win. Endlessly re-editing a page with no demand is the classic SEO time-sink.'},
+  {title:'Page B — high impressions, low clicks (illustrative)', metrics:['Age: <b>7 months</b>','Impressions: <b>4,000/mo</b>','Clicks: <b>48/mo</b> · CTR: <b>1.2%</b>','Avg position: <b>8</b>'], answer:'keep',
+   why:'<strong>Keep watching / refresh.</strong> Position 8 with 4,000 impressions means Google already ranks this page on page one\'s edge — the demand and relevance are there. The leak is the <em>click</em>: a CTR of 1.2% at position 8 is low. Rewrite the title tag and meta description to be more compelling, and add internal links to nudge it up. This is a refresh candidate, not a kill — it is doing the hard part already.'},
+  {title:'Page C — steady climber (illustrative)', metrics:['Age: <b>5 months</b>','Impressions: <b>9,000/mo</b>','Clicks: <b>620/mo</b> · CTR: <b>6.9%</b>','Avg position: <b>3</b>, stable 6 weeks'], answer:'scale',
+   why:'<strong>Scale.</strong> Position 3, a healthy 6.9% CTR, and stable for six weeks — this topic clearly works for you. Scale by building a content <em>cluster</em>: publish related supporting articles and link them to this page, earn a few authority links to it, and expand it to cover adjacent queries. When a page proves demand and Google\'s trust, doubling down on that topic is the highest-confidence move in SEO.'},
+  {title:'Page D — brand-new page (illustrative)', metrics:['Age: <b>3 weeks</b>','Impressions: <b>210/mo</b>','Clicks: <b>4</b> · CTR: <b>1.9%</b>','Avg position: <b>34</b> and rising'], answer:'keep',
+   why:'<strong>Keep watching.</strong> Three weeks is far too early to judge — SEO takes months, and Google is still figuring out where this page belongs (position 34 and rising is a healthy early sign). Killing now buries a page that has not had a chance; scaling now bets budget on noise. Let it mature for 3–6 months, keep it internally linked, and re-check the trend. Patience is the technical skill here.'}
+];
+let kosAnswered = {};
+const KOS_LABELS = {kill:'Kill / consolidate', keep:'Keep watching', scale:'Scale the topic'};
+function renderKos(){
+  kosAnswered = {};
+  document.getElementById('kosGrid').innerHTML = KOS.map((k,i)=>`
+    <div class="kos-card" data-kos="${i}">
+      <div class="kos-title">${k.title}</div>
+      <div class="kos-metrics">${k.metrics.map(m=>`<div class="kos-metric">${m}</div>`).join('')}</div>
+      <div class="kos-btns">
+        <button class="kos-btn" onclick="answerKos(${i},'kill',this)">Kill / consolidate</button>
+        <button class="kos-btn" onclick="answerKos(${i},'keep',this)">Keep watching</button>
+        <button class="kos-btn" onclick="answerKos(${i},'scale',this)">Scale the topic</button>
+      </div>
+      <div class="kos-verdict" id="kosV${i}"></div>
+    </div>`).join('');
+  document.getElementById('feedback3').className='activity-feedback';
+}
+function answerKos(i, choice, btn){
+  if(kosAnswered[i]!==undefined) return;
+  const k = KOS[i];
+  const correct = choice===k.answer;
+  kosAnswered[i]=correct;
+  const card = document.querySelector(`.kos-card[data-kos="${i}"]`);
+  card.querySelectorAll('.kos-btn').forEach(b=>{
+    b.disabled=true;
+    if(b===btn) b.classList.add(correct?'picked-right':'picked-wrong');
+    else if(!correct && b.textContent.toLowerCase().startsWith(k.answer)) b.classList.add('reveal-right');
+  });
+  const v = document.getElementById('kosV'+i);
+  v.className='kos-verdict show '+(correct?'good':'bad');
+  v.innerHTML=(correct?'✓ Expert call. ':'✗ The expert call is <em>'+KOS_LABELS[k.answer]+'</em>. ')+k.why;
+  if(Object.keys(kosAnswered).length===KOS.length){
+    const score = Object.values(kosAnswered).filter(Boolean).length;
+    const fb=document.getElementById('feedback3');
+    if(score===4){
+      fb.className='activity-feedback show success';
+      fb.innerHTML='<strong>4 of 4 — you read Search Console like an SEO.</strong> The pattern: impressions test <em>demand</em>, average position tests <em>ranking foothold</em>, CTR tests the <em>title/meta</em>, and page age tests whether the data is even <em>ready to judge</em>. Prune dead content, refresh page-one pages that under-click, scale proven topics into clusters, and give new pages months before deciding. Most published pages never take off — pruning and refreshing beats endless new posting.';
+    } else {
+      fb.className='activity-feedback show partial';
+      fb.innerHTML=`<strong>You got ${score} of 4.</strong> Re-read the cards you missed — each is a rule you'll reuse forever: <em>old + no demand → prune/consolidate</em> (A), <em>page one but low CTR → refresh title &amp; meta</em> (B), <em>ranking, stable, high CTR → scale the topic</em> (C), <em>brand-new page → wait months, don't judge yet</em> (D). Reset and run all four from memory.`;
+    }
+    document.getElementById('prog3').classList.add('done');
+  }
+}
+function resetKos(){
+  renderKos();
+  document.getElementById('prog3').classList.remove('done');
+}
+
+/* ═══ ACTIVITY 4: Budget split ═══ */
+function updateBudget(){
+  const a=+document.getElementById('sliderA').value;
+  const b=+document.getElementById('sliderB').value;
+  const c=+document.getElementById('sliderC').value;
+  document.getElementById('valA').textContent=a+'h';
+  document.getElementById('valB').textContent=b+'h';
+  document.getElementById('valC').textContent=c+'h';
+  const total=a+b+c;
+  document.getElementById('totalVal').textContent=total+'h';
+  const box=document.getElementById('budgetTotal');
+  box.className='budget-total'+(total===30?' ok':(total>30?' over':''));
+  document.getElementById('checkBudgetBtn').disabled = total!==30;
+  return {a,b,c,total};
+}
+function checkBudget(){
+  const {a,b,c,total}=updateBudget();
+  const fb=document.getElementById('feedback4');
+  if(total!==30){
+    fb.className='activity-feedback show partial';
+    fb.innerHTML='<strong>Your split totals '+total+'h.</strong> Adjust until the sliders sum to exactly 30 hours, then check again.';
+    return;
+  }
+  if(a>=18 && c<=3){
+    fb.className='activity-feedback show success';
+    fb.innerHTML=`<strong>That's a professional SEO month (${a}h / ${b}h / ${c}h).</strong> Technical health + refreshing existing content gets the majority because it is the highest-return, compounding work — fixing crawl/speed issues and updating pages Google already trusts moves rankings faster than anything else. Ethical link building earns the rest: real outreach and digital PR build authority slowly but safely. And buying links gets ~0 hours — it violates Google's guidelines and can get the whole site penalized, wiping out months of work. Honest caveat: even this split takes 3–6 months to show up in rankings, and no one can guarantee a position.`;
+  } else {
+    fb.className='activity-feedback show partial';
+    let notes=[];
+    if(a<18) notes.push(`<strong>Technical + content refresh at ${a}h is too thin.</strong> Experts put 18–24 of 30 hours here — fixing crawl, speed, and mobile issues and updating pages that already rank is the cheapest, fastest-compounding lever you have. Google already trusts those pages.`);
+    if(c>3) notes.push(`<strong>${c}h on buying links / shortcut packages is wasted — and risky.</strong> Paid link networks violate Google's guidelines and can trigger a manual penalty that tanks the whole site. This belongs at 0 hours in any honest SEO plan.`);
+    if(b>12) notes.push(`<strong>${b}h on link building is too much for now.</strong> Links matter, but authority compounds only after the on-page and technical foundation is solid — front-load the fixes, then earn links steadily. Outreach with a weak site converts poorly anyway.`);
+    if(notes.length===0) notes.push('You are close — shift more hours into technical fixes and content refreshes, and drop the bought-links budget to 0.');
+    fb.innerHTML='<strong>Not the expert split yet ('+a+'h / '+b+'h / '+c+'h).</strong><br><br>'+notes.join('<br><br>')+'<br><br>Target shape: technical + refresh ≥ 18h (ideally 18–24h), buying links ≤ 3h (ideally 0h). Adjust and re-check.';
+  }
+  document.getElementById('prog4').classList.add('done');
+}
+function resetBudget(){
+  document.getElementById('sliderA').value=10;
+  document.getElementById('sliderB').value=10;
+  document.getElementById('sliderC').value=10;
+  updateBudget();
+  document.getElementById('feedback4').className='activity-feedback';
+  document.getElementById('prog4').classList.remove('done');
+}
+['sliderA','sliderB','sliderC'].forEach(id=>document.getElementById(id).addEventListener('input',updateBudget));
+
+/* ═══ ACTIVITY 5: Week 1 knowledge check ═══ */
+const QUIZ = [
+  {lesson:'Lesson 1 · SEO Foundations', q:'What does SEO actually optimize a page for?',
+   opts:['Paying Google to appear at the top of results','Ranking higher in unpaid (organic) search results','Getting more likes on social media','Sending more marketing emails'], ans:1,
+   why:'SEO earns <em>organic</em> visibility — the unpaid listings. Unlike ads, you do not pay per click, but it takes months to build and there are no guaranteed rankings. That slow-but-compounding nature is exactly why it is worth doing well.'},
+  {lesson:'Lesson 1 · SEO Foundations', q:'What is "search intent" and why does it matter?',
+   opts:['The number of times a keyword is searched','The reason behind a search — what the user actually wants','The bid price advertisers pay for a keyword','The country the searcher is located in'], ans:1,
+   why:'Two people typing the same words may want different things (to learn vs. to buy). Matching your page to the dominant intent behind a query is often the difference between ranking and being ignored — Google serves the intent, not the keyword.'},
+  {lesson:'Lesson 2 · AI Keyword Research', q:'Why do beginners often target "long-tail" keywords first?',
+   opts:['They have the highest search volume','They are lower-competition and easier to rank for early','Google ignores short keywords entirely','They cost less money per click'], ans:1,
+   why:'Long-tail phrases ("best free note app for students") are more specific, lower-competition, and closer to a decision. A new site can realistically rank for them, earn traffic, and build authority — before competing for broad, brutal head terms.'},
+  {lesson:'Lesson 2 · AI Keyword Research', q:'What is the correct structure for an AI keyword-research prompt, in order?',
+   opts:['Format → criteria → role → task','Task → role → format → criteria','Role → task → criteria → format','Criteria → format → task → role'], ans:2,
+   why:'Role sets expertise ("you are an SEO keyword strategist"); task says what to do; criteria constrain it (topic, low competition, clear intent); format dictates the output shape (table with volume and intent). This order keeps the model on rails and the output usable.'},
+  {lesson:'Lesson 3 · On-Page & AI Content', q:'Where should your primary target keyword appear for strong on-page SEO?',
+   opts:['Hidden in white text at the bottom of the page','In the title tag, H1, and naturally in the first paragraph','Repeated 50+ times throughout the article','Only in the image file names'], ans:1,
+   why:'The title tag, H1, and opening lines tell Google (and readers) what the page is about. Natural placement wins; stuffing the keyword dozens of times ("keyword stuffing") reads badly and can hurt you. Write for humans first, place the keyword deliberately.'},
+  {lesson:'Lesson 3 · On-Page & AI Content', q:'What is the biggest risk of publishing raw AI-generated content without review?',
+   opts:['Google bans all AI content automatically','It can be generic, inaccurate, or unhelpful — hurting E-E-A-T','It always loads too slowly to rank','It cannot contain any keywords'], ans:1,
+   why:'Google rewards helpful, trustworthy content (E-E-A-T), not the tool that made it. Unedited AI drafts can be bland, wrong, or add no real value. Use AI to draft and speed up, then add genuine expertise, accuracy, and a human edit before publishing.'},
+  {lesson:'Lesson 4 · Technical SEO, Links & Measurement', q:'A page shows 4,000 impressions but only 48 clicks (1.2% CTR) at average position 8 in Search Console. What is the best move?',
+   opts:['Delete the page — it clearly does not work','Rewrite the title tag and meta description to earn more clicks','Wait a year and do nothing','Buy backlinks to force it higher'], ans:1,
+   why:'Position 8 with heavy impressions means Google already ranks it — demand and relevance exist. The leak is the click: a 1.2% CTR at that position is low. A more compelling title and meta description, plus internal links, is the highest-leverage fix. This is a refresh, not a kill.'},
+  {lesson:'Lesson 4 · Technical SEO, Links & Measurement', q:'What is the honest expectation for building authority through backlinks?',
+   opts:['Buy links in bulk — it is the fastest safe route','Earn links slowly through outreach and useful content; never buy them','One good link guarantees a #1 ranking','Backlinks no longer affect rankings at all'], ans:1,
+   why:'Links still signal authority, but buying them violates Google\'s guidelines and can penalize the whole site. Ethical link building — digital PR, guest posts, genuinely linkable assets — is slow but safe. And nothing guarantees a ranking; SEO compounds over months, not days.'}
+];
+function renderQuiz(){
+  document.getElementById('quizWrap').innerHTML = QUIZ.map((item,i)=>`
+    <div class="quiz-q" id="qq${i}">
+      <div class="quiz-q-head"><span class="quiz-q-num">Q${i+1}</span><span class="quiz-q-text">${item.q}<span class="quiz-lesson">${item.lesson}</span></span></div>
+      ${item.opts.map((o,j)=>`
+        <label class="quiz-opt"><input type="radio" name="quiz${i}" value="${j}"><span>${o}</span></label>`).join('')}
+      <div class="quiz-review" id="qr${i}"></div>
+    </div>`).join('');
+}
+function submitQuiz(){
+  const fb=document.getElementById('feedback5');
+  const answers = QUIZ.map((_,i)=>{
+    const sel=document.querySelector(`input[name="quiz${i}"]:checked`);
+    return sel? +sel.value : null;
+  });
+  const blank = answers.filter(a=>a===null).length;
+  if(blank>0){
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>${blank} question${blank>1?'s':''} unanswered.</strong> Guessing is allowed, blank is not — answer everything and submit again.`;
+    return;
+  }
+  let score=0; const missedLessons=[];
+  QUIZ.forEach((item,i)=>{
+    const card=document.getElementById('qq'+i);
+    const rev=document.getElementById('qr'+i);
+    card.classList.remove('right','miss');
+    const correct = answers[i]===item.ans;
+    if(correct){
+      score++;
+      card.classList.add('right');
+      rev.className='quiz-review show good';
+      rev.innerHTML='✓ Correct. '+item.why;
+    } else {
+      card.classList.add('miss');
+      missedLessons.push(`Q${i+1} → ${item.lesson}`);
+      rev.className='quiz-review show bad';
+      rev.innerHTML=`✗ The answer is "<strong>${item.opts[item.ans]}</strong>". ${item.why}`;
+    }
+  });
+  if(score===8){
+    fb.className='activity-feedback show success';
+    fb.innerHTML='<strong>8 of 8 — Week 1 mastery.</strong> You hold the full chain: what SEO is and how search intent works, disciplined AI keyword research, on-page and AI-assisted content done right, and the technical health, ethical links, and Search Console measurement that make it all rank. Week 2 builds content scaling and social distribution on top of exactly this.';
+  } else if(score>=6){
+    fb.className='activity-feedback show success';
+    fb.innerHTML=`<strong>${score} of 8 — solid grasp of the week.</strong> The misses are patchable in minutes — read the review notes on: <em>${missedLessons.join(' · ')}</em>, then reset and aim for 8. The questions you missed are the ones that cost real money in practice.`;
+  } else {
+    fb.className='activity-feedback show partial';
+    fb.innerHTML=`<strong>${score} of 8 — worth a revisit before Week 2.</strong> No judgment — this week packed four lessons of SEO into your head. Your misses map to: <em>${missedLessons.join(' · ')}</em>. Reopen those lessons, skim their activities, then reset this quiz. Ten minutes of review now saves real confusion later.`;
+  }
+  document.getElementById('prog5').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  document.getElementById('feedback5').className='activity-feedback';
+  document.getElementById('prog5').classList.remove('done');
+}
+
+/* ═══ INIT ═══ */
+window.addEventListener('DOMContentLoaded',()=>{
+  renderHooks();
+  renderSeq();
+  renderKos();
+  updateBudget();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

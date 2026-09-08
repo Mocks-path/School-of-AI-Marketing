@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · AI On-Page &amp; Content Optimization — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+.lesson-card.alt{background:var(--bg-light)}
+
+/* ── DRAG CARDS + FEEDBACK (shared) ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.85rem;color:var(--text-primary);line-height:1.45;font-weight:500}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary);cursor:help}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.55;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit;text-decoration:none}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── ACTIVITY 1: WIREFRAME ZONES ── */
+.wireframe{border:1.5px solid var(--border);border-radius:var(--radius-sm);overflow:hidden;background:var(--bg-light)}
+.wf-chrome{display:flex;align-items:center;gap:.4rem;background:var(--navy);padding:.5rem .8rem}
+.wf-chrome span{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.35)}
+.wf-chrome .wf-url{flex:1;margin-left:.5rem;background:rgba(255,255,255,.12);border-radius:4px;color:rgba(255,255,255,.7);font-family:var(--mono);font-size:.62rem;padding:.15rem .6rem}
+.wf-zone{border:2px dashed var(--border);margin:.7rem;border-radius:var(--radius-sm);padding:.8rem .9rem;transition:all .25s;background:rgba(255,255,255,.6)}
+.wf-zone.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.wf-zone-title{font-family:'DM Serif Display',serif;font-size:.98rem;color:var(--navy)}
+.wf-zone-sub{font-size:.68rem;color:var(--text-muted);margin-bottom:.55rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.wf-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:34px}
+.wf-fold{display:flex;align-items:center;gap:.5rem;margin:.1rem .9rem;font-size:.62rem;color:var(--text-muted);letter-spacing:.08em;text-transform:uppercase;font-weight:700}
+.wf-fold::before,.wf-fold::after{content:'';flex:1;border-top:1.5px dashed var(--orange);opacity:.5}
+
+/* ── ACTIVITY 2: A/B PAIRS ── */
+.ab-pair{margin-top:1.4rem;padding-top:1.4rem;border-top:1px solid var(--border)}
+.ab-pair:first-child{margin-top:0;padding-top:0;border-top:none}
+.ab-q{font-size:.9rem;font-weight:700;color:var(--navy);margin-bottom:.8rem}
+.ab-q .ab-tag{font-family:var(--mono);font-size:.68rem;color:var(--orange);font-weight:600;letter-spacing:.04em;display:block;margin-bottom:.2rem}
+.ab-cards{display:grid;grid-template-columns:1fr 1fr;gap:.9rem}
+@media (max-width:760px){.ab-cards{grid-template-columns:1fr}}
+.ab-card{background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:pointer;transition:all .25s;position:relative}
+.ab-card:hover{border-color:var(--orange);transform:translateY(-2px);box-shadow:var(--shadow-sm)}
+.ab-card.locked{cursor:default;pointer-events:none}
+.ab-card.win{border-color:var(--green);background:var(--green-light)}
+.ab-card.lose{opacity:.55}
+.ab-card.picked-wrong{border-color:var(--red);background:var(--red-light)}
+.ab-letter{display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;border-radius:50%;background:var(--navy);color:#fff;font-size:.72rem;font-weight:700;margin-bottom:.5rem}
+.ab-copy{font-size:.85rem;line-height:1.55;color:var(--text-primary)}
+.ab-verdict{margin-top:.8rem;font-size:.8rem;line-height:1.55;padding:.7rem .9rem;border-radius:6px;display:none}
+.ab-verdict.show{display:block;animation:fadeIn .35s ease}
+.ab-verdict.good{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.ab-verdict.bad{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── ACTIVITY 3: BRAND TABLE ── */
+.brand-block{margin-top:1.3rem;padding:1.1rem 1.2rem;background:var(--bg-light);border:1px solid var(--border);border-radius:var(--radius-sm)}
+.brand-block:first-child{margin-top:0}
+.brand-name{font-family:'DM Serif Display',serif;font-size:1.15rem;color:var(--navy);margin-bottom:.7rem}
+.brand-row{display:grid;grid-template-columns:1fr auto;gap:.6rem;align-items:center;padding:.35rem 0}
+.brand-crit{font-size:.82rem;color:var(--text-secondary);font-weight:500}
+.tog-group{display:flex;gap:.35rem}
+.tog{padding:.32rem .85rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.74rem;font-weight:700;cursor:pointer;font-family:inherit;color:var(--text-secondary);transition:all .2s}
+.tog:hover{border-color:var(--orange);color:var(--orange)}
+.tog.on-yes{background:var(--navy);border-color:var(--navy);color:#fff}
+.tog.on-no{background:var(--navy);border-color:var(--navy);color:#fff}
+.tog.reveal-hit{background:var(--green-light);border-color:var(--green);color:#256B29}
+.tog.reveal-miss{background:var(--red-light);border-color:var(--red);color:#933}
+.brand-why{margin-top:.6rem;font-size:.78rem;line-height:1.55;color:var(--text-secondary);background:var(--bg-card);border-left:3px solid var(--orange);border-radius:4px;padding:.6rem .8rem;display:none}
+.brand-why.show{display:block;animation:fadeIn .35s ease}
+
+/* ── ACTIVITY 4: TRUST COLUMNS ── */
+.trust-pool{display:flex;flex-wrap:wrap;gap:.6rem;margin-bottom:1.2rem}
+.trust-pool .scenario-card{flex:1 1 260px}
+.trust-cols{display:grid;grid-template-columns:repeat(3,1fr);gap:.9rem}
+@media (max-width:760px){.trust-cols{grid-template-columns:1fr}}
+.tzone{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.9rem;min-height:150px;transition:all .25s;background:rgba(255,255,255,.55)}
+.tzone.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.tzone-head{display:flex;align-items:center;gap:.5rem;margin-bottom:.6rem}
+.tzone-ico{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:.8rem;font-weight:700}
+.tzone-title{font-family:'DM Serif Display',serif;font-size:.95rem;color:var(--navy)}
+.tzone-sub{font-size:.66rem;color:var(--text-muted);letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 1 · AI SEO</div>
+  <h1>AI On-Page &amp; Content Optimization — <em>pages that rank and actually help</em></h1>
+  <p class="hero-sub">Four hands-on drills. Label the parts of an optimized page like an SEO, judge AI-written copy the way a reader (and Google) does, rate five content briefs for search-intent fit, and sort real E-E-A-T signals from the thin-content traps that get pages buried.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: ON-PAGE ANATOMY LABELER ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Label an optimized page — what lives where, and why</h2>
+    <p class="lesson-intro">An optimized page has a job in three places. The <strong>page head</strong> (the HTML Google reads first) frames what the page is about; the <strong>main content</strong> answers the searcher's intent; the <strong>supporting layer</strong> proves the page belongs and connects it to the rest of your site. Drag each of the ten on-page elements into the layer where it does its work. Wrong drops turn red — hover them to learn where they belong and why.</p>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="elemList"></div>
+        <div class="wireframe">
+          <div class="wf-chrome"><span></span><span></span><span></span><div class="wf-url">yoursite.com/guide/best-…</div></div>
+          <div class="wf-zone" data-zone="af">
+            <div class="wf-zone-title">Page head &amp; framing</div>
+            <div class="wf-zone-sub">What Google reads first · 5 elements</div>
+            <div class="wf-drop" data-drop="af"></div>
+          </div>
+          <div class="wf-fold">below the framing — the content itself</div>
+          <div class="wf-zone" data-zone="mid">
+            <div class="wf-zone-title">Main content</div>
+            <div class="wf-zone-sub">Answering search intent · 3 elements</div>
+            <div class="wf-drop" data-drop="mid"></div>
+          </div>
+          <div class="wf-zone" data-zone="bot">
+            <div class="wf-zone-title">Supporting layer</div>
+            <div class="wf-zone-sub">Proof &amp; connections · 2 elements</div>
+            <div class="wf-drop" data-drop="bot"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity1()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers1()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: A/B CONTENT SLOP-VS-HELPFUL ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">2</span>
+    <h2 class="lesson-title">Pick the copy that ranks — and doesn't read like slop</h2>
+    <p class="lesson-intro">AI can draft an article in seconds — but a generic draft is exactly the "mass-produced" content Google's helpful-content stance is built to bury. Below are three pairs. In each, one version is thin, keyword-stuffed, or hollow AI slop; the other answers the searcher and shows real experience. Click the version you would publish; you get the verdict instantly.</p>
+
+    <div class="lesson-card" id="abWrap"></div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: CONTENT BRIEF INTENT EVALUATION ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">3</span>
+    <h2 class="lesson-title">Rate five content briefs for search-intent fit</h2>
+    <p class="lesson-intro">Ranking starts before the first word: does the page you're about to write actually match what the searcher wants? Rate each brief on three tests — <strong>Matches the query's intent?</strong> <strong>Specific &amp; useful (not thin)?</strong> <strong>Built on real experience / E-E-A-T?</strong> — then check yourself against the expert evaluation. The practical drill in real life: Google the target keyword, read what already ranks, and confirm your angle answers the same intent with something genuinely better <em>before</em> you brief the AI.</p>
+
+    <div class="lesson-card">
+      <div id="brandWrap"></div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetBrand()">↻ Reset ratings</button>
+        <button class="btn btn-primary" onclick="checkBrand()">Check my evaluation</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: E-E-A-T SIGNAL SORTER ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#4CAF50">4</span>
+    <h2 class="lesson-title">E-E-A-T sorter — essential, nice-to-have, or harmful?</h2>
+    <p class="lesson-intro">Google judges pages on Experience, Expertise, Authoritativeness and Trust. Some signals are non-negotiable for a page to be taken seriously, some are helpful polish, and some — the faked ones — actively get pages demoted or deindexed the moment they're detected. Drag each of the ten items into the right column. Hover any red pill for the correction.</p>
+
+    <div class="lesson-card">
+      <div class="trust-pool" id="trustPool"></div>
+      <div class="trust-cols">
+        <div class="tzone" data-tzone="ess">
+          <div class="tzone-head"><div class="tzone-ico" style="background:linear-gradient(135deg,#66BB6A,#4CAF50)">✓</div><div><div class="tzone-title">Essential</div><div class="tzone-sub">Non-negotiable · 4 items</div></div></div>
+          <div class="wf-drop" data-tdrop="ess"></div>
+        </div>
+        <div class="tzone" data-tzone="nice">
+          <div class="tzone-head"><div class="tzone-ico" style="background:linear-gradient(135deg,#5B8FE0,#3D72C9)">+</div><div><div class="tzone-title">Nice-to-have</div><div class="tzone-sub">Add later · 3 items</div></div></div>
+          <div class="wf-drop" data-tdrop="nice"></div>
+        </div>
+        <div class="tzone" data-tzone="harm">
+          <div class="tzone-head"><div class="tzone-ico" style="background:linear-gradient(135deg,#E04E3C,#C43A2A)">✗</div><div><div class="tzone-title">Harmful</div><div class="tzone-sub">Never do this · 3 items</div></div></div>
+          <div class="wf-drop" data-tdrop="harm"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback4"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetActivity4()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswers4()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what makes it stay. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">A page targets "best running shoes for flat feet" but the searcher wants comparisons and it just describes one shoe. Which on-page layer failed, and what did it fail to match?</div>
+        <textarea placeholder="The main content failed — it didn't match the search intent, which was ..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">You ask AI to write a "how we tested this" section and it invents details you never did. What do you do before publishing, and why does it matter beyond ethics?</div>
+        <textarea placeholder="Delete it and add the real first-hand experience, because faked E-E-A-T..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 4 · AI Technical SEO</h3>
+      <p>Your content is optimized and trustworthy — now make sure search engines can crawl and understand it. Next: using AI to audit site structure, speed, indexing and structured data, with Search Console and the Rich Results test as your safety net.</p>
+      <a href="04-ai-technical-seo.html" class="btn btn-primary">Continue to Lesson 4 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+/* ─── shared helper ─── */
+function shuffle(arr){ return [...arr].sort(() => Math.random() - 0.5); }
+
+/* ─── ACTIVITY 1: Product-page zone builder ─── */
+const ELEMENTS = [
+  {id:'e1', text:'Title tag (the clickable blue headline in search results)', zone:'af', hint:'The title tag is meta — it lives in the page head and is the single strongest on-page relevance signal, plus the headline a searcher clicks. It belongs in the framing layer, not the visible body.'},
+  {id:'e2', text:'Meta description (the snippet under the title in results)', zone:'af', hint:'The meta description sits in the page head. It rarely affects ranking directly, but it wins or loses the click — so it frames the page for the searcher before they arrive.'},
+  {id:'e3', text:'Clean, keyword-relevant URL slug (/best-running-shoes)', zone:'af', hint:'The URL is part of how a page is framed and read — a short, readable, keyword-relevant slug helps both users and crawlers understand the page at a glance.'},
+  {id:'e4', text:'Schema markup / structured data (e.g. Article, FAQ)', zone:'af', hint:'Structured data lives in the head/markup, not the visible content. It tells search engines what the page is in a language they parse directly — and can earn rich results.'},
+  {id:'e5', text:'The single H1 that states the page topic', zone:'af', hint:'The H1 frames the whole page topic in one line. There should be exactly one, and it should match the search intent — it belongs with the framing, above the body proper.'},
+  {id:'e6', text:'Body copy written to match the searcher\'s intent', zone:'mid', hint:'This is the main content — the actual answer to the query. Matching intent (informational vs commercial vs how-to) is what earns and holds the ranking.'},
+  {id:'e7', text:'H2/H3 subheadings that structure the answer', zone:'mid', hint:'Subheadings organise the main content into scannable sections, help readers, and give crawlers a map of the topics covered on the page.'},
+  {id:'e8', text:'An image with descriptive, keyword-aware alt text', zone:'mid', hint:'Images belong in the main content; the alt text describes them for accessibility and image search — part of optimizing the content itself, not the head.'},
+  {id:'e9', text:'Internal links to related, relevant pages', zone:'bot', hint:'Internal links are the supporting layer — they pass relevance between your pages, help crawlers discover them, and keep readers on your site.'},
+  {id:'e10', text:'Author byline + bio showing real expertise (E-E-A-T)', zone:'bot', hint:'An author bio that shows real experience and credentials is a supporting trust signal — it proves the content came from someone qualified, which E-E-A-T rewards.'}
+];
+const ZONE_NAMES = {af:'Page head & framing', mid:'Main content', bot:'Supporting layer'};
+const ZONE_LIMIT = {af:5, mid:3, bot:2};
+
+let placed1 = {};
+function renderElements(){
+  const list = document.getElementById('elemList');
+  list.innerHTML = shuffle(ELEMENTS).map(e => `
+    <div class="scenario-card" draggable="true" data-id="${e.id}">
+      <div class="scenario-text">${e.text}</div>
+    </div>`).join('');
+  list.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', ev => {
+      ev.dataTransfer.setData('elem', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupZones1(){
+  document.querySelectorAll('.wf-zone').forEach(z => {
+    z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('drag-over'); });
+    z.addEventListener('dragleave', () => z.classList.remove('drag-over'));
+    z.addEventListener('drop', e => {
+      e.preventDefault();
+      z.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('elem');
+      if (id) handleDrop1(id, z.dataset.zone);
+    });
+  });
+}
+function handleDrop1(id, zone){
+  const el = ELEMENTS.find(x => x.id === id);
+  if (!el || placed1[id]) return;
+  const correct = el.zone === zone;
+  placed1[id] = {zone, correct};
+  const card = document.querySelector(`#elemList .scenario-card[data-id="${id}"]`);
+  if (card) card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const drop = document.querySelector(`.wf-drop[data-drop="${zone}"]`);
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + el.text.substring(0, 34) + (el.text.length > 34 ? '…' : '');
+  pill.title = correct ? el.hint : `Belongs in "${ZONE_NAMES[el.zone]}". ${el.hint}`;
+  drop.appendChild(pill);
+  checkDone1();
+}
+function checkDone1(){
+  if (Object.keys(placed1).length !== ELEMENTS.length) return;
+  const right = Object.values(placed1).filter(p => p.correct).length;
+  const fb = document.getElementById('feedback1');
+  if (right === ELEMENTS.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Perfect page — 10 of 10.</strong> You just mapped the anatomy of an optimized page. The <em>page head</em> frames the page for search engines and the click: title tag, meta description, clean URL, schema and a single intent-matching H1. The <em>main content</em> is the answer itself — body copy that matches search intent, subheadings that structure it, and images with real alt text. The <em>supporting layer</em> proves and connects: internal links pass relevance, and an author bio carries E-E-A-T. Every page that ranks well is built on this shape, whatever the topic.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You placed ${right} of 10 correctly.</strong> Hover each red pill to see its true layer and the reason. The mental model: the <em>page head</em> holds what Google reads first and what frames the click — title tag, meta description, URL, schema and the H1. The <em>main content</em> is the intent-matching answer with subheadings and alt-texted images. The <em>supporting layer</em> — internal links and an E-E-A-T author bio — proves and connects the page. Hit <em>Try again</em> and rebuild it.`;
+  }
+  document.getElementById('prog1').classList.add('done');
+}
+function resetActivity1(){
+  placed1 = {};
+  document.getElementById('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('.wf-drop[data-drop]').forEach(d => d.innerHTML = '');
+  renderElements();
+  document.getElementById('prog1').classList.remove('done');
+}
+function showAnswers1(){
+  ELEMENTS.forEach(e => { if (!placed1[e.id]) handleDrop1(e.id, e.zone); });
+}
+
+/* ─── ACTIVITY 2: A/B description picker ─── */
+const PAIRS = [
+  {
+    tag:'Pair 1 · Intro for "how to descale a coffee machine"',
+    losing:'In this comprehensive guide, we will explore everything you need to know about descaling your coffee machine. Descaling is an important process that many people want to learn about. Read on to discover the ultimate tips and tricks for descaling success.',
+    winning:'Limescale is why your coffee tastes flat and your machine takes forever to heat. Here is the exact 15-minute descale I run monthly on my Gaggia — vinegar ratio, cycle steps, and the rinse most guides skip.',
+    why:'Version A is classic AI slop: a throat-clearing intro that promises to "explore everything" and delivers nothing. It wastes the searcher\'s first ten seconds and Google\'s helpful-content systems recognise this padding. Version B answers the intent immediately, names a real machine, and signals first-hand experience ("I run monthly"). Same AI can write B — you just have to prompt for specifics and a real point of view, then edit.',
+    lesson:'Cut the "in this guide we will explore" opener. Lead with the answer and a real, specific detail.'
+  },
+  {
+    tag:'Pair 2 · Section in a "best budget laptops" post',
+    losing:'Best budget laptops are a great choice for anyone looking for the best budget laptops. When choosing the best budget laptops, consider the best budget laptops that fit your needs among the best budget laptops available today.',
+    winning:'Under $500, the tradeoff is almost always the screen. I compared six panels side by side — the Acer Aspire 5\'s 1080p IPS was the only one I could read comfortably outdoors, which is why it tops this list.',
+    why:'Version A is keyword stuffing — repeating "best budget laptops" to game a signal Google stopped rewarding years ago. It reads like a bot and gets pages classed as thin/spam. Version B uses the keyword naturally once, then earns the ranking with a specific comparison and a first-hand observation. Never let AI (or yourself) pad with repeated exact-match phrases — write for the reader.',
+    lesson:'Keyword stuffing is a demotion signal, not a ranking one. Say it once, then be genuinely useful.'
+  },
+  {
+    tag:'Pair 3 · "Is this trail dog-friendly?" answer',
+    losing:'This amazing trail is perfect for everyone and offers a great experience for all types of visitors. It is a must-visit destination that combines nature, adventure and convenience for the modern outdoor enthusiast.',
+    winning:'For anyone hiking with a dog: the first mile is shaded and easy, but the exposed granite after the fork gets hot enough to burn paws by noon — I turned back with mine in July. Go early or bring booties.',
+    why:'Version A is generic AI slop — it names no person, no moment, no real detail, so it helps no one and shows zero experience. Version B speaks to a specific reader (dog owners), at a specific point on the trail, with something only someone who was there would know. That lived detail is exactly the "Experience" in E-E-A-T. Feed AI a precise audience and your real notes, then edit — and never invent an experience you did not have.',
+    lesson:'"Perfect for everyone" helps no one. Real experience + specific detail is what E-E-A-T rewards.'
+  }
+];
+let abDone = 0;
+function renderPairs(){
+  abDone = 0;
+  const wrap = document.getElementById('abWrap');
+  wrap.innerHTML = PAIRS.map((p, i) => {
+    const winFirst = Math.random() < 0.5;
+    const cards = [
+      {label:'A', copy: winFirst ? p.winning : p.losing, win: winFirst},
+      {label:'B', copy: winFirst ? p.losing : p.winning, win: !winFirst}
+    ];
+    return `
+    <div class="ab-pair" data-pair="${i}">
+      <div class="ab-q"><span class="ab-tag">${p.tag}</span>Which version would you publish?</div>
+      <div class="ab-cards">
+        ${cards.map(c => `
+        <div class="ab-card" data-win="${c.win ? 1 : 0}" onclick="pickAB(this, ${i})">
+          <span class="ab-letter">${c.label}</span>
+          <div class="ab-copy">${c.copy}</div>
+        </div>`).join('')}
+      </div>
+      <div class="ab-verdict" id="verdict${i}"></div>
+    </div>`;
+  }).join('') + `
+    <div class="activity-feedback" id="feedback2"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetActivity2()">↻ New round (sides reshuffle)</button>
+    </div>`;
+}
+function pickAB(card, i){
+  const pair = card.closest('.ab-pair');
+  if (pair.dataset.locked) return;
+  pair.dataset.locked = '1';
+  const pickedWin = card.dataset.win === '1';
+  pair.querySelectorAll('.ab-card').forEach(c => {
+    c.classList.add('locked');
+    if (c.dataset.win === '1') c.classList.add('win');
+    else c.classList.add(c === card ? 'picked-wrong' : 'lose');
+  });
+  const v = document.getElementById('verdict' + i);
+  v.className = 'ab-verdict show ' + (pickedWin ? 'good' : 'bad');
+  v.innerHTML = (pickedWin ? '<strong>Right call.</strong> ' : '<strong>The other one wins.</strong> ') + PAIRS[i].why;
+  pair.dataset.score = pickedWin ? '1' : '0';
+  abDone++;
+  if (abDone === PAIRS.length) finishAB();
+}
+function finishAB(){
+  const score = [...document.querySelectorAll('.ab-pair')].reduce((s, p) => s + (p.dataset.score === '1' ? 1 : 0), 0);
+  const fb = document.getElementById('feedback2');
+  if (score === PAIRS.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>3 for 3 — you read like Google's helpful-content system.</strong> The three filters you just used are the ones to run every AI draft through: (1) does it answer the intent right away instead of padding? (2) is it specific and free of keyword stuffing? (3) does it show real, first-hand experience? AI drafts fast; you make it useful, honest, and worth ranking.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You picked ${score} of 3 winners.</strong> Re-read the verdicts above — they are the whole lesson. Remember the three filters for every AI draft: answer the intent over throat-clearing intros, natural language over repeated keywords, and real experience over "perfect for everyone." Reshuffle and run it again.`;
+  }
+  document.getElementById('prog2').classList.add('done');
+}
+function resetActivity2(){
+  renderPairs();
+  document.getElementById('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Brand-name evaluation ─── */
+const CRITERIA = ['Matches the query\'s intent?', 'Specific &amp; useful (not thin)?', 'Built on real experience / E-E-A-T?'];
+const NAMES = [
+  {name:'Query "how to unclog a sink" → step-by-step brief with photos of each stage, from a plumber who documented a real job', expert:[1,1,1],
+   why:'Expert verdict: yes / yes / yes. The searcher wants to fix a sink now, and a photographed step-by-step from someone who actually did it matches that how-to intent exactly, is concrete, and carries genuine Experience and Expertise. This is the kind of page Google\'s helpful-content systems reward.'},
+  {name:'Query "best budget headphones 2026" → a 300-word AI post that never names a single model, just repeats "best budget headphones" and generic pros and cons', expert:[0,0,0],
+   why:'Expert verdict: no / no / no. The intent is a comparison of specific models, and this brief delivers none — it is thin, keyword-stuffed, and shows zero hands-on testing. It is precisely the mass-produced content Google demotes. A brief has to name real options and rest on real testing.'},
+  {name:'Query "is intermittent fasting safe?" → a genuinely helpful, well-written brief, but written by an anonymous author with no health or nutrition background', expert:[1,0,0],
+   why:'Expert verdict: matches intent, but thin on the tests that matter here. The topic touches health ("Your Money or Your Life"), where Google weighs expertise and trust heavily. A useful-sounding article with no credentials and no cited experience will struggle — and can mislead readers. This needs a qualified author or expert review.'},
+  {name:'Query "chocolate chip cookie recipe" → a precise, tested recipe from a real home baker — but buried under 900 words of unrelated life story before the ingredients', expert:[1,1,0],
+   why:'Expert verdict: right intent and genuinely specific and experience-backed, but it fails the reader by making them scroll past a wall of unrelated story to reach the recipe. Structure matters: honour the intent up front. The fix is a jump link or a tighter intro, not padding — helpful content respects the searcher\'s time.'},
+  {name:'Query "beginner yoga poses" → a clear, well-structured brief from a certified instructor with photos she took in her own class', expert:[1,1,1],
+   why:'Expert verdict: yes / yes / yes. It matches the beginner how-to intent, is specific and well organised, and the certification plus original class photos are strong first-hand E-E-A-T. One caveat before publishing: check what already ranks and make sure your angle adds something the top results miss.'}
+];
+let togState = [];
+function renderBrands(){
+  togState = NAMES.map(() => [null, null, null]);
+  const wrap = document.getElementById('brandWrap');
+  wrap.innerHTML = NAMES.map((n, ni) => `
+    <div class="brand-block" data-brand="${ni}">
+      <div class="brand-name">${n.name}</div>
+      ${CRITERIA.map((c, ci) => `
+      <div class="brand-row">
+        <div class="brand-crit">${c}</div>
+        <div class="tog-group">
+          <button class="tog" id="tog-${ni}-${ci}-1" onclick="setTog(${ni},${ci},1)">Yes</button>
+          <button class="tog" id="tog-${ni}-${ci}-0" onclick="setTog(${ni},${ci},0)">No</button>
+        </div>
+      </div>`).join('')}
+      <div class="brand-why" id="why${ni}">${n.why}</div>
+    </div>`).join('');
+}
+function setTog(ni, ci, val){
+  togState[ni][ci] = val;
+  document.getElementById(`tog-${ni}-${ci}-1`).className = 'tog' + (val === 1 ? ' on-yes' : '');
+  document.getElementById(`tog-${ni}-${ci}-0`).className = 'tog' + (val === 0 ? ' on-no' : '');
+}
+function checkBrand(){
+  const fb = document.getElementById('feedback3');
+  const unanswered = togState.flat().filter(v => v === null).length;
+  if (unanswered > 0) {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>${unanswered} rating${unanswered > 1 ? 's' : ''} still blank.</strong> Give every name a Yes or No on all three tests, then check again.`;
+    return;
+  }
+  let hits = 0;
+  NAMES.forEach((n, ni) => {
+    n.expert.forEach((exp, ci) => {
+      const mine = togState[ni][ci];
+      const hit = mine === exp;
+      if (hit) hits++;
+      const chosen = document.getElementById(`tog-${ni}-${ci}-${mine}`);
+      chosen.classList.add(hit ? 'reveal-hit' : 'reveal-miss');
+      if (!hit) document.getElementById(`tog-${ni}-${ci}-${exp}`).classList.add('reveal-hit');
+    });
+    document.getElementById('why' + ni).classList.add('show');
+  });
+  if (hits === 15) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>15 / 15 — expert-level judgement.</strong> You caught the thin keyword-stuffed brief, the missing-expertise health topic, and the recipe buried under padding. Before you brief the AI on anything real: Google the target keyword, read what already ranks to confirm the intent, and make sure your angle brings real experience the top results lack. Five minutes of checking beats a page that never ranks.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You matched ${hits} of 15 expert ratings.</strong> Green pills show the expert answer wherever you differed; each brief’s explanation is now open below its ratings. The three tests in real life: does the page match the query\'s intent, is it specific and useful rather than thin, and does it show real experience or expertise (E-E-A-T)? Check what already ranks before you write. Reset to try for a clean sheet.`;
+  }
+  document.getElementById('prog3').classList.add('done');
+}
+function resetBrand(){
+  renderBrands();
+  document.getElementById('feedback3').className = 'activity-feedback';
+  document.getElementById('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Trust-signal sorter ─── */
+const TRUST_FINAL = [
+  {id:'t1', text:'A named author with a real bio and relevant credentials', col:'ess', hint:'The "E" and "E" in E-E-A-T — experience and expertise — need a real person attached. Anonymous content on topics that matter is exactly what gets treated as low-trust.'},
+  {id:'t2', text:'First-hand experience shown in the content ("I tested this for a month")', col:'ess', hint:'The first "E" in E-E-A-T is Experience. Original, been-there detail is the hardest thing for mass-produced content to fake and the clearest signal the page is genuinely helpful.'},
+  {id:'t3', text:'Accurate, up-to-date information you can stand behind', col:'ess', hint:'Trust — the "T" that E-E-A-T is built around — starts with being correct. Outdated or wrong content erodes the whole site\'s standing, not just one page.'},
+  {id:'t4', text:'Content that actually answers the search intent, not just the keyword', col:'ess', hint:'Helpful content matches what the searcher meant. A page that ranks for a keyword but ignores the intent behind it fails users — and Google\'s helpful-content systems notice.'},
+  {id:'t6', text:'Links out to authoritative sources that support your claims', col:'nice', hint:'Citing solid sources adds credibility and context — helpful polish, but a strong page can stand on its own experience and expertise without it.'},
+  {id:'t7', text:'A clear "last updated" date on the article', col:'nice', hint:'Useful for reader trust and freshness, especially on fast-moving topics — but a nice-to-have, not the thing that makes or breaks whether the page is trustworthy.'},
+  {id:'t8', text:'Related-articles module at the end of the post', col:'nice', hint:'Good for keeping readers on the site and spreading internal-link equity — helpful, but not a core E-E-A-T requirement.'},
+  {id:'t9', text:'A fake "reviewed by Dr. Smith, MD" byline on content no doctor saw', col:'harm', hint:'Fabricated expertise is deceptive and dangerous on health topics. It breaks trust the instant it\'s exposed and is exactly the kind of manipulation Google\'s spam policies target.'},
+  {id:'t10', text:'Mass-produced AI pages spun up at scale with no human review', col:'harm', hint:'Scaled, unedited content made mainly to rank is what the helpful-content and spam policies were written to catch — it gets pages and whole sites demoted or deindexed.'},
+  {id:'t11', text:'Invented statistics or quotes the AI hallucinated', col:'harm', hint:'Publishing fabricated facts or fake quotes destroys trust, can be defamatory or misleading, and is a fast way to lose credibility with both readers and search engines.'}
+];
+const TCOL_NAMES = {ess:'Essential', nice:'Nice-to-have', harm:'Harmful'};
+
+let placed4 = {};
+function renderTrust(){
+  const pool = document.getElementById('trustPool');
+  pool.innerHTML = shuffle(TRUST_FINAL).map(t => `
+    <div class="scenario-card" draggable="true" data-tid="${t.id}">
+      <div class="scenario-text">${t.text}</div>
+    </div>`).join('');
+  pool.querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', ev => {
+      ev.dataTransfer.setData('trust', card.dataset.tid);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupZones4(){
+  document.querySelectorAll('.tzone').forEach(z => {
+    z.addEventListener('dragover', e => { e.preventDefault(); z.classList.add('drag-over'); });
+    z.addEventListener('dragleave', () => z.classList.remove('drag-over'));
+    z.addEventListener('drop', e => {
+      e.preventDefault();
+      z.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('trust');
+      if (id) handleDrop4(id, z.dataset.tzone);
+    });
+  });
+}
+function handleDrop4(id, col){
+  const item = TRUST_FINAL.find(t => t.id === id);
+  if (!item || placed4[id]) return;
+  const correct = item.col === col;
+  placed4[id] = {col, correct};
+  const card = document.querySelector(`#trustPool .scenario-card[data-tid="${id}"]`);
+  if (card) card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const drop = document.querySelector(`.wf-drop[data-tdrop="${col}"]`);
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + item.text.replace(/&amp;/g,'&').substring(0, 32) + '…';
+  pill.title = correct ? item.hint : `Belongs in "${TCOL_NAMES[item.col]}". ${item.hint}`;
+  drop.appendChild(pill);
+  checkDone4();
+}
+function checkDone4(){
+  if (Object.keys(placed4).length !== TRUST_FINAL.length) return;
+  const right = Object.values(placed4).filter(p => p.correct).length;
+  const fb = document.getElementById('feedback4');
+  if (right === TRUST_FINAL.length) {
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>10 of 10 — you sort E-E-A-T like a pro.</strong> The essentials (a real author, first-hand experience, accurate info, and content that answers the intent) are what make a page genuinely trustworthy and rank-worthy. The nice-to-haves — citations, update dates, related links — are helpful polish. And the harmful pile — fake expert bylines, mass-produced unreviewed AI pages, hallucinated stats — is exactly what Google\'s helpful-content and spam policies demote or deindex, and what destroys reader trust the instant it\'s exposed. The honest move: use AI to draft, then add your real experience and edit every claim.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You sorted ${right} of 10 correctly.</strong> Hover the red pills for corrections. The line to remember: anything that shows <em>real</em> experience, expertise or accuracy and truly helps the searcher is essential; anything that adds credibility but isn\'t core is nice-to-have; anything <em>faked</em> — invented credentials, scaled unreviewed AI content, hallucinated facts — is harmful. Fakes get pages demoted or deindexed and destroy trust when spotted. Use AI to draft, then make it real: your experience, your edits. Try again for a clean board.`;
+  }
+  document.getElementById('prog4').classList.add('done');
+}
+function resetActivity4(){
+  placed4 = {};
+  document.getElementById('feedback4').className = 'activity-feedback';
+  document.querySelectorAll('.wf-drop[data-tdrop]').forEach(d => d.innerHTML = '');
+  renderTrust();
+  document.getElementById('prog4').classList.remove('done');
+}
+function showAnswers4(){
+  TRUST_FINAL.forEach(t => { if (!placed4[t.id]) handleDrop4(t.id, t.col); });
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderElements();
+  setupZones1();
+  renderPairs();
+  renderBrands();
+  renderTrust();
+  setupZones4();
+});
+</script>
+</body>
+</html>
