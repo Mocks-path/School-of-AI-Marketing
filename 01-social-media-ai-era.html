@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Social Media in the AI Era · Lesson 01</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,sans-serif;
+  background:var(--paper); color:var(--ink); line-height:1.6; overflow-x:hidden;
+}
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);
+  background-size:24px 24px;
+}
+.topbar{
+  position:sticky;top:0;z-index:100;
+  background:rgba(255,252,246,0.92); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  padding:14px 40px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{
+  font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;
+  text-transform:uppercase;color:var(--orange-dark);font-weight:600;
+  display:inline-flex;align-items:center;gap:10px;
+}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{
+  font-family:'Fraunces',serif;font-weight:800;
+  font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;
+  margin:18px 0 20px;color:var(--brown-dark);
+}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{
+  font-family:'Fraunces',serif;font-weight:700;
+  font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;
+  margin:10px 0 22px;color:var(--brown-dark);max-width:720px;
+}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{
+  background:var(--cream);border:1px solid var(--line);border-radius:18px;
+  padding:32px;margin:24px 0;position:relative;overflow:hidden;
+}
+.illus-title{
+  font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);
+  letter-spacing:0.12em;text-transform:uppercase;
+  margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:10px;
+}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{
+  font-family:'JetBrains Mono',monospace;font-size:11px;
+  background:var(--paper);border:1px solid var(--line);color:var(--brown);
+  padding:6px 12px;border-radius:6px;cursor:pointer;
+  text-transform:uppercase;letter-spacing:0.1em;transition:all .2s;
+}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{
+  background:var(--brown-dark);color:var(--paper);
+  border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden;
+}
+.takeaway::after{
+  content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;
+  border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4;
+}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){
+  .topbar{padding:12px 18px}
+  .page{padding:30px 18px 70px}
+  .illus{padding:20px}
+  .takeaway{padding:28px}
+  .logo-slot{width:38px;height:38px}
+}
+
+/* ============ Figure 1 · the funnel ============ */
+.funnel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:28px 24px 22px}
+.funnel-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:26px;align-items:center}
+.fstack{display:flex;flex-direction:column;align-items:center;gap:10px}
+.fstage{
+  cursor:pointer;color:#fff;border-radius:10px;text-align:center;
+  padding:16px 10px;transition:transform .3s,box-shadow .3s,filter .2s;
+  position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;
+}
+.fstage:hover{filter:brightness(1.07)}
+.fstage.active{transform:scale(1.03);box-shadow:0 10px 24px rgba(65,44,35,0.25);outline:3px solid var(--yellow)}
+.fstage .fslabel{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;opacity:.9}
+.fstage .fsname{font-family:'Fraunces',serif;font-size:19px;font-weight:700;line-height:1.1;margin-top:2px}
+.fstage .fscount{font-family:'JetBrains Mono',monospace;font-size:12px;margin-top:5px;opacity:.92}
+.fs0{width:100%;background:var(--orange)}
+.fs1{width:82%;background:var(--tan)}
+.fs2{width:60%;background:var(--orange-dark)}
+.fs3{width:38%;background:var(--brown)}
+.fconv{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:0.06em}
+.fconv b{color:var(--orange-dark)}
+.fpanel{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:20px;min-height:230px}
+.fpanel.swap{animation:panelIn .4s ease}
+@keyframes panelIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.fpanel .fptag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:block;margin-bottom:4px}
+.fpanel h4{font-family:'Fraunces',serif;font-size:21px;color:var(--brown-dark);margin-bottom:8px}
+.fpanel p{font-size:13.5px;color:var(--ink);max-width:none;margin-bottom:12px;line-height:1.5}
+.fpanel ul{list-style:none;display:grid;gap:7px}
+.fpanel li{font-size:13px;color:var(--ink);padding-left:20px;position:relative;line-height:1.45}
+.fpanel li::before{content:"✦";position:absolute;left:0;color:var(--orange);font-size:12px}
+@media(max-width:700px){.funnel-grid{grid-template-columns:1fr}}
+
+/* ============ Figure 2 · leak calculator ============ */
+.leak{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.lrow{display:grid;grid-template-columns:210px 1fr 62px;gap:14px;align-items:center;margin-bottom:16px}
+.lrow label{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600}
+.lrow .lval{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:600;color:var(--orange-dark);text-align:right}
+input[type=range]{-webkit-appearance:none;appearance:none;width:100%;height:6px;border-radius:3px;background:var(--cream);border:1px solid var(--line);outline:none}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;width:20px;height:20px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+input[type=range]::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--orange);border:3px solid var(--paper);box-shadow:0 1px 5px rgba(65,44,35,0.35);cursor:pointer}
+.lout{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:20px}
+.lcell{background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px;text-align:center}
+.lcell .lk{font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:4px}
+.lcell .lv{font-family:'Fraunces',serif;font-size:26px;font-weight:800;color:var(--brown-dark);line-height:1}
+.lcell.hero{background:var(--brown-dark)}
+.lcell.hero .lk{color:var(--yellow)}
+.lcell.hero .lv{color:var(--paper)}
+.lverdict{margin-top:18px;padding:14px 18px;border-radius:10px;background:var(--cream);border:1px solid var(--line);font-size:14px;color:var(--brown);line-height:1.5}
+@media(max-width:700px){
+  .lrow{grid-template-columns:1fr 60px;gap:8px}
+  .lrow label{grid-column:1/-1}
+  .lout{grid-template-columns:1fr 1fr}
+}
+
+/* ============ Figure 3 · social engine ============ */
+.stack-chain{display:flex;align-items:stretch;gap:0;margin-bottom:18px}
+.snode{
+  flex:1;text-align:center;padding:14px 8px;background:var(--paper);
+  border:2px solid var(--line);border-radius:12px;cursor:pointer;
+  transition:all .25s;
+}
+.snode .sidx{display:block;font-family:'Fraunces',serif;font-size:22px;font-weight:800;color:var(--line);margin-bottom:3px;transition:color .25s}
+.snode .snm{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--brown);font-weight:600}
+.snode:hover{border-color:var(--orange);transform:translateY(-2px)}
+.snode.active{background:var(--brown-dark);border-color:var(--brown-dark)}
+.snode.active .snm{color:var(--paper)}
+.snode.active .sidx{color:var(--orange)}
+.slink{width:22px;flex-shrink:0;align-self:center;height:3px;background:var(--line);position:relative}
+.slink::after{content:"";position:absolute;right:-1px;top:50%;transform:translateY(-50%);border-left:7px solid var(--line);border-top:5px solid transparent;border-bottom:5px solid transparent}
+.spanel{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px;min-height:250px}
+.spanel.swap{animation:panelIn .4s ease}
+.spanel h4{font-family:'Fraunces',serif;font-size:22px;color:var(--brown-dark);margin-bottom:4px}
+.spanel .stag{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:block;margin-bottom:14px}
+.spanel ul{list-style:none;display:grid;gap:9px;margin-bottom:16px}
+.spanel li{font-size:14px;color:var(--ink);padding-left:24px;position:relative;line-height:1.5}
+.spanel li::before{content:"✦";position:absolute;left:0;color:var(--orange);font-size:13px}
+.s-human{background:var(--cream);border-left:3px solid var(--brown);border-radius:0 10px 10px 0;padding:13px 16px;font-size:13.5px;color:var(--brown);line-height:1.5}
+.s-human strong{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--brown-dark);display:block;margin-bottom:3px}
+@media(max-width:700px){
+  .stack-chain{flex-wrap:wrap;gap:8px}
+  .snode{flex:1 1 40%}
+  .slink{display:none}
+}
+
+/* ============ Figure 4 · tool-vs-role cards ============ */
+.tgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.tcard{height:210px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.tgrid.show .tcard{animation:hIn .5s forwards}
+.tgrid.show .tcard:nth-child(1){animation-delay:.05s}
+.tgrid.show .tcard:nth-child(2){animation-delay:.2s}
+.tgrid.show .tcard:nth-child(3){animation-delay:.35s}
+.tgrid.show .tcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.tinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.tcard.flipped .tinner{transform:rotateY(180deg)}
+.tface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center}
+.tfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.tfront .tclaim{font-family:'Fraunces',serif;font-weight:800;font-size:24px;line-height:1.1;margin-bottom:8px}
+.tfront .tsub{font-size:13px;opacity:.92;max-width:260px}
+.tfront .thint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.tback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.tback .tlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.tback p{font-size:13px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){.tgrid{grid-template-columns:1fr}.tcard{height:200px}.tfront .tclaim{font-size:21px}}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 01 · AI Social Media</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="4" y="13" width="36" height="27" rx="6" fill="#412C23"/>
+      <path d="M14 13 C14 4.5 30 4.5 30 13" stroke="#EF7F1A" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M12 32 L12 22 L17 28 L22 21 L27 28 L32 22 L32 32" stroke="#FECC00" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="36" cy="9" r="4.5" fill="#EF7F1A"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 4 · Lesson 01 · AI Social Media</div>
+  <h1>Social media in the <em>AI era</em>.</h1>
+  <p class="lede">Social media isn't one lucky viral post — it's a series of small habits repeated until they compound. Great social is just showing up, usefully, on the right platform, week after week. Once you can see how feeds and algorithms actually work, you can see exactly where attention comes from — and exactly where AI can quietly do the heavy lifting so one person can post like a small studio.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>A feed is a ladder of attention</h2>
+  <p class="lead">Picture how you actually scroll. A post appears, you glance, you decide in half a second whether to keep watching, and only a tiny fraction of what you see earns a like, a save or a follow. Social media is that same shape, and it's honest about an uncomfortable truth: most people who see your post will scroll right past it — and that's completely normal.</p>
+
+  <p>Every post climbs a ladder of attention, and the jargon is simpler than it sounds. <strong>Reach</strong> is "how many people the feed showed you to." <strong>Watch</strong> is "how many actually stopped and paid attention." <strong>Engage</strong> is "how many liked, commented or shared." <strong>Follow &amp; save</strong> is "how many decided you're worth coming back to." Each rung has a different job, because a stranger scrolling past needs something very different from someone deciding whether to hit follow.</p>
+  <p>The reason this is drawn as a shrinking shape is that people drop off at every step. If the feed shows a post to 1,000 people, maybe 200 actually watch, maybe 40 engage, maybe 8 follow or save. These drop-off rates are what the algorithm watches too — watch time, engagement, saves and shares are the signals that decide whether your <em>next</em> post gets shown to more people. Click each rung of the ladder below to learn what job it does — and watch the counts shrink as scrolling turns into a real audience.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · The attention ladder</span>
+      <div class="controls">
+        <button onclick="funStep(-1)">◀ Prev rung</button>
+        <button onclick="funStep(1)">Next rung ▶</button>
+      </div>
+    </div>
+    <div class="funnel">
+      <div class="funnel-grid">
+        <div class="fstack" id="fstack">
+          <div class="fstage fs0 active" data-k="tofu" onclick="pickStage('tofu')">
+            <span class="fslabel">Reach · Shown</span>
+            <span class="fsname">Discovery</span>
+            <span class="fscount">1,000 see the post*</span>
+          </div>
+          <div class="fconv">↓ <b>20%</b> actually watch</div>
+          <div class="fstage fs1" data-k="mofu" onclick="pickStage('mofu')">
+            <span class="fslabel">Watch · Attention</span>
+            <span class="fsname">Watch time</span>
+            <span class="fscount">200 stop &amp; watch</span>
+          </div>
+          <div class="fconv">↓ <b>20%</b> like or share</div>
+          <div class="fstage fs2" data-k="lead" onclick="pickStage('lead')">
+            <span class="fslabel">Engage · Signals</span>
+            <span class="fsname">Engagement</span>
+            <span class="fscount">40 engage or save</span>
+          </div>
+          <div class="fconv">↓ <b>20%</b> decide to follow</div>
+          <div class="fstage fs3" data-k="bofu" onclick="pickStage('bofu')">
+            <span class="fslabel">Follow · Return</span>
+            <span class="fsname">Followers</span>
+            <span class="fscount">8 follow or save*</span>
+          </div>
+        </div>
+        <div class="fpanel" id="fpanel"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Why the shape matters to you</h3>
+  <p>Once the ladder is drawn, your whole job becomes measurable. You stop asking "why isn't my content working?" — a question with no answer — and start asking "which rung is weak?" Maybe the feed barely shows your posts (a reach problem). Maybe lots see them but nobody stops (a weak hook — a watch problem). Maybe people watch but never like or save (an engagement problem). Each weak rung has a different fix, and you can only find it once you're actually reading your numbers instead of guessing.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>Where does your reach fade?</h2>
+  <p class="lead">Small percentages compound. A post with "okay" numbers at every rung can still grow you almost nothing — because the drop-offs multiply together. The good news is the reverse is also true: nudging one weak rung up a few points can double your new followers without a single extra impression.</p>
+
+  <p>Here's the multiplication that beginners feel in their gut but rarely calculate. If 20% of people who see a post actually watch, then 20% of those engage, then 20% of those follow, your seen-to-follower rate isn't 20% — it's 20% × 20% × 20% = <strong>0.8%</strong>. Eight new followers out of a thousand impressions. That sounds bleak until you notice the lever: raise just the middle rung from 20% to 35%, and your new followers jump by three-quarters — same reach, same effort.</p>
+  <p>This is why smart creators obsess over the <em>weakest</em> rung, not the whole ladder. Drag the sliders below and watch the bottom number swing. Notice how sensitive the follower count is to each individual rate — and how fixing your worst rung beats desperately chasing more impressions. (Numbers here are illustrative, to show the shape of the math.)</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · The reach calculator</span>
+      <div class="controls">
+        <button onclick="leakPreset('weak')">Weak post</button>
+        <button onclick="leakPreset('good')">Strong post</button>
+        <button onclick="leakPreset('reset')">↺ Defaults</button>
+      </div>
+    </div>
+    <div class="leak" id="leak">
+      <div class="lrow">
+        <label for="lVis">Impressions / month</label>
+        <input type="range" id="lVis" min="500" max="10000" step="500" value="2000" oninput="calcLeak()">
+        <div class="lval" id="vVis">2,000</div>
+      </div>
+      <div class="lrow">
+        <label for="lC1">Seen → Watch %</label>
+        <input type="range" id="lC1" min="2" max="60" step="1" value="20" oninput="calcLeak()">
+        <div class="lval" id="vC1">20%</div>
+      </div>
+      <div class="lrow">
+        <label for="lC2">Watch → Engage %</label>
+        <input type="range" id="lC2" min="2" max="60" step="1" value="20" oninput="calcLeak()">
+        <div class="lval" id="vC2">20%</div>
+      </div>
+      <div class="lrow">
+        <label for="lC3">Engage → Follow %</label>
+        <input type="range" id="lC3" min="2" max="60" step="1" value="20" oninput="calcLeak()">
+        <div class="lval" id="vC3">20%</div>
+      </div>
+      <div class="lout">
+        <div class="lcell"><span class="lk">Watched</span><span class="lv" id="oClicks">–</span></div>
+        <div class="lcell"><span class="lk">Engaged</span><span class="lv" id="oLeads">–</span></div>
+        <div class="lcell"><span class="lk">Overall rate</span><span class="lv" id="oRate">–</span></div>
+        <div class="lcell hero"><span class="lk">Followers</span><span class="lv" id="oCust">–</span></div>
+      </div>
+      <div class="lverdict" id="lVerdict"></div>
+    </div>
+  </div>
+
+  <h3>The lesson hidden in the math</h3>
+  <p>Chasing more reach is the most exhausting way to grow, because the feed decides how much you get, not you. Fixing a weak rung is nearly free — you change your hook, your first three seconds, or the reason to save, not your posting volume. So before you ever ask "how do I get seen by more people?", ask "which of my three rates is the ugliest, and what would move it?" That's the question this whole week is built to answer, and AI is the tool that lets one person test the answers fast.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>The four-step social engine</h2>
+  <p class="lead">The "social engine" is just a simple loop you run every week: <strong>strategy → create → schedule &amp; engage → measure</strong>. There's no single magic tool. Instead, AI does a different job at each step — and knowing which job goes where is what separates people who "use AI" from people who actually grow with it. These four steps are also the four lessons of this week.</p>
+
+  <p>Keep the honest framing: treat AI as a <strong>fast, tireless content intern</strong>. It's brilliant at volume, speed and first drafts — brainstorming ideas, writing captions, editing clips, drafting a month of posts. It's poor at judgment — sounding like a real human, knowing what your audience actually cares about, deciding what your brand stands for. At every step below, AI generates the work and a human approves the bet. Click each step of the engine to see the concrete tools and the decision that stays yours.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The social engine, step by step</span>
+      <div class="controls">
+        <button onclick="stackStep(-1)">◀ Prev</button>
+        <button onclick="stackStep(1)">Next ▶</button>
+      </div>
+    </div>
+    <div class="stack-chain" id="stackChain">
+      <div class="snode" data-k="attract" onclick="pickStack('attract')"><span class="sidx">1</span><span class="snm">Strategy</span></div>
+      <div class="slink"></div>
+      <div class="snode" data-k="capture" onclick="pickStack('capture')"><span class="sidx">2</span><span class="snm">Create</span></div>
+      <div class="slink"></div>
+      <div class="snode" data-k="nurture" onclick="pickStack('nurture')"><span class="sidx">3</span><span class="snm">Schedule &amp; Engage</span></div>
+      <div class="slink"></div>
+      <div class="snode" data-k="close" onclick="pickStack('close')"><span class="sidx">4</span><span class="snm">Measure</span></div>
+    </div>
+    <div class="spanel" id="spanel"></div>
+  </div>
+
+  <h3>One engine, one creator</h3>
+  <p>Ten years ago, each of these steps was a separate person or department: a strategist to plan, a videographer and designer to create, a community manager to post and reply, an analyst to read the numbers. The social engine collapses all four into tools one focused person can run. That's the real story of this week — not that AI "does social for you," but that it lets a single beginner cover a job that used to need a small team, provided you keep making the calls that matter.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>What AI is — and isn't — in social</h2>
+  <p class="lead">Every AI-social pitch you'll ever hear makes one of these four promises. Flip each card to see the more useful truth underneath. Getting this framing right now will save you from both the hype (trusting AI blindly) and the fear (refusing to use it at all).</p>
+
+  <p>None of this means "don't use AI." It means use AI for the volume, not the voice. The creators who win with AI are the ones who let the machine handle the repetitive 90% — the idea lists, the first-draft captions, the rough cuts, the scheduling — and spend their freed-up attention on the 10% that actually decides whether people care: a genuine point of view, a real reply, a story only they can tell.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Flip the promise</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all truths</button>
+        <button onclick="allHype()">↺ Back to promises</button>
+      </div>
+    </div>
+    <div class="tgrid" id="tgrid">
+      <div class="tcard" onclick="this.classList.toggle('flipped')">
+        <div class="tinner">
+          <div class="tface tfront"><div class="tclaim">"AI goes viral for you"</div><div class="tsub">Post AI content and watch it blow up.</div><div class="thint">tap to flip</div></div>
+          <div class="tface tback"><div class="tlab">Truth</div><p>AI helps you produce more and post consistently, which is what actually compounds. But a hook that makes someone stop, a story that feels true — that's human work. AI gets the post out the door; your point of view is what makes it land.</p></div>
+        </div>
+      </div>
+      <div class="tcard" onclick="this.classList.toggle('flipped')">
+        <div class="tinner">
+          <div class="tface tfront"><div class="tclaim">"Be on every platform"</div><div class="tsub">More platforms means more reach, right?</div><div class="thint">tap to flip</div></div>
+          <div class="tface tback"><div class="tlab">Truth</div><p>Spreading across Instagram, TikTok, YouTube, LinkedIn, Facebook and X at once just means doing all of them badly. Pick one or two where your people already hang out, get good there, then expand. Depth on one platform beats a thin presence on six.</p></div>
+        </div>
+      </div>
+      <div class="tcard" onclick="this.classList.toggle('flipped')">
+        <div class="tinner">
+          <div class="tface tfront"><div class="tclaim">"More posts = more growth"</div><div class="tsub">Just flood the feed with AI content.</div><div class="thint">tap to flip</div></div>
+          <div class="tface tback"><div class="tlab">Truth</div><p>Volume without a point of view just multiplies generic noise, and audiences smell inauthentic content fast. A weak rung stays weak whether you post 3 times or 30. Fix your hook and your reason-to-follow first; scale the volume second. Otherwise AI just helps you post forgettable content faster.</p></div>
+        </div>
+      </div>
+      <div class="tcard" onclick="this.classList.toggle('flipped')">
+        <div class="tinner">
+          <div class="tface tfront"><div class="tclaim">"Schedule it and forget it"</div><div class="tsub">Queue a month of posts, never look back.</div><div class="thint">tap to flip</div></div>
+          <div class="tface tback"><div class="tlab">Truth</div><p>Social is a two-way street. Scheduling posts is fine, but ignoring your comments and DMs kills the relationship that makes people stay. A healthy engine needs a weekly glance: which post worked, which flopped, who's talking to you. Real replies, not just a full queue.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-sentence version</h3>
+  <p>A feed is a ladder of shrinking attention; the social engine is a loop — strategy, create, schedule &amp; engage, measure — where AI quietly does the repetitive work at each step, so one person can run the whole thing while still making every decision that actually earns trust.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>You now have the map every other lesson this week hangs on. A feed shrinks attention at every rung, so your job is to find the weakest rung and fix it — which beats chasing more reach. The social engine loops a different AI helper into each step: strategy, create, schedule &amp; engage, measure. AI owns the volume; you own the voice. Social is a long game — consistency and authenticity beat one viral hit, and AI is leverage, not magic. Next lesson, we start with strategy: choosing your platform and your point of view.</p>
+  <ul>
+    <li>Ladder = Reach (seen) → Watch → Engage → Follow &amp; save</li>
+    <li>Rates multiply — fixing your weakest rung beats chasing more reach</li>
+    <li>The social engine: strategy, create, schedule &amp; engage, measure — one step per lesson</li>
+    <li>AI = fast content intern: volume &amp; drafts from it, voice &amp; judgment from you</li>
+    <li>Pick 1–2 platforms; consistency + authenticity beat one viral hit</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 01 of 04 · Next up: Social Strategy &amp; Content Planning with AI →</footer>
+<script>
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · funnel ===== */
+const FUN={
+  tofu:{tag:'Reach · Top of the feed · Discovery',t:'Discovery — "who are you?"',p:'The widest rung: strangers the feed decided to show you to. They are not interested yet — they are barely aware. The job here is a scroll-stopping first impression, nothing more.',li:['They arrive from the For You feed, explore, search or a share','Goal: earn one stop, one watch, one moment of attention','Wrong move: a slow, generic opening — they scroll in half a second','AI role: brainstorm dozens of hooks and post ideas to test']},
+  mofu:{tag:'Watch · Middle · Attention',t:'Watch time — "is this worth my seconds?"',p:'People who stopped scrolling and are now deciding whether to keep watching. Watch time is the single biggest signal most feeds use — the longer they stay, the more the algorithm shows you.',li:['They watch, and the feed measures how long they stay','Goal: hold attention past the first three seconds','Content: a clear payoff, a story, something genuinely useful','AI role: draft scripts and outlines built around a strong opening']},
+  lead:{tag:'Engage · Signals · Likes &amp; saves',t:'Engagement — "I’ll like, comment or save"',p:'The moment a viewer becomes a fan of the post: they like, comment, share or save. Saves and shares tell the algorithm this was worth keeping — the strongest signals of all.',li:['They tap like, drop a comment, share, or save for later','Goal: earn a save or share — a vote that this mattered','This is where passive scrolling turns into real signal','AI role: suggest captions and prompts that invite a genuine reply']},
+  bofu:{tag:'Follow · The return · Audience',t:'Followers — "okay, I’ll follow"',p:'The narrowest rung: people who liked you enough to want more. A follow (or a save that brings them back) is how a one-time view becomes an ongoing audience.',li:['They decide you are worth seeing again and hit follow','Goal: give a clear reason to come back — a consistent theme','Levers: a recognisable style, a promise of more like this','AI role: help plan a consistent series; you set the point of view']}
+};
+const FORDER=['tofu','mofu','lead','bofu'];
+let funCur='tofu';
+function pickStage(k){
+  funCur=k;
+  document.querySelectorAll('#fstack .fstage').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=FUN[k],pan=el('fpanel');
+  let html='<span class="fptag">'+d.tag+'</span><h4>'+d.t+'</h4><p>'+d.p+'</p><ul>';
+  d.li.forEach(x=>html+='<li>'+x+'</li>');
+  html+='</ul>';
+  pan.innerHTML=html;
+  pan.classList.remove('swap');void pan.offsetWidth;pan.classList.add('swap');
+}
+function funStep(dir){
+  let i=FORDER.indexOf(funCur)+dir;
+  if(i<0)i=FORDER.length-1;if(i>=FORDER.length)i=0;
+  pickStage(FORDER[i]);
+}
+pickStage('tofu');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickStage('tofu');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('fstack'));
+
+/* ===== Figure 2 · leak calculator ===== */
+function fmt(n){return Math.round(n).toLocaleString()}
+function calcLeak(){
+  const vis=+el('lVis').value,c1=+el('lC1').value,c2=+el('lC2').value,c3=+el('lC3').value;
+  el('vVis').textContent=fmt(vis);
+  el('vC1').textContent=c1+'%';el('vC2').textContent=c2+'%';el('vC3').textContent=c3+'%';
+  const clicks=vis*c1/100,leads=clicks*c2/100,cust=leads*c3/100;
+  const rate=(cust/vis)*100;
+  el('oClicks').textContent=fmt(clicks);
+  el('oLeads').textContent=fmt(leads);
+  el('oRate').textContent=rate.toFixed(1)+'%';
+  el('oCust').textContent=fmt(cust);
+  const rates=[['seen→watch',c1],['watch→engage',c2],['engage→follow',c3]];
+  rates.sort((a,b)=>a[1]-b[1]);
+  const worst=rates[0];
+  el('lVerdict').innerHTML='Your weakest rung is <b>'+worst[0]+'</b> at '+worst[1]+'%. That single number is dragging your whole ladder down. Lift it before you chase more reach — reworking a hook or a caption is free; more impressions are up to the feed, not you.';
+}
+function leakPreset(w){
+  const vis=el('lVis'),c1=el('lC1'),c2=el('lC2'),c3=el('lC3');
+  if(w==='weak'){vis.value=2000;c1.value=8;c2.value=12;c3.value=10}
+  else if(w==='good'){vis.value=2000;c1.value=35;c2.value=32;c3.value=28}
+  else{vis.value=2000;c1.value=20;c2.value=20;c3.value=20}
+  calcLeak();
+}
+calcLeak();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){calcLeak();o.unobserve(e.target)}}),{threshold:0.3}).observe(el('leak'));
+
+/* ===== Figure 3 · social engine ===== */
+const STACK={
+  attract:{t:'Strategy — decide what and where to post',tag:'Step 1 · Lesson 01 · the plan',li:['Pick 1–2 platforms where your audience already spends time','Brainstorm content pillars and dozens of post ideas to test','Study what already works in your niche and why','Turn a fuzzy goal into a simple, repeatable weekly plan'],h:'AI suggests topics and angles at speed; you decide the platform, the brand voice, and the point of view only you can bring.'},
+  capture:{t:'Create — turn ideas into content',tag:'Step 2 · Lesson 02 · make it',li:['Draft captions, scripts and hooks in your own tone','Turn one idea into a Reel, a carousel and a post in minutes','Edit clips, clean up audio, add captions and trim to the point','Generate first-draft images and thumbnails to react to'],h:'AI produces the volume and the rough drafts; you decide what is actually true, on-brand and worth your name on it.'},
+  nurture:{t:'Schedule &amp; engage — show up and reply',tag:'Step 3 · Lesson 03 · consistency',li:['Queue a week or month of posts at the best times to post','Draft friendly, on-brand replies to comments and DMs','Flag conversations that need a real, personal human answer','Keep a steady rhythm so the feed learns to trust you'],h:'AI handles the scheduling and first-draft replies; you set the tone and step in personally the moment a real conversation starts.'},
+  close:{t:'Measure — read the numbers and improve',tag:'Step 4 · Lesson 04 · the feedback loop',li:['Summarise which posts won, which flopped, and likely why','Spot patterns: best format, best hook, best time to post','Turn confusing analytics into one or two plain-English lessons','Suggest the next experiment to run this week'],h:'AI reads the data and drafts the takeaways; you decide what to keep, what to drop, and what your audience is really telling you.'}
+};
+const SORDER=['attract','capture','nurture','close'];
+let stackCur='attract';
+function pickStack(k){
+  stackCur=k;
+  document.querySelectorAll('#stackChain .snode').forEach(n=>n.classList.toggle('active',n.dataset.k===k));
+  const d=STACK[k],pan=el('spanel');
+  let html='<span class="stag">'+d.tag+'</span><h4>'+d.t+'</h4><ul>';
+  d.li.forEach(x=>html+='<li>'+x+'</li>');
+  html+='</ul><div class="s-human"><strong>Human still decides</strong>'+d.h+'</div>';
+  pan.innerHTML=html;
+  pan.classList.remove('swap');void pan.offsetWidth;pan.classList.add('swap');
+}
+function stackStep(dir){
+  let i=SORDER.indexOf(stackCur)+dir;
+  if(i<0)i=SORDER.length-1;if(i>=SORDER.length)i=0;
+  pickStack(SORDER[i]);
+}
+pickStack('attract');
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){pickStack('attract');o.unobserve(e.target)}}),{threshold:0.3}).observe(el('stackChain'));
+
+/* ===== Figure 4 · flip cards ===== */
+const tgrid=el('tgrid');
+function allReal(){document.querySelectorAll('.tcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.tcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){tgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(tgrid);
+</script>
+</body>
+</html>

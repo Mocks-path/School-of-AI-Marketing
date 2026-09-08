@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Scheduling, Community & Engagement · Lesson 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);background-size:24px 24px}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(255,252,246,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 40px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;margin:18px 0 20px;color:var(--brown-dark)}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;margin:10px 0 22px;color:var(--brown-dark);max-width:720px}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:32px;margin:24px 0;position:relative;overflow:hidden}
+.illus-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--paper);border:1px solid var(--line);color:var(--brown);padding:6px 12px;border-radius:6px;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;transition:all .2s}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{background:var(--brown-dark);color:var(--paper);border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden}
+.takeaway::after{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){.topbar{padding:12px 18px}.page{padding:30px 18px 70px}.illus{padding:20px}.takeaway{padding:28px}.logo-slot{width:38px;height:38px}}
+
+/* ===== Figure 1 · before/after email ===== */
+.email-wrap{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.email{background:var(--paper);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.email.bad{border-color:var(--line)}
+.email.good{border-color:var(--orange)}
+.email-band{padding:10px 16px;font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;color:#fff;display:flex;justify-content:space-between;align-items:center}
+.email.bad .email-band{background:#8B7A6C}
+.email.good .email-band{background:var(--orange-dark)}
+.email-meta{padding:14px 18px 10px;border-bottom:1px dashed var(--line);font-size:12.5px;color:var(--muted)}
+.email-meta .em-to{color:var(--brown-dark);font-weight:600}
+.email-body{padding:16px 18px;font-size:14px;color:var(--ink);line-height:1.6;min-height:210px;white-space:pre-wrap}
+.email-body .cursor{display:inline-block;width:8px;height:16px;background:var(--orange);vertical-align:-2px;margin-left:1px;animation:blink 1s step-end infinite}
+@keyframes blink{50%{opacity:0}}
+.email-foot{margin-top:auto;padding:12px 18px;border-top:1px dashed var(--line);font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.06em}
+.email.bad .email-foot{color:#8B7A6C}
+.email.good .email-foot{color:var(--orange-dark)}
+@media(max-width:700px){.email-wrap{grid-template-columns:1fr}}
+
+/* ===== Figure 2 · sequence timeline ===== */
+.seq{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:26px 24px 20px}
+.seq-track{position:relative;padding-left:34px}
+.seq-track::before{content:"";position:absolute;left:11px;top:6px;bottom:6px;width:3px;background:var(--line);border-radius:2px}
+.seq-step{position:relative;margin-bottom:14px;cursor:pointer;opacity:0;transform:translateX(10px)}
+.seq.reveal .seq-step{animation:seqIn .5s forwards}
+.seq.reveal .seq-step:nth-child(1){animation-delay:.05s}
+.seq.reveal .seq-step:nth-child(2){animation-delay:.2s}
+.seq.reveal .seq-step:nth-child(3){animation-delay:.35s}
+.seq.reveal .seq-step:nth-child(4){animation-delay:.5s}
+.seq.reveal .seq-step:nth-child(5){animation-delay:.65s}
+@keyframes seqIn{to{opacity:1;transform:none}}
+.seq-dot{position:absolute;left:-30px;top:16px;width:24px;height:24px;border-radius:50%;background:var(--paper);border:3px solid var(--line);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--muted);transition:all .25s;z-index:1}
+.seq-step.active .seq-dot{background:var(--orange);border-color:var(--orange);color:#fff}
+.seq-step.stop .seq-dot{background:var(--brown-dark);border-color:var(--brown-dark);color:var(--yellow)}
+.seq-body{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:14px 16px;transition:all .25s}
+.seq-step.active .seq-body{border-color:var(--orange);background:#FDEBD7}
+.seq-body .seq-day{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.1em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;margin-bottom:4px}
+.seq-body h5{font-family:'Fraunces',serif;font-size:16px;color:var(--brown-dark);margin-bottom:4px}
+.seq-body p{font-size:13px;color:var(--muted);margin:0;max-width:none;line-height:1.5}
+.seq-body .seq-tag{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:9px;letter-spacing:0.08em;text-transform:uppercase;background:var(--paper);border:1px solid var(--line);color:var(--brown);padding:3px 8px;border-radius:999px;margin-top:8px}
+.seq-note{margin-top:16px;font-size:13px;color:var(--muted);background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px 16px;line-height:1.5}
+
+/* ===== Figure 3 · deliverability meter ===== */
+.deliv{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.deliv-grid{display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:center}
+.deliv-checks{display:grid;gap:10px}
+.dchk{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .18s}
+.dchk:hover{border-color:var(--orange)}
+.dchk.on{background:#FDEBD7;border-color:var(--orange)}
+.dchk .dtxt{font-size:13px;color:var(--brown-dark);font-weight:500}
+.dchk .dsub{font-family:'JetBrains Mono',monospace;font-size:9.5px;color:var(--muted);display:block;margin-top:2px;letter-spacing:0.04em}
+.dchk .dbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
+.dchk.on .dbox{background:var(--orange);border-color:var(--orange)}
+.deliv-meter{text-align:center}
+.meter-ring{position:relative;width:180px;height:180px;margin:0 auto}
+.meter-ring svg{transform:rotate(-90deg)}
+.meter-ring .mtrack{fill:none;stroke:var(--cream);stroke-width:16}
+.meter-ring .mfill{fill:none;stroke:var(--orange);stroke-width:16;stroke-linecap:round;transition:stroke-dashoffset .5s ease,stroke .3s}
+.meter-num{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.meter-num .mn{font-family:'Fraunces',serif;font-weight:800;font-size:44px;color:var(--brown-dark);line-height:1}
+.meter-num .ml{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.deliv-verdict{margin-top:14px;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;font-weight:600;padding:8px 14px;border-radius:999px;display:inline-block;transition:all .3s}
+.deliv-verdict.bad{background:rgba(213,82,34,0.12);color:var(--orange-dark)}
+.deliv-verdict.mid{background:rgba(254,204,0,0.2);color:#8A6D00}
+.deliv-verdict.good{background:rgba(46,125,70,0.12);color:#2E7D46}
+.deliv-action{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5;max-width:none}
+@media(max-width:700px){.deliv-grid{grid-template-columns:1fr}}
+
+/* ===== Figure 4 · rule cards ===== */
+.rgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.rcard{height:210px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.rgrid.show .rcard{animation:hIn .5s forwards}
+.rgrid.show .rcard:nth-child(1){animation-delay:.05s}
+.rgrid.show .rcard:nth-child(2){animation-delay:.2s}
+.rgrid.show .rcard:nth-child(3){animation-delay:.35s}
+.rgrid.show .rcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.rinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.rcard.flipped .rinner{transform:rotateY(180deg)}
+.rface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center}
+.rfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.rfront .rclaim{font-family:'Fraunces',serif;font-weight:800;font-size:23px;line-height:1.1;margin-bottom:8px}
+.rfront .rsub{font-size:13px;opacity:.92;max-width:260px}
+.rfront .rhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.rback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.rback .rlab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.rback p{font-size:13px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){.rgrid{grid-template-columns:1fr}.rcard{height:205px}.rfront .rclaim{font-size:20px}}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 03 · AI Social Media</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <rect x="5" y="12" width="34" height="24" rx="5" fill="#412C23"/>
+      <path d="M7 15L22 26L37 15" stroke="#EF7F1A" stroke-width="3.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="36" cy="11" r="4.5" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 4 · Lesson 03 · AI Social Media</div>
+  <h1>Show up <em>consistently</em>, engage like a human.</h1>
+  <p class="lede">The old choice on social media was cruel: you could post warm, personal, on-time content by hand and burn out fast, or go quiet for weeks and watch your reach collapse. Consistency didn't scale; scale felt robotic. AI dissolves that trade-off — letting one person keep a full calendar, reply to a busy community, and listen to the whole conversation while still sounding like themselves. This lesson shows how, without turning into the fake, spammy account everyone mutes.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>The difference consistency makes</h2>
+  <p class="lead">Every feed is a firehose, and accounts that post once a month lose instantly. The algorithm can smell an account that went quiet, and it stops showing your posts to people who used to see them. A brand that shows up <em>on schedule</em> — same steady rhythm, week after week — earns the trust and reach that everything else depends on.</p>
+
+  <p>Consistency isn't about posting more; it's proof you're actually here. When your audience knows a fresh, useful post lands every Tuesday and Thursday, you've signalled three things: you're reliable, you're active, and you're worth following. That steady cadence is often the entire difference between an account that quietly stalls and one that compounds — say a 2% weekly reach that fades versus a 15% one that grows <em>(illustrative)</em>.</p>
+  <p>Here's the magic AI unlocks: it can help you fill a whole content calendar in one sitting, drafting captions, hooks, and hashtags for <em>every</em> slot for the weeks ahead. Watch the two posting plans below get written side by side. Same brand, same goals — one sporadic, one consistent. Notice which one you'd actually keep following.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Sporadic vs. consistent, drafted live</span>
+      <div class="controls">
+        <button id="typeBtn" onclick="runType()">▶ Draft both</button>
+        <button onclick="resetType()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="email-wrap">
+      <div class="email bad">
+        <div class="email-band"><span>Sporadic posting</span><span>✕ reach fades</span></div>
+        <div class="email-meta">Account: <span class="em-to">@mokshpath</span><br>Plan: Post whenever we remember</div>
+        <div class="email-body" id="badBody"></div>
+        <div class="email-foot" id="badFoot"></div>
+      </div>
+      <div class="email good">
+        <div class="email-band"><span>Consistent calendar</span><span>✓ reach grows</span></div>
+        <div class="email-meta">Account: <span class="em-to">@mokshpath</span><br>Plan: A steady, planned weekly cadence</div>
+        <div class="email-body" id="goodBody"></div>
+        <div class="email-foot" id="goodFoot"></div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The prompt that makes it work</h3>
+  <p>You don't invent every post from a blank page — you write one clear <em>brief</em> and let AI fill the calendar slots for each day. A prompt like: <em>"Draft {count} caption ideas for {brand}, a {niche}. For each: a scroll-stopping hook, 2 short lines of value, one call to action, and 3 relevant hashtags. Friendly, no hype, on-brand voice."</em> Give it your themes for the month, and a full grid of post ideas appears. Your job shifts from staring at a blank caption box to editing and approving — taste, not typing.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>One post is a wish; a cadence is a system</h2>
+  <p class="lead">Almost nobody grows from a single lucky post. That's not failure — it's normal. Reach is built by showing up again and again, so people start to recognise you. The pros know this, so they never rely on one post. They run a <strong>weekly cadence</strong>: a planned series of posts across the week, each with a different angle — and they <strong>batch</strong> them in one sitting so a quiet week never sinks the plan.</p>
+
+  <p>The pattern here is freeing once you see it: consistency compounds, and variety keeps it fresh. A well-built cadence rotates the angle each time — an educational post, a behind-the-scenes moment, a piece of pure value, and a community prompt that invites replies. Batch a week's worth in one focused session, queue it in a scheduler, and your feed stays alive even on your busiest days.</p>
+  <p>Crucially, scheduling handles the <em>posting</em>, but a good workflow <strong>hands the moment someone comments to a human</strong> — you never want automation talking over a real conversation. Walk through a typical 4-post week below. Notice the spacing, the changing angles, and the hand-off to a person.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · A 4-post weekly cadence</span>
+      <div class="controls">
+        <button onclick="seqWalk()">▶ Walk the week</button>
+        <button onclick="seqReplyDemo()">Show "a comment arrives" hand-off</button>
+      </div>
+    </div>
+    <div class="seq" id="seq">
+      <div class="seq-track">
+        <div class="seq-step" data-i="0" onclick="seqPick(0)">
+          <div class="seq-dot">1</div>
+          <div class="seq-body">
+            <div class="seq-day">Mon · Teach</div>
+            <h5>The educational post</h5>
+            <p>Your anchor for the week: one clear idea your audience can use today. A how-to, a myth busted, a quick tip — drafted like the captions in Figure 1.</p>
+            <span class="seq-tag">Angle: value</span>
+          </div>
+        </div>
+        <div class="seq-step" data-i="1" onclick="seqPick(1)">
+          <div class="seq-dot">2</div>
+          <div class="seq-body">
+            <div class="seq-day">Wed · Show</div>
+            <h5>Behind the scenes</h5>
+            <p>A human moment: your workspace, a work-in-progress, the team. It reminds people there are real humans behind the brand.</p>
+            <span class="seq-tag">Angle: personality</span>
+          </div>
+        </div>
+        <div class="seq-step" data-i="2" onclick="seqPick(2)">
+          <div class="seq-dot">3</div>
+          <div class="seq-body">
+            <div class="seq-day">Fri · Prove</div>
+            <h5>Social proof</h5>
+            <p>Share something that builds trust with no hard sell: a customer win, a testimonial, a mini result. Let others do the talking.</p>
+            <span class="seq-tag">Angle: proof</span>
+          </div>
+        </div>
+        <div class="seq-step" data-i="3" onclick="seqPick(3)">
+          <div class="seq-dot">4</div>
+          <div class="seq-body">
+            <div class="seq-day">Sat · Invite</div>
+            <h5>The community prompt</h5>
+            <p>"What's the one thing you're stuck on this week?" A question that invites replies and turns quiet followers into an active community.</p>
+            <span class="seq-tag">Angle: conversation</span>
+          </div>
+        </div>
+        <div class="seq-step" data-i="4" onclick="seqPick(4)">
+          <div class="seq-dot">✓</div>
+          <div class="seq-body">
+            <div class="seq-day">Any time · A comment arrives</div>
+            <h5>A human replies</h5>
+            <p>The instant a real person comments or DMs, this is no longer a scheduling job. AI can draft a reply, but a human reviews and sends it in your genuine voice.</p>
+            <span class="seq-tag">Angle: hand to human</span>
+          </div>
+        </div>
+      </div>
+      <div class="seq-note" id="seqNote">Press <b>▶ Walk the week</b> to see how four spaced posts beat one lucky upload — and how the moment a real comment arrives, a person takes the conversation.</div>
+    </div>
+  </div>
+
+  <h3>Consistency, not spamming</h3>
+  <p>There's a line between showing up and flooding the feed, and it's mostly about spacing and quality. Four thoughtful posts across a week is consistency. Eight rushed, repetitive posts in one day is spam — and it trains people to scroll past you, which brings us to the next section. A scheduler handles the timing, but you set the rhythm and the quality bar. When in doubt, post fewer, better things.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Engagement: the conversation nobody answered</h2>
+  <p class="lead">Here's the failure that silently kills more accounts than bad content ever will: comments and DMs pile up unanswered, and your community quietly drifts away. You can run the most perfect content calendar in the world — but if nobody ever replies to a comment, followers stop bothering to leave one. <strong>Engagement</strong> is the often-invisible work of actually talking back.</p>
+
+  <p>AI can carry a huge share of this load without faking anything. It can <strong>draft replies</strong> to comments and DMs for you to review, answer common <strong>FAQs</strong> from a set of pre-approved answers, and help you keep a friendly, on-brand tone even at 200 messages a day. And through <strong>social listening</strong> — monitoring mentions, tags, and trends — AI can <strong>summarise</strong> what your whole audience is saying so you never miss the conversation that matters.</p>
+  <p>You don't need to answer every message alone — you need a simple system where AI drafts and a human approves. Toggle each item below and watch your engagement-health score climb. Notice how skipping even one piece — real human replies, listening, a consistent voice — drags the whole thing down.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · The engagement-health meter</span>
+      <div class="controls">
+        <button onclick="delivAll()">Do it all right</button>
+        <button onclick="delivReset()">↺ Reset to zero</button>
+      </div>
+    </div>
+    <div class="deliv">
+      <div class="deliv-grid">
+        <div class="deliv-checks" id="delivChecks">
+          <div class="dchk" data-pts="20" onclick="toggleDeliv(this)"><div class="dbox">✓</div><div><span class="dtxt">AI drafts replies</span><span class="dsub">Fast first drafts for comments and DMs</span></div></div>
+          <div class="dchk" data-pts="20" onclick="toggleDeliv(this)"><div class="dbox">✓</div><div><span class="dtxt">A human approves</span><span class="dsub">You review before anything is posted</span></div></div>
+          <div class="dchk" data-pts="20" onclick="toggleDeliv(this)"><div class="dbox">✓</div><div><span class="dtxt">FAQ answers ready</span><span class="dsub">Pre-approved responses to common questions</span></div></div>
+          <div class="dchk" data-pts="25" onclick="toggleDeliv(this)"><div class="dbox">✓</div><div><span class="dtxt">Social listening on</span><span class="dsub">AI monitors mentions, tags & trends</span></div></div>
+          <div class="dchk" data-pts="15" onclick="toggleDeliv(this)"><div class="dbox">✓</div><div><span class="dtxt">Consistent human voice</span><span class="dsub">On-brand, warm, never robotic</span></div></div>
+        </div>
+        <div class="deliv-meter">
+          <div class="meter-ring">
+            <svg width="180" height="180" viewBox="0 0 180 180">
+              <circle class="mtrack" cx="90" cy="90" r="74"/>
+              <circle class="mfill" id="meterFill" cx="90" cy="90" r="74" stroke-dasharray="465" stroke-dashoffset="465"/>
+            </svg>
+            <div class="meter-num"><span class="mn" id="meterNum">0%</span><span class="ml">community trust</span></div>
+          </div>
+          <div class="deliv-verdict bad" id="delivVerdict">Community going quiet</div>
+          <div class="deliv-action" id="delivAction">Toggle the checklist. Skip real human replies or listening, and even a great content calendar can't keep a community engaged.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The order that builds a real community</h3>
+  <p>Engagement comes <em>before</em> reach, not after. The tempting mistake is to chase more followers while ignoring the ones already talking to you — a guaranteed way to feel busy while your community drifts. The correct order: reply to real people, listen to what they're saying, answer questions clearly, keep a consistent human voice, <em>then</em> grow. A community's trust takes months to build and one wave of ignored comments to lose. Guard it like the asset it is.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>The rules that keep AI engagement human</h2>
+  <p class="lead">AI makes it trivially easy to automate a thousand replies, likes, and DMs. That power is exactly why restraint matters more than ever. Flip each card for a rule that separates engagement people welcome from the fake, spammy behaviour that gets accounts muted, reported, and — increasingly — banned by the platforms themselves.</p>
+
+  <p>The mindset shift: automation should make each interaction <em>more</em> thoughtful, not less. You're using AI to buy back the time you'd have spent drafting — reinvest some of that time into listening better and replying more genuinely, not just posting more. The goal was never activity for its own sake. It was real relationships with real people.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Four rules of human engagement</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all rules</button>
+        <button onclick="allHype()">↺ Back to labels</button>
+      </div>
+    </div>
+    <div class="rgrid" id="rgrid">
+      <div class="rcard" onclick="this.classList.toggle('flipped')">
+        <div class="rinner">
+          <div class="rface rfront"><div class="rclaim">Never fake engagement</div><div class="rsub">No bought likes, bots, or fake comments.</div><div class="rhint">tap to flip</div></div>
+          <div class="rface rback"><div class="rlab">The rule</div><p>Bought followers, bot likes and fake comments fool no one for long — and platforms detect and punish them. 100 real fans who reply beat 10,000 hollow numbers. Grow the genuine relationships, not the vanity metrics.</p></div>
+        </div>
+      </div>
+      <div class="rcard" onclick="this.classList.toggle('flipped')">
+        <div class="rinner">
+          <div class="rface rfront"><div class="rclaim">Respect the platform rules</div><div class="rsub">No spammy DM automation, ever.</div><div class="rhint">tap to flip</div></div>
+          <div class="rface rback"><div class="rlab">The rule</div><p>Mass automated DMs and aggressive auto-follows violate most platforms' terms and get accounts throttled or banned. Automate the drafting and the timing — never the unsolicited spray of messages into strangers' inboxes.</p></div>
+        </div>
+      </div>
+      <div class="rcard" onclick="this.classList.toggle('flipped')">
+        <div class="rinner">
+          <div class="rface rfront"><div class="rclaim">Disclose automation</div><div class="rsub">Be honest when a bot answers.</div><div class="rhint">tap to flip</div></div>
+          <div class="rface rback"><div class="rlab">The rule</div><p>If an auto-responder handles first-line questions, label it clearly (e.g. an "auto-reply" tag). Pretending a bot is a person breaks trust the moment it's discovered — and AI will happily invent a "fact" to sound human. Verify claims; be upfront about the machine.</p></div>
+        </div>
+      </div>
+      <div class="rcard" onclick="this.classList.toggle('flipped')">
+        <div class="rinner">
+          <div class="rface rfront"><div class="rclaim">Keep a human voice</div><div class="rsub">Real people answer real comments.</div><div class="rhint">tap to flip</div></div>
+          <div class="rface rback"><div class="rlab">The rule</div><p>Spot-check what AI drafts before it posts, and always answer genuine comments and DMs yourself. Automation keeps the calendar full and drafts the routine stuff; a human keeps the warmth. The moment a real person reaches out, they deserve a real person back.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-sentence version</h3>
+  <p>AI social media works when you post consistently enough to earn reach, spaced into a weekly cadence that stays fresh without spamming, backed by an engagement system that answers real people fast — and kept honest by a human who cares more about genuine community than raw follower counts.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Consistency is the price of reach — and AI lets you pay it by filling a whole calendar at once. One post is a wish; a weekly cadence is a system, batched and scheduled so a quiet week never sinks the plan. None of it matters if your community goes unanswered, so engagement comes before chasing more followers. And through it all, authenticity beats automation and a human stays in the loop. Next lesson: measuring what actually works — social media analytics.</p>
+  <ul>
+    <li>Post consistently; draft the calendar with AI, batch and schedule it</li>
+    <li>Run a cadence, not single posts — teach, show, prove, invite</li>
+    <li>AI drafts replies; a human reviews and answers real comments & DMs</li>
+    <li>Engagement first: reply · listen · answer FAQs · keep a human voice</li>
+    <li>Never fake engagement; disclose automation; respect platform rules</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 03 of 04 · Next up: Social Media Analytics &amp; What Works →</footer>
+<script>
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · typewriter emails ===== */
+const BAD_TEXT="This month's plan:\n\nPost... whenever we have time. Maybe a big burst next week if someone remembers, then probably nothing for a while.\n\nNo set days. No themes. No captions written ahead.\n\nHope the algorithm is kind.\n\n— (posted twice, then silence)";
+const GOOD_TEXT="This month's plan:\n\nMon = teach · Wed = behind the scenes · Fri = social proof · Sat = community question.\n\n12 captions drafted with AI in one sitting, edited to sound like us, queued in the scheduler.\n\nSteady every week. Reach compounds.\n\n— @mokshpath";
+let typeTimers=[];
+function typeInto(elId,text,speed,done){
+  const node=el(elId);node.innerHTML='';
+  let i=0;const cur=document.createElement('span');cur.className='cursor';node.appendChild(cur);
+  function step(){
+    if(i<text.length){
+      cur.insertAdjacentText('beforebegin',text[i]);i++;
+      typeTimers.push(setTimeout(step,speed));
+    }else{cur.remove();if(done)done();}
+  }
+  step();
+}
+function resetType(){
+  typeTimers.forEach(t=>clearTimeout(t));typeTimers=[];
+  el('badBody').innerHTML='';el('goodBody').innerHTML='';
+  el('badFoot').textContent='';el('goodFoot').textContent='';
+}
+function runType(){
+  resetType();
+  typeInto('badBody',BAD_TEXT,14,()=>{el('badFoot').textContent='// reach: fading · followers forget you (illustrative)';});
+  typeTimers.push(setTimeout(()=>{
+    typeInto('goodBody',GOOD_TEXT,18,()=>{el('goodFoot').textContent='// reach: growing · a community forms (illustrative)';});
+  },700));
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){runType();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('badBody'));
+
+/* ===== Figure 2 · sequence ===== */
+const seqEl=el('seq');
+let seqTimers=[];
+function seqClear(){document.querySelectorAll('#seq .seq-step').forEach(s=>s.classList.remove('active','stop'))}
+function seqPick(i){
+  seqTimers.forEach(t=>clearTimeout(t));seqTimers=[];
+  seqClear();
+  const step=document.querySelector('#seq .seq-step[data-i="'+i+'"]');
+  step.classList.add(i===4?'stop':'active');
+  const notes=[
+    'Monday — the educational post does the heavy lifting. It gives people a reason to follow and sets the tone for the week.',
+    'Wednesday — a behind-the-scenes moment. It reminds your audience there are real humans here, not just a logo posting links.',
+    'Friday — social proof. Instead of selling, you let a customer win or testimonial build trust for you.',
+    'Saturday — the community prompt. A simple question turns passive scrollers into people who actually reply and connect.',
+    'The instant a real comment or DM arrives, this stops being a scheduling job. AI can draft, but a human reviews and answers in your genuine voice.'
+  ];
+  el('seqNote').textContent=notes[i];
+}
+function seqWalk(){
+  seqTimers.forEach(t=>clearTimeout(t));seqTimers=[];
+  [0,1,2,3].forEach((i,k)=>seqTimers.push(setTimeout(()=>seqPick(i),k*1400)));
+}
+function seqReplyDemo(){seqPick(4)}
+new IntersectionObserver((es,o)=>es.forEach(e=>{
+  if(e.isIntersecting){seqEl.classList.remove('reveal');void seqEl.offsetWidth;seqEl.classList.add('reveal');seqTimers.push(setTimeout(seqWalk,900));o.unobserve(e.target)}
+}),{threshold:0.2}).observe(seqEl);
+
+/* ===== Figure 3 · deliverability ===== */
+const CIRC=465;
+function calcDeliv(){
+  let sum=0;
+  document.querySelectorAll('#delivChecks .dchk.on').forEach(d=>sum+=parseInt(d.dataset.pts,10));
+  el('meterNum').textContent=sum+'%';
+  el('meterFill').style.strokeDashoffset=(CIRC*(1-sum/100));
+  const v=el('delivVerdict'),a=el('delivAction'),f=el('meterFill');
+  v.classList.remove('bad','mid','good');
+  if(sum>=90){v.classList.add('good');v.textContent='Community thriving';f.style.stroke='#2E7D46';a.textContent='Trusted brand. Real people get real replies, questions get answered, and you hear the whole conversation — followers become a community.';}
+  else if(sum>=55){v.classList.add('mid');v.textContent='Engagement patchy';f.style.stroke='var(--yellow)';a.textContent='Risky. Some comments get answered, many slip through. You are leaving relationships on the table. Close the remaining gaps.';}
+  else{v.classList.add('bad');v.textContent='Community going quiet';f.style.stroke='var(--orange-dark)';a.textContent='Silent. No matter how good your calendar is, an unanswered community drifts away. Build the engagement system before you post another batch.';}
+}
+function toggleDeliv(d){d.classList.toggle('on');calcDeliv();}
+function delivAll(){document.querySelectorAll('#delivChecks .dchk').forEach(d=>d.classList.add('on'));calcDeliv();}
+function delivReset(){document.querySelectorAll('#delivChecks .dchk').forEach(d=>d.classList.remove('on'));calcDeliv();}
+calcDeliv();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){delivAll();o.unobserve(e.target)}}),{threshold:0.35}).observe(el('delivChecks'));
+
+/* ===== Figure 4 · rule cards ===== */
+const rgrid=el('rgrid');
+function allReal(){document.querySelectorAll('.rcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.rcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){rgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(rgrid);
+</script>
+</body>
+</html>

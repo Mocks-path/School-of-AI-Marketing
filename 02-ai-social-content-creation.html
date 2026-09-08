@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Social Content Creation · Lesson 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);background-size:24px 24px}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(255,252,246,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 40px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;margin:18px 0 20px;color:var(--brown-dark)}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;margin:10px 0 22px;color:var(--brown-dark);max-width:720px}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:32px;margin:24px 0;position:relative;overflow:hidden}
+.illus-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--paper);border:1px solid var(--line);color:var(--brown);padding:6px 12px;border-radius:6px;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;transition:all .2s}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{background:var(--brown-dark);color:var(--paper);border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden}
+.takeaway::after{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){.topbar{padding:12px 18px}.page{padding:30px 18px 70px}.illus{padding:20px}.takeaway{padding:28px}.logo-slot{width:38px;height:38px}}
+
+/* ===== Figure 1 · ICP builder ===== */
+.icp{display:grid;grid-template-columns:1fr 1fr;gap:24px;align-items:start}
+.icp-in{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:22px}
+.icp-field{margin-bottom:16px}
+.icp-field:last-child{margin-bottom:0}
+.icp-field label{font-family:'JetBrains Mono',monospace;font-size:10.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--brown);font-weight:600;display:block;margin-bottom:7px}
+.chipset{display:flex;flex-wrap:wrap;gap:7px}
+.chip{font-family:'JetBrains Mono',monospace;font-size:11.5px;background:var(--cream);border:1px solid var(--line);color:var(--brown);padding:6px 12px;border-radius:999px;cursor:pointer;transition:all .18s}
+.chip:hover{border-color:var(--orange)}
+.chip.on{background:var(--orange);border-color:var(--orange);color:#fff}
+.icp-card{background:var(--brown-dark);border-radius:14px;padding:24px;color:#F3E7D5;position:relative;overflow:hidden;min-height:280px}
+.icp-card::after{content:"";position:absolute;bottom:-30px;right:-30px;width:130px;height:130px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:.35}
+.icp-card .icptag{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.14em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.icp-card h4{font-family:'Fraunces',serif;font-size:22px;color:var(--paper);margin-bottom:14px;line-height:1.2}
+.icp-line{font-size:14px;line-height:1.6;margin-bottom:10px;position:relative;z-index:1}
+.icp-line b{color:var(--yellow)}
+.icp-summary{font-family:'Fraunces',serif;font-style:italic;font-size:16px;color:var(--paper);border-top:1px solid rgba(255,255,255,0.15);padding-top:14px;margin-top:6px;position:relative;z-index:1;line-height:1.5}
+@media(max-width:700px){.icp{grid-template-columns:1fr}}
+
+/* ===== Figure 2 · enrichment animation ===== */
+.enr{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.enr-flow{display:grid;grid-template-columns:1fr 60px 1fr;gap:14px;align-items:center}
+.enr-box{border:2px solid var(--line);border-radius:12px;padding:18px;background:var(--cream)}
+.enr-box.raw{border-style:dashed}
+.enr-box.rich{border-color:var(--orange);background:#FDEBD7}
+.enr-box .enr-h{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:600}
+.enr-box.rich .enr-h{color:var(--orange-dark)}
+.erow{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:7px 0;border-bottom:1px dashed var(--line)}
+.erow:last-child{border-bottom:none}
+.erow .ek{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.06em;text-transform:uppercase;color:var(--muted)}
+.erow .ev{color:var(--ink);text-align:right;font-weight:500}
+.erow .ev.empty{color:#C9BBAA;font-style:italic}
+.erow.new{opacity:0;transform:translateX(8px)}
+.erow.new.in{animation:erIn .5s forwards}
+@keyframes erIn{to{opacity:1;transform:none}}
+.enr-arrow{display:flex;flex-direction:column;align-items:center;gap:6px;color:var(--orange)}
+.enr-arrow .ea-ico{width:38px;height:38px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;box-shadow:0 4px 12px rgba(239,127,26,0.35)}
+.enr-arrow.spin .ea-ico{animation:easpin 1s linear infinite}
+@keyframes easpin{to{transform:rotate(360deg)}}
+.enr-arrow .ea-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.3}
+.enr-note{margin-top:16px;font-size:13px;color:var(--muted);background:var(--cream);border-radius:10px;padding:12px 16px;border:1px solid var(--line);line-height:1.5}
+@media(max-width:700px){.enr-flow{grid-template-columns:1fr;gap:10px}.enr-arrow{flex-direction:row;justify-content:center}}
+
+/* ===== Figure 3 · lead scoring ===== */
+.score{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.score-grid{display:grid;grid-template-columns:1fr 300px;gap:24px;align-items:center}
+.score-toggles{display:grid;gap:10px}
+.stog{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .18s}
+.stog:hover{border-color:var(--orange)}
+.stog.on{background:#FDEBD7;border-color:var(--orange)}
+.stog .stxt{font-size:13.5px;color:var(--brown-dark);font-weight:500}
+.stog .spts{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);font-weight:600;white-space:nowrap}
+.stog.on .spts{color:var(--orange-dark)}
+.stog .sbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
+.stog.on .sbox{background:var(--orange);border-color:var(--orange)}
+.score-dial{text-align:center}
+.dial-num{font-family:'Fraunces',serif;font-weight:800;font-size:72px;line-height:1;color:var(--brown-dark);transition:color .3s}
+.dial-max{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--muted)}
+.dial-bar{height:14px;border-radius:8px;background:var(--cream);border:1px solid var(--line);overflow:hidden;margin:16px 0 10px}
+.dial-fill{height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--orange-dark));transition:width .4s ease}
+.dial-badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;font-weight:600;padding:7px 16px;border-radius:999px;transition:all .3s}
+.dial-badge.cold{background:rgba(0,141,210,0.12);color:var(--accent)}
+.dial-badge.warm{background:rgba(254,204,0,0.2);color:#8A6D00}
+.dial-badge.hot{background:rgba(213,82,34,0.14);color:var(--orange-dark)}
+.dial-action{font-size:13px;color:var(--muted);margin-top:12px;line-height:1.5;max-width:none}
+@media(max-width:700px){.score-grid{grid-template-columns:1fr}}
+
+/* ===== Figure 4 · source cards ===== */
+.sgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.scard{height:210px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.sgrid.show .scard{animation:hIn .5s forwards}
+.sgrid.show .scard:nth-child(1){animation-delay:.05s}
+.sgrid.show .scard:nth-child(2){animation-delay:.2s}
+.sgrid.show .scard:nth-child(3){animation-delay:.35s}
+.sgrid.show .scard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.sinner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.scard.flipped .sinner{transform:rotateY(180deg)}
+.sface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center}
+.sfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.sfront .sclaim{font-family:'Fraunces',serif;font-weight:800;font-size:23px;line-height:1.1;margin-bottom:8px}
+.sfront .ssub{font-size:13px;opacity:.92;max-width:260px}
+.sfront .shint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.sback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.sback .slab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.sback p{font-size:13px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){.sgrid{grid-template-columns:1fr}.scard{height:205px}.sfront .sclaim{font-size:20px}}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 02 · AI Social Media</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <circle cx="20" cy="20" r="9" stroke="#EF7F1A" stroke-width="3.4" fill="none"/>
+      <path d="M27 27L35 35" stroke="#FECC00" stroke-width="3.4" stroke-linecap="round"/>
+      <circle cx="20" cy="20" r="3" fill="#EF7F1A"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 4 · Lesson 02 · AI Social Media</div>
+  <h1>Content that <em>stops</em> the scroll, not fills the feed.</h1>
+  <p class="lede">Social content creation is the art of earning a moment of attention — but the goal isn't more posts, it's the right posts. A feed of 100 forgettable updates is worse than 10 posts people actually stop, save, and share. This lesson shows how to shape a scroll-stopping idea, draft hooks, captions and scripts with AI, and score a post so your human time goes only where it will earn attention.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Build your content brief</h2>
+  <p class="lead">Before you draft a single post, you have to answer one question: what is this post actually <em>for</em>? The written answer is called your <strong>content brief</strong>. It's a short description of the exact pillar, audience, and format that makes a post worth someone's scroll.</p>
+
+  <p>Skipping the brief is the most common beginner mistake. Without it, "posting" becomes "post whatever comes to mind today," and you pour effort — and, later, AI credits — into content that fits no one and stops nobody. A sharp brief does the opposite: it makes you deliberately ignore every idea that doesn't serve one pillar and one person. Focused is not a limitation; focused is the strategy.</p>
+  <p>A good brief names a few concrete traits: which pillar it serves, who it's for, and what native format it lives in. Build one below by tapping the traits that fit a piece you'd love to make — watch the brief card assemble itself, and notice how much sharper your idea instantly becomes.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Interactive content brief builder</span>
+      <div class="controls">
+        <button onclick="icpPreset('saas')">Reel example</button>
+        <button onclick="icpPreset('local')">Carousel example</button>
+        <button onclick="icpReset()">↺ Clear</button>
+      </div>
+    </div>
+    <div class="icp">
+      <div class="icp-in" id="icpIn">
+        <div class="icp-field">
+          <label>Which pillar it serves</label>
+          <div class="chipset" data-group="who">
+            <span class="chip" data-v="meant to educate — teach one useful thing">Educate</span>
+            <span class="chip" data-v="meant to entertain — make them smile or laugh">Entertain</span>
+            <span class="chip" data-v="meant to inspire — show what's possible">Inspire</span>
+            <span class="chip" data-v="meant to promote — invite them to your offer">Promote</span>
+          </div>
+        </div>
+        <div class="icp-field">
+          <label>Who it's for</label>
+          <div class="chipset" data-group="pain">
+            <span class="chip" data-v="new founders drowning in busywork">Busy founders</span>
+            <span class="chip" data-v="beginners nervous about using AI tools">AI beginners</span>
+            <span class="chip" data-v="creators stuck staring at a blank feed">Stuck creators</span>
+            <span class="chip" data-v="small teams with no design budget">Small teams</span>
+          </div>
+        </div>
+        <div class="icp-field">
+          <label>Its native format</label>
+          <div class="chipset" data-group="signal">
+            <span class="chip" data-v="a short-form video (Reel / Short / TikTok)">Short-form video</span>
+            <span class="chip" data-v="a swipeable carousel of slides">Carousel</span>
+            <span class="chip" data-v="a single bold image with a caption">Single image</span>
+            <span class="chip" data-v="a text thread that builds point by point">Thread / Story</span>
+          </div>
+        </div>
+      </div>
+      <div class="icp-card" id="icpCard">
+        <div class="icptag">Your content brief</div>
+        <h4 id="icpTitle">Tap traits to build it →</h4>
+        <div class="icp-line">Pillar: <b id="icpWho">— pick a pillar —</b></div>
+        <div class="icp-line">For: <b id="icpPain">— pick who it's for —</b></div>
+        <div class="icp-line">Format: <b id="icpSignal">— pick a native format —</b></div>
+        <div class="icp-summary" id="icpSummary">Your brief sentence appears here once you've chosen one of each.</div>
+      </div>
+    </div>
+  </div>
+
+  <h3>How AI uses your brief</h3>
+  <p>Once your brief is written, it becomes the instruction you feed every AI tool: "make content like <em>this</em>." AI can then generate hooks, captions, scripts and visual ideas that match those exact traits — instead of you staring at a blank feed at midnight. But the brief itself is a human judgment call. AI can't tell you what's worth saying; it can only produce more of whatever you point it at. Point it well.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>From a bare idea to a ready-to-post draft</h2>
+  <p class="lead">A one-line idea barely counts as content. It's a note-to-self, not a post. <strong>Drafting with AI</strong> is the step that turns that thin idea into a shootable draft — adding a hook, a caption, a script beat, and the little details that make a post feel native instead of generic.</p>
+
+  <p>Here's the difference in plain terms. A bare idea says: <code>post about batching content</code>. A drafted post says: hook "You don't need more time — you need a batching day," a caption that teaches the 3-step method, a 20-second script, and a visual note ("desk, sticky-note storyboard, one clean cut"). One of those you'd stare at for an hour. The other you could film today — because AI did the blank-page heavy lifting and you kept the taste.</p>
+  <p>AI drafting tools do this by working from your brief: the pillar, the audience, the format. AI turns the fragments into a clean, usable first draft. Press play below to watch a bare idea transform, field by field, into something you could actually shoot.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Watch an idea get drafted</span>
+      <div class="controls">
+        <button id="enrBtn" onclick="runEnrich()">▶ Draft the post</button>
+        <button onclick="resetEnrich()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="enr">
+      <div class="enr-flow">
+        <div class="enr-box raw">
+          <div class="enr-h">Bare idea — what you started with</div>
+          <div class="erow"><span class="ek">Idea</span><span class="ev">post about batching content</span></div>
+          <div class="erow"><span class="ek">Hook</span><span class="ev empty">blank</span></div>
+          <div class="erow"><span class="ek">Caption</span><span class="ev empty">blank</span></div>
+          <div class="erow"><span class="ek">Script</span><span class="ev empty">blank</span></div>
+          <div class="erow"><span class="ek">Visual</span><span class="ev empty">blank</span></div>
+        </div>
+        <div class="enr-arrow" id="enrArrow">
+          <div class="ea-ico">✦</div>
+          <div class="ea-lbl">AI<br>draft</div>
+        </div>
+        <div class="enr-box rich" id="enrRich">
+          <div class="enr-h">Ready-to-post draft — what AI adds</div>
+          <div class="erow"><span class="ek">Idea</span><span class="ev">post about batching content</span></div>
+          <div class="erow new" data-i="0"><span class="ek">Hook</span><span class="ev">"You need a batching day, not more time"</span></div>
+          <div class="erow new" data-i="1"><span class="ek">Caption</span><span class="ev">Teaches the 3-step method</span></div>
+          <div class="erow new" data-i="2"><span class="ek">Script</span><span class="ev">20-sec talking-head beats</span></div>
+          <div class="erow new" data-i="3"><span class="ek">Visual</span><span class="ev">Desk · sticky-note storyboard</span></div>
+        </div>
+      </div>
+      <div class="enr-note" id="enrNote">Press <b>▶ Draft the post</b> and watch AI fill in the blanks that turn a one-line idea into something you could film today.</div>
+    </div>
+  </div>
+
+  <h3>Why AI drafts change your whole approach</h3>
+  <p>A drafted post lets you repurpose — take one idea and reshape it into a Reel, a carousel, and a thread — and speak to each format differently. It's the raw material for the batching you'll master below. One honest caution: an AI first draft is often 80–90% there (illustrative), not finished. It can sound generic, or invent a "fact." So an AI draft is a strong starting point, not a publish-ready post. Always give it a human pass before it goes live.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Post scoring: what earns the scroll</h2>
+  <p class="lead">Once ideas are flowing, a new problem appears: not every post is worth publishing. <strong>Post scoring</strong> solves it by giving each draft a number that says "how likely is this to stop the scroll?" — so your limited creative energy goes to the strongest posts instead of the safest ones.</p>
+
+  <p>The idea is simple. You decide which traits signal a scroll-stopper, and you assign each one points. Opens with a strong hook? Points. Delivers one clear takeaway? Points. Built native to the format? Big points. Reads like generic AI filler? Few or none. Add it up, and every draft sorts itself into <strong>weak</strong>, <strong>okay</strong>, or <strong>scroll-stopper</strong> — automatically, the moment you tweak it.</p>
+  <p>This is where AI helps, because it can check every trait across every draft at once — something tiring to do by eye. It updates the score in real time and surfaces the posts worth polishing today. Toggle the traits below and watch the score climb. Notice how a draft with a sharp hook <em>and</em> a native format shoots into "scroll-stopper."</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Live post scoring</span>
+      <div class="controls">
+        <button onclick="scorePreset('hot')">Scroll-stopper</button>
+        <button onclick="scorePreset('cold')">Weak draft</button>
+        <button onclick="scoreReset()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="score">
+      <div class="score-grid">
+        <div class="score-toggles" id="scoreTog">
+          <div class="stog" data-pts="20" onclick="toggleSig(this)"><div class="sbox">✓</div><span class="stxt">Opens with a strong hook</span><span class="spts">+20</span></div>
+          <div class="stog" data-pts="15" onclick="toggleSig(this)"><div class="sbox">✓</div><span class="stxt">Native to its format</span><span class="spts">+15</span></div>
+          <div class="stog" data-pts="12" onclick="toggleSig(this)"><div class="sbox">✓</div><span class="stxt">Delivers one clear takeaway</span><span class="spts">+12</span></div>
+          <div class="stog" data-pts="10" onclick="toggleSig(this)"><div class="sbox">✓</div><span class="stxt">Sounds like your real voice</span><span class="spts">+10</span></div>
+          <div class="stog" data-pts="8" onclick="toggleSig(this)"><div class="sbox">✓</div><span class="stxt">Ends with a clear next step</span><span class="spts">+8</span></div>
+          <div class="stog" data-pts="-10" onclick="toggleSig(this)"><div class="sbox">✓</div><span class="stxt">Reads like generic AI filler</span><span class="spts">−10</span></div>
+        </div>
+        <div class="score-dial">
+          <div class="dial-num" id="dialNum">0</div>
+          <div class="dial-max">out of 65 points</div>
+          <div class="dial-bar"><div class="dial-fill" id="dialFill"></div></div>
+          <div class="dial-badge cold" id="dialBadge">Weak draft</div>
+          <div class="dial-action" id="dialAction">Toggle traits to score this draft. Weak drafts go back for a rewrite; scroll-stoppers earn your polish and go live.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Scoring is a filter, not a verdict</h3>
+  <p>A high score means "worth polishing and posting," not "guaranteed to go viral." And a weak score doesn't mean "delete the idea" — it means "the idea's fine, the draft isn't; sharpen the hook and make it native." The whole point is triage: your week has room for only so many posts, and scoring makes sure those slots go to the drafts most likely to earn the scroll.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>One idea, four native formats</h2>
+  <p class="lead">"Making content" sounds like one activity, but the same idea lives in very different formats — and each has a different strength, effort, and reach. Flip each card to see the honest trade-off. The best creators don't pick one; they repurpose a single idea across two or three formats at once.</p>
+
+  <p>One rule ties them all together: <strong>native beats copy-paste, every time</strong>. An idea reshaped for each format will out-perform the same text pasted everywhere, because a Reel, a carousel and a thread each reward a different rhythm. Every format below is only as good as how well it fits the brief you built in Figure 1.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · Four native formats, flipped</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all trade-offs</button>
+        <button onclick="allHype()">↺ Back to labels</button>
+      </div>
+    </div>
+    <div class="sgrid" id="sgrid">
+      <div class="scard" onclick="this.classList.toggle('flipped')">
+        <div class="sinner">
+          <div class="sface sfront"><div class="sclaim">Short-form video</div><div class="ssub">Reels, Shorts, TikTok — a hook then a payoff.</div><div class="shint">tap to flip</div></div>
+          <div class="sface sback"><div class="slab">The trade-off</div><p>Highest reach — the algorithm loves it, so a strong hook can travel far. But it's the most effort to shoot and edit. AI drafts the script and storyboard; it can't hand you your on-camera presence or timing.</p></div>
+        </div>
+      </div>
+      <div class="scard" onclick="this.classList.toggle('flipped')">
+        <div class="sinner">
+          <div class="sface sfront"><div class="sclaim">Carousel</div><div class="ssub">Swipeable slides that teach step by step.</div><div class="shint">tap to flip</div></div>
+          <div class="sface sback"><div class="slab">The trade-off</div><p>Highest save-rate — people bookmark a good how-to and it keeps working. But slide one has to earn the swipe. AI drafts the slide copy fast, yet a weak first slide just means faster, quieter scrolling past.</p></div>
+        </div>
+      </div>
+      <div class="scard" onclick="this.classList.toggle('flipped')">
+        <div class="sinner">
+          <div class="sface sfront"><div class="sclaim">Single image</div><div class="ssub">One bold visual with a sharp caption.</div><div class="shint">tap to flip</div></div>
+          <div class="sface sback"><div class="slab">The trade-off</div><p>Fastest to make — one graphic, one caption, done. But it lives or dies on that single frame, so there's nowhere to hide a weak idea. AI drafts caption options and image concepts; you still pick the one with real punch.</p></div>
+        </div>
+      </div>
+      <div class="scard" onclick="this.classList.toggle('flipped')">
+        <div class="sinner">
+          <div class="sface sfront"><div class="sclaim">Thread / Story</div><div class="ssub">Text or frames that build point by point.</div><div class="shint">tap to flip</div></div>
+          <div class="sface sback"><div class="slab">The trade-off</div><p>The most personal — it reads like you talking, which builds real trust cheaply. The catch: it rewards a strong point of view you can't fake. AI can outline the beats, but the opinion and the voice have to be genuinely yours.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The one-sentence version</h3>
+  <p>Social content creation isn't about posting the most — it's about writing a sharp brief, drafting hooks, captions and scripts with AI, and scoring each draft so your human hours land only on the posts genuinely ready to stop the scroll.</p>
+</section>
+
+<div class="takeaway">
+  <h2>What to carry forward</h2>
+  <p>Your feed is only as good as what you let onto it. Write your brief first, so every tool knows exactly what to make. Draft bare ideas into shootable posts worth publishing. Score them so your limited time polishes the scroll-stoppers, not the safe ones. Batch a week of content in one sitting, and always give the AI draft a human pass — the personality is the edge. Remember AI's honest limits: video and image quality still wobble, drafts drift toward sameness, and where a platform asks, disclose that AI helped. Next lesson, we turn these posts into a repeatable weekly system.</p>
+  <ul>
+    <li>Brief first: name the pillar, the audience, the native format</li>
+    <li>An AI draft turns a bare idea into a hook, caption, script &amp; visual</li>
+    <li>Post scoring = triage; your time goes to scroll-stoppers, not safe</li>
+    <li>Native beats copy-paste — repurpose one idea per format</li>
+    <li>AI drafts &amp; scores; you bring the voice, taste &amp; the human pass</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 02 of 04 · Next up: Batching a Week of Content →</footer>
+<script>
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · ICP builder ===== */
+const icpState={who:null,pain:null,signal:null};
+function icpRender(){
+  el('icpWho').textContent=icpState.who||'— pick a pillar —';
+  el('icpPain').textContent=icpState.pain||'— pick who it’s for —';
+  el('icpSignal').textContent=icpState.signal||'— pick a native format —';
+  if(icpState.who&&icpState.pain&&icpState.signal){
+    el('icpTitle').textContent='Brief locked ✓';
+    el('icpSummary').textContent='"This post is '+icpState.who+', made for '+icpState.pain+', as '+icpState.signal+'." Feed this exact sentence to every AI tool you use.';
+  }else{
+    el('icpTitle').textContent='Tap traits to build it →';
+    el('icpSummary').textContent='Your brief sentence appears here once you’ve chosen one of each.';
+  }
+}
+document.querySelectorAll('#icpIn .chipset').forEach(set=>{
+  const grp=set.dataset.group;
+  set.querySelectorAll('.chip').forEach(chip=>{
+    chip.addEventListener('click',()=>{
+      const already=chip.classList.contains('on');
+      set.querySelectorAll('.chip').forEach(c=>c.classList.remove('on'));
+      if(!already){chip.classList.add('on');icpState[grp]=chip.dataset.v}
+      else{icpState[grp]=null}
+      icpRender();
+    });
+  });
+});
+function icpSet(who,pain,signal){
+  const map={who,pain,signal};
+  document.querySelectorAll('#icpIn .chipset').forEach(set=>{
+    const grp=set.dataset.group;
+    set.querySelectorAll('.chip').forEach(c=>{
+      const hit=c.dataset.v===map[grp];
+      c.classList.toggle('on',hit);
+    });
+    icpState[grp]=map[grp];
+  });
+  icpRender();
+}
+function icpPreset(k){
+  if(k==='saas')icpSet('meant to educate — teach one useful thing','new founders drowning in busywork','a short-form video (Reel / Short / TikTok)');
+  else icpSet('meant to educate — teach one useful thing','creators stuck staring at a blank feed','a swipeable carousel of slides');
+}
+function icpReset(){
+  document.querySelectorAll('#icpIn .chip').forEach(c=>c.classList.remove('on'));
+  icpState.who=icpState.pain=icpState.signal=null;
+  icpRender();
+}
+icpRender();
+
+/* ===== Figure 2 · enrichment ===== */
+let enrTimers=[];
+function resetEnrich(){
+  enrTimers.forEach(t=>clearTimeout(t));enrTimers=[];
+  document.querySelectorAll('#enrRich .erow.new').forEach(r=>r.classList.remove('in'));
+  el('enrArrow').classList.remove('spin');
+  el('enrNote').innerHTML='Press <b>▶ Draft the post</b> and watch AI fill in the blanks that turn a one-line idea into something you could film today.';
+}
+function runEnrich(){
+  resetEnrich();
+  el('enrArrow').classList.add('spin');
+  const rows=document.querySelectorAll('#enrRich .erow.new');
+  rows.forEach((r,i)=>{
+    enrTimers.push(setTimeout(()=>r.classList.add('in'),500+i*650));
+  });
+  enrTimers.push(setTimeout(()=>{
+    el('enrArrow').classList.remove('spin');
+    el('enrNote').innerHTML='<b>Same idea, totally different post.</b> Now you can film: "You need a batching day, not more time" — then teach the 3-step method over a 20-second cut. That post gets saved. The blank note never got made. Just give the draft a human pass first.';
+  },500+rows.length*650+400));
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){runEnrich();o.unobserve(e.target)}}),{threshold:0.4}).observe(el('enrRich'));
+
+/* ===== Figure 3 · lead scoring ===== */
+function calcScore(){
+  let sum=0;
+  document.querySelectorAll('#scoreTog .stog.on').forEach(t=>sum+=parseInt(t.dataset.pts,10));
+  if(sum<0)sum=0;
+  el('dialNum').textContent=sum;
+  const pct=Math.min(100,(sum/65)*100);
+  el('dialFill').style.width=pct+'%';
+  const badge=el('dialBadge'),act=el('dialAction');
+  badge.classList.remove('cold','warm','hot');
+  if(sum>=40){badge.classList.add('hot');badge.textContent='Scroll-stopper 🔥';act.textContent='Polish and post this today. Sharp hook, native format, real voice — this is exactly the draft that deserves your human time.';}
+  else if(sum>=20){badge.classList.add('warm');badge.textContent='Okay draft';act.textContent='Keep refining — tighten the hook or make it more native. One more strong trait and it graduates to a scroll-stopper.';}
+  else{badge.classList.add('cold');badge.textContent='Weak draft';act.textContent='Send it back for a rewrite. Don’t post yet — sharpen the hook and cut the generic AI filler until it earns the scroll.';}
+}
+function toggleSig(t){t.classList.toggle('on');calcScore();}
+function scorePreset(k){
+  const tog=document.querySelectorAll('#scoreTog .stog');
+  tog.forEach(t=>t.classList.remove('on'));
+  if(k==='hot'){tog[0].classList.add('on');tog[1].classList.add('on');tog[2].classList.add('on');tog[3].classList.add('on');tog[4].classList.add('on');}
+  else{tog[5].classList.add('on');}
+  calcScore();
+}
+function scoreReset(){document.querySelectorAll('#scoreTog .stog').forEach(t=>t.classList.remove('on'));calcScore();}
+calcScore();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){scorePreset('hot');o.unobserve(e.target)}}),{threshold:0.35}).observe(el('scoreTog'));
+
+/* ===== Figure 4 · source cards ===== */
+const sgrid=el('sgrid');
+function allReal(){document.querySelectorAll('.scard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.scard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){sgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(sgrid);
+</script>
+</body>
+</html>

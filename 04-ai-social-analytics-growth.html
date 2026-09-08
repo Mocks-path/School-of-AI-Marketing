@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>AI Social Analytics &amp; Growth · Lesson 04</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,ital,wght@9..144,0,400;9..144,0,600;9..144,0,800;9..144,1,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --orange:#EF7F1A; --orange-light:#FF9429; --orange-dark:#D55222;
+  --brown:#412C23; --brown-dark:#2F1D19; --tan:#A34E1C;
+  --yellow:#FECC00; --cream:#FBF6EE; --paper:#FFFCF6;
+  --ink:#1C1410; --muted:#6E5C50; --line:#E8DCC8; --accent:#008DD2;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--paper);color:var(--ink);line-height:1.6;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(circle at 1px 1px,rgba(65,44,35,0.05) 1px,transparent 0);background-size:24px 24px}
+.topbar{position:sticky;top:0;z-index:100;background:rgba(255,252,246,0.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);padding:14px 40px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:'Fraunces',serif;font-weight:800;font-size:17px;letter-spacing:-0.01em;color:var(--brown-dark)}
+.brand .dot{color:var(--orange)}
+.brand .sub{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.15em;color:var(--muted);font-weight:500;text-transform:uppercase;margin-left:8px}
+.logo-slot{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.logo-slot svg{width:100%;height:100%;display:block}
+.page{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:50px 40px 100px}
+.hero{padding:30px 0 50px;border-bottom:1px solid var(--line)}
+.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:0.18em;text-transform:uppercase;color:var(--orange-dark);font-weight:600;display:inline-flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:24px;height:2px;background:var(--orange)}
+h1{font-family:'Fraunces',serif;font-weight:800;font-size:clamp(38px,7vw,80px);line-height:0.98;letter-spacing:-0.03em;margin:18px 0 20px;color:var(--brown-dark)}
+h1 em{font-style:italic;color:var(--orange-dark);font-weight:600}
+.lede{font-size:19px;max-width:680px;color:var(--muted)}
+section{padding:70px 0;border-bottom:1px solid var(--line)}
+section:last-of-type{border-bottom:none}
+.section-num{font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--orange);font-weight:600;letter-spacing:0.08em}
+h2{font-family:'Fraunces',serif;font-weight:700;font-size:clamp(28px,4.5vw,48px);line-height:1.05;letter-spacing:-0.02em;margin:10px 0 22px;color:var(--brown-dark);max-width:720px}
+h3{font-family:'Fraunces',serif;font-weight:600;font-size:24px;color:var(--brown-dark);margin:28px 0 12px}
+p{max-width:680px;margin-bottom:14px;color:var(--ink)}
+.lead{font-size:17px;color:var(--muted);max-width:680px;margin-bottom:26px}
+code{font-family:'JetBrains Mono',monospace;font-size:0.92em;background:var(--cream);padding:2px 6px;border-radius:4px;color:var(--brown-dark)}
+.illus{background:var(--cream);border:1px solid var(--line);border-radius:18px;padding:32px;margin:24px 0;position:relative;overflow:hidden}
+.illus-title{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;margin-bottom:20px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.controls{display:flex;gap:8px;flex-wrap:wrap}
+.controls button{font-family:'JetBrains Mono',monospace;font-size:11px;background:var(--paper);border:1px solid var(--line);color:var(--brown);padding:6px 12px;border-radius:6px;cursor:pointer;text-transform:uppercase;letter-spacing:0.1em;transition:all .2s}
+.controls button:hover{background:var(--orange);color:#fff;border-color:var(--orange)}
+.controls button.active{background:var(--brown-dark);color:#fff;border-color:var(--brown-dark)}
+.takeaway{background:var(--brown-dark);color:var(--paper);border-radius:18px;padding:44px;margin-top:50px;position:relative;overflow:hidden}
+.takeaway::after{content:"";position:absolute;top:-40px;right:-40px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,var(--orange),transparent 70%);opacity:0.4}
+.takeaway h2{color:var(--paper);margin-bottom:16px}
+.takeaway p{color:#E8D9C5;font-size:16px;max-width:680px}
+.takeaway ul{list-style:none;margin-top:18px;display:grid;gap:8px}
+.takeaway li{font-family:'JetBrains Mono',monospace;font-size:13px;padding-left:22px;position:relative;color:#FBE7CB}
+.takeaway li::before{content:"→";position:absolute;left:0;color:var(--orange);font-weight:bold}
+footer{text-align:center;padding:36px;color:var(--muted);font-size:12px;font-family:'JetBrains Mono',monospace;letter-spacing:0.1em}
+@media(max-width:700px){.topbar{padding:12px 18px}.page{padding:30px 18px 70px}.illus{padding:20px}.takeaway{padding:28px}.logo-slot{width:38px;height:38px}}
+
+/* ===== Figure 1 · workflow builder ===== */
+.wf{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.wf-canvas{display:flex;flex-direction:column;gap:0;align-items:center}
+.wf-node{
+  width:min(100%,460px);border-radius:12px;padding:16px 18px;position:relative;
+  cursor:pointer;transition:transform .25s,box-shadow .25s;opacity:0;transform:translateY(12px);
+}
+.wf.built .wf-node{animation:wfIn .5s forwards}
+.wf.built .wf-node:nth-child(1){animation-delay:.1s}
+.wf.built .wf-node:nth-child(3){animation-delay:.4s}
+.wf.built .wf-node:nth-child(5){animation-delay:.7s}
+.wf.built .wf-node:nth-child(7){animation-delay:1s}
+.wf.built .wf-node:nth-child(9){animation-delay:1.3s}
+@keyframes wfIn{to{opacity:1;transform:none}}
+.wf-node.active{transform:scale(1.02);box-shadow:0 8px 20px rgba(65,44,35,0.18);outline:3px solid var(--yellow)}
+.wf-node .wf-kind{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.12em;text-transform:uppercase;font-weight:600;margin-bottom:5px;display:flex;align-items:center;gap:6px}
+.wf-node h5{font-family:'Fraunces',serif;font-size:17px;line-height:1.2}
+.wf-node p{font-size:12.5px;margin:4px 0 0;max-width:none;line-height:1.45}
+.wf-trigger{background:#FDEBD7;border:2px solid var(--orange)}
+.wf-trigger .wf-kind{color:var(--orange-dark)}
+.wf-trigger h5{color:var(--brown-dark)}
+.wf-trigger p{color:var(--brown)}
+.wf-action{background:var(--cream);border:2px solid var(--line)}
+.wf-action .wf-kind{color:var(--tan)}
+.wf-action h5{color:var(--brown-dark)}
+.wf-action p{color:var(--muted)}
+.wf-cond{background:var(--brown-dark);border:2px solid var(--brown-dark)}
+.wf-cond .wf-kind{color:var(--yellow)}
+.wf-cond h5{color:var(--paper)}
+.wf-cond p{color:#E8D9C5}
+.wf-conn{width:3px;height:24px;background:var(--line);position:relative;opacity:0}
+.wf.built .wf-conn{animation:connIn .3s forwards}
+.wf.built .wf-conn:nth-child(2){animation-delay:.3s}
+.wf.built .wf-conn:nth-child(4){animation-delay:.6s}
+.wf.built .wf-conn:nth-child(6){animation-delay:.9s}
+.wf.built .wf-conn:nth-child(8){animation-delay:1.2s}
+@keyframes connIn{to{opacity:1}}
+.wf-conn::after{content:"▾";position:absolute;bottom:-9px;left:50%;transform:translateX(-50%);color:var(--line);font-size:14px}
+.wf-detail{margin-top:18px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:14px 16px;font-size:13.5px;color:var(--brown);line-height:1.55;min-height:70px}
+.wf-detail b{color:var(--orange-dark)}
+
+/* ===== Figure 2 · notes to follow-up ===== */
+.n2f{display:grid;grid-template-columns:1fr 60px 1fr;gap:14px;align-items:stretch}
+.n2f-box{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:18px;display:flex;flex-direction:column}
+.n2f-box.notes{border-style:dashed}
+.n2f-box.out{border-color:var(--orange)}
+.n2f-h{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.12em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;font-weight:600}
+.n2f-box.out .n2f-h{color:var(--orange-dark)}
+.n2f-notes-body{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--brown);line-height:1.7;white-space:pre-wrap;flex:1}
+.n2f-out-body{flex:1}
+.n2f-item{opacity:0;transform:translateY(6px);margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed var(--line)}
+.n2f-item:last-child{border-bottom:none;margin-bottom:0}
+.n2f-item.in{animation:n2fIn .45s forwards}
+@keyframes n2fIn{to{opacity:1;transform:none}}
+.n2f-item .ni-lab{font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.1em;text-transform:uppercase;color:var(--tan);font-weight:600;display:block;margin-bottom:4px}
+.n2f-item .ni-txt{font-size:13px;color:var(--ink);line-height:1.5}
+.n2f-arrow{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--orange)}
+.n2f-arrow .na-ico{width:38px;height:38px;border-radius:50%;background:var(--orange);display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;box-shadow:0 4px 12px rgba(239,127,26,0.35)}
+.n2f-arrow.spin .na-ico{animation:naspin 1s linear infinite}
+@keyframes naspin{to{transform:rotate(360deg)}}
+.n2f-arrow .na-lbl{font-family:'JetBrains Mono',monospace;font-size:8.5px;letter-spacing:0.08em;text-transform:uppercase;color:var(--muted);text-align:center;line-height:1.3}
+@media(max-width:700px){.n2f{grid-template-columns:1fr;gap:10px}.n2f-arrow{flex-direction:row}}
+
+/* ===== Figure 3 · CRM hygiene meter ===== */
+.crm{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:24px}
+.crm-grid{display:grid;grid-template-columns:1fr 260px;gap:24px;align-items:center}
+.crm-checks{display:grid;gap:10px}
+.cchk{display:flex;align-items:center;justify-content:space-between;gap:12px;background:var(--cream);border:1px solid var(--line);border-radius:10px;padding:12px 14px;cursor:pointer;transition:all .18s}
+.cchk:hover{border-color:var(--orange)}
+.cchk.on{background:#FDEBD7;border-color:var(--orange)}
+.cchk .ctxt{font-size:13px;color:var(--brown-dark);font-weight:500}
+.cchk .cbox{width:22px;height:22px;border-radius:6px;border:2px solid var(--line);flex-shrink:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px}
+.cchk.on .cbox{background:var(--orange);border-color:var(--orange)}
+.crm-out{text-align:center}
+.crm-num{font-family:'Fraunces',serif;font-weight:800;font-size:64px;line-height:1;color:var(--brown-dark);transition:color .3s}
+.crm-lab{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:var(--muted)}
+.crm-bar{height:14px;border-radius:8px;background:var(--cream);border:1px solid var(--line);overflow:hidden;margin:16px 0 12px}
+.crm-fill{height:100%;width:0;background:linear-gradient(90deg,var(--orange),var(--orange-dark));transition:width .4s ease}
+.crm-verdict{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:0.08em;font-weight:600;padding:7px 16px;border-radius:999px;transition:all .3s}
+.crm-verdict.bad{background:rgba(213,82,34,0.12);color:var(--orange-dark)}
+.crm-verdict.mid{background:rgba(254,204,0,0.2);color:#8A6D00}
+.crm-verdict.good{background:rgba(46,125,70,0.12);color:#2E7D46}
+.crm-action{font-size:12.5px;color:var(--muted);margin-top:12px;line-height:1.5;max-width:none}
+@media(max-width:700px){.crm-grid{grid-template-columns:1fr}}
+
+/* ===== Figure 4 · balance cards ===== */
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.bcard{height:210px;perspective:1100px;cursor:pointer;opacity:0;transform:translateY(12px)}
+.bgrid.show .bcard{animation:hIn .5s forwards}
+.bgrid.show .bcard:nth-child(1){animation-delay:.05s}
+.bgrid.show .bcard:nth-child(2){animation-delay:.2s}
+.bgrid.show .bcard:nth-child(3){animation-delay:.35s}
+.bgrid.show .bcard:nth-child(4){animation-delay:.5s}
+@keyframes hIn{to{opacity:1;transform:translateY(0)}}
+.binner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transition:transform .65s cubic-bezier(.4,.1,.2,1)}
+.bcard.flipped .binner{transform:rotateY(180deg)}
+.bface{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;border-radius:14px;padding:22px;display:flex;flex-direction:column;justify-content:center}
+.bfront{background:linear-gradient(135deg,var(--orange) 0%,var(--orange-dark) 100%);color:#fff;text-align:center;align-items:center}
+.bfront .bclaim{font-family:'Fraunces',serif;font-weight:800;font-size:23px;line-height:1.1;margin-bottom:8px}
+.bfront .bsub{font-size:13px;opacity:.92;max-width:260px}
+.bfront .bhint{position:absolute;bottom:12px;left:0;right:0;font-family:'JetBrains Mono',monospace;font-size:9.5px;letter-spacing:0.15em;text-transform:uppercase;opacity:.75}
+.bback{background:var(--brown-dark);color:#F3E7D5;transform:rotateY(180deg);border:1px solid var(--brown)}
+.bback .blab{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--yellow);font-weight:600;margin-bottom:8px}
+.bback p{font-size:13px;line-height:1.55;color:#F3E7D5;margin:0;max-width:none}
+@media(max-width:700px){.bgrid{grid-template-columns:1fr}.bcard{height:205px}.bfront .bclaim{font-size:20px}}
+
+</style>
+</head>
+<body>
+<div class="topbar">
+  <div class="brand">MokshPath <span class="dot">·</span> <span class="sub">Lesson 04 · AI Social Media</span></div>
+  <div class="logo-slot" aria-label="MokshPath logo">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="20" fill="#412C23"/>
+      <path d="M13 22l6 6 12-13" stroke="#EF7F1A" stroke-width="3.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+      <circle cx="34" cy="11" r="3.5" fill="#FECC00"/>
+    </svg>
+  </div>
+</div>
+<div class="page">
+
+<section class="hero">
+  <div class="eyebrow">Week 4 · Lesson 04 · AI Social Media</div>
+  <h1>Reading the numbers — to <em>actually grow</em>.</h1>
+  <p class="lede">Most creators post into the dark. They chase likes, panic at flat weeks, and never learn which posts actually moved the needle. This final lesson is about the unglamorous skill that separates growth from luck: knowing which metrics matter, using AI to spot the patterns in your analytics, and turning that attention into real business results. Honest truth up front — virality isn't a strategy. Growth is slow, compounding, and never guaranteed.</p>
+</section>
+
+<section>
+  <div class="section-num">01 / 04</div>
+  <h2>Metrics that matter (and the ones that don't)</h2>
+  <p class="lead">Social analytics looks scary — a wall of numbers — but the trick is simple: <strong>pick the metric that matches your goal</strong>, and ignore the rest. If your goal is "get discovered," you watch reach. If it's "build a loyal audience," you watch saves and shares. Vanity metrics (raw likes, follower count alone) feel good; meaningful metrics tell you what to do next.</p>
+
+  <p>Here's the beginner's map of the metrics that actually mean something, roughly in the order attention turns into results. <strong>Reach &amp; impressions</strong> (how many saw it) → <strong>engagement rate</strong> (how many cared) → <strong>saves &amp; shares</strong> (the strongest "this was worth it" signal) → <strong>watch time &amp; retention</strong> (did they stay?) → <strong>follower growth</strong>, <strong>profile visits</strong>, <strong>link clicks</strong>, and finally <strong>conversions</strong> (email signups, DMs, sales). No coding, no dashboards to build — every platform hands you these for free.</p>
+  <p>The one to un-learn: chasing raw likes. A post with 500 likes and zero saves taught the algorithm nothing lasting; a post with 80 saves quietly compounds for weeks. Press build below to see the metric ladder assemble, then click any rung to learn what it really tells you — and which are vanity traps. <em>(Illustrative numbers throughout — your real ones will differ.)</em></p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 1 · Build the metric ladder</span>
+      <div class="controls">
+        <button onclick="wfBuild()">▶ Build ladder</button>
+        <button onclick="wfReset()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="wf" id="wf">
+      <div class="wf-canvas">
+        <div class="wf-node wf-trigger" data-i="0" onclick="wfPick(0)">
+          <div class="wf-kind">◆ Discovery</div>
+          <h5>Reach &amp; impressions</h5>
+          <p>How many people saw the post at all. The top of the ladder — no reach, nothing else can happen.</p>
+        </div>
+        <div class="wf-conn"></div>
+        <div class="wf-node wf-action" data-i="1" onclick="wfPick(1)">
+          <div class="wf-kind">▸ Interest</div>
+          <h5>Engagement rate</h5>
+          <p>Of those who saw it, what share reacted, commented, or tapped. A percentage, not a raw count.</p>
+        </div>
+        <div class="wf-conn"></div>
+        <div class="wf-node wf-action" data-i="2" onclick="wfPick(2)">
+          <div class="wf-kind">▸ Real value</div>
+          <h5>Saves &amp; shares</h5>
+          <p>The strongest signal there is: people found it worth keeping or passing on. This is what compounds.</p>
+        </div>
+        <div class="wf-conn"></div>
+        <div class="wf-node wf-cond" data-i="3" onclick="wfPick(3)">
+          <div class="wf-kind">⑂ Vanity trap</div>
+          <h5>Raw likes &amp; follower count</h5>
+          <p>Feels great, teaches you little. A big number here with no saves or clicks is applause, not a business.</p>
+        </div>
+        <div class="wf-conn"></div>
+        <div class="wf-node wf-action" data-i="4" onclick="wfPick(4)">
+          <div class="wf-kind">▸ Result</div>
+          <h5>Profile visits → link clicks → conversions</h5>
+          <p>Where attention becomes business: they visit, tap your link, and join your list or buy.</p>
+        </div>
+      </div>
+      <div class="wf-detail" id="wfDetail">Press <b>▶ Build ladder</b> to watch the metrics stack up, then tap any rung to learn what it really tells you.</div>
+    </div>
+  </div>
+
+  <h3>Pick one metric per goal, not ten</h3>
+  <p>The beginner trap is staring at every number at once and feeling paralysed. Don't. Decide what this month is <em>for</em> — getting discovered, deepening loyalty, or driving signups — and watch the one metric that matches. Reach for discovery, saves for loyalty, link clicks for signups. Ignore the rest for now. A single metric you actually act on beats a full dashboard you only stare at.</p>
+</section>
+
+<section>
+  <div class="section-num">02 / 04</div>
+  <h2>From a wall of numbers to a clear plan</h2>
+  <p class="lead">Reading raw analytics is exactly the task a busy creator does worst. You open the app, see a grid of numbers across a dozen posts, and your eyes glaze over. Which post won? Why? What should you make next? This is AI's single best trick in social — it reads the wall of numbers for you and tells you what to do.</p>
+
+  <p>Here's the move that feels like magic the first time. Export or copy your last month of post stats (every platform lets you). Hand that messy table to AI with one instruction: "summarise how I did, spot the patterns in my best and worst posts, and tell me what to make more of." In seconds you get a plain-English summary, the patterns you'd never have spotted, and a concrete content plan. What used to be an hour of squinting becomes twenty seconds and a quick sanity-check.</p>
+  <p>Watch it happen below. On the left, the raw, rambling analytics from a real-feeling month. Press the button and watch AI extract the structure — a summary, the patterns, and next steps — on the right. <em>(Illustrative data.)</em></p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 2 · Raw analytics → clear plan</span>
+      <div class="controls">
+        <button id="n2fBtn" onclick="runN2F()">▶ Analyse month</button>
+        <button onclick="resetN2F()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="n2f">
+      <div class="n2f-box notes">
+        <div class="n2f-h">Raw monthly stats — messy grid <em>(illustrative)</em></div>
+        <div class="n2f-notes-body">reel "3 pantry swaps" — reach 8.4k, saves 210, shares 60
+carousel "meal-prep myth" — reach 3.1k, saves 180, shares 22
+selfie "good morning!" — reach 5.9k, likes 540, saves 4
+reel "1-pot dinner" — reach 7.8k, saves 240, watch 68%
+quote graphic — reach 1.2k, saves 3
+reel "grocery haul" — reach 900, watch 21%
+followers +180 this month, profile visits 1.4k
+link clicks 240, newsletter signups 31</div>
+      </div>
+      <div class="n2f-arrow" id="n2fArrow">
+        <div class="na-ico">✦</div>
+        <div class="na-lbl">AI<br>reads it</div>
+      </div>
+      <div class="n2f-box out">
+        <div class="n2f-h">AI output — patterns &amp; next steps</div>
+        <div class="n2f-out-body">
+          <div class="n2f-item" data-i="0">
+            <span class="ni-lab">Summary</span>
+            <div class="ni-txt">Solid month: +180 followers and 31 newsletter signups from 240 link clicks. Your saveable, teach-something reels far outperform selfies and quote graphics on the metric that matters — saves.</div>
+          </div>
+          <div class="n2f-item" data-i="1">
+            <span class="ni-lab">Patterns spotted</span>
+            <div class="ni-txt">① "How-to" reels drive saves &amp; reach; ② selfies get likes but ~zero saves (vanity); ③ quote graphics flop — drop them; ④ retention dips below 25% kill reach.</div>
+          </div>
+          <div class="n2f-item" data-i="2">
+            <span class="ni-lab">Do next month</span>
+            <div class="ni-txt">"Make more short, useful how-to reels (your 'pantry swaps' style). Turn the winner into a series. Cut quote graphics. Keep the first 3 seconds tight to hold retention. Put your newsletter link front-and-centre."</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>The "double-down, iterate, or drop" decision</h3>
+  <p>Once AI shows you the pattern, every post falls into one of three buckets. <strong>Double down</strong> on the clear winners — make more like them, turn one into a series. <strong>Iterate</strong> on the near-misses — the idea worked but the hook or first three seconds didn't, so try again with one change. And <strong>drop</strong> the formats that consistently flop, even if you love making them. That's it. You don't need to be more talented than everyone else — just more honest about what your own numbers already told you.</p>
+</section>
+
+<section>
+  <div class="section-num">03 / 04</div>
+  <h2>Growth tactics that actually work</h2>
+  <p class="lead">Real growth is slow and compounding — there's no button for it. But a handful of habits reliably tilt the odds in your favour, and a handful of "shortcuts" reliably wreck an account. The difference isn't software or luck; it's discipline. Honest warning: none of this guarantees anything, and algorithms change — but these are the habits that survive the changes.</p>
+
+  <p>The reason the good habits win: they earn <em>real</em> attention that the algorithm can trust. Strong hooks, content series people come back for, genuine collaborations, trends used with your own spin, and — above all — consistency. Slow but real. The shady shortcuts (follow/unfollow games, engagement pods, bought followers) buy a fake number that poisons your metrics: the platform sees ghost followers who never engage, decides your content is weak, and shows it to fewer real people. A bought audience is worse than none.</p>
+  <p>Toggle the healthy growth habits below and watch your growth-health score rise. Notice it's not about hacks — it's a few honest disciplines that compound quietly over months.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 3 · Growth-habit health check</span>
+      <div class="controls">
+        <button onclick="crmAll()">Adopt every habit</button>
+        <button onclick="crmReset()">↺ Reset</button>
+      </div>
+    </div>
+    <div class="crm">
+      <div class="crm-grid">
+        <div class="crm-checks" id="crmChecks">
+          <div class="cchk" data-pts="22" onclick="toggleCrm(this)"><div class="cbox">✓</div><span class="ctxt">Open every post with a strong hook</span></div>
+          <div class="cchk" data-pts="20" onclick="toggleCrm(this)"><div class="cbox">✓</div><span class="ctxt">Post consistently — show up on a rhythm</span></div>
+          <div class="cchk" data-pts="18" onclick="toggleCrm(this)"><div class="cbox">✓</div><span class="ctxt">Turn winners into a repeatable series</span></div>
+          <div class="cchk" data-pts="20" onclick="toggleCrm(this)"><div class="cbox">✓</div><span class="ctxt">Collaborate &amp; use trends with your own spin</span></div>
+          <div class="cchk" data-pts="20" onclick="toggleCrm(this)"><div class="cbox">✓</div><span class="ctxt">Never buy followers or join engagement pods</span></div>
+        </div>
+        <div class="crm-out">
+          <div class="crm-num" id="crmNum">0</div>
+          <div class="crm-lab">Growth health</div>
+          <div class="crm-bar"><div class="crm-fill" id="crmFill"></div></div>
+          <div class="crm-verdict bad" id="crmVerdict">Chasing shortcuts</div>
+          <div class="crm-action" id="crmAction">Toggle the habits. Bought growth is worse than none — it hides how few real people you're actually reaching.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Turning attention into business results</h3>
+  <p>Followers alone don't pay you — so the highest-return habit isn't a hack, it's a bridge. Once real people are watching, gently move them somewhere you own: invite them to your email list, open your DMs for questions, and make a clear, occasional offer. A single "link in bio → free guide → email list" loop quietly turns strangers' attention into a business you control, immune to the algorithm changing overnight. Real attention makes this bridge work; a bought audience never crosses it.</p>
+</section>
+
+<section>
+  <div class="section-num">04 / 04</div>
+  <h2>Read the signal — double down, iterate, or drop</h2>
+  <p class="lead">You now have the whole toolkit: the metrics that matter, AI to read them, and the honest growth habits. The final skill is judgment — knowing what a number is really telling you to do. Flip each card for the honest call on a common social situation you'll actually face.</p>
+
+  <p>The guiding principle for your whole social presence: <strong>let real signals drive the next post</strong>. The numbers are only useful when you act on them — double down on what earns saves, iterate on near-misses, drop what flops, and never fake the signal with bought growth. Get this right and you compound slowly but truly. Get it wrong — chasing vanity likes or one lucky viral hit — and you'll stay busy while going nowhere. Virality is not a strategy; consistency is.</p>
+
+  <div class="illus">
+    <div class="illus-title">
+      <span>Figure 4 · What's the number telling you?</span>
+      <div class="controls">
+        <button onclick="allReal()">Show all answers</button>
+        <button onclick="allHype()">↺ Back to situations</button>
+      </div>
+    </div>
+    <div class="bgrid" id="bgrid">
+      <div class="bcard" onclick="this.classList.toggle('flipped')">
+        <div class="binner">
+          <div class="bface bfront"><div class="bclaim">A reel with tons of saves</div><div class="bsub">What should you do?</div><div class="bhint">tap to flip</div></div>
+          <div class="bface bback"><div class="blab">Double down ✓</div><p>Saves are the strongest "worth keeping" signal there is. Make more like it, turn it into a series, and study what made it saveable. This is your winning format — feed it, don't move on to something random.</p></div>
+        </div>
+      </div>
+      <div class="bcard" onclick="this.classList.toggle('flipped')">
+        <div class="binner">
+          <div class="bface bfront"><div class="bclaim">Big reach, but people drop off fast</div><div class="bsub">What should you do?</div><div class="bhint">tap to flip</div></div>
+          <div class="bface bback"><div class="blab">Iterate ✓</div><p>The topic pulled people in, but the first 3 seconds lost them. Don't scrap the idea — remake it with a sharper hook. Near-misses are gold: one small change to the opening often turns a flop into a winner.</p></div>
+        </div>
+      </div>
+      <div class="bcard" onclick="this.classList.toggle('flipped')">
+        <div class="binner">
+          <div class="bface bfront"><div class="bclaim">A format that always flops</div><div class="bsub">What should you do?</div><div class="bhint">tap to flip</div></div>
+          <div class="bface bback"><div class="blab">Drop it ✕</div><p>If quote graphics get 3 saves every time, stop making them — even if you love them. Your time is limited; spend it on formats the numbers already reward. Dropping a fond flop is a growth decision, not a failure.</p></div>
+        </div>
+      </div>
+      <div class="bcard" onclick="this.classList.toggle('flipped')">
+        <div class="binner">
+          <div class="bface bfront"><div class="bclaim">One post went viral</div><div class="bsub">What should you do?</div><div class="bhint">tap to flip</div></div>
+          <div class="bface bback"><div class="blab">Don't chase it ✕</div><p>A viral hit is luck, not a strategy — you can't repeat it on demand. Enjoy the bump, capture new followers into your email list, then go right back to your consistent, saveable content. Compounding beats lightning.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>A simple monthly social report</h3>
+  <p>Once a month, spend fifteen minutes and write down five lines: top post (and why), the one meaningful metric that moved, followers and email signups gained, one thing to double down on, and one thing to drop. Let AI draft it from your stats. That tiny report is your whole strategy — honest, repeatable, and immune to the panic of any single flat week. Growth is slow and compounding; the report is how you stay patient enough to let it work.</p>
+</section>
+
+<div class="takeaway">
+  <h2>Week 4 · What you carry forward</h2>
+  <p>You've walked the whole social machine: choosing platforms, planning content, using AI to create it, and now reading the numbers to grow honestly. Watch the metric that matches your goal, not raw likes. Let AI read your analytics and spot the patterns. Double down, iterate, or drop — every post tells you which. And the golden rule ties it together: real attention, turned into an email list you own, compounds slowly but truly. Virality is not a strategy.</p>
+  <ul>
+    <li>Match the metric to the goal — saves &amp; clicks over vanity likes</li>
+    <li>Hand your monthly stats to AI to spot patterns and next steps</li>
+    <li>Every post → double down, iterate, or drop</li>
+    <li>Real growth habits compound; bought followers poison your metrics</li>
+    <li>Turn attention into an email list you own — and stay patient</li>
+  </ul>
+</div>
+
+</div>
+<footer>MokshPath · Lesson 04 of 04 · Week 4 complete — you can now grow with AI social analytics →</footer>
+<script>
+function el(id){return document.getElementById(id)}
+
+/* ===== Figure 1 · workflow builder ===== */
+const wfEl=el('wf');
+const WF_DETAIL=[
+  '<b>Reach &amp; impressions</b> — the top of the ladder. This is simply how many people saw your post. No reach, and nothing else can happen. Watch it when your goal is getting discovered — but remember, being seen isn\'t the same as being valued.',
+  '<b>Engagement rate</b> — of the people who saw it, what share actually reacted, commented, or tapped through. It\'s a <i>percentage</i>, not a raw count, so it fairly compares a small post to a big one. Rising engagement tells the algorithm your content is worth showing.',
+  '<b>Saves &amp; shares</b> — the strongest signal on the whole ladder. A save means "I want this again"; a share means "you need to see this too." These quietly compound reach for weeks. If you optimise for one thing, make it this.',
+  'The <b>vanity trap</b>. Raw likes and a big follower count feel wonderful and mean little on their own. A post with 500 likes and zero saves taught you nothing lasting. Enjoy the applause, but never steer by it — steer by saves, clicks, and signups.',
+  '<b>The result</b> — where attention becomes business. A profile visit leads to a link click leads to a conversion: an email signup, a DM, a sale. This is the bottom of the ladder and the whole point. Everything above exists to feed this.'
+];
+function wfClear(){document.querySelectorAll('#wf .wf-node').forEach(n=>n.classList.remove('active'))}
+function wfPick(i){
+  wfClear();
+  const n=document.querySelector('#wf .wf-node[data-i="'+i+'"]');
+  n.classList.add('active');
+  el('wfDetail').innerHTML=WF_DETAIL[i];
+}
+function wfBuild(){
+  wfEl.classList.remove('built');void wfEl.offsetWidth;wfEl.classList.add('built');
+  el('wfDetail').innerHTML='Building the metric ladder… each rung stacks onto the last. Tap any rung once it lands to learn what it really tells you.';
+  setTimeout(()=>wfPick(0),1600);
+}
+function wfReset(){
+  wfEl.classList.remove('built');wfClear();
+  el('wfDetail').innerHTML='Press <b>▶ Build ladder</b> to watch the metrics stack up, then tap any rung to learn what it really tells you.';
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){wfBuild();o.unobserve(e.target)}}),{threshold:0.25}).observe(wfEl);
+
+/* ===== Figure 2 · notes to follow-up ===== */
+let n2fTimers=[];
+function resetN2F(){
+  n2fTimers.forEach(t=>clearTimeout(t));n2fTimers=[];
+  document.querySelectorAll('.n2f-item').forEach(x=>x.classList.remove('in'));
+  el('n2fArrow').classList.remove('spin');
+}
+function runN2F(){
+  resetN2F();
+  el('n2fArrow').classList.add('spin');
+  const items=document.querySelectorAll('.n2f-item');
+  items.forEach((x,i)=>n2fTimers.push(setTimeout(()=>x.classList.add('in'),600+i*800)));
+  n2fTimers.push(setTimeout(()=>el('n2fArrow').classList.remove('spin'),600+items.length*800));
+}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){runN2F();o.unobserve(e.target)}}),{threshold:0.35}).observe(el('n2fArrow'));
+
+/* ===== Figure 3 · CRM health ===== */
+function calcCrm(){
+  let sum=0;
+  document.querySelectorAll('#crmChecks .cchk.on').forEach(c=>sum+=parseInt(c.dataset.pts,10));
+  el('crmNum').textContent=sum;
+  el('crmFill').style.width=Math.min(100,sum)+'%';
+  const v=el('crmVerdict'),a=el('crmAction');
+  v.classList.remove('bad','mid','good');
+  if(sum>=90){v.classList.add('good');v.textContent='Healthy — built to compound';a.textContent='These are the habits that survive algorithm changes. Growth will be slow, but it will be real — and every follower is a person who might join your email list.';}
+  else if(sum>=50){v.classList.add('mid');v.textContent='Mixed — some real, some fragile';a.textContent='You\'re doing some things right, but gaps leave you tempted by shortcuts. Lock in consistency and hooks before you chase anything flashier.';}
+  else{v.classList.add('bad');v.textContent='Chasing shortcuts';a.textContent='This path leads to bought followers and dead engagement. Fix the honest habits first — fake growth just hides how few real people you\'re reaching.';}
+}
+function toggleCrm(c){c.classList.toggle('on');calcCrm();}
+function crmAll(){document.querySelectorAll('#crmChecks .cchk').forEach(c=>c.classList.add('on'));calcCrm();}
+function crmReset(){document.querySelectorAll('#crmChecks .cchk').forEach(c=>c.classList.remove('on'));calcCrm();}
+calcCrm();
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){crmAll();o.unobserve(e.target)}}),{threshold:0.35}).observe(el('crmChecks'));
+
+/* ===== Figure 4 · balance cards ===== */
+const bgrid=el('bgrid');
+function allReal(){document.querySelectorAll('.bcard').forEach(c=>c.classList.add('flipped'))}
+function allHype(){document.querySelectorAll('.bcard').forEach(c=>c.classList.remove('flipped'))}
+new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){bgrid.classList.add('show');o.unobserve(e.target)}}),{threshold:0.25}).observe(bgrid);
+</script>
+</body>
+</html>
