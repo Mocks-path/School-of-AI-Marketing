@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 2 · Building &amp; Growing Your Email List with AI — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 1: ORDER PIPELINE (click-to-order chain) ── */
+.chain-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:1.5rem;margin-top:.5rem}
+@media (max-width:760px){.chain-grid{grid-template-columns:1fr}}
+.chain-pool{display:flex;flex-direction:column;gap:.6rem}
+.chain-chip{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.8rem 1rem;font-size:.84rem;line-height:1.5;font-weight:500;cursor:pointer;transition:all .2s;user-select:none}
+.chain-chip:hover{border-color:var(--orange);transform:translateY(-1px);box-shadow:var(--shadow-sm)}
+.chain-chip.used{opacity:.3;pointer-events:none;background:var(--green-light);border-color:var(--green)}
+.chain-chip.shake{animation:shake .45s;border-color:var(--red);background:var(--red-light)}
+.chain-slots{display:flex;flex-direction:column;gap:.5rem}
+.chain-slot{display:flex;align-items:flex-start;gap:.7rem;border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.65rem .85rem;min-height:46px;font-size:.82rem;line-height:1.5;color:var(--text-muted);transition:all .25s;background:rgba(255,255,255,0.5)}
+.chain-slot.filled{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary)}
+.chain-slot-num{width:24px;height:24px;border-radius:50%;background:var(--text-muted);color:#fff;display:flex;align-items:center;justify-content:center;font-size:.72rem;font-weight:700;flex-shrink:0}
+.chain-slot.filled .chain-slot-num{background:var(--green)}
+.chain-hintbox{margin-top:.8rem;padding:.7rem .9rem;background:#FFF4E5;border-left:3px solid #E89B2E;border-radius:4px;font-size:.8rem;color:#7A4A0A;line-height:1.55;display:none}
+.chain-hintbox.show{display:block;animation:fadeIn .3s ease}
+
+/* ── ACTIVITY 2: CLEAN A MESSY RECORD ── */
+.clean-grid{display:grid;gap:.7rem;margin-top:1rem}
+.clean-row{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.9rem 1.1rem;transition:all .25s}
+.clean-row.fixed{border-color:var(--green);background:var(--green-light)}
+.clean-field{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;color:var(--text-muted);margin-bottom:.3rem}
+.clean-current{font-family:var(--mono);font-size:.86rem;color:var(--navy);margin-bottom:.6rem}
+.clean-current .bad{color:var(--red);text-decoration:line-through;text-decoration-color:rgba(224,78,60,.5)}
+.clean-actions{display:flex;gap:.5rem;flex-wrap:wrap}
+.clean-btn{padding:.4rem .9rem;border-radius:50px;border:1.5px solid var(--border);background:var(--bg-card);font-size:.76rem;font-weight:600;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-secondary)}
+.clean-btn:hover{border-color:var(--orange);color:var(--orange)}
+.clean-btn:disabled{cursor:not-allowed;opacity:.55}
+.clean-btn.picked-right{background:var(--green);border-color:var(--green);color:#fff;opacity:1}
+.clean-btn.picked-wrong{background:var(--red);border-color:var(--red);color:#fff;opacity:1}
+.clean-explain{display:none;margin-top:.6rem;font-size:.78rem;line-height:1.6;color:var(--text-secondary);border-top:1px dashed var(--border);padding-top:.5rem}
+.clean-explain.show{display:block;animation:fadeIn .3s ease}
+.clean-verdict{font-weight:700;font-size:.7rem;letter-spacing:.05em;text-transform:uppercase}
+.clean-verdict.v-right{color:#256B29}
+.clean-verdict.v-wrong{color:#A03A2C}
+
+/* ── ACTIVITY 3: MATCH AI FIELDS TO SOURCES ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.7rem}
+.match-terms{display:flex;flex-direction:column;gap:.6rem}
+.match-term{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.85rem;font-weight:600;color:var(--navy);cursor:pointer;transition:all .2s;user-select:none}
+.match-term:hover{border-color:var(--orange);transform:translateX(2px)}
+.match-term.selected{border-color:var(--orange);background:var(--orange-glow);box-shadow:var(--shadow-sm)}
+.match-term.matched{opacity:.45;pointer-events:none;border-color:var(--green);background:var(--green-light)}
+.match-defs{display:flex;flex-direction:column;gap:.6rem}
+.match-def{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.82rem;line-height:1.5;color:var(--text-secondary);cursor:pointer;transition:all .2s;min-height:52px}
+.match-def:hover{border-color:var(--orange)}
+.match-def.matched{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary);pointer-events:none}
+.match-def.matched .md-pair{display:block;font-size:.72rem;color:#256B29;font-weight:700;margin-bottom:.2rem}
+.match-def.shake{animation:shake .4s;border-color:var(--red);background:var(--red-light)}
+.md-pair{display:none}
+.match-instruct{font-size:.78rem;color:var(--text-muted);margin-bottom:.8rem;font-style:italic}
+
+/* ── QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 2 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 5 · AI Email Marketing</div>
+  <h1>Building &amp; Growing Your Email List with AI — <em>from zero subscribers to an owned audience</em></h1>
+  <p class="hero-sub">Four hands-on activities. Sort good vs. bad list-building practices, put the steps for setting up your email tool in the right order, match each list-building idea to what it actually does, then quiz yourself on permission and list hygiene. By the end you'll know why your list is your most valuable asset — and why slow, honest growth beats spammy shortcuts every time.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: ORDER THE PIPELINE STAGES ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Order the setup — from empty tool to your first subscriber</h2>
+    <p class="lesson-intro">Setting up your email tool (your ESP — Email Service Provider) is the backbone of list-building: do the steps in the right order and your first subscriber gets a warm welcome automatically. Skip a step and people sign up into a black hole. The seven steps below are shuffled — click them <strong>in the order a beginner actually sets things up</strong>. A wrong click shakes red and hints at what comes next.</p>
+
+    <div class="lesson-card">
+      <div class="chain-grid">
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Shuffled steps — click the next one</h4>
+          <div class="chain-pool" id="chainPool"></div>
+        </div>
+        <div>
+          <h4 style="font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.6rem">Your setup, in order</h4>
+          <div class="chain-slots" id="chainSlots"></div>
+        </div>
+      </div>
+      <div class="chain-hintbox" id="chainHint"></div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetChain()">↻ Reset the setup</button>
+      </div>
+      <div class="tip-note">💡 <strong>Why order matters:</strong> your welcome email can only fire if the list, fields, tags, and sign-up form already exist. Build them out of order and new subscribers land in silence — the worst first impression. Set it up once, carefully, and every future signup gets welcomed automatically.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: CLEAN A MESSY RECORD ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Good vs. bad growth — pick the honest move</h2>
+    <p class="lesson-intro">Not all "list growth" is real growth. A permission-based list of people who actually want you beats a huge purchased list that gets you flagged as spam. Here are five common list-building situations. For each one, pick the <strong>honest, permission-first move</strong>. Wrong picks turn red and explain why.</p>
+
+    <div class="lesson-card">
+      <p style="font-size:.8rem;color:var(--text-muted);font-style:italic;margin-bottom:.5rem">Five growth decisions — choose the practice that protects your list and your sender reputation:</p>
+      <div class="clean-grid" id="cleanGrid"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetClean()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: MATCH AI FIELDS TO SOURCES ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Know your toolkit — match the term to what it does</h2>
+    <p class="lesson-intro">List-building has its own vocabulary — lead magnet, opt-in form, segment, tag, and more. Get these straight and the rest of email marketing clicks into place. Click a list-building term, then click the plain-English description of what it actually does.</p>
+
+    <div class="tip-note">💡 <strong>Why this matters:</strong> a lead magnet is what earns the signup; a welcome email is what keeps it warm; segmentation is what makes future emails relevant. Knowing which tool does which job is how you build a list that people are glad to be on.</div>
+
+    <div class="lesson-card">
+      <p class="match-instruct">Click a list-building term, then click the description that matches it. Six correct matches completes it.</p>
+      <div class="match-grid">
+        <div class="match-col">
+          <h4>List-building term</h4>
+          <div class="match-terms" id="matchTerms"></div>
+        </div>
+        <div class="match-col">
+          <h4>What it does</h4>
+          <div class="match-defs" id="matchDefs"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMatch()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Permission &amp; hygiene — the check-yourself quiz</h2>
+    <p class="lesson-intro">Five real list-building choices you'll face from day one. Every option comes with an explanation — the wrong ones are the spammy shortcuts that quietly wreck your deliverability three months in.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">↻ Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">What lead magnet could YOUR business offer to earn a signup — a checklist, a mini-guide, a discount, a template? Which one would your ideal subscriber actually want?</div>
+        <textarea placeholder="My lead magnet would be... because my audience wants..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Where will your opt-in form live so people actually see it — homepage, a landing page, the end of a blog post, a popup? What's the one honest way you'll grow your list first?</div>
+        <textarea placeholder="I'll place my form at... and grow honestly by..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 3 · Writing Emails That Get Opened &amp; Read</h3>
+      <p>Your list is growing with people who genuinely want to hear from you. Now learn to write for them: use AI to craft subject lines that earn the open, first lines that pull people in, and body copy that gets read and clicked — without sounding like a robot.</p>
+      <a href="03-ai-email-writing.html" class="btn btn-primary">Continue to Lesson 3 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Order the pipeline stages ─── */
+const CHAIN = [
+  {text:'Pick an email tool (ESP) and create your free account — Mailchimp, MailerLite, or similar.', hint:'You can\'t build anything until you\'ve signed up for an email service provider to house it all.'},
+  {text:'Create your first list (audience) — the single place all your subscribers will live.', hint:'Before you collect fields or tags, you need a list for those subscribers to belong to.'},
+  {text:'Add the fields you\'ll collect — usually just first name and email to start.', hint:'Once the list exists, decide what info each subscriber row will hold — keep it minimal.'},
+  {text:'Set up tags or groups so you can label subscribers by interest later.', hint:'After fields, add labels so you can segment people once the list grows.'},
+  {text:'Build your sign-up form (or landing page) where people opt in.', hint:'With the list, fields, and tags ready, create the form that actually captures new subscribers.'},
+  {text:'Write a welcome email that sends automatically the moment someone subscribes.', hint:'Once the form exists, set up the first thing every new subscriber receives.'},
+  {text:'Place the form where people will see it and test the whole flow end to end.', hint:'The setup isn\'t done until the form is live on your site and you\'ve confirmed the welcome email fires.'}
+];
+let chainNext = 0;
+function renderChain(){
+  const pool = $('chainPool'), slots = $('chainSlots');
+  const order = CHAIN.map((_, i) => i).sort(()=>Math.random()-0.5);
+  pool.innerHTML = order.map(i => `<div class="chain-chip" data-step="${i}" onclick="clickChain(${i})">${CHAIN[i].text}</div>`).join('');
+  slots.innerHTML = CHAIN.map((_, i) => `
+    <div class="chain-slot" id="slot${i}">
+      <span class="chain-slot-num">${i+1}</span>
+      <span class="chain-slot-text">Waiting for step ${i+1}…</span>
+    </div>`).join('');
+}
+function clickChain(i){
+  const chip = document.querySelector(`.chain-chip[data-step="${i}"]`);
+  const hintBox = $('chainHint');
+  if (!chip || chip.classList.contains('used')) return;
+  if (i !== chainNext){
+    chip.classList.remove('shake'); void chip.offsetWidth;
+    chip.classList.add('shake');
+    hintBox.className = 'chain-hintbox show';
+    hintBox.innerHTML = `<strong>Not yet.</strong> That step comes later. Think about step ${chainNext+1}: ${CHAIN[chainNext].hint}`;
+    setTimeout(() => chip.classList.remove('shake'), 500);
+    return;
+  }
+  chip.classList.add('used');
+  const slot = $('slot' + i);
+  slot.classList.add('filled');
+  slot.querySelector('.chain-slot-text').textContent = CHAIN[i].text;
+  hintBox.className = 'chain-hintbox';
+  chainNext++;
+  if (chainNext >= CHAIN.length){
+    const fb = $('feedback1');
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>Setup complete — all 7 steps in order.</strong> Notice the shape: you build the <em>container</em> first (tool, list, fields, tags), then the <em>capture</em> (form), then the <em>welcome</em>, then you go live. Do it in this order once and every future subscriber flows in, gets tagged, and gets welcomed — with zero extra work from you. That is the quiet power of a list that's set up properly.`;
+    $('prog1').classList.add('done');
+  }
+}
+function resetChain(){
+  chainNext = 0;
+  $('feedback1').className = 'activity-feedback';
+  $('chainHint').className = 'chain-hintbox';
+  renderChain();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Clean the messy record ─── */
+const CLEAN_ROWS = [
+  {
+    field:'You want 500 subscribers fast',
+    current:'A vendor offers to sell you a list of 5,000 "targeted" email addresses.',
+    bad:'A vendor offers to sell you a list of 5,000 "targeted" email addresses.',
+    opts:[
+      {t:'Never buy the list — build your own with permission', ok:true},
+      {t:'Buy it — 5,000 is a huge head start', ok:false},
+      {t:'Buy a smaller list to be safe', ok:false}
+    ],
+    why:'Right. Never buy lists — full stop. Those people never agreed to hear from you, so they mark you as spam, your deliverability tanks, and it can breach privacy law. A small list of people who opted in beats a huge purchased one every time.'
+  },
+  {
+    field:'Your sign-up form',
+    current:'You could pre-tick the "email me offers" box so more people join.',
+    bad:'You could pre-tick the "email me offers" box so more people join.',
+    opts:[
+      {t:'Leave it unticked — let people actively opt in', ok:true},
+      {t:'Pre-tick it — most people won\'t bother unticking', ok:false},
+      {t:'Hide the box entirely and subscribe them anyway', ok:false}
+    ],
+    why:'Right. Real consent is a clear, active opt-in the person chooses themselves. Pre-ticked boxes and hidden subscriptions aren\'t genuine permission and are exactly what GDPR-style rules forbid. Make joining a deliberate "yes."'
+  },
+  {
+    field:'Earning the signup',
+    current:'People visit your site but few subscribe from a plain "Join my newsletter" box.',
+    bad:'People visit your site but few subscribe from a plain "Join my newsletter" box.',
+    opts:[
+      {t:'Offer a useful lead magnet in exchange for the email', ok:true},
+      {t:'Add a second popup that\'s impossible to close', ok:false},
+      {t:'Collect emails at checkout without telling people', ok:false}
+    ],
+    why:'Right. A lead magnet — a checklist, mini-guide, template, or discount — gives people a clear reason to hand over their email. Give value first and the signup is honest and enthusiastic, not tricked or forced.'
+  },
+  {
+    field:'List hygiene',
+    current:'50 addresses keep hard-bouncing every send (they don\'t exist anymore).',
+    bad:'50 addresses keep hard-bouncing every send (they don\'t exist anymore).',
+    opts:[
+      {t:'Remove the hard bounces to protect deliverability', ok:true},
+      {t:'Keep emailing them — the number looks bigger', ok:false},
+      {t:'Ignore it, bounces don\'t affect anything', ok:false}
+    ],
+    why:'Right. Repeatedly emailing dead addresses tells inbox providers you\'re careless, which hurts delivery for everyone on your list. Cleaning bounces keeps your sender reputation healthy — a smaller, real list outperforms a bloated, bouncing one.'
+  },
+  {
+    field:'Inactive subscribers',
+    current:'200 people haven\'t opened a single email in 8 months.',
+    bad:'200 people haven\'t opened a single email in 8 months.',
+    opts:[
+      {t:'Send a win-back email, then sunset those who stay silent', ok:true},
+      {t:'Keep emailing them forever just in case', ok:false},
+      {t:'Immediately delete them all without a heads-up', ok:false}
+    ],
+    why:'Right. Try one friendly re-engagement email; if they still don\'t open, gently remove ("sunset") them. Long-term non-openers drag down your open rates and deliverability. Sunsetting inactive subscribers protects the inbox placement of everyone who\'s still engaged.'
+  }
+];
+let cleanAnswered = {};
+function renderClean(){
+  cleanAnswered = {};
+  $('cleanGrid').innerHTML = CLEAN_ROWS.map((r, i) => `
+    <div class="clean-row" id="cleanRow${i}">
+      <div class="clean-field">${r.field}</div>
+      <div class="clean-current">Scenario: <span>${r.current}</span></div>
+      <div class="clean-actions">
+        ${r.opts.map((o, oi) => `<button class="clean-btn" id="cb${i}-${oi}" onclick="answerClean(${i},${oi})">${o.t}</button>`).join('')}
+      </div>
+      <div class="clean-explain" id="cleanEx${i}"></div>
+    </div>`).join('');
+}
+function answerClean(i, oi){
+  if (cleanAnswered[i] !== undefined) return;
+  const row = CLEAN_ROWS[i];
+  const ok = row.opts[oi].ok;
+  cleanAnswered[i] = ok;
+  const rowEl = $('cleanRow' + i);
+  row.opts.forEach((_, k) => {
+    const b = $(`cb${i}-${k}`);
+    b.disabled = true;
+    if (row.opts[k].ok) b.classList.add('picked-right');
+  });
+  if (!ok) $(`cb${i}-${oi}`).classList.add('picked-wrong');
+  if (ok) rowEl.classList.add('fixed');
+  const ex = $('cleanEx' + i);
+  ex.className = 'clean-explain show';
+  ex.innerHTML = `<span class="clean-verdict ${ok ? 'v-right' : 'v-wrong'}">${ok ? '✓ Correct fix' : '✗ Not the safe fix'}</span><br>${row.why}`;
+  if (Object.keys(cleanAnswered).length === CLEAN_ROWS.length){
+    const score = Object.values(cleanAnswered).filter(Boolean).length;
+    const fb = $('feedback2');
+    if (score === CLEAN_ROWS.length){
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All five — honest growth every time.</strong> Every choice followed one principle: <em>permission and relevance beat volume and shortcuts</em>. Never buy lists, never trick people into opting in, always give value first, and keep your list clean. Slow, honest growth builds an audience that opens your emails — and that protects your deliverability for years.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${score} of 5.</strong> Re-read the ones you missed. The rules beginners break most: <em>never buy a list</em> (permission is everything) and <em>never chase raw numbers</em> — a smaller engaged list beats a big dead one. Click <em>Try again</em>.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetClean(){
+  $('feedback2').className = 'activity-feedback';
+  renderClean();
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Match AI field to source ─── */
+const PAIRS = [
+  {id:'company', term:'Lead magnet', def:'A free, useful thing (checklist, guide, template, discount) you give in exchange for someone\'s email — it earns the signup.'},
+  {id:'jobtitle', term:'Opt-in form', def:'The little box on your site where a visitor actively types their email and clicks subscribe — where permission is captured.'},
+  {id:'location', term:'Landing page', def:'A dedicated single page built for one purpose: convincing a visitor to sign up, with no distracting menus or links.'},
+  {id:'purchase', term:'Welcome email', def:'The automatic first email a new subscriber receives the moment they join — it sets the tone and starts the relationship.'},
+  {id:'leadscore', term:'Segmentation', def:'Splitting your list into smaller groups by interest or behavior so you can send each group more relevant emails.'},
+  {id:'social', term:'List hygiene', def:'Regularly removing bounces and sunsetting inactive subscribers to keep your list healthy and protect deliverability.'}
+];
+let selectedTerm = null, matchedCount = 0;
+function renderMatch(){
+  matchedCount = 0; selectedTerm = null;
+  const terms = [...PAIRS].sort(()=>Math.random()-0.5);
+  const defs = [...PAIRS].sort(()=>Math.random()-0.5);
+  $('matchTerms').innerHTML = terms.map(p =>
+    `<div class="match-term" data-id="${p.id}" onclick="pickTerm('${p.id}', this)">${p.term}</div>`).join('');
+  $('matchDefs').innerHTML = defs.map(p =>
+    `<div class="match-def" data-id="${p.id}" onclick="pickDef('${p.id}', this)"><span class="md-pair"></span>${p.def}</div>`).join('');
+}
+function pickTerm(id, el){
+  if (el.classList.contains('matched')) return;
+  document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTerm = id;
+}
+function pickDef(id, el){
+  if (el.classList.contains('matched') || !selectedTerm) return;
+  if (id === selectedTerm){
+    const termEl = document.querySelector(`.match-term[data-id="${id}"]`);
+    const pair = PAIRS.find(p => p.id === id);
+    termEl.classList.remove('selected');
+    termEl.classList.add('matched');
+    el.classList.add('matched');
+    el.querySelector('.md-pair').textContent = '✓ ' + pair.term;
+    selectedTerm = null;
+    matchedCount++;
+    if (matchedCount === PAIRS.length){
+      const fb = $('feedback3');
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six matched.</strong> Notice how they work together: a <em>lead magnet</em> earns the signup, an <em>opt-in form</em> or <em>landing page</em> captures it, a <em>welcome email</em> starts the relationship, and <em>segmentation</em> plus <em>list hygiene</em> keep it healthy and relevant. Ask AI to brainstorm lead magnets, draft your welcome email, and suggest segments — it\'s a brilliant planning partner for every one of these.`;
+      $('prog3').classList.add('done');
+    }
+  } else {
+    el.classList.remove('shake'); void el.offsetWidth;
+    el.classList.add('shake');
+    setTimeout(() => el.classList.remove('shake'), 450);
+  }
+}
+function resetMatch(){
+  $('feedback3').className = 'activity-feedback';
+  renderMatch();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {
+    q:'A service offers you 10,000 email addresses for $50. Should you buy them?',
+    opts:[
+      {t:'No — never buy lists; build your own with permission', ok:true, ex:'Right, and this rule has no exceptions. Bought contacts never agreed to hear from you, so they mark you as spam. That destroys your sender reputation, most tools ban purchased lists outright, and it can breach privacy law. Earn every subscriber.'},
+      {t:'Yes — 10,000 contacts is an incredible head start', ok:false, ex:'It feels like a shortcut but it\'s a trap. Those people don\'t know you, so open rates crater and spam complaints spike — which tanks deliverability even to your real subscribers. A tiny opted-in list is worth more than a giant bought one.'},
+      {t:'Only if the seller says they\'re "opted-in and GDPR-safe"', ok:false, ex:'That promise is essentially unverifiable and usually false. Consent is between the subscriber and YOU — it can\'t be transferred by a seller. If you didn\'t collect the opt-in yourself, treat it as no consent.'}
+    ]
+  },
+  {
+    q:'In plain English, what does "permission-based" email marketing actually require?',
+    opts:[
+      {t:'People must actively choose to join your list before you email them', ok:true, ex:'Correct. Rules like GDPR and CAN-SPAM boil down to: get a clear opt-in, tell people who you are, and always include an easy unsubscribe. Permission is the whole game — it protects both your subscribers and your deliverability.'},
+      {t:'You can email anyone as long as there\'s an unsubscribe link', ok:false, ex:'An unsubscribe link is required, but it doesn\'t give you permission to email people who never signed up. You need consent first; the unsubscribe is for people who already opted in and later change their mind.'},
+      {t:'You only need permission if you\'re selling something', ok:false, ex:'Consent rules apply to marketing emails regardless of whether there\'s a hard sell. If you\'re broadcasting to a list, those people should have opted in — newsletters included.'}
+    ]
+  },
+  {
+    q:'Why bother splitting your list into segments instead of emailing everyone the same thing?',
+    opts:[
+      {t:'Relevant emails to smaller groups get opened more and annoy fewer people', ok:true, ex:'Exactly. Segmentation lets you send new-subscriber tips to newcomers and advanced offers to loyal buyers. Relevance lifts opens and clicks and cuts unsubscribes — which keeps your whole list healthy. Ask AI to suggest sensible segments from your subscriber data.'},
+      {t:'It doesn\'t matter — one email to everyone always performs best', ok:false, ex:'A single generic blast is the least relevant option, so it earns lower opens and more unsubscribes. Even simple segments (new vs. long-time, buyers vs. browsers) noticeably improve results.'},
+      {t:'Because email tools charge less if you send to smaller groups', ok:false, ex:'Pricing is usually based on total subscribers, not segment size. The real payoff of segmentation is relevance — right message, right group — which protects engagement and deliverability.'}
+    ]
+  },
+  {
+    q:'200 subscribers haven\'t opened an email in 8 months. What\'s the healthy move?',
+    opts:[
+      {t:'Send a win-back email, then sunset those who still don\'t engage', ok:true, ex:'Right. Give them one friendly chance to re-engage; if they stay silent, gently remove them. Long-term non-openers signal to inbox providers that your mail isn\'t wanted, which hurts delivery for everyone. A smaller engaged list outperforms a big sleepy one.'},
+      {t:'Keep emailing them indefinitely — a bigger number looks better', ok:false, ex:'Vanity metrics cost you real reach. Dead weight drags down open rates and deliverability, so your engaged subscribers start landing in spam too. Protect the list by pruning the truly inactive.'},
+      {t:'Delete all 200 instantly with no attempt to win them back', ok:false, ex:'Some may just have been busy. A single re-engagement email costs almost nothing and can recover real subscribers. Sunset the ones who ignore it — don\'t axe the whole group blind.'}
+    ]
+  },
+  {
+    q:'You\'re short on ideas for a lead magnet. What\'s a smart, honest way to use AI here?',
+    opts:[
+      {t:'Ask AI to brainstorm lead-magnet ideas your specific audience would want', ok:true, ex:'Right. AI is a great planning partner: describe your audience and it will suggest checklists, mini-guides, templates, or quizzes to offer. You still pick the best fit and create real value — but the ideation and first drafts get much faster.'},
+      {t:'Ask AI to generate a list of email addresses to send to', ok:false, ex:'AI can\'t (and shouldn\'t) conjure real people who agreed to hear from you — that\'s just a fabricated purchased list by another name. Use AI to attract subscribers, never to invent them.'},
+      {t:'Skip the lead magnet — just add a popup that\'s hard to close', ok:false, ex:'Aggressive, sticky popups annoy visitors and rarely earn genuine, engaged signups. A useful lead magnet gives people a real reason to opt in willingly, which produces subscribers who actually open your emails.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length){
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 — you grow a list the right way.</strong> The through-line: never buy lists, always earn permission, keep emails relevant with segmentation, prune inactive subscribers, and use AI to plan — not to fake. Slow, honest growth builds an owned audience that opens your emails for years. Your list is your most valuable marketing asset; treat it like one.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the misses — each wrong option is a spammy shortcut that costs you later (buying lists, skipping consent, generic blasts, hoarding dead subscribers, faking growth). Permission and relevance protect your deliverability. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderChain();
+  renderClean();
+  renderMatch();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

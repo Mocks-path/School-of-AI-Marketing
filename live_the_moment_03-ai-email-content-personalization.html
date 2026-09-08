@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 3 · AI Email Content &amp; Personalization — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── DRAG SORTER ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:80px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY 2: CHURN SCORE CARDS ── */
+.churn-grid{display:grid;gap:1.2rem;margin-top:1rem}
+.churn-case{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius);padding:1.4rem;box-shadow:var(--shadow-sm)}
+.churn-head{display:flex;align-items:center;gap:1rem;margin-bottom:1rem;flex-wrap:wrap}
+.churn-gauge{width:66px;height:66px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-family:var(--mono);font-weight:600;font-size:1.05rem;color:#fff;position:relative}
+.churn-gauge.low{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.churn-gauge.med{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.churn-gauge.high{background:linear-gradient(135deg,#E04E3C,#C43A29)}
+.churn-meta h4{font-family:'DM Serif Display',serif;font-size:1.1rem;color:var(--navy);margin-bottom:.15rem}
+.churn-meta .churn-signals{font-size:.78rem;color:var(--text-secondary);line-height:1.5}
+.churn-risk-label{font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;padding:.2rem .6rem;border-radius:50px;display:inline-block;margin-top:.3rem}
+.churn-risk-label.low{background:var(--green-light);color:#256B29}
+.churn-risk-label.med{background:var(--orange-glow);color:var(--orange-dark)}
+.churn-risk-label.high{background:var(--red-light);color:#A03A2C}
+.churn-q{font-size:.82rem;font-weight:600;color:var(--navy);margin:.4rem 0 .7rem}
+.churn-opts{display:grid;gap:.5rem}
+.churn-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.65rem .9rem;font-size:.82rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.churn-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.churn-opt:disabled{cursor:default;opacity:.75}
+.churn-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.churn-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.churn-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.churn-explain.show{display:block;animation:fadeIn .3s ease}
+.churn-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.churn-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── ACTIVITY 3: MATCH SIGNALS ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.7rem}
+.match-terms{display:flex;flex-direction:column;gap:.6rem}
+.match-term{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.85rem;font-weight:600;color:var(--navy);cursor:pointer;transition:all .2s;user-select:none}
+.match-term:hover{border-color:var(--orange);transform:translateX(2px)}
+.match-term.selected{border-color:var(--orange);background:var(--orange-glow);box-shadow:var(--shadow-sm)}
+.match-term.matched{opacity:.45;pointer-events:none;border-color:var(--green);background:var(--green-light)}
+.match-defs{display:flex;flex-direction:column;gap:.6rem}
+.match-def{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.82rem;line-height:1.5;color:var(--text-secondary);cursor:pointer;transition:all .2s;min-height:52px}
+.match-def:hover{border-color:var(--orange)}
+.match-def.matched{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary);pointer-events:none}
+.match-def.matched .md-pair{display:block;font-size:.72rem;color:#256B29;font-weight:700;margin-bottom:.2rem}
+.match-def.shake{animation:shake .4s;border-color:var(--red);background:var(--red-light)}
+.md-pair{display:none}
+.match-instruct{font-size:.78rem;color:var(--text-muted);margin-bottom:.8rem;font-style:italic}
+
+/* ── QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 3 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 5 · AI Email Marketing</div>
+  <h1>AI Email Content &amp; Personalization — <em>write emails people actually open</em></h1>
+  <p class="hero-sub">Four hands-on activities. Sort good subject lines from spammy ones, label the parts of an email that gets opened and clicked, match personalization and deliverability terms to what they mean, then quiz yourself. This is where AI stops writing generic blasts and starts writing emails that land in the inbox — and get read.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: SEGMENT CUSTOMERS ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Sort the subject lines — what earns the open, what triggers spam</h2>
+    <p class="lesson-intro">The subject line decides whether your email gets opened or ignored — and some words send you straight to the spam folder. Study the four categories, then drag each subject line into where it belongs. Wrong pills carry a hover hint explaining the right home.</p>
+
+    <div class="tip-note">💡 <strong>The core idea:</strong> AI can draft a dozen subject lines in seconds — but <em>you</em> decide which earns the open and which trips a spam filter. Curiosity and clarity beat hype; ALL-CAPS, "FREE!!!", and fake urgency get you filtered before anyone reads a word.</div>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="segList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="new">
+            <div class="bucket-title">Clear &amp; specific</div>
+            <div class="bucket-sub">Says exactly what's inside — no guessing</div>
+            <div class="bucket-drop" data-drop="new"></div>
+          </div>
+          <div class="bucket" data-bucket="loyal">
+            <div class="bucket-title">Curiosity &amp; personal</div>
+            <div class="bucket-sub">Relevant hook that earns the open honestly</div>
+            <div class="bucket-drop" data-drop="loyal"></div>
+          </div>
+          <div class="bucket" data-bucket="atrisk">
+            <div class="bucket-title">Spammy / hype</div>
+            <div class="bucket-sub">ALL-CAPS, exclamation marks, trigger words</div>
+            <div class="bucket-drop" data-drop="atrisk"></div>
+          </div>
+          <div class="bucket" data-bucket="lapsed">
+            <div class="bucket-title">Vague / misleading</div>
+            <div class="bucket-sub">Says nothing, or promises what's not inside</div>
+            <div class="bucket-drop" data-drop="lapsed"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetSeg()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswersSeg()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: READ CHURN SCORE ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Fix the email draft — pick the change that gets it opened, read, and delivered</h2>
+    <p class="lesson-intro">AI gives you a solid first draft — but a first draft isn't ready to send. Each email below has one problem holding it back: a spam-trigger, a fake or creepy personalization, or a design that breaks on a phone. Read each case and choose the smartest fix. A human pass like this is what separates a real email from a generic blast.</p>
+
+    <div class="lesson-card">
+      <div class="churn-grid" id="churnGrid"></div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetChurn()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: MATCH SCORING SIGNALS ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Label the email — match each part to what it does</h2>
+    <p class="lesson-intro">Every email that gets opened and clicked has the same anatomy: from-name, subject line, preview text, body, and one clear CTA — plus the plumbing that keeps it out of spam. Knowing each part means you can brief AI precisely and spot what a draft is missing. Click a part on the left, then click what it does. A wrong match shakes red.</p>
+
+    <div class="lesson-card">
+      <p class="match-instruct">Click a part, then click what it does. Six correct matches completes the activity.</p>
+      <div class="match-grid">
+        <div class="match-col">
+          <h4>The part of the email</h4>
+          <div class="match-terms" id="matchTerms"></div>
+        </div>
+        <div class="match-col">
+          <h4>What it does</h4>
+          <div class="match-defs" id="matchDefs"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMatch()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Personalization &amp; deliverability — the check-yourself quiz</h2>
+    <p class="lesson-intro">Five questions on subject lines, personalization that helps versus creeps, spam-avoidance, and using AI drafts responsibly. Every option explains itself — the wrong answers are the traps that turn a good email into an unopened one.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">↻ Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Think of the last email you sent (or would send) to your subscribers. Write a subject line and a one-line preview text for it — clear and specific, no hype. What would AI need to know to draft the body in your brand voice?</div>
+        <textarea placeholder="Subject: ... Preview: ... To keep my voice, AI would need to know..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Where's the line between personalization that helps and personalization that feels creepy? Name one detail you'd happily use to make an email more relevant — and one you'd never mention even if you had it.</div>
+        <textarea placeholder="I'd use... because it's relevant. I'd never mention... because it would feel..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 4 · Automated Email Sequences + Capstone</h3>
+      <p>You can write one email that gets opened and read. In the final lesson, turn one email into a sequence: build an AI-assisted welcome and nurture flow that sends the right message at the right moment — and connect the whole email module into one working system.</p>
+      <a href="04-ai-email-sequences-capstone.html" class="btn btn-primary">Continue to the Capstone →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Segment customers ─── */
+const SEGMENTS = [
+  {id:'c1', text:'"Your July order has shipped — track it here"', hint:'Says exactly what\'s inside, no guessing = clear & specific.', bucket:'new', why:'It tells the reader precisely what the email is about. Clear, specific subject lines set an honest expectation and consistently earn opens.'},
+  {id:'c2', text:'"Priya, the size you asked about is back in stock"', hint:'A relevant, personal hook that earns the open honestly.', bucket:'loyal', why:'This uses a real, useful detail (a size she actually asked about) to spark curiosity. That\'s personalization that helps — relevant, not creepy.'},
+  {id:'c3', text:'"FREE!!! ACT NOW — 90% OFF EVERYTHING TODAY ONLY"', hint:'ALL-CAPS, exclamation marks, classic trigger words = spammy.', bucket:'atrisk', why:'ALL-CAPS, multiple exclamation marks and "FREE" are textbook spam triggers. Filters flag this, and readers distrust it — it hurts deliverability.'},
+  {id:'c4', text:'"Re: (no subject)"', hint:'Says nothing and fakes a reply — vague and misleading.', bucket:'lapsed', why:'A fake "Re:" pretends to be a reply and tells the reader nothing. Misleading subject lines get opens once, then get you marked as spam.'},
+  {id:'c5', text:'"3 easy weeknight recipes inside — 20 minutes each"', hint:'Concrete promise of exactly what\'s inside = clear & specific.', bucket:'new', why:'It states the value plainly: three recipes, 20 minutes each. When the subject matches the content, people open and trust future emails too.'},
+  {id:'c6', text:'"The one tip our top readers swear by"', hint:'An honest curiosity gap that\'s still relevant to them.', bucket:'loyal', why:'It opens a genuine curiosity gap without lying or shouting. Curiosity that pays off inside the email earns the open and keeps trust.'},
+  {id:'c7', text:'"CONGRATULATIONS!!! You\'ve been SELECTED, claim your PRIZE $$$"', hint:'Fake urgency, money symbols, shouting = spam trigger.', bucket:'atrisk', why:'Fake prizes, dollar signs and shouting are spam-filter magnets. Even if it slips through, it reads as a scam and damages your sender reputation.'},
+  {id:'c8', text:'"An update"', hint:'Vague — could be anything, gives no reason to open.', bucket:'lapsed', why:'"An update" says nothing. With no hint of value, there\'s no reason to open it — vague subject lines quietly kill your open rate.'}
+];
+const SEG_NAMES = {new:'Clear & specific', loyal:'Curiosity & personal', atrisk:'Spammy / hype', lapsed:'Vague / misleading'};
+let segPlaced = {};
+function renderSeg(){
+  segPlaced = {};
+  const shuffled = [...SEGMENTS].sort(()=>Math.random()-0.5);
+  $('segList').innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+      <div class="scenario-hint">${s.hint}</div>
+    </div>`).join('');
+  attachDrag('segList');
+}
+function attachDrag(listId){
+  $(listId).querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupSegBuckets(){
+  document.querySelectorAll('#activity-1 .bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      segDrop(e.dataTransfer.getData('id'), b.dataset.bucket);
+    });
+  });
+}
+function segDrop(id, bucket){
+  const item = SEGMENTS.find(s => s.id === id);
+  if (!item || segPlaced[id]) return;
+  const correct = item.bucket === bucket;
+  segPlaced[id] = {bucket, correct};
+  const card = document.querySelector(`#activity-1 .scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const dropZone = document.querySelector(`#activity-1 [data-drop="${bucket}"]`);
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + item.text.substring(0, 30) + '…';
+  pill.title = correct ? item.why : `Correct category: ${SEG_NAMES[item.bucket]}. ${item.why}`;
+  dropZone.appendChild(pill);
+  if (Object.keys(segPlaced).length === SEGMENTS.length){
+    const right = Object.values(segPlaced).filter(p => p.correct).length;
+    const fb = $('feedback1');
+    if (right === SEGMENTS.length){
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All eight sorted correctly.</strong> Two questions decide almost every subject line: <em>does it tell the truth about what's inside</em>, and <em>does it shout or trip a filter</em>. Clear = says exactly what's inside. Curiosity/personal = a relevant hook that pays off. Spammy = ALL-CAPS, "FREE!!!", fake prizes. Vague/misleading = says nothing or lies to get the open. Get these right and your emails reach the inbox and earn the open.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 8.</strong> Hover the red pills. The common mix-up is <em>curiosity</em> vs <em>vague</em>: real curiosity is relevant and pays off inside; vague just says nothing. And a spammy line isn't only about words — ALL-CAPS and exclamation marks trip filters too. Click <em>Try again</em>.`;
+    }
+    $('prog1').classList.add('done');
+  }
+}
+function resetSeg(){
+  $('feedback1').className = 'activity-feedback';
+  document.querySelectorAll('#activity-1 .bucket-drop').forEach(d => d.innerHTML = '');
+  renderSeg();
+  $('prog1').classList.remove('done');
+}
+function showAnswersSeg(){
+  SEGMENTS.forEach(s => { if (!segPlaced[s.id]) segDrop(s.id, s.bucket); });
+}
+
+/* ─── ACTIVITY 2: Read churn score ─── */
+const CHURN = [
+  {
+    name:'Draft A — "MokshPath Summer Sale" newsletter',
+    score:82, level:'high', label:'Spam risk: high',
+    signals:'Problem: subject is "FREE GIFT!!! 70% OFF — BUY NOW"; body is one giant image with almost no text; five different buttons.',
+    q:'This draft will likely land in spam. What\'s the best fix?',
+    opts:[
+      {t:'Rewrite the subject in plain language, balance image with real text, and cut it down to one clear CTA', ok:true, ex:'Right. ALL-CAPS + "FREE" + "!!!" are spam triggers; an image-only email with no text looks like spam to filters; and five buttons split attention. Calmer subject, healthy image/text balance, and one CTA fix all three at once.'},
+      {t:'Send it anyway — a good offer always gets through', ok:false, ex:'Filters don\'t care how good the offer is. Trigger words, image-only bodies, and clutter get it flagged before anyone sees the deal. Fix the format first, then the offer can do its job.'},
+      {t:'Add even more buttons and bigger red text so it stands out', ok:false, ex:'That makes it worse. More buttons and louder styling push it further toward "spammy," raising the spam score and lowering trust. Clarity and restraint beat shouting.'}
+    ]
+  },
+  {
+    name:'Draft B — AI-personalized re-engagement email',
+    score:74, level:'high', label:'Creepy: high',
+    signals:'Problem: AI merged in "We saw you were on our site at 11:47pm Tuesday from your phone" and guessed her job title — which is wrong.',
+    q:'The personalization here backfires. What\'s the right move?',
+    opts:[
+      {t:'Use only relevant, comfortable details (like a product she viewed) and drop the creepy or unverified ones', ok:true, ex:'Right. Personalization should feel helpful, not surveilled. Exact timestamps and device details feel creepy, and a wrong job title breaks trust instantly. Keep segment-relevant facts you\'re sure of; fact-check anything AI infers.'},
+      {t:'Keep it all — the more personal detail, the more it converts', ok:false, ex:'Past a point, "personal" tips into "creepy." Timestamps and device data make people feel watched, and a wrong guess (her job title) reads as careless. Relevance beats volume of detail.'},
+      {t:'Personalize nothing ever — just send everyone the identical email', ok:false, ex:'That\'s the opposite over-correction. Good personalization (a product she actually viewed, her city, her interest) genuinely lifts response. The fix is being relevant and accurate, not going generic.'}
+    ]
+  },
+  {
+    name:'Draft C — clean, honest email that reads fine on desktop',
+    score:20, level:'low', label:'Deliverability: healthy',
+    signals:'Good: honest subject, one CTA, balanced text — but the body is three dense paragraphs and the CTA button sits far below on a phone.',
+    q:'Deliverability is fine. Anything left to improve before sending?',
+    opts:[
+      {t:'Yes — make it skimmable and mobile-first: short paragraphs, clear headers, CTA high enough to reach on a phone', ok:true, ex:'Right. Most people read email on a phone and skim, not read. Short chunks, a clear header, and a CTA that\'s easy to reach without scrolling forever is what turns a delivered email into a clicked one.'},
+      {t:'No — if it lands in the inbox, the job is done', ok:false, ex:'Getting delivered is only half the battle. If it\'s a wall of text and the button is buried on mobile, people skim, shrug, and close it. Design for the skim and the small screen.'},
+      {t:'Add three more paragraphs so it looks thorough', ok:false, ex:'More text is the wrong direction. Denser copy is harder to skim and pushes the CTA even further down. Tighten and structure it instead — less, but clearer.'}
+    ]
+  }
+];
+let churnAnswered = 0, churnScore = 0;
+function renderChurn(){
+  churnAnswered = 0; churnScore = 0;
+  $('churnGrid').innerHTML = CHURN.map((c, ci) => {
+    const order = c.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="churn-case" id="churn${ci}">
+      <div class="churn-head">
+        <div class="churn-gauge ${c.level}">${c.score}</div>
+        <div class="churn-meta">
+          <h4>${c.name}</h4>
+          <div class="churn-signals">${c.signals}</div>
+          <span class="churn-risk-label ${c.level}">${c.label} · ${c.score}/100</span>
+        </div>
+      </div>
+      <div class="churn-q">${c.q}</div>
+      <div class="churn-opts">${order.map(oi =>
+        `<button class="churn-opt" onclick="answerChurn(${ci}, ${oi}, this)">${c.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="churn-explain" id="churnEx${ci}"></div>
+    </div>`;
+  }).join('');
+  $('feedback2').className = 'activity-feedback';
+}
+function answerChurn(ci, oi, btn){
+  const c = CHURN[ci];
+  const box = $('churn' + ci);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = c.opts[oi];
+  const rightText = c.opts.find(o => o.ok).t;
+  box.querySelectorAll('.churn-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('churnEx' + ci);
+  ex.className = 'churn-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Smart move.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  churnAnswered++;
+  if (opt.ok) churnScore++;
+  if (churnAnswered === CHURN.length){
+    const fb = $('feedback2');
+    if (churnScore === CHURN.length){
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>3/3 — you gave every draft a proper human pass.</strong> The lesson under all three: <em>an AI draft is a starting point, not a send.</em> Strip spam triggers and balance image with text, keep personalization relevant and accurate (never creepy or guessed), and design for the skim on a phone. AI writes fast; you make it safe to send.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${churnScore}/3.</strong> Re-read the explanations. The recurring trap is trusting the draft as-is — spam words and image-only bodies get filtered, over-personalization feels creepy, and desktop-only design breaks on mobile. Relevance and restraint beat volume and hype. Click <em>Try again</em>.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function resetChurn(){
+  renderChurn();
+  $('prog2').classList.remove('done');
+}
+
+/* ─── ACTIVITY 3: Match scoring signals ─── */
+const PAIRS = [
+  {id:'recency', term:'From-name', def:'The sender name in the inbox — a recognizable, human name builds trust and is often what decides whether an email is even opened.'},
+  {id:'email', term:'Subject line', def:'The single line that earns (or loses) the open — clear and specific beats vague or hyped, and hype words can trip spam filters.'},
+  {id:'frequency', term:'Preview text', def:'The snippet shown after the subject — a second hook that extends the subject line instead of repeating it or showing "View in browser".'},
+  {id:'support', term:'Body in brand voice', def:'The message itself, written the way your brand actually sounds — skimmable and human, so it never feels like a generic mass blast.'},
+  {id:'value', term:'One clear CTA', def:'A single, obvious action you want the reader to take — one focused button converts far better than five competing links.'},
+  {id:'browse', term:'SPF / DKIM / DMARC', def:'The behind-the-scenes records that prove your email is really from you — set them up (and warm up new senders) to stay out of spam.'}
+];
+let selectedTerm = null, matchedCount = 0;
+function renderMatch(){
+  matchedCount = 0; selectedTerm = null;
+  const terms = [...PAIRS].sort(()=>Math.random()-0.5);
+  const defs = [...PAIRS].sort(()=>Math.random()-0.5);
+  $('matchTerms').innerHTML = terms.map(p =>
+    `<div class="match-term" data-id="${p.id}" onclick="pickTerm('${p.id}', this)">${p.term}</div>`).join('');
+  $('matchDefs').innerHTML = defs.map(p =>
+    `<div class="match-def" data-id="${p.id}" onclick="pickDef('${p.id}', this)"><span class="md-pair"></span>${p.def}</div>`).join('');
+}
+function pickTerm(id, el){
+  if (el.classList.contains('matched')) return;
+  document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTerm = id;
+}
+function pickDef(id, el){
+  if (el.classList.contains('matched') || !selectedTerm) return;
+  if (id === selectedTerm){
+    const termEl = document.querySelector(`.match-term[data-id="${id}"]`);
+    const pair = PAIRS.find(p => p.id === id);
+    termEl.classList.remove('selected');
+    termEl.classList.add('matched');
+    el.classList.add('matched');
+    el.querySelector('.md-pair').textContent = '✓ ' + pair.term;
+    selectedTerm = null;
+    matchedCount++;
+    if (matchedCount === PAIRS.length){
+      const fb = $('feedback3');
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six matched.</strong> Now you can brief AI on every part: from-name earns trust, subject line earns the open, preview text is the second hook, the body carries your voice, one CTA drives the click, and SPF/DKIM/DMARC keep the whole thing out of spam. When a draft is missing a piece, you'll spot it instantly.`;
+      $('prog3').classList.add('done');
+    }
+  } else {
+    el.classList.remove('shake'); void el.offsetWidth;
+    el.classList.add('shake');
+    setTimeout(() => el.classList.remove('shake'), 450);
+  }
+}
+function resetMatch(){
+  $('feedback3').className = 'activity-feedback';
+  renderMatch();
+  $('prog3').classList.remove('done');
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {
+    q:'What makes a subject line more likely to get opened — and stay out of spam?',
+    opts:[
+      {t:'Clear and specific about what\'s inside, with an honest hook — no ALL-CAPS, no "FREE!!!", no fake urgency', ok:true, ex:'Exactly. Readers open what\'s clearly relevant, and spam filters flag shouting and trigger words. Clarity plus an honest curiosity gap wins the open without risking the inbox.'},
+      {t:'As many capital letters, exclamation marks, and the word FREE as possible', ok:false, ex:'That\'s the recipe for the spam folder. ALL-CAPS, "!!!", and "FREE" are classic filter triggers — and readers distrust them. Calm and specific beats loud every time.'},
+      {t:'Something vague like "An update" so people open out of curiosity', ok:false, ex:'Vague subject lines give no reason to open. Real curiosity is relevant and pays off inside; "An update" just says nothing and quietly kills your open rate.'}
+    ]
+  },
+  {
+    q:'What\'s the difference between personalization that helps and personalization that feels creepy?',
+    opts:[
+      {t:'Helpful uses relevant details the subscriber is comfortable with; creepy uses surveillance-style data or wrong guesses', ok:true, ex:'Right. A product they viewed or their city feels helpful; an exact login timestamp, their device, or a wrong job title feels like being watched. Relevance and accuracy — not the amount of data — is the line.'},
+      {t:'The more personal data you cram in, the better it always performs', ok:false, ex:'Past a point, "personal" becomes "creepy" and hurts trust. Timestamps and device details make people uneasy, and a wrong guess reads as careless. Relevance beats volume.'},
+      {t:'There\'s no difference — any personalization is always a plus', ok:false, ex:'There\'s a real line. Surveillance-style details and inaccurate guesses backfire. Good personalization is relevant and correct; bad personalization erodes trust.'}
+    ]
+  },
+  {
+    q:'An email is mostly one big image with almost no text, and has five different buttons. Why is that a problem?',
+    opts:[
+      {t:'Image-heavy, text-light emails look like spam to filters, and multiple CTAs split attention — one clear CTA converts better', ok:true, ex:'Correct. A healthy image/text balance and a single, obvious CTA both help: filters trust text, and readers act when there\'s one clear thing to do. Five buttons is four too many.'},
+      {t:'It\'s not a problem — big images and lots of buttons look impressive', ok:false, ex:'Filters often flag image-only emails, and readers freeze when given five choices. Impressive-looking isn\'t the goal; delivered, skimmable, and one clear action is.'},
+      {t:'Only a problem if the images are low-resolution', ok:false, ex:'Resolution isn\'t the issue. The image/text imbalance and the competing CTAs are what hurt deliverability and clicks — regardless of how sharp the picture is.'}
+    ]
+  },
+  {
+    q:'AI just wrote you a polished email draft in seconds. What should you do before hitting send?',
+    opts:[
+      {t:'Give it a human pass — check the brand voice, fact-check any claims, and cut it to one clear CTA', ok:true, ex:'Right. AI drafts are a fast starting point, not a finished send. They can drift from your voice, invent details, or bury the CTA. A quick human review is what makes it accurate, on-brand, and safe to send.'},
+      {t:'Send it immediately — AI output is always accurate and on-brand', ok:false, ex:'AI can sound off-brand and confidently state things that aren\'t true. Sending unchecked risks errors and lost trust. Always review and fact-check first.'},
+      {t:'Trust it fully, but only if it looks nicely formatted', ok:false, ex:'Nice formatting says nothing about accuracy or voice. A tidy layout can still contain a wrong fact or a generic tone. Read it as a human before it goes out.'}
+    ]
+  },
+  {
+    q:'You could email your whole list every single day, or send fewer, more relevant emails. What\'s the honest tradeoff?',
+    opts:[
+      {t:'Relevance beats volume — fewer, well-targeted emails keep trust and engagement; over-mailing burns your list and hurts deliverability', ok:true, ex:'Exactly. Respecting the inbox is a long game. Flooding people leads to ignores, unsubscribes, and spam complaints that lower your sender reputation. Relevant and welcome beats frequent and annoying.'},
+      {t:'Volume always wins — the more emails you send, the more sales, no downside', ok:false, ex:'Over-mailing trains people to ignore or report you, and rising complaints drag down deliverability for everyone on your list. More is not free — it has a real cost.'},
+      {t:'It doesn\'t matter how often you send as long as the design looks good', ok:false, ex:'Frequency matters a lot. A beautiful email sent too often still annoys people and triggers unsubscribes. Respect the inbox — relevance and restraint protect the relationship.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length){
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 — you write emails people actually open.</strong> You pick clear subject lines over hype, personalize with relevance not surveillance, balance image and text with one CTA, give every AI draft a human pass and a fact-check, and respect the inbox with relevance over volume. That's the whole discipline: AI drafts fast, the human makes it worth sending.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the misses — the wrong options all share one flaw: chasing volume or hype instead of relevance and trust. Clear over loud, relevant over creepy, one CTA, human pass, respect the inbox. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderSeg();
+  setupSegBuckets();
+  renderChurn();
+  renderMatch();
+  renderQuiz();
+});
+</script>
+</body>
+</html>

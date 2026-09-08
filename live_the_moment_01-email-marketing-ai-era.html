@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lesson 1 · Email Marketing in the AI Era — MokshPath</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=JetBrains+Mono:wght@400;600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --orange:#E87A2E;--orange-dark:#D06A20;--orange-light:#F5943E;--orange-glow:rgba(232,122,46,0.12);
+  --navy:#2B2D42;--navy-dark:#1A1B2E;
+  --bg:#F3EDE7;--bg-card:#FFFFFF;--bg-light:#F9F5F0;
+  --text-primary:#2B2D42;--text-secondary:#6B6D7B;--text-muted:#9597A6;
+  --border:#E5DDD4;--green:#4CAF50;--green-light:#E8F5E9;--red:#E04E3C;--red-light:#FDECEA;
+  --shadow-sm:0 2px 8px rgba(43,45,66,0.06);--shadow-md:0 8px 24px rgba(43,45,66,0.08);
+  --shadow-lg:0 16px 48px rgba(43,45,66,0.12);
+  --radius:14px;--radius-sm:8px;
+  --mono:'JetBrains Mono',monospace;
+}
+html{scroll-behavior:smooth}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--bg);color:var(--text-primary);overflow-x:hidden;-webkit-font-smoothing:antialiased}
+
+/* ── NAV ── */
+.nav{position:sticky;top:0;z-index:100;background:var(--bg-card);border-bottom:1px solid var(--border);padding:0 2rem;height:64px;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-sm)}
+.nav-left{display:flex;align-items:center;gap:.7rem}
+.lesson-badge{font-size:.7rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--orange);background:var(--orange-glow);padding:.3rem .7rem;border-radius:50px}
+.nav-logo{display:flex;align-items:center;gap:.7rem;text-decoration:none}
+.nav-logo-icon{width:auto;height:48px;display:block;object-fit:contain}
+.nav-logo-text{display:flex;flex-direction:column;line-height:1.15}
+.nav-logo-name{font-family:'DM Serif Display',serif;font-size:1.25rem;color:var(--navy)}
+.nav-logo-name span{color:var(--orange)}
+.nav-logo-tag{font-size:.62rem;color:var(--text-muted);font-weight:500;letter-spacing:.02em}
+
+/* ── HERO ── */
+.hero{padding:3.5rem 2rem 2.5rem;text-align:center;position:relative}
+.hero-eyebrow{display:inline-flex;align-items:center;gap:.45rem;padding:.4rem 1rem;border-radius:50px;background:var(--orange-glow);color:var(--orange);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:1.2rem}
+.hero-eyebrow .dot{width:7px;height:7px;border-radius:50%;background:var(--orange);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.hero h1{font-family:'DM Serif Display',serif;font-size:clamp(2rem,4vw,3rem);line-height:1.13;color:var(--navy);margin-bottom:1rem;max-width:780px;margin-left:auto;margin-right:auto}
+.hero h1 em{font-style:normal;color:var(--orange)}
+.hero-sub{font-size:1.02rem;color:var(--text-secondary);line-height:1.7;max-width:620px;margin:0 auto}
+
+/* ── PROGRESS RAIL ── */
+.progress-rail{max-width:760px;margin:1.8rem auto 0;display:flex;align-items:center;gap:.5rem}
+.progress-dot{flex:1;height:6px;background:var(--border);border-radius:3px;transition:background .3s}
+.progress-dot.done{background:linear-gradient(90deg,var(--orange),var(--orange-light))}
+.progress-label{font-size:.7rem;color:var(--text-muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+
+/* ── SECTIONS ── */
+section.lesson{padding:3rem 2rem}
+.container{max-width:1080px;margin:0 auto}
+.lesson-num{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:50%;background:var(--orange);color:#fff;font-family:'DM Serif Display',serif;font-size:1.1rem;margin-bottom:.9rem}
+.lesson-title{font-family:'DM Serif Display',serif;font-size:clamp(1.6rem,2.5vw,2.1rem);color:var(--navy);margin-bottom:.55rem;line-height:1.2}
+.lesson-intro{font-size:.95rem;color:var(--text-secondary);line-height:1.7;max-width:680px;margin-bottom:2rem}
+.lesson-card{background:var(--bg-card);border-radius:var(--radius);box-shadow:var(--shadow-sm);border:1px solid var(--border);padding:2rem;margin-top:1.5rem}
+
+/* ── DRAG SORTER (Activities 1, 2, 3) ── */
+.classify-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.classify-grid{grid-template-columns:1fr}}
+.classify-scenarios{display:flex;flex-direction:column;gap:.7rem}
+.scenario-card{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.1rem;cursor:grab;transition:all .25s;position:relative;user-select:none}
+.scenario-card:hover{border-color:var(--orange);box-shadow:var(--shadow-sm);transform:translateY(-1px)}
+.scenario-card.dragging{opacity:.4}
+.scenario-card.placed{opacity:.35;cursor:not-allowed;pointer-events:none}
+.scenario-card.placed.correct{border-color:var(--green);background:var(--green-light)}
+.scenario-card.placed.wrong{border-color:var(--red);background:var(--red-light)}
+.scenario-text{font-size:.86rem;color:var(--text-primary);line-height:1.5;font-weight:500}
+.scenario-hint{font-size:.72rem;color:var(--text-muted);margin-top:.3rem;font-style:italic}
+.bucket-stack{display:flex;flex-direction:column;gap:1rem}
+.bucket{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:1rem;min-height:88px;transition:all .25s;background:rgba(255,255,255,0.5)}
+.bucket.drag-over{border-color:var(--orange);background:var(--orange-glow);border-style:solid}
+.bucket-title{font-family:'DM Serif Display',serif;font-size:1rem;color:var(--navy);margin-bottom:.25rem}
+.bucket-sub{font-size:.7rem;color:var(--text-muted);margin-bottom:.6rem;letter-spacing:.04em;text-transform:uppercase;font-weight:600}
+.bucket-drop{display:flex;flex-wrap:wrap;gap:.4rem;min-height:32px}
+.dropped-pill{background:var(--bg-card);border:1px solid var(--border);border-radius:50px;padding:.3rem .7rem;font-size:.72rem;font-weight:500;color:var(--text-primary)}
+.dropped-pill.correct{background:var(--green-light);border-color:var(--green);color:#256B29}
+.dropped-pill.wrong{background:var(--red-light);border-color:var(--red);color:#933}
+.activity-feedback{margin-top:1.2rem;padding:1rem 1.2rem;border-radius:var(--radius-sm);font-size:.85rem;line-height:1.5;display:none}
+.activity-feedback.show{display:block;animation:fadeIn .4s ease}
+.activity-feedback.success{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.activity-feedback.partial{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.activity-toolbar{display:flex;gap:.6rem;margin-top:1.2rem;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.4rem;padding:.6rem 1.2rem;border-radius:8px;font-size:.82rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;font-family:inherit}
+.btn-primary{background:var(--orange);color:#fff}.btn-primary:hover{background:var(--orange-dark);transform:translateY(-1px);box-shadow:0 4px 12px rgba(232,122,46,0.3)}
+.btn-ghost{background:transparent;border:1.5px solid var(--border);color:var(--text-secondary)}.btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
+
+/* ── COMPARE CARDS ── */
+.compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-top:1.2rem}
+@media (max-width:760px){.compare-grid{grid-template-columns:1fr}}
+.compare-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.2rem;transition:all .3s}
+.compare-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);border-color:transparent}
+.compare-icon{width:38px;height:38px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin-bottom:.7rem;font-size:1.05rem;font-weight:700;font-family:'DM Serif Display',serif;color:#fff}
+.compare-card:nth-child(1) .compare-icon{background:linear-gradient(135deg,var(--orange),var(--orange-light))}
+.compare-card:nth-child(2) .compare-icon{background:linear-gradient(135deg,#5B8FE0,#3D72C9)}
+.compare-card:nth-child(3) .compare-icon{background:linear-gradient(135deg,#66BB6A,#4CAF50)}
+.compare-card h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.3rem}
+.compare-card p{font-size:.82rem;color:var(--text-secondary);line-height:1.55}
+.compare-card ul{list-style:none;padding:0;margin-top:.6rem;border-top:1px dashed var(--border);padding-top:.55rem}
+.compare-card li{font-size:.74rem;color:var(--text-secondary);padding:.15rem 0;display:flex;gap:.4rem;align-items:flex-start;line-height:1.45}
+.compare-card li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.tip-note{margin-top:.9rem;padding:.7rem .9rem;background:var(--orange-glow);border-left:3px solid var(--orange);border-radius:4px;font-size:.78rem;color:var(--text-primary);line-height:1.55}
+
+/* ── ACTIVITY: MATCH PAIRS ── */
+.match-grid{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:1rem}
+@media (max-width:760px){.match-grid{grid-template-columns:1fr}}
+.match-col h4{font-family:'DM Serif Display',serif;font-size:1.05rem;color:var(--navy);margin-bottom:.7rem}
+.match-terms{display:flex;flex-direction:column;gap:.6rem}
+.match-term{background:var(--bg-card);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.85rem;font-weight:600;color:var(--navy);cursor:pointer;transition:all .2s;user-select:none}
+.match-term:hover{border-color:var(--orange);transform:translateX(2px)}
+.match-term.selected{border-color:var(--orange);background:var(--orange-glow);box-shadow:var(--shadow-sm)}
+.match-term.matched{opacity:.45;pointer-events:none;border-color:var(--green);background:var(--green-light)}
+.match-defs{display:flex;flex-direction:column;gap:.6rem}
+.match-def{border:2px dashed var(--border);border-radius:var(--radius-sm);padding:.75rem 1rem;font-size:.82rem;line-height:1.5;color:var(--text-secondary);cursor:pointer;transition:all .2s;min-height:52px}
+.match-def:hover{border-color:var(--orange)}
+.match-def.matched{border-style:solid;border-color:var(--green);background:var(--green-light);color:var(--text-primary);pointer-events:none}
+.match-def.matched .md-pair{display:block;font-size:.72rem;color:#256B29;font-weight:700;margin-bottom:.2rem}
+.match-def.shake{animation:shake .4s;border-color:var(--red);background:var(--red-light)}
+.md-pair{display:none}
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+.match-instruct{font-size:.78rem;color:var(--text-muted);margin-bottom:.8rem;font-style:italic}
+
+/* ── QUIZ ── */
+.quiz-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1.3rem 1.4rem;margin-top:1rem}
+.quiz-q-num{font-family:var(--mono);font-size:.68rem;font-weight:600;color:var(--orange);letter-spacing:.08em;text-transform:uppercase;margin-bottom:.4rem}
+.quiz-q-text{font-size:.92rem;font-weight:600;color:var(--navy);line-height:1.55;margin-bottom:.9rem}
+.quiz-opts{display:grid;gap:.5rem}
+.quiz-opt{text-align:left;background:var(--bg-light);border:1.5px solid var(--border);border-radius:var(--radius-sm);padding:.7rem .9rem;font-size:.83rem;line-height:1.5;cursor:pointer;transition:all .2s;font-family:inherit;color:var(--text-primary)}
+.quiz-opt:hover:not(:disabled){border-color:var(--orange);transform:translateX(2px)}
+.quiz-opt:disabled{cursor:default;opacity:.75}
+.quiz-opt.right{background:var(--green-light);border-color:var(--green);color:#1F5723;opacity:1;font-weight:600}
+.quiz-opt.wrong{background:var(--red-light);border-color:var(--red);color:#7A2A1E;opacity:1}
+.quiz-explain{margin-top:.7rem;padding:.7rem .9rem;border-radius:6px;font-size:.78rem;line-height:1.6;display:none}
+.quiz-explain.show{display:block;animation:fadeIn .3s ease}
+.quiz-explain.ok{background:var(--green-light);color:#1F5723;border-left:3px solid var(--green)}
+.quiz-explain.no{background:#FFF4E5;color:#7A4A0A;border-left:3px solid #E89B2E}
+
+/* ── REFLECTION ── */
+.reflect-prompt{display:grid;grid-template-columns:1fr;gap:.8rem;margin-top:1rem}
+.reflect-q{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:1rem 1.2rem}
+.reflect-q-text{font-size:.88rem;font-weight:600;color:var(--navy);margin-bottom:.5rem}
+.reflect-q textarea{width:100%;border:1px solid var(--border);border-radius:6px;padding:.6rem .8rem;font-family:inherit;font-size:.85rem;color:var(--text-primary);background:var(--bg-light);resize:vertical;min-height:60px}
+.reflect-q textarea:focus{outline:none;border-color:var(--orange)}
+
+/* ── FOOTER NEXT ── */
+.next-up{background:linear-gradient(135deg,var(--navy-dark),var(--navy));border-radius:var(--radius);padding:2.4rem;color:#fff;margin-top:2rem;text-align:center;position:relative;overflow:hidden}
+.next-up::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:rgba(232,122,46,0.12)}
+.next-up h3{font-family:'DM Serif Display',serif;font-size:1.5rem;margin-bottom:.5rem;position:relative}
+.next-up p{font-size:.92rem;color:rgba(255,255,255,0.75);margin-bottom:1.2rem;position:relative}
+.next-up .btn-primary{position:relative}
+
+@media (max-width:760px){
+  .nav{padding:0 1rem}
+  .nav-logo-tag{display:none}
+  .hero{padding:2.5rem 1.2rem 2rem}
+  section.lesson{padding:2rem 1.2rem}
+  .lesson-card{padding:1.4rem}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-left">
+    <span class="lesson-badge">Lesson 1 of 4</span>
+  </div>
+  <a href="https://mokshpath.org/" class="nav-logo">
+    <img class="nav-logo-icon" src="hero.svg" alt="MokshPath logo">
+    <div class="nav-logo-text">
+      <span class="nav-logo-name">Moksh<span>Path</span></span>
+      <span class="nav-logo-tag">Guided Path to True Learning</span>
+    </div>
+  </a>
+</nav>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="hero-eyebrow"><span class="dot"></span> Week 5 · AI Email Marketing</div>
+  <h1>Email Marketing in the AI Era — <em>the one channel you actually own</em></h1>
+  <p class="hero-sub">Four hands-on activities. Match the core email vocabulary to plain-English meanings, sort which channels you own versus rent, tell a broadcast email apart from an automated one, then lock it in with a quick quiz. This is the highest-ROI channel in marketing — a direct line to people who asked to hear from you.</p>
+  <div class="progress-rail">
+    <span class="progress-label">Progress</span>
+    <div class="progress-dot" id="prog1"></div>
+    <div class="progress-dot" id="prog2"></div>
+    <div class="progress-dot" id="prog3"></div>
+    <div class="progress-dot" id="prog4"></div>
+  </div>
+</header>
+
+<!-- ── ACTIVITY 1: MATCH CONCEPTS TO DEFINITIONS ── -->
+<section class="lesson" id="activity-1">
+  <div class="container">
+    <span class="lesson-num">1</span>
+    <h2 class="lesson-title">Match the email word to what it actually means</h2>
+    <p class="lesson-intro">Every email tool — Mailchimp, Klaviyo, ConvertKit, the AI-native new wave — uses the same handful of words. Learn them once and every tool suddenly makes sense. Click a term on the left, then click the definition on the right that fits it. A wrong match shakes red so you can try again.</p>
+
+    <div class="tip-note">💡 <strong>Plain-English promise:</strong> Email marketing is just sending helpful messages to people who <em>gave you permission</em> — and it's the highest-ROI channel because you <em>own</em> the list. Master these six words and you speak the language.</div>
+
+    <div class="lesson-card">
+      <p class="match-instruct">Click a term, then click its definition. Six correct matches completes the activity.</p>
+      <div class="match-grid">
+        <div class="match-col">
+          <h4>The term</h4>
+          <div class="match-terms" id="matchTerms"></div>
+        </div>
+        <div class="match-col">
+          <h4>What it means</h4>
+          <div class="match-defs" id="matchDefs"></div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback1"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetMatch()">↻ Try again</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 2: OWNED VS RENTED CHANNELS ── -->
+<section class="lesson" id="activity-2" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#5B8FE0">2</span>
+    <h2 class="lesson-title">Own it or rent it? — sort your marketing channels</h2>
+    <p class="lesson-intro">Some channels you <strong>own</strong>: your email list is yours, it can't be taken away, and it's a direct line to people who opted in. Others you <strong>rent</strong>: social feeds and search ads live on someone else's platform, and the rules (and reach) can change overnight. Drag each item into <strong>You own it</strong> or <strong>You only rent it</strong>.</p>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="recordList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="in">
+            <div class="bucket-title">You own it</div>
+            <div class="bucket-sub">Yours to keep, direct line, opted in</div>
+            <div class="bucket-drop" data-drop="in"></div>
+          </div>
+          <div class="bucket" data-bucket="out">
+            <div class="bucket-title">You only rent it</div>
+            <div class="bucket-sub">Someone else's platform &amp; rules</div>
+            <div class="bucket-drop" data-drop="out"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback2"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetRecord()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswersRecord()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 3: BROADCAST vs AUTOMATED ── -->
+<section class="lesson" id="activity-3">
+  <div class="container">
+    <span class="lesson-num" style="background:#66BB6A">3</span>
+    <h2 class="lesson-title">Broadcast or automated? — sort the difference</h2>
+    <p class="lesson-intro">A <strong>broadcast</strong> email is a one-time send you write and blast to a list on a certain day. An <strong>automated</strong> email is set up once and then sends itself the moment a person does something — no one at a keyboard. Both matter; knowing which is which is how you stop doing by hand what should run on its own. Study the two cards, then drag each email into the bucket it truly belongs to.</p>
+
+    <div class="compare-grid">
+      <div class="compare-card">
+        <div class="compare-icon">B</div>
+        <h4>Broadcast</h4>
+        <p>A <strong>one-time send</strong> you schedule to a whole list or segment — same message, same day, to many people.</p>
+        <ul>
+          <li>This week's newsletter to all subscribers</li>
+          <li>A flash-sale announcement on Friday</li>
+          <li>A product-launch email to everyone</li>
+          <li>You pick the send time by hand</li>
+        </ul>
+      </div>
+      <div class="compare-card" style="border-color:#E5DDD4">
+        <div class="compare-icon" style="background:linear-gradient(135deg,#9597A6,#6B6D7B)!important">A</div>
+        <h4>Automated</h4>
+        <p>Set up <strong>once</strong>, then it fires on its own when a person takes an action — you're not there when it sends.</p>
+        <ul style="border-color:var(--border)">
+          <li style="--x:1">A welcome email when someone signs up</li>
+          <li>An abandoned-cart reminder after 1 hour</li>
+          <li>A "happy birthday" note each year</li>
+          <li>Triggered by the subscriber, not you</li>
+        </ul>
+      </div>
+    </div>
+    <div class="tip-note">💡 <strong>The test:</strong> did <em>you</em> choose the exact moment it goes out (broadcast), or does it fire on its own the instant a subscriber does something (automated)? If it sends itself while you sleep, it's automated.</div>
+
+    <div class="lesson-card">
+      <div class="classify-grid">
+        <div class="classify-scenarios" id="aiList"></div>
+        <div class="bucket-stack">
+          <div class="bucket" data-bucket="native">
+            <div class="bucket-title">Broadcast</div>
+            <div class="bucket-sub">One-time send you schedule by hand</div>
+            <div class="bucket-drop" data-drop="native"></div>
+          </div>
+          <div class="bucket" data-bucket="bolton">
+            <div class="bucket-title">Automated</div>
+            <div class="bucket-sub">Fires itself when a subscriber acts</div>
+            <div class="bucket-drop" data-drop="bolton"></div>
+          </div>
+        </div>
+      </div>
+      <div class="activity-feedback" id="feedback3"></div>
+      <div class="activity-toolbar">
+        <button class="btn btn-ghost" onclick="resetAI()">↻ Try again</button>
+        <button class="btn btn-primary" onclick="showAnswersAI()">Show me the answers</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── ACTIVITY 4: QUIZ ── -->
+<section class="lesson" id="activity-4" style="background:var(--bg-light)">
+  <div class="container">
+    <span class="lesson-num" style="background:#8E6BC0">4</span>
+    <h2 class="lesson-title">Email myths vs reality — the check-yourself quiz</h2>
+    <p class="lesson-intro">Five questions on why email still wins and how AI changes it. Every option carries an explanation — the wrong answers are the exact myths that lead beginners to blast a big cold list and wonder why nothing works.</p>
+
+    <div id="quizWrap"></div>
+    <div class="activity-feedback" id="feedback4"></div>
+    <div class="activity-toolbar">
+      <button class="btn btn-ghost" onclick="resetQuiz()">↻ Retake quiz</button>
+    </div>
+  </div>
+</section>
+
+<!-- ── REFLECT ── -->
+<section class="lesson" style="padding-bottom:1.5rem">
+  <div class="container">
+    <h2 class="lesson-title" style="font-size:1.5rem">Quick reflect — make it stick</h2>
+    <p class="lesson-intro" style="margin-bottom:1rem">A sentence each is enough. Writing it in your own words is what moves it into memory. (Nothing is saved or sent.)</p>
+    <div class="reflect-prompt">
+      <div class="reflect-q">
+        <div class="reflect-q-text">Right now, how do you reach your customers — mostly rented channels (social, ads) or an owned email list? What would happen to your reach if one platform changed its rules tomorrow?</div>
+        <textarea placeholder="Today I mostly rely on... and if the rules changed I would..."></textarea>
+      </div>
+      <div class="reflect-q">
+        <div class="reflect-q-text">Name one email you send by hand today (a welcome, a follow-up, a reminder) that could become an automated one. And where could AI help you draft or personalize it without turning it into a generic blast?</div>
+        <textarea placeholder="I manually send... I could automate it so... and AI could help by..."></textarea>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- NEXT UP -->
+<section class="lesson" style="padding-top:0">
+  <div class="container">
+    <div class="next-up">
+      <h3>Lesson 2 · Building Your Email List with AI</h3>
+      <p>You know why email is the channel you own and how the pieces fit. Next: build the list for real — create opt-in forms and lead magnets, set up double opt-in, and let AI help you grow a small, engaged list that beats a big cold one.</p>
+      <a href="02-building-email-list-ai.html" class="btn btn-primary">Continue to Lesson 2 →</a>
+    </div>
+  </div>
+</section>
+
+<script>
+const $ = id => document.getElementById(id);
+
+/* ─── ACTIVITY 1: Match Concepts to Definitions ─── */
+const PAIRS = [
+  {id:'contact', term:'ESP', def:'Your Email Service Provider — the tool (like Mailchimp or Klaviyo) that stores your list and sends your emails safely at scale.'},
+  {id:'lead', term:'Deliverability', def:'Whether your email actually lands in the inbox instead of the spam folder — the thing that quietly decides if anyone reads you.'},
+  {id:'pipeline', term:'Opt-in', def:'The moment a person gives you permission to email them — usually by entering their address on a signup form.'},
+  {id:'record', term:'Sender reputation', def:'A score inbox providers give you based on how people react to your emails — good behavior keeps you out of spam.'},
+  {id:'segment', term:'Segment', def:'A group of subscribers who share something — like "opened your last 3 emails" — so you can send them more relevant messages.'},
+  {id:'enrichment', term:'Automation', def:'An email set up once that then sends itself the moment a subscriber does something, with no one at a keyboard.'}
+];
+let selectedTerm = null, matchedCount = 0;
+function renderMatch(){
+  matchedCount = 0; selectedTerm = null;
+  const terms = [...PAIRS].sort(()=>Math.random()-0.5);
+  const defs = [...PAIRS].sort(()=>Math.random()-0.5);
+  $('matchTerms').innerHTML = terms.map(p =>
+    `<div class="match-term" data-id="${p.id}" onclick="pickTerm('${p.id}', this)">${p.term}</div>`).join('');
+  $('matchDefs').innerHTML = defs.map(p =>
+    `<div class="match-def" data-id="${p.id}" onclick="pickDef('${p.id}', this)"><span class="md-pair"></span>${p.def}</div>`).join('');
+}
+function pickTerm(id, el){
+  if (el.classList.contains('matched')) return;
+  document.querySelectorAll('.match-term').forEach(t => t.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedTerm = id;
+}
+function pickDef(id, el){
+  if (el.classList.contains('matched') || !selectedTerm) return;
+  if (id === selectedTerm){
+    const termEl = document.querySelector(`.match-term[data-id="${id}"]`);
+    const pair = PAIRS.find(p => p.id === id);
+    termEl.classList.remove('selected');
+    termEl.classList.add('matched');
+    el.classList.add('matched');
+    el.querySelector('.md-pair').textContent = '✓ ' + pair.term;
+    selectedTerm = null;
+    matchedCount++;
+    if (matchedCount === PAIRS.length){
+      const fb = $('feedback1');
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All six matched — you speak email now.</strong> Notice the through-line: someone <em>opts in</em>, your <em>ESP</em> sends to them, good <em>sender reputation</em> protects your <em>deliverability</em>, you group people into a <em>segment</em>, and <em>automation</em> sends the right message on its own. Every tool in this course uses these exact words.`;
+      $('prog1').classList.add('done');
+    }
+  } else {
+    el.classList.remove('shake'); void el.offsetWidth;
+    el.classList.add('shake');
+    setTimeout(() => el.classList.remove('shake'), 450);
+  }
+}
+function resetMatch(){
+  $('feedback1').className = 'activity-feedback';
+  renderMatch();
+  $('prog1').classList.remove('done');
+}
+
+/* ─── ACTIVITY 2: Owned vs rented channels ─── */
+const RECORD_ITEMS = [
+  {id:'r1', text:'Your email subscriber list, stored in your ESP', hint:'You can export it and move it anywhere — it\'s truly yours.', bucket:'in', why:'Your email list is the classic owned asset: you can export it, take it to a new provider, and no platform can delete your reach overnight.'},
+  {id:'r2', text:'Your own website and its signup forms', hint:'You control the domain, the content, and the data it collects.', bucket:'in', why:'Your website is owned property — you set the rules, keep the visitor data, and it stays up regardless of any social platform.'},
+  {id:'r3', text:'A blog you host on your own domain', hint:'Content on land you control, not a feed you\'re renting.', bucket:'in', why:'A self-hosted blog is owned: the content and its audience path belong to you, unlike posts trapped inside someone else\'s app.'},
+  {id:'r4', text:'The phone numbers of customers who opted in to texts', hint:'Permission-based contact info you hold directly.', bucket:'in', why:'An opted-in SMS list is owned, direct contact — like email, it\'s a permission-based line you control, not rented space.'},
+  {id:'r5', text:'Your Instagram followers', hint:'The platform owns the feed, the algorithm, and the reach.', bucket:'out', why:'You rent your Instagram audience: the platform controls the algorithm and reach, and could change the rules or vanish tomorrow.'},
+  {id:'r6', text:'Your ranking in Google search results', hint:'Google decides who sees you — the rules can change any day.', bucket:'out', why:'Search visibility is rented: Google\'s algorithm decides your reach, and an update can raise or wipe your traffic without warning.'},
+  {id:'r7', text:'Paid ads running on a social platform', hint:'Reach lasts exactly as long as you keep paying.', bucket:'out', why:'Paid ads are pure rental — the moment you stop paying, the reach disappears. You never own the audience you rented.'},
+  {id:'r8', text:'Your follower count on a video app', hint:'One policy change and that reach can shrink overnight.', bucket:'out', why:'A follower count on someone else\'s app is rented reach — a policy or algorithm change can cut it off, and you can\'t take those followers with you.'}
+];
+const REC_NAMES = {in:'You own it', out:'You only rent it'};
+let recPlaced = {};
+function renderRecord(){
+  recPlaced = {};
+  const shuffled = [...RECORD_ITEMS].sort(()=>Math.random()-0.5);
+  $('recordList').innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+      <div class="scenario-hint">${s.hint}</div>
+    </div>`).join('');
+  attachDrag('recordList');
+}
+function renderRecordBuckets(){ setupBuckets('#activity-2', RECORD_ITEMS, recPlaced, REC_NAMES, checkRecordDone); }
+
+/* ─── ACTIVITY 3: Broadcast vs automated ─── */
+const AI_ITEMS = [
+  {id:'a1', text:'You write this month\'s newsletter and schedule it to go to all 4,000 subscribers on Tuesday at 9am.', hint:'One send, whole list, a day you picked.', bucket:'native', why:'A newsletter you write once and blast to the whole list on a chosen day is a classic broadcast — you decide the exact moment it sends.'},
+  {id:'a2', text:'The second someone joins your list, a warm welcome email lands in their inbox.', hint:'Triggered by their signup, not your calendar.', bucket:'bolton', why:'A welcome email that fires the instant someone subscribes is automated — the trigger is the subscriber\'s action, not you pressing send.'},
+  {id:'a3', text:'You announce a weekend flash sale by sending one email to every customer on Friday morning.', hint:'A one-time blast you launch by hand.', bucket:'native', why:'A flash-sale blast to everyone on a specific morning is a broadcast — a single, hand-launched send to the whole list.'},
+  {id:'a4', text:'An hour after a shopper leaves items in their cart, a reminder email goes out on its own.', hint:'It fires from the shopper\'s behavior.', bucket:'bolton', why:'An abandoned-cart reminder that sends itself an hour after the action is automated — set up once, then triggered by the shopper\'s behavior.'},
+  {id:'a5', text:'You draft a product-launch email and hit send to your entire subscriber base at once.', hint:'One message, everyone, your chosen moment.', bucket:'native', why:'A launch email sent to the whole base in one go, when you decide, is a broadcast — the send moment is yours, not triggered by any subscriber.'},
+  {id:'a6', text:'On each subscriber\'s birthday, a "happy birthday" email with a coupon sends automatically.', hint:'Fires on their date, no one at the keyboard.', bucket:'bolton', why:'A birthday email that fires on each person\'s own date, with nobody hitting send, is automated — a rule that runs itself, subscriber by subscriber.'}
+];
+const AI_NAMES = {native:'Broadcast', bolton:'Automated'};
+let aiPlaced = {};
+function renderAI(){
+  aiPlaced = {};
+  const shuffled = [...AI_ITEMS].sort(()=>Math.random()-0.5);
+  $('aiList').innerHTML = shuffled.map(s => `
+    <div class="scenario-card" draggable="true" data-id="${s.id}">
+      <div class="scenario-text">${s.text}</div>
+      <div class="scenario-hint">${s.hint}</div>
+    </div>`).join('');
+  attachDrag('aiList');
+}
+function renderAIBuckets(){ setupBuckets('#activity-3', AI_ITEMS, aiPlaced, AI_NAMES, checkAIDone); }
+
+/* ─── SHARED DRAG-DROP ENGINE ─── */
+function attachDrag(listId){
+  $(listId).querySelectorAll('.scenario-card').forEach(card => {
+    card.addEventListener('dragstart', e => {
+      e.dataTransfer.setData('id', card.dataset.id);
+      card.classList.add('dragging');
+    });
+    card.addEventListener('dragend', () => card.classList.remove('dragging'));
+  });
+}
+function setupBuckets(sectionSel, items, placedObj, names, doneFn){
+  document.querySelectorAll(sectionSel + ' .bucket').forEach(b => {
+    b.addEventListener('dragover', e => { e.preventDefault(); b.classList.add('drag-over'); });
+    b.addEventListener('dragleave', () => b.classList.remove('drag-over'));
+    b.addEventListener('drop', e => {
+      e.preventDefault();
+      b.classList.remove('drag-over');
+      const id = e.dataTransfer.getData('id');
+      genericDrop(sectionSel, id, b.dataset.bucket, items, placedObj, names, doneFn);
+    });
+  });
+}
+function genericDrop(sectionSel, id, bucket, items, placedObj, names, doneFn){
+  const item = items.find(s => s.id === id);
+  if (!item || placedObj[id]) return;
+  const correct = item.bucket === bucket;
+  placedObj[id] = {bucket, correct};
+  const card = document.querySelector(`${sectionSel} .scenario-card[data-id="${id}"]`);
+  card.classList.add('placed', correct ? 'correct' : 'wrong');
+  const dropZone = document.querySelector(`${sectionSel} [data-drop="${bucket}"]`);
+  const pill = document.createElement('span');
+  pill.className = 'dropped-pill ' + (correct ? 'correct' : 'wrong');
+  pill.textContent = (correct ? '✓ ' : '✗ ') + item.text.substring(0, 34) + (item.text.length > 34 ? '…' : '');
+  pill.title = correct ? item.why : `Correct: ${names[item.bucket]}. ${item.why}`;
+  dropZone.appendChild(pill);
+  doneFn();
+}
+function checkRecordDone(){
+  if (Object.keys(recPlaced).length === RECORD_ITEMS.length){
+    const right = Object.values(recPlaced).filter(p => p.correct).length;
+    const fb = $('feedback2');
+    if (right === RECORD_ITEMS.length){
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>All eight sorted correctly.</strong> The rule of thumb: if you can <em>export it and take it with you</em> (your email list, website, blog, opted-in numbers), you own it. If a platform controls the reach and rules (social followers, search rank, paid ads), you only rent it. That's why email is the safest place to build — no one can switch off the audience you own.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 8.</strong> Hover any red pill for the reasoning. The trap is thinking followers = an audience you own. Ask: if this platform changed its rules tomorrow, could they take my reach away? If yes, you're renting. Click <em>Try again</em>.`;
+    }
+    $('prog2').classList.add('done');
+  }
+}
+function checkAIDone(){
+  if (Object.keys(aiPlaced).length === AI_ITEMS.length){
+    const right = Object.values(aiPlaced).filter(p => p.correct).length;
+    const fb = $('feedback3');
+    if (right === AI_ITEMS.length){
+      fb.className = 'activity-feedback show success';
+      fb.innerHTML = `<strong>Six for six — you can tell them apart.</strong> Broadcast = one send <em>you</em> schedule to a list on a chosen day. Automated = set up once, then it fires the instant a <em>subscriber</em> acts. Most of email's real power comes from automations that run while you sleep — welcome, cart, birthday — freeing you to write the occasional great broadcast.`;
+    } else {
+      fb.className = 'activity-feedback show partial';
+      fb.innerHTML = `<strong>You got ${right} of 6.</strong> Hover the red pills. The one tell: did <em>you</em> pick the exact send moment (broadcast), or does it fire on its own when a subscriber does something (automated)? If it sends itself, it's automated. Click <em>Try again</em>.`;
+    }
+    $('prog3').classList.add('done');
+  }
+}
+function resetRecord(){
+  $('feedback2').className = 'activity-feedback';
+  document.querySelectorAll('#activity-2 .bucket-drop').forEach(d => d.innerHTML = '');
+  renderRecord();
+  $('prog2').classList.remove('done');
+}
+function showAnswersRecord(){
+  RECORD_ITEMS.forEach(s => { if (!recPlaced[s.id]) genericDrop('#activity-2', s.id, s.bucket, RECORD_ITEMS, recPlaced, REC_NAMES, checkRecordDone); });
+}
+function resetAI(){
+  $('feedback3').className = 'activity-feedback';
+  document.querySelectorAll('#activity-3 .bucket-drop').forEach(d => d.innerHTML = '');
+  renderAI();
+  $('prog3').classList.remove('done');
+}
+function showAnswersAI(){
+  AI_ITEMS.forEach(s => { if (!aiPlaced[s.id]) genericDrop('#activity-3', s.id, s.bucket, AI_ITEMS, aiPlaced, AI_NAMES, checkAIDone); });
+}
+
+/* ─── ACTIVITY 4: Quiz ─── */
+const QUIZ = [
+  {
+    q:'Myth: "Email is dead — social media is where marketing happens now." What\'s the reality?',
+    opts:[
+      {t:'True — nobody checks email anymore, so put all your effort into social', ok:false, ex:'Not true. People check email every day, and it consistently returns more per dollar than social. Social reach is rented and can vanish with an algorithm change; email is a direct line you own.'},
+      {t:'Email is the highest-ROI owned channel — you reach people who chose to hear from you, on a list no platform can take away', ok:true, ex:'Exactly. Studies routinely put email\'s return around $36 per $1 spent — far ahead of most channels. And because you own the list, your reach doesn\'t depend on anyone else\'s algorithm.'},
+      {t:'Email and social are identical — it makes no difference which you use', ok:false, ex:'They\'re very different. On social you rent access to your audience; with email you own the list and reach inboxes directly. That ownership is exactly why email stays so valuable.'}
+    ]
+  },
+  {
+    q:'Myth: "The bigger my list, the better — so I should buy or scrape thousands of addresses." Reality?',
+    opts:[
+      {t:'A small, engaged list of people who opted in beats a big cold one — and buying lists gets you flagged as spam', ok:true, ex:'Right. Emailing people who never opted in tanks your open rates, triggers spam complaints, and can wreck your sender reputation for everyone. 500 people who want your emails are worth more than 50,000 who don\'t.'},
+      {t:'Always buy the biggest list you can — more addresses always means more sales', ok:false, ex:'This is the classic trap. Cold, purchased lists produce spam complaints and hurt deliverability, so even your good emails start landing in spam. Permission and engagement beat raw size every time.'},
+      {t:'List size doesn\'t affect anything at all', ok:false, ex:'It does matter — but engagement matters more than size. A list of people who genuinely opted in and open your emails protects your deliverability; a big cold list quietly destroys it.'}
+    ]
+  },
+  {
+    q:'What actually decides whether your email lands in the inbox instead of the spam folder?',
+    opts:[
+      {t:'Your sender reputation and deliverability — built from permission, engagement, and low spam complaints', ok:true, ex:'Correct. Inbox providers watch how people react: opens, replies, and few complaints build a good sender reputation that keeps you in the inbox. Blasting unengaged people does the opposite.'},
+      {t:'Nothing you do — it\'s purely random which emails hit spam', ok:false, ex:'It\'s not random. Deliverability is earned: emailing people who opted in and engage keeps you in the inbox, while spammy sends and complaints push you to the spam folder.'},
+      {t:'Using bigger fonts and more exclamation marks in the subject line', ok:false, ex:'That backfires — spammy, shouty subject lines and gimmicks can trigger filters. What really protects the inbox is a clean, permission-based list and genuine engagement.'}
+    ]
+  },
+  {
+    q:'What\'s the real difference between single opt-in and double opt-in?',
+    opts:[
+      {t:'Single adds someone the moment they submit; double sends a confirmation email they must click first', ok:true, ex:'Correct. Double opt-in asks the person to confirm via a click, which proves the address is real and truly wanted. It grows the list a little slower but keeps it cleaner and more engaged — better for deliverability.'},
+      {t:'They\'re two names for exactly the same thing', ok:false, ex:'Not quite. With single opt-in the person is added instantly; with double they must click a confirmation link. The extra step filters out typos and fake addresses, protecting your list quality.'},
+      {t:'Double opt-in means you email them twice as often', ok:false, ex:'No — "double" refers to the confirmation step, not frequency. It\'s one extra click to confirm they want in, which keeps your list clean and your sender reputation healthy.'}
+    ]
+  },
+  {
+    q:'Myth: "AI can just write and send all my emails for me now — I can automate everything." Reality?',
+    opts:[
+      {t:'AI is leverage, not magic — it speeds up drafting, subject lines, and personalization, but generic AI blasts and over-automation trigger spam complaints', ok:true, ex:'Exactly. AI is brilliant for drafting, testing subject lines, segmenting, and timing — but it still needs your judgment. Firing off generic, over-automated blasts erodes trust and gets you marked as spam.'},
+      {t:'Yes — turn on full AI automation and never think about your emails again', ok:false, ex:'Over-automation is a real risk. AI without oversight produces generic, off-brand blasts that annoy people and raise spam complaints. Use AI to draft and personalize, but keep a human deciding what\'s worth sending.'},
+      {t:'AI has no useful role in email marketing at all', ok:false, ex:'It absolutely does. AI meaningfully helps with drafting copy, generating subject-line options, segmenting your list, and timing sends. The point is that it\'s a tool you guide — leverage, not a replacement for judgment.'}
+    ]
+  }
+];
+let quizAnswered = 0, quizScore = 0;
+function renderQuiz(){
+  quizAnswered = 0; quizScore = 0;
+  $('quizWrap').innerHTML = QUIZ.map((q, qi) => {
+    const order = q.opts.map((_, i) => i).sort(()=>Math.random()-0.5);
+    return `<div class="quiz-q" id="q${qi}">
+      <div class="quiz-q-num">Question ${qi+1} of ${QUIZ.length}</div>
+      <div class="quiz-q-text">${q.q}</div>
+      <div class="quiz-opts">${order.map(oi =>
+        `<button class="quiz-opt" onclick="answerQuiz(${qi}, ${oi}, this)">${q.opts[oi].t}</button>`).join('')}
+      </div>
+      <div class="quiz-explain" id="qx${qi}"></div>
+    </div>`;
+  }).join('');
+  $('feedback4').className = 'activity-feedback';
+}
+function answerQuiz(qi, oi, btn){
+  const q = QUIZ[qi];
+  const box = $('q' + qi);
+  if (box.dataset.done) return;
+  box.dataset.done = '1';
+  const opt = q.opts[oi];
+  const rightText = q.opts.find(o => o.ok).t;
+  box.querySelectorAll('.quiz-opt').forEach(b => {
+    b.disabled = true;
+    if (b.textContent === rightText) b.classList.add('right');
+  });
+  if (!opt.ok) btn.classList.add('wrong');
+  const ex = $('qx' + qi);
+  ex.className = 'quiz-explain show ' + (opt.ok ? 'ok' : 'no');
+  ex.innerHTML = (opt.ok ? '<strong>Right.</strong> ' : '<strong>Not quite.</strong> ') + opt.ex;
+  quizAnswered++;
+  if (opt.ok) quizScore++;
+  if (quizAnswered === QUIZ.length) finishQuiz();
+}
+function finishQuiz(){
+  const fb = $('feedback4');
+  if (quizScore === QUIZ.length){
+    fb.className = 'activity-feedback show success';
+    fb.innerHTML = `<strong>5/5 — the fundamentals are locked in.</strong> You know why email is the highest-ROI channel you <em>own</em>, that a small engaged list beats a big cold one, what protects your deliverability, single vs double opt-in, and that AI is leverage — not a magic autopilot. Next lesson, you'll build the list for real.`;
+  } else {
+    fb.className = 'activity-feedback show partial';
+    fb.innerHTML = `<strong>You scored ${quizScore}/5.</strong> Re-read the explanations on the ones you missed — the wrong options are the exact myths that lead people to buy cold lists and blast generic email. The core idea: email works because it's permission-based and <em>owned</em>, and AI is leverage you guide, not magic. Retake for a clean 5/5.`;
+  }
+  $('prog4').classList.add('done');
+}
+function resetQuiz(){
+  renderQuiz();
+  $('prog4').classList.remove('done');
+}
+
+/* ─── INIT ─── */
+window.addEventListener('DOMContentLoaded', () => {
+  renderMatch();
+  renderRecord();
+  renderRecordBuckets();
+  renderAI();
+  renderAIBuckets();
+  renderQuiz();
+});
+</script>
+</body>
+</html>
